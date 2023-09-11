@@ -30,8 +30,6 @@ al mismo tiempo beneficiarse de esta información para sus propias compras.
 ## Estructura de archivos
 ```plaintext
 \---design
-    +---database
-    +---mockups
     \---sprint0
         +---database
         |   +---avance1
