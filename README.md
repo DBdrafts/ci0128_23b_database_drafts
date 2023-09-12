@@ -27,8 +27,20 @@ Producto, le han llamado **LoCoMPro**. Esta sería una aplicación de software que
 permita a las personas colaborar generando información sobre precios de productos, y
 al mismo tiempo beneficiarse de esta información para sus propias compras.
 
+## Estructura de archivos
+```plaintext
+\---design
+    \---sprint0
+        +---database
+        |   +---avance1
+        |   \---avance2
+        \---mockups
+            +---avance1
+            \---avance2
+```
+
+En el directorio _./design_ existen directorios referentes a cada iteración y avance del programa. Los diseños a su vez, se guardan en dos directorios(_./database_ y _./mockups_) con la información correspondiente a la base de datos y los mockups de la interfaz de usuario.
+
 ## Enlaces adicionales
 
-- [Documentación]
-- [Manual de Usuario]
-
+- [Diseño](./design/design.md)
