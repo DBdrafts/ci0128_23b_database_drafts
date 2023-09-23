@@ -1,10 +1,19 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Página principal";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<head>
+    <link rel="stylesheet" href="../Pages/Index.cshtml.css" />
+</head>
+
+ <div class="text-center">
+    <h1>LoCoMPro</h1>
+    <div class="search-bar">
+        <button id="type-search-selector">Buscar por</button>
+        <input type="text" id="search-input" placeholder="Buscar.." />
+        <button id="search-button">Buscar</button>
+        <button id="location-selector">Prueba</button>
+    </div>
 </div>
