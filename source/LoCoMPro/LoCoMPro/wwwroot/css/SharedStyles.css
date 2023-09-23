@@ -16,6 +16,20 @@
     outline: none;
 }
 
+#type-search-selector {
+    background-color: #BABAB8;
+    color: black;
+    border: none;
+    border-radius: 15px;
+    padding: 0px 10px;
+    cursor: pointer;
+    margin: 0px initial;
+}
+
+#type-search-selector:hover {
+    background-color: #adada9;
+}
+
 #search-button {
     background-color: #F5AA38;
     color: black;
@@ -27,7 +41,7 @@
 }
 
 #search-button:hover {
-    background-color: #ff6a00;
+    background-color: #f6a01d;
 }
 
 #location-selector {
@@ -41,20 +55,22 @@
     z-index: 0;
 }
 
-    #location-selector:hover {
-        background-color: #39A4F4;
-    }
-
-#type-search-selector {
-    background-color: #BABAB8;
-    color: black;
-    border: none;
-    border-radius: 15px;
-    padding: 0px 10px;
-    cursor: pointer;
-    margin: 0px initial;
+#location-selector:hover {
+    background-color: #39A4F4;
 }
 
-    #type-search-selector:hover {
-        background-color: #adada9;
-    }
+.layout-button {
+    background: none;
+    color: black;
+    border: none;
+    margin: auto;
+    cursor: pointer;
+}
+
+#add-register-button {
+
+}
+
+#user-settings-button {
+    
+}
