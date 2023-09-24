@@ -1,4 +1,11 @@
-﻿.search-bar {
+﻿.button-general {
+    color: black;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.search-bar {
     display: flex;
     width: auto;
     margin: auto 225px;
@@ -18,11 +25,7 @@
 
 #type-search-selector {
     background-color: #BABAB8;
-    color: black;
-    border: none;
-    border-radius: 15px;
     padding: 0px 10px;
-    cursor: pointer;
     margin: 0px initial;
 }
 
@@ -30,7 +33,6 @@
     padding: 5px;
     width: auto;
     height: auto;
-
 }
 
 #type-search-selector:hover {
@@ -39,11 +41,7 @@
 
 #search-button {
     background-color: #F5AA38;
-    color: black;
-    border: none;
-    border-radius: 15px;
     margin: 0px auto;
-    cursor: pointer;
     z-index: 1;
 }
 
@@ -59,11 +57,7 @@
 
 #location-selector {
     background-color: #88C8F8;
-    color: black;
-    border: none;
-    border-radius: 15px;
     padding: 0px 30px;
-    cursor: pointer;
     margin: 0px -25px;
     z-index: 0;
 }
@@ -80,30 +74,12 @@
 
 .layout-button {
     background: none;
-    border: none;
-    margin: auto auto -20px auto;
-    cursor: pointer;
-    align-items: center;
+    margin: 0px 10px -15px 0px;
     display: inline-block;
-    color: black;
     text-align: center;
-    text-decoration: none;
 }
 
 .layout-button img {
     max-height: 30px;
     max-width: 30px;
-}
-
-.layout-button p {
-    color: black;
-}
-
-
-#add-register-button {
-
-}
-
-#user-settings-button {
-    
 }

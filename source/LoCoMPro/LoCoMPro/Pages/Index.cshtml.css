@@ -1,11 +1,10 @@
 ﻿.logo-image {
-    height: 200px;
-    width: 300px;
-    margin: auto;
-    padding: -25px;
-    text-align:center;
+    height: auto;
+    width: auto;
+    margin: 20px auto;
+    text-align: center;
 }
 .logo-image img {
-    max-height: 50%;
-    max-width: 50%;
+    max-height: 100%;
+    max-width: 100%;
 }
