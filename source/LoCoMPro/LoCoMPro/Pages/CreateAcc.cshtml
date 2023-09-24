@@ -1,0 +1,37 @@
+﻿@page
+@model LoCoMPro.Pages.CreateAccModel
+@{
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cuenta</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="logo-image">
+        <img src="~/img/LoCoMProLogo.svg" alt="LoCoMPro Logo">
+    </div>
+    <div class="register-section">
+        <form>
+            <div id='CrAcc'>Crear Cuenta</div>
+            <label for="email">Correo Electrónico</label>
+            <input type="text" id="email" name="Email" placeholder="usuario@gmail.com" required>
+
+            <label for="usr">Nombre de Usuario</label>
+            <input type="text" id="usr" name="Usuario" placeholder="Usuario" required>
+
+            <label for="psw">Contraseña</label>
+            <input type="text" id="psw" name="Contraseña" required>
+
+            <label for="conpsw">Confirmar Contraseña</label>
+            <input type="text" id="conpsw" name="ConfirmContraseña" required>
+
+            <button id="register" type="submit">Registrarse</button>
+        </form>
+    </div>
+</body>
+</html>
