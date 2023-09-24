@@ -1,0 +1,35 @@
+﻿@page
+@model LoCoMPro.Pages.LoginModel
+@{
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/login.css">
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="~/js/login.js"></script>
+</head>
+<body>
+    <div class="login-section">
+
+        <form>
+            <div id='inises'>Iniciar Sesión</div>
+            <label for="email">Correo Electrónico</label>
+            <input type="text" id="email" name="Email" placeholder="usuario@gmail.com" required>
+
+            <label for="psw">Contraseña</label>
+            <input type="password" id="psw" name="Contraseña" placeholder="Contraseña" required>
+            <input type="checkbox" onclick="shwPass()">Mostrar Contraseña
+
+            <button id="login" type="submit">Iniciar Sesión</button>
+            <!-- <span class="registr">¿No tiene una cuenta? <a href="#">Regístrese aquí</a></span> -->
+        </form>
+    </div>
+    <div>
+    </div>
+</body>
+</html>
