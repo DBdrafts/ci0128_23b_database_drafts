@@ -47,11 +47,13 @@ button.accept-policy {
   line-height: 60px;
 }
 
+
 #login-button {
     background-color: #88C8F8;
 }
 
-login-button:hover {
+    /* Style for the location selector button when the cursor is on the button */
+#login-button:hover{
     background-color: #39A4F4;
 }
 
@@ -67,11 +69,11 @@ login-button:hover {
     z-index: 1;
 }
 
-    .popup button {
-        cursor: pointer;
-        display: inline-block;
-        border-radius: 15px;
-        padding: 10px;
-        width: auto;
-    }
+.popup button {
+    cursor: pointer;
+    display: inline-block;
+    border-radius: 15px;
+    padding: 10px;
+    width: auto;
+}
 
