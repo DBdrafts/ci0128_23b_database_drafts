@@ -1,6 +1,7 @@
 ﻿@page
 @model LoCoMPro.Pages.AddProductPageModel
 @{
+    ViewData["Title"] = "AgregarProducto";
 }
 
 <!DOCTYPE html>
@@ -8,17 +9,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="~/css/add-product.css">
+
     <title>Nuevo Registro</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="register-section">
-        
-        <form>
-          <h2>Nuevo Registro</h2>
+        <div class="title-and-button">
+            <h2>Nuevo registro de producto</h2>
+            <button type="submit" class="submit-button" form="addProductForm">
+                <div class="button-content">
+                    <span class="button-text">Publicar Registro</span>
+                    <img src="~/img/AddRegisterIcon.svg" alt="addRegIcon" class="icon">
+                </div>
+            </button>
+
+        </div>
+        <hr class="title-separator">
+        <form id = "addProductForm">
+          
             <label for="location">Establecimiento:</label>
-            <input type="text" id="location" 		name="location" placeholder="Establecimiento" required>
+            <input type="text" id="location" name="location" placeholder="Establecimiento" required>
 
             <label for="productName">Nombre del Producto:</label>
             <input type="text" id="productName" name="productName" placeholder="Nombre" required>
@@ -42,7 +53,6 @@
             <label for="comment">Comentario:</label>
             <textarea id="comment" name="comment"></textarea>
 
-            <button type="submit">Publicar Registro</button>
         </form>
     </div>
 </body>

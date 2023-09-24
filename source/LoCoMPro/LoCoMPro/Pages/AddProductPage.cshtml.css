@@ -1,0 +1,130 @@
+﻿/* Set a base style for the entire page body */
+body {
+    background-color: #FFFFFF;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+
+/* Style for the form */
+form {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+/* Style for labels */
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+
+/* Style for text input fields, select, and textarea */
+input[type="text"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #E2E3E3;
+    border-radius: 5px;
+}
+
+textarea {
+    height: 100px;
+}
+
+/* Specific style for text input */
+input[type="text"],
+textarea {
+    background-color: #E2E3E3;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 25px;
+    border: 1px solid #E2E3E3;
+    border-radius: 15px;
+}
+
+
+/* Style for the select field */
+select {
+    background-color: #E2E3E3;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 25px;
+    border: 1px solid #E2E3E3;
+    border-radius: 15px;
+}
+
+/* Title Style */
+h2 {
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/*Title Separator Style*/
+.title-separator {
+    border: none;
+    height: 4px;
+    background-color: #9F9F9F;
+    margin-bottom: 20px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 255, 0.5);
+}
+
+/*Style title and button position*/
+.title-and-button {
+    display: flex;
+    justify-content: space-between; /* Alinea los elementos al principio y al final del contenedor */
+    align-items: center; /* Centra verticalmente los elementos */
+    margin-bottom: 20px; /* Espaciado entre el contenedor y el resto del contenido */
+}
+
+
+/* Specific style for text input */
+.submit-button {
+    background-color: #F5AA38;
+    color: #000000;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/*Text in button*/
+.button-text {
+    font-weight: 500;
+    margin-right: 15px;
+    order: 1;
+}
+
+/*Icon Style*/
+.icon {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    opacity: 1;
+    filter: grayscale(80%);
+    transform: translateX(40px);
+    order: 2;
+}
+
+
+
+
+
+
+
