@@ -1,0 +1,76 @@
+﻿/* Set a base style for the entire page body */
+body {
+    background-color: #FFFFFF;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Style for the form */
+form {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 800px;
+}
+
+/* Style for labels */
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+
+/* Style for text input fields, select, and textarea */
+input[type="text"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #E2E3E3;
+    border-radius: 5px;
+}
+
+textarea {
+    height: 100px;
+}
+
+/* Specific style for text input */
+input[type="text"],
+textarea {
+    background-color: #E2E3E3; /* Cambia el color de fondo aquí */
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #E2E3E3;
+    border-radius: 15px;
+}
+
+
+/* Specific style for text input */
+button {
+    background-color: #F5AA38;
+    color: #000000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+/* Style for the select field */
+select {
+    background-color: #E2E3E3;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #E2E3E3;
+    border-radius: 15px;
+}
