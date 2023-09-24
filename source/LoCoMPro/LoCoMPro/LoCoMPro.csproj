@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Pages\Login.cshtml.css" />
-    <Content Include="Pages\login.cshtml.js" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\css\SharedStyles.css" />
   </ItemGroup>
 
