@@ -1,10 +1,14 @@
-﻿.button-general {
+﻿/* Style shared by several pages */
+
+/* General style for the button */
+.button-general {
     color: black;
     border: none;
     border-radius: 15px;
     cursor: pointer;
 }
 
+/* Style for the search bar class */
 .search-bar {
     display: flex;
     width: auto;
@@ -13,6 +17,7 @@
     border-radius: 15px;
 }
 
+/* Style for the search input box */
 #search-input {
     flex: auto;
     padding: 5px 10px;
@@ -23,38 +28,45 @@
     outline: none;
 }
 
+/* Style for the slector of types */
 #type-search-selector {
     background-color: #BABAB8;
     padding: 0px 15px;
     margin: 0px initial;
 }
 
+/* Style for the image of the type selector */
 #type-search-selector img{
     padding: 0px 0px 0px 7px;
     width: auto;
     height: auto;
 }
 
+/* Style for the type selector when the cursor is on the button */
 #type-search-selector:hover {
     background-color: #adada9;
 }
 
+/* Style for the search button */
 #search-button {
     background-color: #F5AA38;
     margin: 0px auto;
     z-index: 1;
 }
 
+/* Style for the image of the search button */
 #search-button img {
     width: 90%;
     height: 90%;
     padding: 0px 15px;
 }
 
+/* Style for the search button when the cursor is on the button */
 #search-button:hover {
     background-color: #f6a01d;
 }
 
+/* Style for the location selector button */
 #location-selector {
     background-color: #88C8F8;
     padding: 0px 30px;
@@ -62,16 +74,19 @@
     z-index: 0;
 }
 
+/* Style for the image of the location selector button */
 #location-selector img {
     width: 27px;
     height: 27px;
     padding: 0px 5px;
 }
 
+/* Style for the location selector button when the cursor is on the button */
 #location-selector:hover {
     background-color: #39A4F4;
 }
 
+/* Style for the layout buttons */
 .layout-button {
     background: none;
     margin: 0px 10px -15px 0px;
@@ -80,10 +95,12 @@
     text-decoration: none;
 }
 
+/* Style for the paragraph in the layput button */
 .layout-button p {
     color:black;
 }
 
+    /* Style for the image of the layout buttons */
 .layout-button img {
     max-height: 30px;
     max-width: 30px;
