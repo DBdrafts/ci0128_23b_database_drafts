@@ -1,0 +1,48 @@
+﻿@page
+@model LoCoMPro.Pages.AddProductPageModel
+@{
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Registro</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="register-section">
+        
+        <form>
+          <h2>Nuevo Registro</h2>
+            <label for="location">Establecimiento:</label>
+            <input type="text" id="location" 		name="location" placeholder="Establecimiento" required>
+
+            <label for="productName">Nombre del Producto:</label>
+            <input type="text" id="productName" name="productName" placeholder="Nombre" required>
+			<label for="price">Precio:</label>
+            <input type="text" id="price" name="price" placeholder="Precio" required >
+            <label for="brand">Marca (Opcional):</label>
+            <input type="text" id="brand" name="brand" placeholder="Marca">
+          
+          	<label for="model">Modelo (Opcional):</label>
+            <input type="text" id="model" name="model"placeholder="Modelo">
+
+            <label for="category">Categoría:</label>
+            <select id="category" name="category" required>
+                <option value=""  selected>Elegir categoría</option>
+                <option value="option1">Ropa</option>
+                <option value="option2">Comida</option>
+                <option value="option3">Tecnología</option>
+            </select>
+
+
+            <label for="comment">Comentario:</label>
+            <textarea id="comment" name="comment"></textarea>
+
+            <button type="submit">Publicar Registro</button>
+        </form>
+    </div>
+</body>
+</html>
