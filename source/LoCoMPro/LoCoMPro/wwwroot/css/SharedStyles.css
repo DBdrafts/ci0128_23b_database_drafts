@@ -61,11 +61,25 @@
 
 .layout-button {
     background: none;
-    color: black;
     border: none;
-    margin: auto;
+    margin: auto auto -20px auto;
     cursor: pointer;
+    align-items: center;
+    display: inline-block;
+    color: black;
+    text-align: center;
+    text-decoration: none;
 }
+
+.layout-button img {
+    max-height: 30px;
+    max-width: 30px;
+}
+
+.layout-button p {
+    color: black;
+}
+
 
 #add-register-button {
 
