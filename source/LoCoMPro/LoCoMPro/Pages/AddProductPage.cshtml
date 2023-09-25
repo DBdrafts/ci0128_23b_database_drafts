@@ -10,10 +10,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Nuevo Registro</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="~/css/SharedStyles.css">
+
 </head>
 <body>
     <div class="register-section">
@@ -29,7 +29,10 @@
         </div>
         <hr class="title-separator">
         <form id = "addProductForm">
-          
+            <div class="location-container">
+                <button type="button" class="location-button" id="locationButton">Elegir ubicación</button>
+                <input type="text" id="chosenLocation" name="chosenLocation" style="display: none;" readonly>
+            </div>
             <label for="location">Establecimiento:</label>
             <input type="text" id="location" name="location" placeholder="Establecimiento" required>
 
@@ -55,7 +58,26 @@
             <label for="comment">Comentario:</label>
             <textarea id="comment" name="comment"></textarea>
 
+
+            <div id="locationPopup" class="popup">
+                <div class="popup-content">
+                    <h2>Selecciona tu ubicación</h2>
+                    <label for="province">Provincia:</label>
+                    <select id="province" name="province">
+                        <option value="provincia1">Provincia 1</option>
+                        <option value="provincia2">Provincia 2</option>
+                    </select>
+                    <label for="canton">Cantón:</label>
+                    <select id="canton" name="canton" disabled>
+                        <option value="" selected>Selecciona provincia primero</option>
+                        <option value="canton3">Cantón 3</option>
+                        <option value="canton4">Cantón 4</option>
+                    </select>
+                    <button type="button" id="saveLocation">Guardar</button>
+                </div>
+            </div>
         </form>
     </div>
+    <script src="~/js/selectLocation.js"></script>
 </body>
 </html>
