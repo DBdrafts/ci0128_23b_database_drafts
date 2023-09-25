@@ -10,18 +10,21 @@
 
 /* Style for the search bar class */
 .search-bar {
-    display: flex;
-    width: auto;
-    margin: auto 225px;
+    display:flex;
+    min-width: 60%;
+    height: fit-content;
+    margin: 0px auto;
     background-color: #E2E3E3;
     border-radius: 15px;
+    max-height: 10%;
+    max-width: 75%;
 }
 
 /* Style for the search input box */
 #search-input {
     flex: auto;
     padding: 5px 10px;
-    border: 1px hidden;
+    border: none;
     border-radius: 15px;
     background-color: #E2E3E3;
     color: black;
@@ -68,10 +71,14 @@
 
 /* Style for the location selector button */
 #location-selector {
+    flex: none;
     background-color: #88C8F8;
     padding: 0px 30px;
     margin: 0px -25px;
     z-index: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 20%;
 }
 
 /* Style for the image of the location selector button */
@@ -86,6 +93,20 @@
     background-color: #39A4F4;
 }
 
+/* Style of the box of the logo image of the main page*/
+.logo-image {
+    height: auto;
+    width: auto;
+    margin: 30px auto;
+    text-align: center;
+}
+
+/* Style for the logo image of the main page*/
+.logo-image img {
+    max-height: 40%;
+    max-width: 40%;
+}
+
 /* Style for the layout buttons */
 .layout-button {
     background: none;
@@ -97,11 +118,24 @@
 
 /* Style for the paragraph in the layput button */
 .layout-button p {
-    color:black;
+    color: black;
 }
 
-    /* Style for the image of the layout buttons */
+/* Style for the image of the layout buttons */
 .layout-button img {
     max-height: 30px;
     max-width: 30px;
+}
+
+/* Style for the logo that work as a link to the main page */
+.logo-link {
+    height: 50px;
+    width: 150px;
+    margin: 0px 15px;
+}
+
+/* Style for the image of the logo that work as a link to the main page */
+.logo-link img {
+    max-height: 100%;
+    max-width: 100%;
 }
