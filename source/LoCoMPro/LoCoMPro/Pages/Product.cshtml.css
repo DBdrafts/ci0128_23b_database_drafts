@@ -1,13 +1,41 @@
 ﻿/* Styles for the producto visualization page*/
-
+ 
+/* Style for the title of product requested */
 .titleProduct {
     width: 1152px;
     text-align: center;
     color: black;
     font-size: 30px;
-    font-family: Inter, Arial, sans-serif;
     font-weight: 700;
     word-wrap: break-word;
     margin: 0 auto;
     padding: 30px;
+}
+
+/* Style for the format of specifications of product */
+.column {
+    flex: 33.33%;
+    height: 100px;
+    margin: 5px;
+    text-align: center;
+    display: inline-block;
+    margin: 0px;
+}
+
+/* Style for paragraphs within columns */
+.column p {
+    font-size: 24px;
+}
+
+/* Container that wraps the product specification columns */
+.container {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+/* Horizontal line of separation with the list of records */
+hr.style-four {
+    background: #9F9F9F;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.50);
+    margin-bottom: 20px;
 }

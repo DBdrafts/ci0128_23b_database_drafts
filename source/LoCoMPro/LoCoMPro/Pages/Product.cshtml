@@ -1,35 +1,58 @@
 ﻿@page
 @model LoCoMPro.Pages.ProductoModel
 @{
+    ViewData["Title"] = "SearchProduct";
+    Layout = "_Layout";
 }
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset=utf-8 />
-    <title>Titulo</title>
+    <title>Product Visualization</title>
+    <link rel="stylesheet" href="~/css/SharedStyles.css" />
 </head>
 
 <body>
+    <!-- Name of product requested -->
     <div class="titleProduct">
         Titulo del Producto solicitado
     </div>
-    <div class="nombreColumna">
-        <text>Marca</text>
-        <text>Modelo</text>
-        <text>Establecimiento</text>
-        <text>Cantón</text>
-        <text>Provincia</text>
-    </div>
 
-    <div class="valorColumna">
-        <text>NombreMarca</text>
-        <text>NombreModelo</text>
-        <text>NombreEstablecimiento</text>
-        <text>NombreCanton</text>
-        <text>NombreProvicia</text>
+    <!-- Section for columns of specifications from requested product -->
+    <div class="container">
+        <!-- brand column -->
+        <div class="column">
+            <h2>Marca</h2>
+            <p>NombreMarca</p>
+        </div>
+
+        <!-- model column -->
+        <div class="column">
+            <h2>Modelo</h2>
+            <p>NombreModelo</p>
+        </div>
+
+        <!-- establishment column -->
+        <div class="column">
+            <h2>Establecimiento</h2>
+            <p>NombreEstablecimiento</p>
+        </div>
+
+        <!-- cantón column -->
+        <div class="column">
+            <h2>Cantón</h2>
+            <p>NombreCantón</p>
+        </div>
+
+        <!-- province column -->
+        <div class="column">
+            <h2>Provincia</h2>
+            <p>NombreProvincia</p>
+        </div>    
     </div>
+    <!-- Horizontal separating line -->
+    <hr class="style-four">
 
    </body>
-
 </html>
