@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace LoCoMPro.Models
 {
@@ -9,6 +11,11 @@ namespace LoCoMPro.Models
         public required string UserName { get; set; }
         public string? Email { get; set; }
         public string? Password { get; set; }
-        public Canton? Location { get; set; }
+        
+        // Navigation atributes
+        //public string? CantonName { get; set; }
+        //public string? ProvinciaName { get; set; }
+
+        //public required Canton Location { get; set; }
     }
 }
