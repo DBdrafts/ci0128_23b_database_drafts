@@ -6,10 +6,10 @@ namespace LoCoMPro.Models
     [PrimaryKey(nameof(Name))]
     public class Provincia
     {
-        //  Primary Key atributte
+        //  Primary Key
         public required string Name { get; set; }
 
-        // Navegation atribute
-        public ICollection<Canton>? Cantones { get; set; }
+        // Navegation atributte
+        public List<Canton>? Cantones { get; set; }
     }
 }

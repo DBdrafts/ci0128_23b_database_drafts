@@ -16,5 +16,8 @@ namespace LoCoMPro.Models
 
         // Foreign Key 
         public required Canton Location { get; set; }
+
+        // Navegation attributes
+        public List<Register>? Registers { get; set; }
     }
 }
