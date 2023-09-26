@@ -45,7 +45,10 @@ namespace LoCoMPro.Data
                 .WithMany(e => e.Registers)
                 .HasForeignKey(c => new { c.StoreName, c.CantonName, c.ProvinciaName });
 
-
+            modelBuilder.Entity<User>()
+                .HasOne(p => p.Location)
+                .WithMany(e => e.Users)
+                .HasForeignKey(c => new { c.CantonName, c.ProvinciaName });
         }
 
     }
