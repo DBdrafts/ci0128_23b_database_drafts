@@ -13,5 +13,8 @@ namespace LoCoMPro.Models
         public string? Brand { get; set; }
         public string? Model { get; set; }
         public string? Category { get; set; }
+
+        // Navegation attributes
+        public List<Register>? Registers { get; set; }  // TODO: May have to change to FLUENT API notation
     }
 }

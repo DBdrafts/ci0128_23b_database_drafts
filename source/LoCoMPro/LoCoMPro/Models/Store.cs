@@ -13,11 +13,9 @@ namespace LoCoMPro.Models
         // Navegation attribute
         public required string CantonName { get; set; }
         public required string ProvinciaName { get; set; }
+        public List<Register>? Registers { get; set; }
 
         // Foreign Key 
         public required Canton Location { get; set; }
-
-        // Navegation attributes
-        public List<Register>? Registers { get; set; }
     }
 }
