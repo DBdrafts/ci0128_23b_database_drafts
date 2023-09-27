@@ -1,0 +1,25 @@
+﻿/* Style for the location button */
+
+/* Style for the location selector button */
+.location-selector {
+    flex: none;
+    background-color: #88C8F8;
+    padding: 0px 30px;
+    margin: 0px -25px;
+    z-index: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 20%;
+}
+
+/* Style for the image of the location selector button */
+.location-selector img {
+    width: 27px;
+    height: 27px;
+    padding: 0px 5px;
+}
+
+/* Style for the location selector button when the cursor is on the button */
+.location-selector:hover {
+    background-color: #39A4F4;
+}
