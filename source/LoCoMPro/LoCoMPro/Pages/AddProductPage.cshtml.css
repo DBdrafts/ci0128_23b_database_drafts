@@ -58,6 +58,22 @@ textarea {
 }
 
 
+/* Style for disabled fields */
+.required-field:disabled {
+    background-color: #D0D0D0;
+}
+
+.required-field:disabled::placeholder {
+    color: #9F9F9F;
+}
+
+.required-field:enabled::placeholder {
+    color: #6b6b6b;
+}
+
+
+
+
 /* Style for the container of brand and model */
 .brand-model-container {
     display: flex;
@@ -275,7 +291,6 @@ h2 {
 #saveLocation-botton:hover {
     background-color: #5AABE2;
 }
-
 
 
 /*Style for the asterisk of required fields*/

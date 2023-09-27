@@ -28,17 +28,17 @@
             </div>
             <label for="location">Establecimiento<span class="required-marker">*</span> 
             <span class="required-tooltip">Campo obligatorio</span></label>
-            <input type="text" id="location" name="location" placeholder="Establecimiento" required>
+            <input type="text" id="location" name="location" class="required-field" placeholder="Establecimiento" required>
 
             <label for="productName">Nombre del Producto<span class="required-marker">*</span>
                 <span class="required-tooltip">Campo obligatorio</span></label>
-            <input type="text" id="productName" name="productName" placeholder="Nombre" required>
+            <input type="text" id="productName" name="productName" class="required-field" placeholder="Nombre" required>
 
             <div class="price-category-container">
                 <div class="price-category-field-group">
                     <label for="price">Precio<span class="required-marker">*</span>
                         <span class="required-tooltip">Campo obligatorio</span></label>
-                    <input type="text" id="price" name="price" placeholder="Precio" required>
+                    <input type="text" id="price" name="price" class="required-field" placeholder="Precio" required>
                 </div>
                 <div class="price-category-field-group">
                     <label for="category">Categoría </label>
@@ -62,8 +62,6 @@
                     <input type="text" id="model" name="model" placeholder="Modelo">
                 </div>
             </div>
-                
-
 
             <label for="comment">Comentario:</label>
             <textarea id="comment" name="comment"></textarea>
@@ -94,5 +92,6 @@
         </form>
     </div>
     <script src="~/js/selectLocation.js"></script>
+    <script src="~/js/sequentialForm.js"></script>
 </body>
 </html>
