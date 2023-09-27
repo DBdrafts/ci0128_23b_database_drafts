@@ -21,7 +21,7 @@
         <hr class="title-separator">
         <form id = "addProductForm">
             <label for="location">Ubicación<span class="required-marker">*</span>
-            <span class="required-tooltip">Campo obligatorio</span></label>
+                <span class="required-tooltip">Campo obligatorio</span></label>
             <div class="location-container">
                 <button type="button" class="location-button" id="locationButton">Elegir ubicación</button>
                 <input type="text" id="chosenLocation" name="chosenLocation" style="display: none;" readonly>
@@ -31,24 +31,38 @@
             <input type="text" id="location" name="location" placeholder="Establecimiento" required>
 
             <label for="productName">Nombre del Producto<span class="required-marker">*</span>
-            <span class="required-tooltip">Campo obligatorio</span></label>
-            <input type="text" id="productName" name="productName" placeholder="Nombre" required>
-            <label for="price">Precio<span class="required-marker">*</span>
                 <span class="required-tooltip">Campo obligatorio</span></label>
-            <input type="text" id="price" name="price" placeholder="Precio" required >
-            <label for="brand">Marca</label>
-            <input type="text" id="brand" name="brand" placeholder="Marca">
-          
-          	<label for="model">Modelo</label>
-            <input type="text" id="model" name="model"placeholder="Modelo">
+            <input type="text" id="productName" name="productName" placeholder="Nombre" required>
 
-            <label for="category">Categoría </label>
-            <select id="category" name="category" required>
-                <option value=""  selected>Elegir categoría</option>
-                <option value="option1">Ropa</option>
-                <option value="option2">Comida</option>
-                <option value="option3">Tecnología</option>
-            </select>
+            <div class="price-category-container">
+                <div class="price-category-field-group">
+                    <label for="price">Precio<span class="required-marker">*</span>
+                        <span class="required-tooltip">Campo obligatorio</span></label>
+                    <input type="text" id="price" name="price" placeholder="Precio" required>
+                </div>
+                <div class="price-category-field-group">
+                    <label for="category">Categoría </label>
+                    <select id="category" name="category" required>
+                        <option value=""  selected>Elegir categoría</option>
+                        <option value="option1">Ropa</option>
+                        <option value="option2">Comida</option>
+                        <option value="option3">Tecnología</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="brand-model-container">
+                <div class="brand-model-field-group">
+                    <label for="brand">Marca</label>
+                    <input type="text" id="brand" name="brand" placeholder="Marca">
+                </div>
+                <div class="brand-model-field-group">
+                    <label for="model">Modelo</label>
+                    <input type="text" id="model" name="model" placeholder="Modelo">
+                </div>
+            </div>
+                
 
 
             <label for="comment">Comentario:</label>
@@ -74,7 +88,7 @@
                         <option value="canton3">Cantón 3</option>
                         <option value="canton4">Cantón 4</option>
                     </select>
-                    <button type="button" id="saveLocation">Guardar</button>
+                    <button type="button" id="saveLocation-botton">Guardar</button>
                 </div>
             </div>
         </form>

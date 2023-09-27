@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const locationPopup = document.getElementById("locationPopup");
     const provinceSelect = document.getElementById("province");
     const cantonSelect = document.getElementById("canton");
-    const saveLocationButton = document.getElementById("saveLocation");
+    const saveLocationButton = document.getElementById("saveLocation-botton");
 
     locationButton.addEventListener("click", function () {
         locationPopup.style.display = "block";

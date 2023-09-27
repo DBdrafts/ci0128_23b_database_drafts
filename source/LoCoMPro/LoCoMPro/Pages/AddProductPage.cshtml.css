@@ -39,9 +39,12 @@ textarea {
     border-radius: 5px;
 }
 
+
 textarea {
+    /* Comment box heigh*/
     height: 100px;
 }
+
 
 /* Specific style for text input */
 input[type="text"],
@@ -52,6 +55,62 @@ textarea {
     margin-bottom: 25px;
     border: 1px solid #E2E3E3;
     border-radius: 15px;
+}
+
+
+/* Style for the container of brand and model */
+.brand-model-container {
+    display: flex;
+    justify-content: space-between; /* Add space between the fields */
+}
+
+/* Style for each field and label of brand and model */
+.brand-model-field-group {
+    flex: 1; /* Distribute available space evenly between fields */
+    display: flex;
+    flex-direction: column; /* Place the label above the input field */
+    align-items: flex-start; /* Align elements to the left */
+}
+
+
+/* Style for the input fields */
+.brand-model-field-group input[type="text"] {
+    width: 100%; /* Make both input fields the same width */
+    padding: 10px;
+    border: 1px solid #E2E3E3;
+}
+
+/*White space between fields*/
+.brand-model-field-group:first-child {
+    margin-right: 30px;
+}
+
+
+/* Style for the container of price and category */
+.price-category-container {
+display: flex;
+justify-content: space-between; /* Add space between the fields */
+}
+
+/* Style for each field and label of price and category */
+.price-category-field-group {
+flex: 1; /* Distribute available space evenly between fields */
+display: flex;
+flex-direction: column; /* Place the label above the input field */
+align-items: flex-start; /* Align elements to the left */
+}
+
+
+/* Style for the input fields */
+.price-category-field-group input[type="text"] {
+    width: 100%; /* Make both input fields the same width */
+    padding: 10px;
+    border: 1px solid #E2E3E3;
+}
+
+/*White space between fields*/
+.price-category-field-group:first-child {
+    margin-right: 30px;
 }
 
 
@@ -83,7 +142,7 @@ h2 {
 
 
 
-/* Specific style for text input button */
+/* Specific style for input button */
 .submit-button {
     background-color: #F5AA38;
     color: #000000;
@@ -99,6 +158,13 @@ h2 {
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.30);
     margin-left:auto;
 }
+
+
+/**Style for submit-button when hover*/
+.submit-button:hover {
+    background-color: #F59500;
+}
+
 
 /*Text in button*/
 .button-text {
@@ -119,7 +185,7 @@ h2 {
 }
 
 
-
+/*Style for pop up*/
 .popup {
     display: none;
     position: fixed;
@@ -131,6 +197,7 @@ h2 {
     z-index: 1;
 }
 
+/*Style for pop up content*/
 .popup-content {
     background-color: #fff;
     margin: 20% auto;
@@ -142,20 +209,8 @@ h2 {
 }
 
 
-.close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    cursor: pointer;
-    border-radius: 15px;
-}
 
-.close-button:hover {
-    color: #f44336;
-}
-
-
+/*Style for location button*/
 .location-button {
     background-color: #74C2F8;
     color: #000000;
@@ -170,18 +225,19 @@ h2 {
     white-space: nowrap;
 }
 
+/**Style for location button when hover*/
 .location-button:hover {
-    background-color: #0056b3;
+    background-color: #5AABE2;
 }
 
-
+/**Style for location container*/
 .location-container {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
 }
 
-
+/**Style for location input*/
 .location-input {
     flex: 1;
     background-color: #E2E3E3;
@@ -191,6 +247,7 @@ h2 {
     border-radius: 5px;
 }
 
+/**Style for location options*/
 #chosenLocationLabel,
 #chosenLocation {
     display: none;
@@ -203,8 +260,8 @@ h2 {
     margin-bottom: 0px;
 }
 
-
-#saveLocation {
+/**Style for save location botton*/
+#saveLocation-botton {
     background-color: #74C2F8;
     color: #000000;
     border: none;
@@ -213,6 +270,12 @@ h2 {
     cursor: pointer;
     font-size: 16px;
 }
+
+/**Style for location button when hover*/
+#saveLocation-botton:hover {
+    background-color: #5AABE2;
+}
+
 
 
 /*Style for the asterisk of required fields*/
