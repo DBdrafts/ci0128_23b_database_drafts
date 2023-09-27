@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using LoCoMPro.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace LoCoMPro.Data
@@ -8,9 +9,9 @@ namespace LoCoMPro.Data
     {
         public static void Initialize(LoCoMProContext context)
         {
-            List<Provincia> provincias = new List<Provincia>();
-            List<Canton> cantones = new List<Canton>();
-            List<Store> stores = new ();
+            List<Provincia> provincias = new();
+            List<Canton> cantones = new();
+            List<Store> stores = new();
 
             InitializeProvincias(context, ref provincias);
             InitializeCantones(context, ref provincias, ref cantones);
@@ -25,7 +26,8 @@ namespace LoCoMPro.Data
 
             if (context.Provincias.Any())
             {
-                return;   // DB has been seeded
+                context.Provincias.ExecuteDelete<Provincia>();
+                //return;   // DB has been seeded
             }
             
             provincias.Add(new Provincia() { Name = "San Jose"});
@@ -39,16 +41,20 @@ namespace LoCoMPro.Data
             , ref List<Provincia> provincias, ref List<Canton> cantones)
         {
 
-            if (context.Cantones.Any() || provincias.IsNullOrEmpty())
+            if (provincias.IsNullOrEmpty())
             {
                 return;   // DB has been seeded
+            }
+            if (context.Cantones.Any())
+            {
+                context.Cantones.ExecuteDelete<Canton>();
             }
 
             cantones.Add(new Canton() { CantonName = "Montes de Oca", Provincia = provincias[0], ProvinciaName = "San Jose"});
             cantones.Add(new Canton() { CantonName = "Guadalupe", Provincia = provincias[0], ProvinciaName = "San Jose"});
             cantones.Add(new Canton() { CantonName = "Santo Domingo", Provincia = provincias[0], ProvinciaName = "Heredia"});
 
-            context.Provincias.AddRange(provincias);
+            context.Cantones.AddRange(cantones);
             context.SaveChanges();
         }
 

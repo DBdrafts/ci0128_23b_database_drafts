@@ -17,5 +17,7 @@ namespace LoCoMPro.Models
 
         // Foreign Key 
         public required Canton Location { get; set; }
+        [NotMapped]
+        public List<Product>? Products { get; set; }
     }
 }

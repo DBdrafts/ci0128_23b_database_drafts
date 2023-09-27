@@ -21,5 +21,5 @@ namespace LoCoMPro.Models
         //  Foreing Key
         public required Canton Location { get; set; }
         
-    }
+    };
 }

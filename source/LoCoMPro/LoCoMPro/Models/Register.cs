@@ -19,7 +19,9 @@ namespace LoCoMPro.Models
 
         // Atributes
         public required float Price { get; set; }
+        [NotMapped]
         public uint? NumConfirmations { get; set; }
+        [NotMapped]
         public uint? NumCorrections { get; set; }
         public string? Comment { get; set; }
 
