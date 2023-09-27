@@ -12,7 +12,7 @@ namespace LoCoMPro.Models
         public required string CantonName { get; set; }
 
         // Navegation atribute
-        public required string ProvinciaName { get; set; }
+        public string? ProvinciaName { get; set; }
         public List<Store>? Stores { get; set; }
         public List<User>? Users { get; set; }
 
