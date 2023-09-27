@@ -13,40 +13,36 @@
     <title>Nuevo Registro</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="~/css/SharedStyles.css">
-
 </head>
+
 <body>
     <div class="register-section">
-        <div class="title-and-button">
             <h2>Nuevo registro de producto</h2>
-            <button type="submit" class="submit-button" form="addProductForm">
-                <div class="button-content">
-                    <span class="button-text">Publicar Registro</span>
-                    <img src="~/img/AddRegisterIcon.svg" alt="addRegIcon" class="icon">
-                </div>
-            </button>
-
-        </div>
         <hr class="title-separator">
         <form id = "addProductForm">
+            <label for="location">Ubicación<span class="required-marker">*</span>
+            <span class="required-tooltip">Campo obligatorio</span></label>
             <div class="location-container">
                 <button type="button" class="location-button" id="locationButton">Elegir ubicación</button>
                 <input type="text" id="chosenLocation" name="chosenLocation" style="display: none;" readonly>
             </div>
-            <label for="location">Establecimiento:</label>
+            <label for="location">Establecimiento<span class="required-marker">*</span> 
+            <span class="required-tooltip">Campo obligatorio</span></label>
             <input type="text" id="location" name="location" placeholder="Establecimiento" required>
 
-            <label for="productName">Nombre del Producto:</label>
+            <label for="productName">Nombre del Producto<span class="required-marker">*</span>
+            <span class="required-tooltip">Campo obligatorio</span></label>
             <input type="text" id="productName" name="productName" placeholder="Nombre" required>
-			<label for="price">Precio:</label>
+            <label for="price">Precio<span class="required-marker">*</span>
+                <span class="required-tooltip">Campo obligatorio</span></label>
             <input type="text" id="price" name="price" placeholder="Precio" required >
-            <label for="brand">Marca (Opcional):</label>
+            <label for="brand">Marca</label>
             <input type="text" id="brand" name="brand" placeholder="Marca">
           
-          	<label for="model">Modelo (Opcional):</label>
+          	<label for="model">Modelo</label>
             <input type="text" id="model" name="model"placeholder="Modelo">
 
-            <label for="category">Categoría:</label>
+            <label for="category">Categoría </label>
             <select id="category" name="category" required>
                 <option value=""  selected>Elegir categoría</option>
                 <option value="option1">Ropa</option>
@@ -57,7 +53,12 @@
 
             <label for="comment">Comentario:</label>
             <textarea id="comment" name="comment"></textarea>
-
+            <button type="submit" class="submit-button" form="addProductForm">
+                <div class="button-content">
+                    <span class="button-text">Publicar Registro</span>
+                    <img src="~/img/AddRegisterIcon.svg" alt="addRegIcon" class="icon">
+                </div>
+            </button>
 
             <div id="locationPopup" class="popup">
                 <div class="popup-content">

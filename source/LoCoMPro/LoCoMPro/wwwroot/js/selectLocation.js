@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (selectedProvince) {
             cantonSelect.removeAttribute("disabled");
 
-            // Verificamos si se seleccionó la "Provincia 2" y habilitamos las opciones correspondientes.
             if (selectedProvince === "provincia2") {
                 const cantonOptions = cantonSelect.getElementsByTagName("option");
                 for (let i = 0; i < cantonOptions.length; i++) {
@@ -26,7 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 }
             } else {
-                // Si se selecciona otra provincia, deshabilitamos todas las opciones de cantón.
                 const cantonOptions = cantonSelect.getElementsByTagName("option");
                 for (let i = 0; i < cantonOptions.length; i++) {
                     cantonOptions[i].setAttribute("disabled", "disabled");
@@ -51,7 +49,6 @@ document.addEventListener("DOMContentLoaded", function () {
             chosenLocation.style.display = "block";
             chosenLocation.value = locationText;
         } else {
-            // Si no se ha seleccionado una ubicación válida, ocultamos la caja de texto.
             document.getElementById("chosenLocation").style.display = "none";
         }
 
