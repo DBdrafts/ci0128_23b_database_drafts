@@ -1,6 +1,7 @@
 ﻿@page
 @model LoCoMPro.Pages.LoginModel
 @{
+    Layout = "_Layout";
 }
 
 <!DOCTYPE html>
@@ -9,6 +10,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="~/css/SharedStyles.css">
     <link rel="stylesheet" href="styles.css">
     <script src="~/js/Login.js"></script>
 </head>
@@ -27,10 +29,13 @@
             <input type="checkbox" onclick="shwPass()">Mostrar Contraseña
 
             <button id="login" type="submit">Iniciar Sesión</button>
-            <!-- <span class="registr">¿No tiene una cuenta? <a href="#">Regístrese aquí</a></span> -->
+            <div id="forgotpsw"><a href="">¿Has olvidado tu contraseña?</a></div>
         </form>
     </div>
-    <div>
+    <div class="noacc-section">
+        <div id="separator"></div>
+        <div style="text-align: center">¿No te has registrado?</div>
+        <button id="register">Registrarse</button>
     </div>
 </body>
 </html>
