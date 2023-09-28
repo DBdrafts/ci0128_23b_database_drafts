@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,41 +16,20 @@
     <header>
         <!-- Navegation bar of the layout -->
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            @if (!(bool)ViewData["HiddenLayout"])
-            {
-                <div class="logo-link d-flex justify-content-left">
+            <div class="w-100 d-flex">
+                @if (ViewBag.ShowNavigation ?? true)
+                {
                     <!-- Logo link to the main page -->
-                    <a href="/" class="button-general">
-                        <img src="~/img/LoCoMProLogo.svg" alt="Agregar Registro">
-                    </a>
-                </div>
-                <!-- Section of the search bar and buttons for the layout -->
-                <div class="search-bar d-flex justify-content-center">
-                    <!-- Type selector button -->
-                <button class="button-general" id="type-search-selector">
-                    <span>Buscar por</span>
-                    <img src="~/img/ArrowDownIcon.svg" />
-                </button>
-
-                <!-- Input box for the search -->
-                <input type="text" id="search-input" placeholder="Buscar.." />
-
-                <!-- Search button -->
-                <button class="button-general" id="search-button">
-                    <img src="~/img/SearchIcon.svg" />
-                </button>
-
-                <!-- Location butoon -->
-                <button class="button-general" id="location-selector">
-                    <img src="~/img/LocationIcon.svg" />
-                    <span> Placeholder de una prueba </span>
-                </button>
-                </div>
-            }
-            <!-- Navegation bar buttons -->
-            @if (!(bool)ViewData["HiddenLayout"])
-            {
-                <div class="d-flex justify-content-end w-100">
+                    <div class="logo-link justify-content-left">
+                        <a href="/" class="button-general">
+                            <img src="~/img/LoCoMProLogo.svg" alt="Agregar Registro">
+                        </a>
+                    </div>
+                    <!-- Section of the search bar and buttons for the layout -->
+                    @await Html.PartialAsync("_SearchBar")
+                }
+                <!-- Navegation bar buttons -->
+                <div class="d-flex justify-content-end">
                     <!-- Add register button of the layout -->
                     <a href="" class="layout-button button-general">
                         <img src="~/img/AddRegisterIcon.svg" alt="Agregar Registro">
@@ -62,22 +41,7 @@
                         <p>Usuario</p>
                     </button>
                 </div>
-            }
-            @if ((bool)ViewData["HiddenLayout"])
-            {
-                <div class="d-flex justify-content-end w-100">
-                    <!-- Add register button of the layout -->
-                    <a href="" class="layout-button button-general">
-                        <img src="~/img/AddRegisterIcon.svg" alt="Agregar Registro">
-                        <p>Agregar</p>
-                    </a>
-                    <!-- USer configuration button of the layout -->
-                    <button class="layout-button button-general">
-                        <img src="~/img/UserIcon.svg" alt="Opciones de Usuario">
-                        <p>Usuario</p>
-                    </button>
-                </div>
-            }
+            </div>  
         </nav>
     </header>
     <div class="container">
