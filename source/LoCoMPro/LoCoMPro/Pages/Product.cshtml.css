@@ -54,11 +54,6 @@ hr.style-four {
     line-height: normal;
 }
 
-/*Style for list registers columns */
-.containerListRegistercolumns {
-    display: grid;
-    grid-template-columns: 1fr 1fr 3fr;
-}
 
 /*Style for dropdown options*/
 .dropdownOption {
@@ -71,15 +66,71 @@ hr.style-four {
     background-position: 200px 22px;
 }   
 
-/*Style for dropdown mouse up*/
-.dropdownOption:hover {
+/*Style for the text in the columns*/
+nav {
+    background-color: #FFF;
+    font-size: 30px;
+    text-align: center
+}
+
+/*Style for list registers columns */
+.containerListRegistercolumns {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr 3fr;
+}
+
+/*Style for text in the html list */
+.containerListRegistercolumns > li > a {
+        display: block;
+        padding: 15px 20px;
+        color: black;
+        text-decoration: none;
+        background-image: url('/img/ArrowDownIcon.svg');
+        background-repeat: no-repeat;
+        background-position: 200px 30px;
+        text-align:center;
+}
+
+/*Style for text in the selected option of the list */
+.containerListRegistercolumns > li:hover > a  {
    color: #208EE0; 
 }
+
+/*Style for the vertical menu */
+.menu-vertical {
+    position: absolute;
+    display: none;
+    list-style: none;
+    width: 200px;
+    background-color: darkgrey;
+}
+
+/*Style for the vertical menu */
+.containerListRegistercolumns li:hover .menu-vertical {
+    display: block;
+    /*heres to fix*/
+}
+
+/*Style for text in the selected option of the vertical menu */
+.menu-vertical li:hover a {
+    color: #208EE0;
+}
+
+/*Style for text in the vertical menu */
+.menu-vertical li a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 15px 15px 15px 20px;
+    font-size: 20px;
+    text-align: center;
+}
+
 
 /*Style for comment */
 .textComment {
     text-align: center;
-    height: 100px;
     font-size: 30px;
     margin: 0px;
 }
