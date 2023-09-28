@@ -1,0 +1,26 @@
+﻿<!-- Partial view of the search bar -->
+
+<head>
+    <!-- Shared style for several pages-->
+    <link rel="stylesheet" href="~/css/SearchBar.css" />
+</head>
+
+<!-- Section of the search bar and buttons for the layout -->
+<div class="search-bar justify-content-center">
+    <!-- Type selector button -->
+    <button class="button-general" id="type-search-selector">
+        <span>Buscar por</span>
+        <img src="~/img/ArrowDownIcon.svg" />
+    </button>
+
+    <!-- Input box for the search -->
+    <input type="text" id="search-input" placeholder="Buscar.." />
+
+    <!-- Search button -->
+    <button class="button-general" id="search-button">
+        <img src="~/img/SearchIcon.svg" />
+    </button>
+
+    <!-- Location button -->
+    @await Html.PartialAsync("_LocationButton")
+</div>
