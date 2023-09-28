@@ -1,16 +1,4 @@
-﻿/* Set a base style for the entire page body */
-body {
-    background-color: #FFFFFF;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
-
-
+﻿
 /* Style for the form */
 form {
     background-color: #FFFFFF;
@@ -18,6 +6,8 @@ form {
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     width: 100%;
+    border: none;
+    box-shadow: none;
 }
 
 /* Style for labels */
@@ -63,16 +53,14 @@ textarea {
     background-color: #D0D0D0;
 }
 
+/**Disabled placeholder fields style*/
 .required-field:disabled::placeholder {
     color: #9F9F9F;
 }
-
+/**Enabled placeholder fields style*/
 .required-field:enabled::placeholder {
     color: #6b6b6b;
 }
-
-
-
 
 /* Style for the container of brand and model */
 .brand-model-container {
@@ -149,14 +137,11 @@ h2 {
 
 /*Title Separator Style*/
 .title-separator {
-    border: none;
-    height: 4px;
+    height: 50px;
     background-color: #9F9F9F;
     margin-bottom: 20px;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25)!important;
 }
-
-
 
 /* Specific style for input button */
 .submit-button {
@@ -185,21 +170,17 @@ h2 {
 /*Text in button*/
 .button-text {
     font-weight: 500;
-    margin-right: 15px;
+    margin-right: 8px;
     order: 1;
 }
+    
 
-/*Icon Style*/
-.icon {
-    width: 13px;
-    height: 20px;
-    margin-left: 10px;
+.button-content img {
+    height: 25px;
+    margin-left: 0px;
     opacity: 1;
-    filter: grayscale(80%);
-    transform: translateX(40px);
     order: 2;
 }
-
 
 /*Style for pop up*/
 .popup {
@@ -225,13 +206,12 @@ h2 {
 }
 
 
-
 /*Style for location button*/
 .location-button {
     background-color: #74C2F8;
     color: #000000;
     border: none;
-    padding: 10px 20px;
+    padding: 6px 20px;
     border-radius: 15px;
     cursor: pointer;
     font-size: 16px;
@@ -239,6 +219,7 @@ h2 {
     font-weight: 500;
     width: auto;
     white-space: nowrap;
+    box-shadow: 0px 4px 4px 0px rgba(80, 158, 224, 0.5);
 }
 
 /**Style for location button when hover*/
@@ -263,14 +244,14 @@ h2 {
     border-radius: 5px;
 }
 
-/**Style for location options*/
+/**Style for location options and location box*/
 #chosenLocationLabel,
 #chosenLocation {
     display: none;
     width: 100%;
-    padding: 10px;
+    padding: 6px;
     margin-bottom: 15px;
-    border: 1px solid #E2E3E3;
+    border: 1px solid #FFFFFF;
     border-radius: 15px;
     background-color: #FFFFFF;
     margin-bottom: 0px;
@@ -285,6 +266,8 @@ h2 {
     border-radius: 15px;
     cursor: pointer;
     font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0px 4px 4px 0px rgba(80, 158, 224, 0.5);
 }
 
 /**Style for location button when hover*/

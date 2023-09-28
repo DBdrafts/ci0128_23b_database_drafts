@@ -13,13 +13,15 @@
     <title>Nuevo Registro</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="~/css/SharedStyles.css">
+    <link rel="stylesheet" href="~/css/AddProductPage.css">
 </head>
 
 <body>
     <div class="register-section">
-            <h2>Nuevo registro de producto</h2>
-        <hr class="title-separator">
         <form id = "addProductForm">
+            <h2>Nuevo registro de producto</h2>
+            <hr class="title-separator">
+
             <label for="location">Ubicación<span class="required-marker">*</span>
                 <span class="required-tooltip">Campo obligatorio</span></label>
             <div class="location-container">
@@ -65,6 +67,7 @@
 
             <label for="comment">Comentario:</label>
             <textarea id="comment" name="comment"></textarea>
+
             <button type="submit" class="submit-button" form="addProductForm">
                 <div class="button-content">
                     <span class="button-text">Publicar Registro</span>
