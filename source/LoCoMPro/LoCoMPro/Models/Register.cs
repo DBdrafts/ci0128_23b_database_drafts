@@ -26,10 +26,10 @@ namespace LoCoMPro.Models
         public string? Comment { get; set; }
 
         // Navegation atributtes
-        public required string ContributorName { get; set; }
-        public required string ProductName { get; set; }
-        public required string StoreName { get; set; }
-        public required string CantonName { get; set; } 
-        public required string ProvinciaName { get; set; }
+        public string? ContributorName { get; set; }
+        public string? ProductName { get; set; }
+        public string? StoreName { get; set; }
+        public string? CantonName { get; set; } 
+        public string? ProvinciaName { get; set; }
     }
 }
