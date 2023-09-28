@@ -60,18 +60,23 @@ hr.style-four {
     grid-template-columns: 1fr 1fr 3fr;
 }
 
+/*Style for dropdown options*/
 .dropdownOption {
     text-align: center;
     height: 100px;
     font-size: 30px;
     margin: 0px;
-}
+    background-image: url('/img/ArrowDownIcon.svg');
+    background-repeat: no-repeat;
+    background-position: 200px 22px;
+}   
 
+/*Style for dropdown mouse up*/
 .dropdownOption:hover {
-   color: #208EE0; /* Cambia el color del texto a azul cuando se pasa el mouse por encima */
+   color: #208EE0; 
 }
 
-
+/*Style for comment */
 .textComment {
     text-align: center;
     height: 100px;
