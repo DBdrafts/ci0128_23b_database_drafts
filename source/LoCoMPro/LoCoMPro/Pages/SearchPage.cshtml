@@ -1,0 +1,56 @@
+﻿@page
+@model LoCoMPro.Pages.SearchPageModel
+@{
+    ViewData["Title"] = "Busqueda Producto";
+    Layout = "_Layout";
+    ViewData["HiddenLayout"] = true;
+}
+
+<head>
+    <link rel ="stylesheet" href="~/css/SearchPage.css"/>
+</head>
+
+<div>
+    <!-- Search filter section -->
+    <form method="post">
+        <div class="filter-section">
+            <h4> Filtros </h4>
+            <div class="filter-line">
+                <label asp-for="IsChecked">Comida</label>
+                <input asp-for="IsChecked" type="checkbox" />
+            </div>
+            <div class ="filter-line">
+                <label asp-for="IsChecked">Tecnología</label>
+                <input asp-for="IsChecked"  type="checkbox" />
+            </div>
+            <div class="filter-line">
+                <label asp-for="IsChecked">Tecnología</label>
+                <input asp-for="IsChecked" type="checkbox" />
+            </div>
+        </div>
+        <div class="search-section">
+
+            <h1> Artículo buscado </h1>
+            
+            <div class="search-title">
+                <p>Producto</p>
+                <p>Tienda</p>
+                <p>Cantón</p>
+                <p>Provincia</p>
+                <p>Precio</p>
+                <p>Fecha</p>
+            </div>
+
+            <div class="result-section">
+                <div class="result-block">
+                    <p>Sandalias negras Nike para hombre</p>
+                    <p>Uolmart</p>
+                    <p>Montes de Uca</p>
+                    <p>San Joise</p>
+                    <p>$2500</p>
+                    <p>29/08/2024</p>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

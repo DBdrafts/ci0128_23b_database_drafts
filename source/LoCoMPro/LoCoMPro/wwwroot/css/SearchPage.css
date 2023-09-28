@@ -1,0 +1,46 @@
+﻿/* Styles for the search page */
+
+.filter-section {
+    display: inline-block;
+    height: 100%;
+    width: 15%;
+    background-color: red;
+    float: left;
+}
+
+.filter-section h4 {
+    font-weight: bold;
+    margin: 30px 0px;
+}
+
+.filter-line {
+    font-size: larger;
+    margin: 10px 0px;
+}
+
+.search-section {
+    display: inline-block;
+    height: 100%;
+    width: 85%;
+    background-color: blue;
+    text-align: center;
+}
+
+.search-section h1 {
+    font-weight: bold;
+}
+
+.search-title {
+    display: flex;
+    height: auto;
+    width: 100%;
+    background-color: green;
+    justify-content: space-between;
+}
+
+.search-title p {
+    font-size: x-large;
+    flex: 0 0 16%;
+    text-align: center;
+    margin: 10px 0px;
+}
