@@ -15,26 +15,21 @@
     <form method="post">
         <div class="filter-section">
             <h4> Filtros </h4>
-            <!-- Filters checkbox -->
-            <div class="filter-line">
-                <label asp-for="IsChecked">Comida</label>
-                <input asp-for="IsChecked" type="checkbox" />
-            </div>
-            <div class ="filter-line">
-                <label asp-for="IsChecked">Tecnología</label>
-                <input asp-for="IsChecked"  type="checkbox" />
-            </div>
-            <div class="filter-line">
-                <label asp-for="IsChecked">Tecnología</label>
-                <input asp-for="IsChecked" type="checkbox" />
-            </div>
+
+            @foreach (var category in Model.Category)
+            {
+                <div class="filter-line">
+                    <label asp-for="IsChecked">@Html.DisplayFor(modelItem => category.CategoryName)</label>
+                    <input asp-for="IsChecked" type="checkbox" />
+                </div>
+            }
         </div>
     </form>
 
     <!-- Search result section -->
     <div class="search-section">
         <h1> Artículo buscado - Placeholder </h1>
-            
+         
         <!-- Search header -->
         <div class="search-title">
             <p>Producto</p>
@@ -47,9 +42,23 @@
 
         <!-- Search result section -->
         <!-- TODO(Julio): The next section contains placeholders -->
+        @foreach (var register in Model.Register)
+        {
+            <div class="result-section">
+                <div class="result-block">
+                    <p>@Html.DisplayFor(modelItem => register.ProductName)</p>
+                    <p>@Html.DisplayFor(modelItem => register.StoreName)</p>
+                    <p>@Html.DisplayFor(modelItem => register.CantonName)</p>
+                    <p>@Html.DisplayFor(modelItem => register.ProvinciaName)</p>
+                    <p>₡ @Html.DisplayFor(modelItem => register.Price)</p>
+                    <p>@Html.DisplayFor(modelItem => register.SubmitionDate)</p>
+                </div>
+            </div>
+        }
+
         <div class="result-section">
             <div class="result-block">
-                <p>Sandalias negras Nike para hombre, esto es una prueba</p>
+                <p>Placeholder Placeholder Placeholder, esto es una prueba</p>
                 <p>Uolmart</p>
                 <p>Montes de Uca</p>
                 <p>San Joise</p>
@@ -60,51 +69,7 @@
 
         <div class="result-section">
             <div class="result-block">
-                <p>Sandalias negras Nike para hombre, esto es una prueba</p>
-                <p>Uolmart</p>
-                <p>Montes de Uca</p>
-                <p>San Joise</p>
-                <p>$2500</p>
-                <p>29/08/2024</p>
-            </div>
-        </div>
-
-        <div class="result-section">
-            <div class="result-block">
-                <p>Sandalias negras Nike para hombre, esto es una prueba</p>
-                <p>Uolmart</p>
-                <p>Montes de Uca</p>
-                <p>San Joise</p>
-                <p>$2500</p>
-                <p>29/08/2024</p>
-            </div>
-        </div>
-
-        <div class="result-section">
-            <div class="result-block">
-                <p>Sandalias negras Nike para hombre, esto es una prueba</p>
-                <p>Uolmart</p>
-                <p>Montes de Uca</p>
-                <p>San Joise</p>
-                <p>$2500</p>
-                <p>29/08/2024</p>
-            </div>
-        </div>
-
-        <div class="result-section">
-            <div class="result-block">
-                <p>Sandalias negras Nike para hombre, esto es una prueba</p>
-                <p>Uolmart</p>
-                <p>Montes de Uca</p>
-                <p>San Joise</p>
-                <p>$2500</p>
-                <p>29/08/2024</p>
-            </div>
-        </div>
-
-        <div class="result-section">
-            <div class="result-block">
-                <p>Sandalias negras Nike para hombre, esto es una prueba</p>
+                <p>Placeholder Placeholder Placeholder, esto es una prueba</p>
                 <p>Uolmart</p>
                 <p>Montes de Uca</p>
                 <p>San Joise</p>

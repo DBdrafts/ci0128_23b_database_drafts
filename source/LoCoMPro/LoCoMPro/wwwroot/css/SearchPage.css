@@ -70,7 +70,7 @@
 /* Style for the result block */
 .result-block {
     display: flex;
-    height: auto;
+    height: 4em;
     width: 100%;
     background-color: #E2E3E3;
     justify-content: space-between;
