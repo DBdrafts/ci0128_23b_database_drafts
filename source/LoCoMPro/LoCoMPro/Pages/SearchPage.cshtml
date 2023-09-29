@@ -14,10 +14,13 @@
     <!-- Search filter section -->
     <form method="post">
         <div class="filter-section">
+            <!-- Search filter title -->
             <h4> Filtros </h4>
 
+            <!-- Razor directive that gets all the categories names -->
             @foreach (var category in Model.Category)
             {
+                <!-- Individuals categories -->
                 <div class="filter-line">
                     <label asp-for="IsChecked">@Html.DisplayFor(modelItem => category.CategoryName)</label>
                     <input asp-for="IsChecked" type="checkbox" />
@@ -28,9 +31,10 @@
 
     <!-- Search result section -->
     <div class="search-section">
-        <h1> Artículo buscado - Placeholder </h1>
+        <!-- Search section title -->
+        <h1> Resultados "@Model.SearchString" - Búsqueda por "Placeholder" </h1>
          
-        <!-- Search header -->
+        <!-- Search section header -->
         <div class="search-title">
             <p>Producto</p>
             <p>Tienda</p>
@@ -40,11 +44,12 @@
             <p>Fecha</p>
         </div>
 
-        <!-- Search result section -->
-        <!-- TODO(Julio): The next section contains placeholders -->
+        <!-- Razor directives that gets all the registers that match with the search string -->
         @foreach (var register in Model.Register)
         {
+            <!-- Search result section -->
             <div class="result-section">
+                <!-- Individual registers -->
                 <div class="result-block">
                     <p>@Html.DisplayFor(modelItem => register.ProductName)</p>
                     <p>@Html.DisplayFor(modelItem => register.StoreName)</p>
@@ -56,9 +61,10 @@
             </div>
         }
 
+        <!-- TODO(Julio): The next section contains placeholders -->
         <div class="result-section">
             <div class="result-block">
-                <p>Placeholder Placeholder Placeholder, esto es una prueba</p>
+                <p>Placeholder Placeholder Placeholder Placeholder, esto es una prueba</p>
                 <p>Uolmart</p>
                 <p>Montes de Uca</p>
                 <p>San Joise</p>
@@ -69,7 +75,7 @@
 
         <div class="result-section">
             <div class="result-block">
-                <p>Placeholder Placeholder Placeholder, esto es una prueba</p>
+                <p>Placeholder Placeholder Placeholder Placeholder, esto es una prueba</p>
                 <p>Uolmart</p>
                 <p>Montes de Uca</p>
                 <p>San Joise</p>
