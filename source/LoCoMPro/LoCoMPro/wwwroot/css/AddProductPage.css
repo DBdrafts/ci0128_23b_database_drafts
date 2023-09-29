@@ -52,11 +52,11 @@ textarea {
     background-color: #D0D0D0;
 }
 
-/**Disabled placeholder fields style*/
+/* Disabled placeholder fields style*/
 .required-field:disabled::placeholder {
     color: #9F9F9F;
 }
-/**Enabled placeholder fields style*/
+/* Enabled placeholder fields style*/
 .required-field:enabled::placeholder {
     color: #6b6b6b;
 }
@@ -83,7 +83,7 @@ textarea {
     border: 1px solid #E2E3E3;
 }
 
-/*White space between fields*/
+/* White space between fields*/
 .brand-model-field-group:first-child {
     margin-right: 30px;
 }
@@ -111,7 +111,7 @@ align-items: flex-start; /* Align elements to the left */
     border: 1px solid #E2E3E3;
 }
 
-/*White space between fields*/
+/* White space between fields*/
 .price-category-field-group:first-child {
     margin-right: 30px;
 }
@@ -134,7 +134,7 @@ h2 {
     margin-bottom: 20px;
 }
 
-/*Title Separator Style*/
+/* Title Separator Style*/
 .title-separator {
     height: 50px;
     background-color: #9F9F9F;
@@ -154,26 +154,25 @@ h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 6px 15px;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.30);
     margin-left:auto;
 }
 
 
-/**Style for submit-button when hover*/
+/* Style for submit-button when hover*/
 .submit-button:hover {
     background-color: #F59500;
 }
 
 
-/*Text in button*/
+/* Text in button*/
 .button-text {
     font-weight: 500;
     margin-right: 8px;
     order: 1;
 }
     
-
+/* Style for icon in submit botton*/
 .button-content img {
     height: 25px;
     margin-left: 0px;
@@ -193,7 +192,7 @@ h2 {
     z-index: 1;
 }
 
-/*Style for pop up content*/
+/* Style for pop up content*/
 .popup-content {
     background-color: #fff;
     margin: 20% auto;
@@ -205,7 +204,7 @@ h2 {
 }
 
 
-/*Style for location button*/
+/* Style for location button*/
 .location-button {
     background-color: #74C2F8;
     color: #000000;
@@ -221,19 +220,19 @@ h2 {
     box-shadow: 0px 4px 4px 0px rgba(80, 158, 224, 0.5);
 }
 
-/**Style for location button when hover*/
+/* Style for location button when hover*/
 .location-button:hover {
     background-color: #5AABE2;
 }
 
-/**Style for location container*/
+/* Style for location container*/
 .location-container {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
 }
 
-/**Style for location input*/
+/* Style for location input*/
 .location-input {
     flex: 1;
     background-color: #E2E3E3;
@@ -243,7 +242,7 @@ h2 {
     border-radius: 5px;
 }
 
-/**Style for location options and location box*/
+/* Style for location options and location box*/
 #chosenLocationLabel,
 #chosenLocation {
     display: none;
@@ -256,12 +255,12 @@ h2 {
     margin-bottom: 0px;
 }
 
-/**Style for save location botton*/
-#saveLocation-botton {
+/* Style for save location botton*/
+#saveLocation-button {
     background-color: #74C2F8;
     color: #000000;
     border: none;
-    padding: 10px 20px;
+    padding: 6px 15px;
     border-radius: 15px;
     cursor: pointer;
     font-size: 16px;
@@ -269,26 +268,27 @@ h2 {
     box-shadow: 0px 4px 4px 0px rgba(80, 158, 224, 0.5);
 }
 
-/**Style for location button when hover*/
-#saveLocation-botton:hover {
+/* SaveLocation-button when hover*/
+#saveLocation-button:hover {
     background-color: #5AABE2;
 }
 
 
-/*Style for the asterisk of required fields*/
+
+/* Style for the asterisk of required fields*/
 .required-marker {
     color: red;
     margin-left: 3px;
 }
 
-/*Hide asterisk message*/
+/* Hide asterisk message*/
 .required-tooltip {
     display: none;
     color: red;
     margin-left: 5px;
 }
 
-/*Show message when hovering over asterisk*/
+/* Show message when hovering over asterisk*/
 .required-marker:hover + .required-tooltip {
-        display: inline-block;
+    display: inline-block;
  }
