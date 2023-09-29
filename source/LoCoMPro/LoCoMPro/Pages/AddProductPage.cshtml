@@ -42,12 +42,9 @@
                     <input type="number" id="price" name="price" class="required-field" placeholder="Precio" required>
                 </div>
                 <div class="price-category-field-group">
-                    <label for="category">Categoría </label>
-                    <select id="category" name="category" required>
-                        <option value=""  selected>Elegir categoría</option>
-                        <option value="option1">Ropa</option>
-                        <option value="option2">Comida</option>
-                        <option value="option3">Tecnología</option>
+                    <label for="category">Categoría</label>
+                    <select id="category" name="category" asp-items="@Model.CategoryList">
+                        <option value="">Elegir categoría</option>
                     </select>
                 </div>
 
