@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const locationPopup = document.getElementById("locationPopup");
     const provinceSelect = document.getElementById("province");
     const cantonSelect = document.getElementById("canton");
-    const saveLocationButton = document.getElementById("saveLocation-botton");
+    const saveLocationButton = document.getElementById("saveLocation-button");
 
     locationButton.addEventListener("click", function () {
         locationPopup.style.display = "block";
@@ -12,50 +12,36 @@ document.addEventListener("DOMContentLoaded", function () {
     provinceSelect.addEventListener("change", function () {
         const selectedProvince = provinceSelect.value;
         if (selectedProvince) {
-            cantonSelect.removeAttribute("disabled");
-
-            if (selectedProvince === "provincia2") {
-                const cantonOptions = cantonSelect.getElementsByTagName("option");
-                for (let i = 0; i < cantonOptions.length; i++) {
-                    const option = cantonOptions[i];
-                    if (option.value === "canton3" || option.value === "canton4") {
-                        option.removeAttribute("disabled");
-                    } else {
-                        option.setAttribute("disabled", "disabled");
-                    }
-                }
-            } else {
-                const cantonOptions = cantonSelect.getElementsByTagName("option");
-                for (let i = 0; i < cantonOptions.length; i++) {
-                    cantonOptions[i].setAttribute("disabled", "disabled");
-                }
-            }
+            fetch(`/AddProductPage?handler=Cantones&provincia=${selectedProvince}`)
+                .then(response => response.json())
+                .then(data => {
+                    cantonSelect.innerHTML = "";
+                    data.forEach(canton => {
+                        const option = document.createElement("option");
+                        option.value = canton.value;
+                        option.text = canton.text;
+                        cantonSelect.appendChild(option);
+                    });
+                    cantonSelect.removeAttribute("disabled");
+                })
+                .catch(error => {
+                    console.error("Error al obtener cantones:", error);
+                });
         } else {
             cantonSelect.setAttribute("disabled", "disabled");
         }
     });
-
 
     saveLocationButton.addEventListener("click", function () {
         const selectedProvince = provinceSelect.value;
         const selectedCanton = cantonSelect.value;
 
         if (selectedProvince && selectedCanton) {
-            const cantonText = decodeURIComponent(selectedCanton);
-            const provinceText = decodeURIComponent(selectedProvince);
-
-            const locationText = `Ubicacion seleccionada: ${cantonText}, ${provinceText}`;
-            const chosenLocation = document.getElementById("chosenLocation");
-            chosenLocation.style.display = "block";
-            chosenLocation.value = locationText;
-        } else {
-            document.getElementById("chosenLocation").style.display = "none";
+            const locationInfo = document.getElementById("locationInfo");
+            locationInfo.textContent = `Provincia: ${selectedProvince}, Cantón: ${selectedCanton}`;
+            locationInfo.style.display = "block";
         }
 
         locationPopup.style.display = "none";
-    })
-;
-
-
+    });
 });
-
