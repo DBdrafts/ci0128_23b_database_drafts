@@ -91,12 +91,16 @@ button {
     cursor: pointer;
 }
 
-#login {
-    background: #39A4F4;
+#iniSesion {
+    background-color: #88C8F8;
     width: 100%;
     border-radius: 15px;
     margin-top: 25px;
     margin-bottom: 15px;
+}
+
+#iniSesion:hover {
+    background-color: #39A4F4;
 }
 
 #forgotpsw {
@@ -131,6 +135,10 @@ button {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.30);
     border-radius: 15px;
     border: 1px #BABAB8 solid
+}
+
+#register:hover {
+    background-color: #BABAB8;
 }
 
 /* Style for the select field */
