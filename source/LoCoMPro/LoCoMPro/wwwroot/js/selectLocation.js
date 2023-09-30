@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     cantonSelect.removeAttribute("disabled");
                 })
                 .catch(error => {
-                    console.error("Error al obtener cantones:", error);
+                    console.error("Error getting cantones:", error);
                 });
         } else {
             cantonSelect.setAttribute("disabled", "disabled");
@@ -40,6 +40,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const locationInfo = document.getElementById("locationInfo");
             locationInfo.textContent = `Provincia: ${selectedProvince}, Cantón: ${selectedCanton}`;
             locationInfo.style.display = "block";
+            document.getElementById("selectedProvince").value = selectedProvince;
+            document.getElementById("selectedCanton").value = selectedCanton;
         }
 
         locationPopup.style.display = "none";
