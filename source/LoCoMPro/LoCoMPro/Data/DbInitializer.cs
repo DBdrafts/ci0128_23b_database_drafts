@@ -131,7 +131,7 @@ namespace LoCoMPro.Data
             , ref List<Register> registers, ref List<User> users
             , ref List<Product> products, ref List<Store> stores)
         {
-            // Add the users
+            // Add the registers
             registers.Add(new Register() { Product = products[0], Contributor = users[0], Store = stores[0]
                 , Price = 2000, SubmitionDate = new DateTime(2023, 1, 10, 12, 0, 0, DateTimeKind.Utc) });
             registers.Add(new Register() { Product = products[0], Contributor = users[1], Store = stores[0]
@@ -143,7 +143,25 @@ namespace LoCoMPro.Data
             registers.Add(new Register() { Product = products[0], Contributor = users[1], Store = stores[0]
                 , Price = 2300, SubmitionDate = new DateTime(2022, 12, 31, 12, 0, 0, DateTimeKind.Utc) });
             registers.Add(new Register() { Product = products[0], Contributor = users[0], Store = stores[0]
+                , Price = 2250, SubmitionDate = new DateTime(2023, 1, 18, 12, 0, 0, DateTimeKind.Utc) });
+            registers.Add(new Register() { Product = products[0], Contributor = users[0], Store = stores[0]
                 , Price = 2250, SubmitionDate = new DateTime(2023, 1, 15, 12, 0, 0, DateTimeKind.Utc) });
+            registers.Add(new Register(){Product = products[0], Contributor = users[0], Store = stores[0]
+                , Price = 2250, SubmitionDate = new DateTime(2023, 1, 1, 12, 0, 0, DateTimeKind.Utc)});
+            registers.Add(new Register(){Product = products[0], Contributor = users[0], Store = stores[0]
+                , Price = 2250, SubmitionDate = new DateTime(2023, 1, 2, 12, 0, 0, DateTimeKind.Utc)});
+            registers.Add(new Register(){Product = products[0], Contributor = users[0], Store = stores[0]
+                , Price = 2250, SubmitionDate = new DateTime(2023, 1, 3, 12, 0, 0, DateTimeKind.Utc)});
+            registers.Add(new Register(){Product = products[0], Contributor = users[0], Store = stores[0]
+                , Price = 2250, SubmitionDate = new DateTime(2023, 1, 4, 12, 0, 0, DateTimeKind.Utc)});
+            registers.Add(new Register(){Product = products[0], Contributor = users[0], Store = stores[0]
+                , Price = 2250, SubmitionDate = new DateTime(2023, 1, 5, 12, 0, 0, DateTimeKind.Utc)});
+            registers.Add(new Register(){Product = products[0], Contributor = users[0], Store = stores[0]
+                , Price = 2250, SubmitionDate = new DateTime(2023, 1, 6, 12, 0, 0, DateTimeKind.Utc)});
+            registers.Add(new Register(){Product = products[0], Contributor = users[0],Store = stores[0]
+                , Price = 2250, SubmitionDate = new DateTime(2023, 1, 7, 12, 0, 0, DateTimeKind.Utc)});
+            registers.Add(new Register(){Product = products[0], Contributor = users[0], Store = stores[0]
+                , Price = 2250, SubmitionDate = new DateTime(2023, 1, 8, 12, 0, 0, DateTimeKind.Utc)});
 
             registers.Add(new Register() { Product = products[2], Contributor = users[2], Store = stores[0]
                 , Price = 25500, SubmitionDate = new DateTime(2023, 8, 8, 12, 0, 0, DateTimeKind.Utc) });

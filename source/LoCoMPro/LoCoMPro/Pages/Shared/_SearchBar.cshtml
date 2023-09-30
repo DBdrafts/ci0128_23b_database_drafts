@@ -23,10 +23,10 @@
 
     <form method="get" asp-page="SearchPage" asp-route-pageIndex="1" class="search-inner-section">
         <!-- Input box for the search -->
-        <input type="text" name="SearchString" id="search-input" maxlength="70" placeholder="Buscar..." />
+        <input type="text" name="SearchString" id="search-input" maxlength="70" placeholder="Buscar..." required/>
 
         <!-- Search button -->
-        <button class="button-general" id="search-button">
+        <button type="submit" class="button-general" id="search-button">
             <img src="~/img/SearchIcon.svg" />
         </button>
     </form>

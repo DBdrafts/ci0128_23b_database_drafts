@@ -22,16 +22,17 @@
     text-align: center;
 }
 
+/* Style for the options of the search type */
 select.button-general option {
     background-color: #E2E3E3;
 }
-
 
 /* Style for the type selector when the cursor is on the button */
 #type-search-selector:hover {
     background-color: #adada9;
 }
 
+/* Style for the inner part of the search bar */
 .search-inner-section {
     width: 67%;
     border: none;

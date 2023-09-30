@@ -9,7 +9,7 @@
     margin: 50px 0px 0px 0px;
 }
 
-    /* Style for the filter section title h4 */
+/* Style for the filter section title h4 */
 .filter-section h4 {
     font-weight: bold;
     margin: 20px 0px;
@@ -18,7 +18,24 @@
 /* Style for the filter section line */
 .filter-line {
     font-size: larger;
-    margin: 10px 0px;
+    margin: 5px 0px;
+}
+
+/* Style for the filter button */
+.filter-section button {
+    background-color: #88C8F8;
+    float: right;
+    margin: 20px 50px;
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    width: 45%;
+    height: 45px;
+   font-size: medium;
+}
+
+.filter-section button:hover {
+    background-color: #39A4F4;
 }
 
 /* Style for the search section */
@@ -57,6 +74,8 @@
 .result-section {
     height: auto;
     width: 100%;
+    text-decoration: none;
+    color: #000000;
 }
 
 /* Style for the result section paragraph */
@@ -68,6 +87,7 @@
     align-items: center;
     overflow: clip;
     text-overflow: ellipsis;
+    padding: 0px 5px;
 }
 
 /* Style for the result block */
@@ -82,72 +102,8 @@
     max-height: 4em;
 }
 
-/* Style for the pagination section */
-.pagination-section {
-    display: inline-block;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-}
-
-/* Style for the pagination square for the pages */
-#pagination-square {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    margin: 10px 0px;
-    text-align: center;
-}
-
-/* Style for the pagination square links for the pages */
-#pagination-square a {
-    display: block;
-    color: black;
-    text-decoration: none;
-    border-radius: 0px;
-    border: 1px solid #E2E3E3;
-    width: 100%;
-    height: 100%;
-    line-height: 50px;
-}
-
-/* Style for the pagination square links to not change when hover */
-#pagination-square a:hover:not(.active) {
-    background-color: #E2E3E3;
-}
-
-/* Style for the pagination square of the page that is active */
-.pagination-square-active {
-    background-color: #F5AA38;
-    border: 1px solid #000000;
-}
-
-/* Style for the pagination button for change the page */
-.pagination-button {
-    display: inline-block;
-    width: 65px;
-    height: 50px;
-    margin: 10px 0px;
-    border-radius: 0px;
-    text-align: center;
-    background-color: #88C8F8;
-    border: 1px solid #E2E3E3;
-}
-
-/* Style for the pagination button image */
-.pagination-button img {
-    width: 15px;
-    height: 15px;
-}
-
-/* Style for the pagination button for change the page to the previous one */
-#pagination-button-left {
-    border-bottom-left-radius: 15px;
-    border-top-left-radius: 15px;
-}
-
-/* Style for the pagination button for change the page to the next one */
-#pagination-button-right {
-    border-bottom-right-radius: 15px;
-    border-top-right-radius: 15px;
+/* Style for the result block when hover */
+.result-block:hover {
+    color: #000000;
+    border: 1px solid #BABAB8;
 }
