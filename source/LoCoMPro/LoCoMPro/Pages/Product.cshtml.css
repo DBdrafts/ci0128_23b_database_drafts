@@ -78,18 +78,20 @@ nav {
     list-style: none;
     display: grid;
     grid-template-columns: 1fr 1fr 3fr;
+    padding-left: 0;
 }
 
 /*Style for text in the html list */
 .containerListRegistercolumns > li > a {
-        display: block;
-        padding: 15px 20px;
-        color: black;
-        text-decoration: none;
-        background-image: url('/img/ArrowDownIcon.svg');
-        background-repeat: no-repeat;
-        background-position: 200px 30px;
-        text-align:center;
+    display: block;
+    padding: 15px 20px;
+    color: black;
+    text-decoration: none;
+    background-image: url('/img/ArrowDownIcon.svg');
+    background-repeat: no-repeat;
+    background-position: 150px 30px;
+    text-align: left;
+    padding-left: 30px;
 }
 
 /*Style for text in the selected option of the list */
@@ -104,6 +106,8 @@ nav {
     list-style: none;
     width: 200px;
     background-color: darkgrey;
+    border-radius: 15px;
+    padding-left: 0;
 }
 
 /*Style for the vertical menu */
@@ -117,9 +121,13 @@ nav {
     color: #208EE0;
 }
 
+.menu-vertical li a {
+    padding-left: 0px;
+}
+
 /*Style for text in the vertical menu */
 .menu-vertical li a {
-    display: block;
+    display: grid;
     color: white;
     text-decoration: none;
     padding: 15px 15px 15px 20px;
@@ -133,6 +141,7 @@ nav {
     text-align: center;
     font-size: 30px;
     margin: 0px;
+    padding: 15px 20px;
 }
 
 /* Style for pagination box */
@@ -140,6 +149,10 @@ nav {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: fixed;
+    bottom: 75px;
+    left: 0;
+    width: 100%;
 }
 
 /* Style for pagination box text */
@@ -186,4 +199,37 @@ font-size: 22px;
 /* Center align text inside the pagination box */
 .center {
 text-align: center;
+}
+
+/* Style for the result section */
+.result-section {
+    height: auto;
+    width: 100%;
+}
+
+
+/* Style for the result section paragraph */
+.result-section p {
+    font-size: 24px;
+    text-align: left;
+    align-items: center;
+    padding-left: 30px;
+}
+
+
+/* Style for the result block */
+.result-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr 3fr;
+    width: 100%;
+    background-color: #E2E3E3;
+    border-radius: 15px;
+    margin: 10px 0px;
+    max-height: 4em;
+}
+
+/*Style for the comment in the result-block*/
+.result-block p:last-child {
+    text-align: center;
+    padding-right: 30px;
 }
