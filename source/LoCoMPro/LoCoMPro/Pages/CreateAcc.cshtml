@@ -32,8 +32,15 @@
             <label for="conpsw">Confirmar Contraseña</label>
             <input type="text" id="conpsw" name="ConfirmContraseña" required>
 
-            <button id="register" type="submit">Registrarse</button>
+            <button class="button-general" id="register" type="submit">Registrarse</button>
         </form>
+    </div>
+    <div class="hasacc-section">
+        <div id="separator"></div>
+        <div style="text-align: center">¿Ya te has registrado?</div>
+        <a asp-area="" asp-page="/login">
+            <button class="button-general" id="login">Iniciar Sesión</button>
+        </a>
     </div>
 </body>
 </html>
