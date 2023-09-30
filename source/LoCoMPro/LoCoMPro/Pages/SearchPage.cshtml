@@ -22,8 +22,8 @@
             {
                 <!-- Individuals categories -->
                 <div class="filter-line">
-                    <label asp-for="IsChecked">@Html.DisplayFor(modelItem => category.CategoryName)</label>
                     <input asp-for="IsChecked" type="checkbox" />
+                    <label asp-for="IsChecked">@Html.DisplayFor(modelItem => category.CategoryName)</label>
                 </div>
             }
         </div>
@@ -61,34 +61,19 @@
             </div>
         }
 
-        <!-- TODO(Julio): The next section contains placeholders -->
-        <div class="result-section">
-            <div class="result-block">
-                <p>Placeholder Placeholder Placeholder Placeholder, esto es una prueba</p>
-                <p>Uolmart</p>
-                <p>Montes de Uca</p>
-                <p>San Joise</p>
-                <p>$2500</p>
-                <p>29/08/2024</p>
-            </div>
-        </div>
-
-        <div class="result-section">
-            <div class="result-block">
-                <p>Placeholder Placeholder Placeholder Placeholder, esto es una prueba</p>
-                <p>Uolmart</p>
-                <p>Montes de Uca</p>
-                <p>San Joise</p>
-                <p>$2500</p>
-                <p>29/08/2024</p>
-            </div>
-        </div>
-
-        <div class="pagination">
+        <div class="pagination-section">
+            <button class="button-general pagination-button" id="pagination-button-left" @(Model.ActualPage <= 1 ? "disabled" : "") onclick="window.location.href='/SearchPage/@(Model.ActualPage - 1)?SearchString=@Model.SearchString'">
+                <img src="~/img/ArrowLeftIcon.svg" alt="Anterior">
+            </button>
             @for (int i = 1; i <= Model.TotalPages; i++)
             {
-                <a href="/SearchPage/@i?SearchString=@Model.SearchString">@i</a>
+                <div id="pagination-square">
+                    <a class="@(i == Model.ActualPage ? "pagination-square-active" : "")" href="/SearchPage/@i?SearchString=@Model.SearchString">@i</a>
+                </div>
             }
+            <button class="button-general pagination-button" id="pagination-button-right" @(Model.ActualPage >= Model.TotalPages ? "disabled" : "") onclick="window.location.href='/SearchPage/@(Model.ActualPage + 1)?SearchString=@Model.SearchString'">
+                <img src="~/img/ArrowRightIcon.svg" alt="Siguiente">
+            </button>
         </div>
 
     </div>
