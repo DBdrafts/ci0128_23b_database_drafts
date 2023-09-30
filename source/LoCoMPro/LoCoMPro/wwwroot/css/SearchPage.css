@@ -90,6 +90,7 @@
     height: 100%;
 }
 
+/* Style for the pagination square for the pages */
 #pagination-square {
     display: inline-block;
     width: 50px;
@@ -98,6 +99,7 @@
     text-align: center;
 }
 
+/* Style for the pagination square links for the pages */
 #pagination-square a {
     display: block;
     color: black;
@@ -109,15 +111,18 @@
     line-height: 50px;
 }
 
+/* Style for the pagination square links to not change when hover */
 #pagination-square a:hover:not(.active) {
     background-color: #E2E3E3;
 }
 
+/* Style for the pagination square of the page that is active */
 .pagination-square-active {
     background-color: #F5AA38;
     border: 1px solid #000000;
 }
 
+/* Style for the pagination button for change the page */
 .pagination-button {
     display: inline-block;
     width: 65px;
@@ -129,61 +134,20 @@
     border: 1px solid #E2E3E3;
 }
 
+/* Style for the pagination button image */
 .pagination-button img {
     width: 15px;
     height: 15px;
 }
 
+/* Style for the pagination button for change the page to the previous one */
 #pagination-button-left {
     border-bottom-left-radius: 15px;
     border-top-left-radius: 15px;
 }
 
+/* Style for the pagination button for change the page to the next one */
 #pagination-button-right {
     border-bottom-right-radius: 15px;
     border-top-right-radius: 15px;
 }
-
-
-/* Style for pagination box */
-/*.pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px;
-    height: 50px;
-}*/
-
-/* Style for pagination box text */
-/*.pagination a {
-    color: black;
-    padding: 8px 16px;
-    text-decoration: none;
-    margin: 0 5px;
-    border-radius: 5px;
-    transition: background-color .3s;
-    border: 1px solid #ddd;*/ /* Gray border */
-    /*font-size: 22px;
-}*/
-
-/* Style for the active pagination link */
-/*.pagination a.active {
-    background-color: #208EE0;*/ /* Blue background for active link */
-    /*color: white;*/ /* White text for active link */
-/*}*/
-
-/* Style for hover effect on pagination links */
-/*.pagination a:hover:not(.active) {
-    background-color: #ddd;*/ /* Gray background on hover */
-/*}*/
-
-/* Additional style for the active pagination link's border radius */
-/*.pagination a.active {
-    border-radius: 5px;
-}*/
-
-
-/* Center align text inside the pagination box */
-/*.center {
-    text-align: center;
-}*/

@@ -46,6 +46,7 @@ namespace LoCoMPro.Pages
         /* OnGet method that manage the GET request */
         public async Task OnGetAsync(int pageIndex = 1)
         {
+            /* Prepares the query to get the data from the database */
             var categories = from c in _context.Categories
                              select c;
 
@@ -54,8 +55,10 @@ namespace LoCoMPro.Pages
 
             registers = registers.Where(x => x.ProductName.Contains(SearchString));
 
+            /* Counts the total amount of pages */
             TotalPages = (int)Math.Ceiling(await registers.CountAsync() / (double)AmountElements);
 
+            /* Gets the data from the database */
             Category = await categories.ToListAsync();
             Register = await registers.Skip((pageIndex - 1) * AmountElements).Take(AmountElements).ToListAsync();
 

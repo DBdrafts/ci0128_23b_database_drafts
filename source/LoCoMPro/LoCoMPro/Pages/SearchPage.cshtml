@@ -61,20 +61,27 @@
             </div>
         }
 
+        <!-- Search pagination section -->
         <div class="pagination-section">
+            <!-- Button to go to the previous page -->
             <button class="button-general pagination-button" id="pagination-button-left" @(Model.ActualPage <= 1 ? "disabled" : "") onclick="window.location.href='/SearchPage/@(Model.ActualPage - 1)?SearchString=@Model.SearchString'">
                 <img src="~/img/ArrowLeftIcon.svg" alt="Anterior">
             </button>
-            @for (int i = 1; i <= Model.TotalPages; i++)
+
+            <!-- Page button section that behaves dynamically -->
+            @for (int i = Model.ActualPage - 1; i <= Model.TotalPages && i <= Model.ActualPage + 3; i++)
             {
-                <div id="pagination-square">
-                    <a class="@(i == Model.ActualPage ? "pagination-square-active" : "")" href="/SearchPage/@i?SearchString=@Model.SearchString">@i</a>
-                </div>
+                if (i >= 1)
+                {
+                    <div id="pagination-square">
+                        <a class="@(i == Model.ActualPage ? "pagination-square-active" : "")" href="/SearchPage/@i?SearchString=@Model.SearchString">@i</a>
+                    </div>
+                }   
             }
+            <!-- Button to go to the next page -->
             <button class="button-general pagination-button" id="pagination-button-right" @(Model.ActualPage >= Model.TotalPages ? "disabled" : "") onclick="window.location.href='/SearchPage/@(Model.ActualPage + 1)?SearchString=@Model.SearchString'">
                 <img src="~/img/ArrowRightIcon.svg" alt="Siguiente">
             </button>
         </div>
-
     </div>
 </div>
