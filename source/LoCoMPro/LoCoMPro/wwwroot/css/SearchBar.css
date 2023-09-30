@@ -2,72 +2,72 @@
 
 /* Style for the search bar class */
 .search-bar {
-    display: flex;
-    min-width: 60%;
-    height: fit-content;
+    display: inline-flex;
+    flex: none;
+    background-color: #E2E3E3;
+    border-radius: 15px;
     margin: auto auto;
-    background-color: #E2E3E3;
-    border-radius: 15px;
-    max-height: 10%;
-    max-width: 75%;
-}
-
-.search-inner-section {
-    flex: auto;
-    width: 100%;
-    height: 5%;
-}
-
-.search-inner-section input {
-    width: 85%;
-    height: 5%;
-}
-
-/* Style for the search input box */
-#search-input {
-    flex: auto;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 15px;
-    background-color: #E2E3E3;
-    color: black;
-    outline: none;
-    height: 5%;
-}
-
-/* Style for the search button */
-#search-button {
-    background-color: #F5AA38;
-    margin: 0px;
-    z-index: 1;
-    width: 10%;
-    height: 5%;
+    height: 28px;
+    width: 60%;
+    max-width: 60%;
 }
 
 /* Style for the selector of types */
 #type-search-selector {
     background-color: #BABAB8;
     padding: 0px 15px;
-    margin: 0px initial;
+    margin: 0px;
+    width: 15%;
+    height: 100%;
+    text-align: center;
 }
 
-/* Style for the image of the type selector */
-#type-search-selector img {
-    padding: 0px 0px 0px 7px;
-    width: auto;
-    height: auto;
+select.button-general option {
+    background-color: #E2E3E3;
 }
+
 
 /* Style for the type selector when the cursor is on the button */
 #type-search-selector:hover {
     background-color: #adada9;
 }
 
+.search-inner-section {
+    width: 67%;
+    border: none;
+    border-radius: 15px;
+    color: black;
+    outline: none;
+    height: 100%;
+    margin: 0px;
+}
+
+/* Style for the search input box */
+#search-input {
+    width: 89%;
+    border: none;
+    border-radius: 15px;
+    background-color: #E2E3E3;
+    color: black;
+    outline: none;
+    height: auto;
+    margin: 0px;
+    padding: 0px 10px;
+}
+
+/* Style for the search button */
+#search-button {
+    background-color: #F5AA38;
+    margin: 0px;
+    z-index: 0;
+    width: 10%;
+    height: auto;
+}
+
 /* Style for the image of the search button */
 #search-button img {
-    width: 90%;
-    height: 90%;
-    padding: 0px 15px;
+    width: 15px;
+    height: 15px;
 }
 
 /* Style for the search button when the cursor is on the button */

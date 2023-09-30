@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "~/SearchPage/{pageIndex:int}"
 @model LoCoMPro.Pages.SearchPageModel
 @{
     ViewData["Title"] = "Busqueda Producto";
@@ -82,6 +82,13 @@
                 <p>$2500</p>
                 <p>29/08/2024</p>
             </div>
+        </div>
+
+        <div class="pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <a href="/SearchPage/@i?SearchString=@Model.SearchString">@i</a>
+            }
         </div>
 
     </div>

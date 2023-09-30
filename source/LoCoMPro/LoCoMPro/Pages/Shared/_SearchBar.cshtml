@@ -8,14 +8,22 @@
 <!-- Section of the search bar and buttons for the layout -->
 <div class="search-bar justify-content-center">
     <!-- Type selector button -->
-    <button class="button-general" id="type-search-selector">
-        <span>Buscar por</span>
-        <img src="~/img/ArrowDownIcon.svg" />
-    </button>
+    <select class="button-general" id="type-search-selector">
+        <option value="nombre">
+            Nombre
+        </option>
+        <option value="marca">
+            Marca
+        </option>
+        <option value="modelo">
+            Modelo
+        </option>
+    </select>
 
-    <form method="get" asp-page="SearchPage" class="search-inner-section">
+
+    <form method="get" asp-page="SearchPage" asp-route-pageIndex="1" class="search-inner-section">
         <!-- Input box for the search -->
-        <input type="text" name="SearchString" id="search-input" maxlength="70" placeholder="Buscar.." />
+        <input type="text" name="SearchString" id="search-input" maxlength="70" placeholder="Buscar..." />
 
         <!-- Search button -->
         <button class="button-general" id="search-button">
