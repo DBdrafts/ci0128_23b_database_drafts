@@ -7,11 +7,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Build.ObjectModelRemoting;
 using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace LoCoMPro.Pages
@@ -107,41 +110,87 @@ namespace LoCoMPro.Pages
                 return Page();
             }
 
-            string productName = Request.Form["productName"]!;
-            string brandName = Request.Form["brand"]!;
-            string modelName = Request.Form["model"]!;
-            float price = Convert.ToSingle(Request.Form["price"]);
-            string categoria = Request.Form["category"]!;
             string provinciaName = Request.Form["selectedProvince"]!;
             string cantonName = Request.Form["selectedCanton"]!;
-            var product = new Product
+            string storeName= Request.Form["location"]!;
+            string productName = Request.Form["productName"]!;
+            float price = Convert.ToSingle(Request.Form["price"]);
+            string chosenCategory = Request.Form["category"]!;
+            string brandName = Request.Form["brand"]!;
+            string modelName = Request.Form["model"]!;
+            string comment = Request.Form["comment"]!;
+
+            string userName = "Jose Miguel Garcia Lopez";  // STATIC USER
+
+            Debug.WriteLine($"provincia: {provinciaName}");
+            Debug.WriteLine($"canton: {cantonName}");
+            Debug.WriteLine($"Tienda: {storeName}");
+            Debug.WriteLine($"Producto: {productName}");
+            Debug.WriteLine($"Precio: {price}");
+            Debug.WriteLine($"Categoría: {chosenCategory}");
+            Debug.WriteLine($"Marca: {brandName}");
+            Debug.WriteLine($"Modelo: {modelName}");
+            Debug.WriteLine($"Comentario: {comment}");
+
+
+            if (!_context.Products.Any(p => p.Name == productName))  // If the product doesn't exists
             {
-                Name = productName,
-                Brand = brandName,
-                Model = modelName
+                // Create new product
+                Product newProduct = new()
+                {
+                    Name = productName,
+                    Brand = brandName,
+                    Model = modelName,
+                    Categories = new List<Category>() { _context.Categories.FirstOrDefault(c => c.CategoryName == chosenCategory) }
+                };
+                _context.Products.Add(newProduct);
+                _context.SaveChanges();
+
+                AddStoreRelation(storeName, cantonName);
+                _context.Stores.First(s => s.Name == storeName).Products.Add(newProduct);
+
+            } else
+            {
+                AddStoreRelation(storeName, cantonName);
+                Product product = _context.Products.First(p => p.Name == productName);
+                if (!_context.Stores.First(s => s.Name == storeName).Products.Contains(product))
+                {
+                    _context.Stores.First(s => s.Name == storeName).Products.Add(product);
+                }
+
+            }
+            _context.SaveChanges();
+
+            // Create new Register
+            Register newRegister = new()
+            {
+                SubmitionDate = DateTime.Now,
+                Contributor = _context.Users.First(u => u.UserName == userName), // TODO: CHANGE STATIC USER!
+                Product = _context.Products.First(p => p.Name == productName),
+                Store = _context.Stores.First(s => s.Name == storeName),
+                Price = price,
+                Comment = comment
             };
+            _context.Registers.Add(newRegister);
 
-            Debug.WriteLine($"El resultado de la provincia es: {provinciaName}");
-            Debug.WriteLine($"El resultado del canton es: {cantonName}");
-            Debug.WriteLine($"El resultado de la categoría es: {categoria}");
-            // if (string.Compare (provinciaName, "San Jose") == 0)
-            //{
-            //    var provinciaNueva = new Provincia { Name = "EstaPruebaFunciona" };
-            //    _context.Provincias.Add(provinciaNueva);
-
-            //}
-
-
-            //if (string.Compare (cantonName, "Montes de Oca") == 0)
-            //{
-            //    var cantonProv = new Provincia { Name = "CantonNice" };
-            //    _context.Provincias.Add(cantonProv);
-
-            //}
-
-            //_context.Products.Add(product);
             await _context.SaveChangesAsync();
             return RedirectToPage("/Index");
+        }
+
+        private void AddStoreRelation(string storeName, string cantonName) {
+            if (!_context.Stores.Any(s => s.Name == storeName)) // If the store doesn't exist
+            {
+                // Create new store
+                Store newStore = new()
+                {
+                    Name = storeName,
+                    Location = _context.Cantones.First(c => c.CantonName == cantonName),
+                    Products = new List<Product>()
+                };
+                _context.Stores.Add(newStore);
+                _context.SaveChanges();
+            }
+
         }
     }
 }
