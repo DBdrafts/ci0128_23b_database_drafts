@@ -109,46 +109,26 @@
 				</ul>
 			</li>
             <li>
-                <div class="textComment">Comentario</div>
+                <div class="textComment">Comentarios</div>
             </li>
 
 		</ul>
 	</nav>
 
-   <div class="result-section">
+   <div class="register-section">
         <!-- Individual registers -->
-        <div class="result-block">
-            <p>fechaDe</p>
-            <p>precioDe</p>
-            <p>ComentarioDe</p>
-        </ div>
-    </div>
-
-    <div class="result-section">
-        <!-- Individual registers -->
-        <div class="result-block">
-            <p>fechaDe</p>
-            <p>precioDe</p>
-            <p>ComentarioDe</p>
-        </div>
-    </div>
-
-    <div class="result-section">
-        <!-- Individual registers -->
-        <div class="result-block">
-            <p>fechaDe</p>
-            <p>precioDe</p>
-            <p>ComentarioDe</p>
-        </div>
-    </div>
-
-
-    <div class="pagination">
-        <a href="#">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#">4</a>
-        <a href="#">5</a>
+        @foreach (var register in Model.Register)
+        {
+            <!-- Search result section -->
+          
+                <!-- Individual registers -->
+                <div class="register-block">
+                <p>@Html.DisplayFor(modelItem => register.SubmitionDate)</p>
+                <p>₡@Html.DisplayFor(modelItem => register.Price)</p>
+                <p>@Html.DisplayFor(modelItem => register.Comment)</p>
+                </div>
+        }
+        
     </div>
 
    </body>

@@ -202,15 +202,15 @@ text-align: center;
 }
 
 /* Style for the result section */
-.result-section {
+.register-section {
     height: auto;
     width: 100%;
 }
 
 
 /* Style for the result section paragraph */
-.result-section p {
-    font-size: 24px;
+.register-section p {
+    font-size: medium;
     text-align: left;
     align-items: center;
     padding-left: 30px;
@@ -218,7 +218,7 @@ text-align: center;
 
 
 /* Style for the result block */
-.result-block {
+.register-block {
     display: grid;
     grid-template-columns: 1fr 1fr 3fr;
     width: 100%;
@@ -229,7 +229,12 @@ text-align: center;
 }
 
 /*Style for the comment in the result-block*/
-.result-block p:last-child {
+.register-block p:last-child {
     text-align: center;
     padding-right: 30px;
+}
+
+/* Style for the result block when hover */
+.register-block:hover {
+     background-color: #9F9F9F;
 }
