@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "~/Product/{pageIndex:int}"
 @model LoCoMPro.Pages.ProductPageModel
 @{
     ViewData["Title"] = "SearchProduct";
@@ -14,12 +14,12 @@
 </head>
 
 <body>
-    <!-- Name of product requested -->
+    <!-- Name of product Search -->
     <div class="titleProduct">
-        @Model.requestedProductName
+        @Model.SearchProductName
     </div>
 
-    <!-- Section for columns of specifications from requested product -->
+    <!-- Section for columns of specifications from Search product -->
     <div class="container">
         @{ // select the first matches
             var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
@@ -85,5 +85,6 @@
     <!-- Horizontal separating line -->
     <hr class="style-four">
 
-   </body>
+</body>
+
 </html>
