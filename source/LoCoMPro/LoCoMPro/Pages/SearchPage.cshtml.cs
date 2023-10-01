@@ -12,10 +12,6 @@ namespace LoCoMPro.Pages
 {
     public class SearchPageModel : PageModel
     {
-        /* Determinate if the check-box was activated */
-        [BindProperty]
-        public bool IsChecked { get; set; }
-
         /* Context of the data base */
         private readonly LoCoMPro.Data.LoCoMProContext _context;
         /* Configuration for the page */
@@ -28,6 +24,10 @@ namespace LoCoMPro.Pages
             Configuration = configuration;
         }
 
+        /* Determinate if the check-box was activated */
+        [BindProperty]
+        public bool IsChecked { get; set; }
+
         /* List of the categories that exist in the database */
         public IList<Category> Category { get; set; } = default!;
 
@@ -38,15 +38,19 @@ namespace LoCoMPro.Pages
         [BindProperty(SupportsGet = true)]
         public string? SearchString { get; set; }
 
+        /* Text enters as the search type attribute */
+        [BindProperty(SupportsGet = true)]
+        public string? SearchType { get; set; }
 
         /* OnGet method that manage the GET request */
-        public async Task OnGetAsync(string searchString, int? pageIndex)
+        public async Task OnGetAsync(string searchType, string searchString, int? pageIndex)
         {
             /* If the page index is lower that 1 */
             pageIndex = pageIndex < 1 ? 1: pageIndex;
 
             SearchString = searchString;
 
+            SearchType = searchType;
 
             /* Prepares the query to get the data from the database */
             var categories = from c in _context.Categories
@@ -55,7 +59,16 @@ namespace LoCoMPro.Pages
             var registers = from r in _context.Registers
                             select r;
 
-            registers = registers.Where(x => x.ProductName.Contains(SearchString));
+            switch (SearchType)
+            {
+                case "Nombre":
+                default:
+                    registers = from r in _context.Registers
+                                    where r.ProductName.Contains(SearchString)
+                                    group r by new { r.ProductName, r.StoreName } into grouped
+                                    select grouped.OrderByDescending(r => r.SubmitionDate).First();
+                    break;
+            }
 
 
             /* Get th amount of pages that will be needed for all the registers */

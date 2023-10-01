@@ -161,13 +161,13 @@ namespace LoCoMPro.Data
             registers.Add(new Register(){Product = products[0], Contributor = users[0],Store = stores[0]
                 , Price = 2250, SubmitionDate = new DateTime(2023, 1, 7, 12, 0, 0, DateTimeKind.Utc)});
             registers.Add(new Register(){Product = products[0], Contributor = users[0], Store = stores[0]
-                , Price = 2250, SubmitionDate = new DateTime(2023, 1, 8, 12, 0, 0, DateTimeKind.Utc)});
+                , Price = 10000, SubmitionDate = new DateTime(2023, 1, 8, 12, 0, 0, DateTimeKind.Utc)});
 
             registers.Add(new Register() { Product = products[2], Contributor = users[2], Store = stores[0]
                 , Price = 25500, SubmitionDate = new DateTime(2023, 8, 8, 12, 0, 0, DateTimeKind.Utc) });
 
             registers.Add(new Register() { Product = products[0], Contributor = users[4], Store = stores[1]
-                , Price = 1000000, SubmitionDate = new DateTime(2023, 4, 4, 12, 0, 0, DateTimeKind.Utc) });
+                , Price = 3000, SubmitionDate = new DateTime(2023, 4, 4, 12, 0, 0, DateTimeKind.Utc) });
 
             registers.Add(new Register() { Product = products[1], Contributor = users[2], Store = stores[1]
                 , Price = 900000, SubmitionDate = new DateTime(2023, 3, 28, 12, 0, 0, DateTimeKind.Utc) });
