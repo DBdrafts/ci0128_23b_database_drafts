@@ -26,7 +26,7 @@
             <!-- Search filter title -->
             <h4> Filtros </h4>
         
-            @* Commented fot later use *@
+            @* Commented for later use *@
             @* <form method="post"> *@
                 <!-- Razor directive that gets all the categories names -->
                 @foreach (var category in Model.Category)
@@ -34,7 +34,8 @@
                     <!-- Individuals categories -->
                     <div class="filter-line">
                         <input asp-for="IsChecked" type="checkbox" />
-                        <label asp-for="IsChecked">@Html.DisplayFor(modelItem => category.CategoryName)</label>
+                        <label asp-for="IsChecked">@Html.DisplayFor(modelItem
+                            => category.CategoryName)</label>
                     </div>
                 }
 
@@ -105,7 +106,8 @@
                 }
 
                 <!-- Page button section that behaves dynamically -->
-                @for (int i = Model.Register.PageIndex - 1; i <= Model.Register.TotalPages && i <= Model.Register.PageIndex + 3; i++)
+                @for (int i = Model.Register.PageIndex - 1; i <= Model.Register.TotalPages 
+                    && i <= Model.Register.PageIndex + 3; i++)
                 {
                     <!-- If there´re previous pages higher that 0 -->
                     if (i >= 1)

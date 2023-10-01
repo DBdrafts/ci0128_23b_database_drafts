@@ -59,16 +59,7 @@ namespace LoCoMPro.Pages
             var registers = from r in _context.Registers
                             select r;
 
-            switch (SearchType)
-            {
-                case "Nombre":
-                default:
-                    registers = from r in _context.Registers
-                                    where r.ProductName.Contains(SearchString)
-                                    group r by new { r.ProductName, r.StoreName } into grouped
-                                    select grouped.OrderByDescending(r => r.SubmitionDate).First();
-                    break;
-            }
+            GetRegistersByType(ref registers);
 
 
             /* Get th amount of pages that will be needed for all the registers */
@@ -78,6 +69,20 @@ namespace LoCoMPro.Pages
             Category = await categories.ToListAsync();
             Register = await PaginatedList<Register>.CreateAsync(
                 registers.AsNoTracking(), pageIndex ?? 1, pageSize);
+        }
+
+        public void GetRegistersByType(ref IQueryable<Register>? registers)
+        {
+            switch (SearchType)
+            {
+                case "Nombre":
+                default:
+                    registers = from r in _context.Registers
+                                where r.ProductName.Contains(SearchString)
+                                group r by new { r.ProductName, r.StoreName } into grouped
+                                select grouped.OrderByDescending(r => r.SubmitionDate).First();
+                    break;
+            }
         }
 
         /* OnPost method that sent request */
