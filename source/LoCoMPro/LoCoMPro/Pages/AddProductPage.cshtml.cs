@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Build.ObjectModelRemoting;
 using Microsoft.CodeAnalysis;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System;
@@ -147,7 +148,7 @@ namespace LoCoMPro.Pages
                 _context.Products.Add(newProduct);
                 _context.SaveChanges();
 
-                //AddStoreRelation(storeName, cantonName, provinciaName);
+                AddStoreRelation(storeName, cantonName, provinciaName);
                 //var store = _context.Stores.First(s => s.Name == storeName && s.CantonName == cantonName && s.ProvinciaName == provinciaName);
                 // Use raw SQL to insert data into the table
                 string sql = "INSERT INTO Sells (ProductName, StoreName, ProvinceName, CantonName) VALUES ({0}, {1}, {2}, {3})";
@@ -157,13 +158,19 @@ namespace LoCoMPro.Pages
                 //_context.Database.
             } else
             {
-                
                 AddStoreRelation(storeName, cantonName, provinciaName);
-                Product product = _context.Products.First(p => p.Name == productName);
-                if (!_context.Stores.First(s => s.Name == storeName).Products.Contains(product))
+                string sql = "SELECT 1 FROM Sells WHERE ProductName = {0} AND StoreName = {1}";
+                var result = _context.Database.ExecuteSqlRaw(sql, productName, storeName);
+                if (result < 0)
                 {
-                    _context.Stores.First(s => s.Name == storeName).Products.Add(product);
+                    sql = "INSERT INTO Sells (ProductName, StoreName, ProvinceName, CantonName) VALUES ({0}, {1}, {2}, {3})";
+                    _context.Database.ExecuteSqlRaw(sql, productName, storeName, provinciaName, cantonName);
                 }
+                //Product product = _context.Products.First(p => p.Name == productName);
+                //if (!_context.Stores.First(s => s.Name == storeName).Products.Contains(product))
+                //{
+                //    _context.Stores.First(s => s.Name == storeName).Products.Add(product);
+                //}
 
             }
             _context.SaveChanges();
