@@ -133,6 +133,7 @@ namespace LoCoMPro.Pages
             Debug.WriteLine($"Comentario: {comment}");
 
 
+            
             if (!_context.Products.Any(p => p.Name == productName))  // If the product doesn't exists
             {
                 // Create new product
@@ -146,12 +147,18 @@ namespace LoCoMPro.Pages
                 _context.Products.Add(newProduct);
                 _context.SaveChanges();
 
-                AddStoreRelation(storeName, cantonName);
-                _context.Stores.First(s => s.Name == storeName).Products.Add(newProduct);
-
+                //AddStoreRelation(storeName, cantonName, provinciaName);
+                //var store = _context.Stores.First(s => s.Name == storeName && s.CantonName == cantonName && s.ProvinciaName == provinciaName);
+                // Use raw SQL to insert data into the table
+                string sql = "INSERT INTO Sells (ProductName, StoreName, ProvinceName, CantonName) VALUES ({0}, {1}, {2}, {3})";
+                _context.Database.ExecuteSqlRaw(sql, productName, storeName, provinciaName, cantonName);
+                //_context.Add("Sells").
+                //store.Products?.Add(newProduct);
+                //_context.Database.
             } else
             {
-                AddStoreRelation(storeName, cantonName);
+                
+                AddStoreRelation(storeName, cantonName, provinciaName);
                 Product product = _context.Products.First(p => p.Name == productName);
                 if (!_context.Stores.First(s => s.Name == storeName).Products.Contains(product))
                 {
@@ -177,8 +184,9 @@ namespace LoCoMPro.Pages
             return RedirectToPage("/Index");
         }
 
-        private void AddStoreRelation(string storeName, string cantonName) {
-            if (!_context.Stores.Any(s => s.Name == storeName)) // If the store doesn't exist
+        private void AddStoreRelation(string storeName, string cantonName, string provinceName) {
+            //var store = _context.Stores.First(p => p.Name == storeName && p.CantonName == cantonName && p.ProvinciaName == provinceName);
+            if (!_context.Stores.Any(s => s.Name == storeName /*&& s.CantonName == cantonName && s.ProvinciaName == provinceName*/)) // If the store doesn't exist
             {
                 // Create new store
                 Store newStore = new()
@@ -190,6 +198,7 @@ namespace LoCoMPro.Pages
                 _context.Stores.Add(newStore);
                 _context.SaveChanges();
             }
+
 
         }
     }
