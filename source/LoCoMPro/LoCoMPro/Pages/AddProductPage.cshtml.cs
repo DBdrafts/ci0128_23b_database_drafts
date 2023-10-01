@@ -154,12 +154,24 @@ namespace LoCoMPro.Pages
                     Brand = brandName,
                     Model = modelName,
                     // May want to Check this line of code.
-                    Categories = new List<Category>() { _context.Categories.FirstOrDefault(c => c.CategoryName == chosenCategory) }
+                    Categories = new List<Category>() { _context.Categories.FirstOrDefault(c => c.CategoryName == chosenCategory)! }
                 };
                 _context.Products.Add(productToAdd);
             }
-            store.Products.Add(productToAdd);
-            //_context.SaveChanges();
+            _context.SaveChanges();
+            string sqlQuery = 
+                "IF NOT EXISTS (SELECT * FROM Sells WHERE ProductName = {0} AND StoreName = {1} AND ProvinceName = {2} AND CantonName = {3})\n" +
+                "BEGIN\n" +
+                "    INSERT INTO Sells (ProductName, StoreName, ProvinceName, CantonName) VALUES ({0}, {1}, {2}, {3})\n" +
+                "END";
+            try
+            {
+                _ = _context.Database.ExecuteSqlRaw(sqlQuery, productName, storeName, provinciaName, cantonName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
 
             // Create new Register
             Register newRegister = new()
@@ -175,6 +187,7 @@ namespace LoCoMPro.Pages
             //productToAdd.Registers?.Add(newRegister);
 
             await _context.SaveChangesAsync();
+            //_context.
             return RedirectToPage("/Index");
         }
 
