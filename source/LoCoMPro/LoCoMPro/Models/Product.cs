@@ -15,9 +15,9 @@ namespace LoCoMPro.Models
         public string? Model { get; set; }
 
         // Navegation attributes
-        public List<Register>? Registers { get; set; }  // TODO: May have to change to FLUENT API notation
-        public List<Category>? Categories { get; set; }
-        [NotMapped]
-        public List<Store>? Stores { get; set; }
+        public ICollection<Register>? Registers { get; set; } = new List<Register>();  // TODO: May have to change to FLUENT API notation
+        public ICollection<Category>? Categories { get; set; } = new List<Category>();
+
+        public virtual ICollection<Store>? Stores { get; set; } = new List<Store>();
     }
 }

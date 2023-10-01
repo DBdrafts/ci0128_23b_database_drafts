@@ -13,8 +13,8 @@ namespace LoCoMPro.Models
 
         // Navegation atribute
         public string? ProvinciaName { get; set; }
-        public List<Store>? Stores { get; set; }
-        public List<User>? Users { get; set; }
+        public ICollection<Store>? Stores { get; set; } = new List<Store>();
+        public ICollection<User>? Users { get; set; } = new List<User>();
 
         // Foreing Key
         [ForeignKey(nameof(ProvinciaName))]

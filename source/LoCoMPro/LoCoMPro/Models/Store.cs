@@ -13,11 +13,11 @@ namespace LoCoMPro.Models
         // Navegation attribute
         public string? CantonName { get; set; }
         public string? ProvinciaName { get; set; }
-        public List<Register>? Registers { get; set; }
+        public ICollection<Register>? Registers { get; set; } = new List<Register>();
 
         // Foreign Key 
         public required Canton Location { get; set; }
-        [NotMapped]
-        public List<Product>? Products { get; set; }
+
+        public ICollection<Product>? Products { get; set; } = new List<Product>();
     }
 }
