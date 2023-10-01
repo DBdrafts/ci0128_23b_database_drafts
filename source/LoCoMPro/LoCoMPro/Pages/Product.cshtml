@@ -16,25 +16,22 @@
 <body>
     <!-- Name of product requested -->
     <div class="titleProduct">
-        @Model.amountRegisterDisplayed
+        @Model.requestedProductName
     </div>
-
-
 
     <!-- Section for columns of specifications from requested product -->
     <div class="container">
-        @{
-            var firstNonNullRegister = Model.Register.FirstOrDefault(r => r.StoreName != null);
-
+        @{ // select the first matches
+            var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
+            var firstNonNullStore = Model.Store.FirstOrDefault(r => r.Name != null);
         }
-
         <!-- brand column -->
         <div class="column">
             <h2>Marca</h2>
             @{
-                if (firstNonNullRegister != null)
+                if (firstNonNullProduct != null)
                 {
-                    <p>@Html.DisplayFor(modelItem => firstNonNullRegister.Product.Brand)</p>
+                    <p>@firstNonNullProduct.Brand</p>
                 }
             }
         </div>
@@ -43,9 +40,9 @@
         <div class="column">
             <h2>Modelo</h2>
             @{
-                if (firstNonNullRegister != null)
+                if (firstNonNullProduct != null)
                 {
-                    <p>@Html.DisplayFor(modelItem => firstNonNullRegister.Product.Model)</p>
+                    <p>@firstNonNullProduct.Model</p>
                 }
             }
             </div>
@@ -54,9 +51,9 @@
         <div class="column">
             <h2>Establecimiento</h2>
             @{
-                if (firstNonNullRegister != null)
+                if (firstNonNullStore != null)
                 {
-                    <p>@Html.DisplayFor(modelItem => firstNonNullRegister.StoreName)</p>
+                    <p>@firstNonNullStore.Name</p>
                 }
             }
         </div>
@@ -65,9 +62,9 @@
         <div class="column">
             <h2>Cantón</h2>
             @{
-                if (firstNonNullRegister != null)
+                if (firstNonNullStore != null)
                 {
-                    <p>@Html.DisplayFor(modelItem => firstNonNullRegister.CantonName)</p>
+                    <p>@firstNonNullStore.CantonName</p>
                 }
             }
         </div>
@@ -76,9 +73,9 @@
         <div class="column">
             <h2>Provincia</h2>
             @{
-                if (firstNonNullRegister != null)
+                if (firstNonNullStore != null)
                 {
-                    <p>@Html.DisplayFor(modelItem => firstNonNullRegister.ProvinciaName)</p>
+                    <p>@firstNonNullStore.ProvinciaName</p>
                 }
             }
         </div>
