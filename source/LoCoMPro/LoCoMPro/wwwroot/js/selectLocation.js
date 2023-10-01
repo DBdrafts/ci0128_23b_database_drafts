@@ -1,9 +1,11 @@
+SelectLocation:
 document.addEventListener("DOMContentLoaded", function () {
     const locationButton = document.getElementById("locationButton");
     const locationPopup = document.getElementById("locationPopup");
     const provinceSelect = document.getElementById("province");
     const cantonSelect = document.getElementById("canton");
     const saveLocationButton = document.getElementById("saveLocation-button");
+    const addProductForm = document.getElementById("addProductForm");
 
     locationButton.addEventListener("click", function () {
         locationPopup.style.display = "block";
@@ -29,6 +31,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
         } else {
             cantonSelect.setAttribute("disabled", "disabled");
+            cantonSelect.innerHTML = '<option value="" disabled selected hidden>Seleccionar un cantón</option>';
+        }
+    });
+
+    addProductForm.addEventListener("submit", function (event) {
+        const selectedProvince = provinceSelect.value;
+        const selectedCanton = cantonSelect.value;
+
+        if (!selectedProvince || selectedProvince === "" || !selectedCanton || selectedCanton === "") {
+            event.preventDefault();
+            alert("Debe seleccionar una ubicaci\u00F3n antes de enviar el formulario.");
         }
     });
 
@@ -36,14 +49,13 @@ document.addEventListener("DOMContentLoaded", function () {
         const selectedProvince = provinceSelect.value;
         const selectedCanton = cantonSelect.value;
 
-        if (selectedProvince && selectedCanton) {
+        if (selectedProvince && selectedProvince !== "" && selectedCanton && selectedCanton !== "") {
             const locationInfo = document.getElementById("locationInfo");
-            locationInfo.textContent = `Provincia: ${selectedProvince}, Cantón: ${selectedCanton}`;
+            locationInfo.textContent = `Provincia: ${selectedProvince}, Cant\u00F3n: ${selectedCanton}`;
             locationInfo.style.display = "block";
             document.getElementById("selectedProvince").value = selectedProvince;
             document.getElementById("selectedCanton").value = selectedCanton;
+            locationPopup.style.display = "none";
         }
-
-        locationPopup.style.display = "none";
     });
 });

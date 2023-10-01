@@ -110,7 +110,7 @@ namespace LoCoMPro.Pages
              * Checked for:
              *  - New Product AND New Store pass
              *  - Known Store AND New Product pass
-             *  - Know Store AND New Product pass
+             *  - Know Store AND Know Product pass
              *  - New Store AND Known Product pass
              *  
              *  Have to add code to check for errors :)
@@ -125,26 +125,18 @@ namespace LoCoMPro.Pages
             string storeName= Request.Form["location"]!;
             string productName = Request.Form["productName"]!;
             float price = Convert.ToSingle(Request.Form["price"]);
-            string chosenCategory = Request.Form["category"]!;
-            string brandName = Request.Form["brand"]!;
-            string modelName = Request.Form["model"]!;
-            string comment = Request.Form["comment"]!;
+            string? chosenCategory = Request.Form["category"];
+            string? brandName = CheckNull(Request.Form["brand"]);
+            string? modelName = CheckNull(Request.Form["model"]);
+            string? comment = CheckNull(Request.Form["comment"]);
 
             string userName = "Jose Miguel Garcia Lopez";  // STATIC USER
-
-            Debug.WriteLine($"provincia: {provinciaName}");
-            Debug.WriteLine($"canton: {cantonName}");
-            Debug.WriteLine($"Tienda: {storeName}");
-            Debug.WriteLine($"Producto: {productName}");
-            Debug.WriteLine($"Precio: {price}");
-            Debug.WriteLine($"Categoría: {chosenCategory}");
-            Debug.WriteLine($"Marca: {brandName}");
-            Debug.WriteLine($"Modelo: {modelName}");
-            Debug.WriteLine($"Comentario: {comment}");
 
 
             var productToAdd = _context.Products.Find(productName);
             var store = AddStoreRelation(storeName, cantonName, provinciaName);
+            var category = _context.Categories.Find(chosenCategory);
+
             if (productToAdd == null)  // If the product doesn't exists
             {
                 // Create new product
@@ -153,13 +145,16 @@ namespace LoCoMPro.Pages
                     Name = productName,
                     Brand = brandName,
                     Model = modelName,
-                    // May want to Check this line of code.
-                    Categories = new List<Category>() { _context.Categories.FirstOrDefault(c => c.CategoryName == chosenCategory) }
                 };
+                
+                if (category != null)
+                {
+                    productToAdd.Categories = new List<Category>() { category };
+                }
+
                 _context.Products.Add(productToAdd);
             }
-            store.Products.Add(productToAdd);
-            //_context.SaveChanges();
+            store.Products!.Add(productToAdd);
 
             // Create new Register
             Register newRegister = new()
@@ -172,14 +167,12 @@ namespace LoCoMPro.Pages
                 Comment = comment
             };
             _context.Registers.Add(newRegister);
-            //productToAdd.Registers?.Add(newRegister);
 
             await _context.SaveChangesAsync();
             return RedirectToPage("/Index");
         }
 
         private Store AddStoreRelation(string storeName, string cantonName, string provinceName) {
-            //var store = _context.Stores.First(p => p.Name == storeName && p.CantonName == cantonName && p.ProvinciaName == provinceName);
             var store = _context.Stores.Find(storeName, cantonName, provinceName);
             if (store == null) // If the store doesn't exist
             {
@@ -191,7 +184,6 @@ namespace LoCoMPro.Pages
                     Products = new List<Product>()
                 };
                 _context.Stores.Add(store);
-                //_context.SaveChanges();
             } else
             {
                 // Entity framework does not initialize the list, apparentely
@@ -199,5 +191,14 @@ namespace LoCoMPro.Pages
             }
             return store;
         }
+        static private string? CheckNull(string? attribute)
+        {
+            if (attribute == "")
+            {
+                attribute = null;
+            }
+            return attribute;
+        }
     }
 }
+

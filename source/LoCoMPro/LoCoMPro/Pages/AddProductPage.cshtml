@@ -72,15 +72,15 @@
                     <h2>Seleccionar ubicación</h2>
                     <label for="province">Provincia:</label>
                     <select id="province" name="province">
-                        <option value="">Seleccionar provincia</option>
-                        @foreach (var provincia in Model.ProvinciaList)
+                        <option value="" disabled selected hidden>Seleccionar provincia</option>
+                        @foreach (var provincia in Model.ProvinciaList!)
                         {
                             <option value="@provincia.Value">@provincia.Text</option>
                         }
                     </select>
                     <label for="canton">Cantón:</label>
-                    <select id="canton" name="canton">
-                        <option value="">Seleccionar una provincia primero</option>
+                    <select id="canton" name="canton" disabled>
+                        <option value="" disabled selected hidden>Seleccionar un cantón</option>
                     </select>
                     <button type="button" id="saveLocation-button">Guardar</button>
                 </div>
@@ -92,7 +92,6 @@
                 </div>
             </button>
 
-            
         </form>
     </div>
     <script src="~/js/selectLocation.js"></script>
