@@ -77,7 +77,7 @@ namespace LoCoMPro.Pages
             switch (SearchType)
             {
                 /* If the type of search is by "Name" or default */
-                case "Name":
+                case "Nombre":
                 default:
                     registers = from r in _context.Registers
                                 where r.ProductName.Contains(SearchString)
@@ -86,10 +86,19 @@ namespace LoCoMPro.Pages
                     break;
 
                 /* If the type of search is by "Brand"*/
-                case "Brand":
+                case "Marca":
                     registers = from r in _context.Registers
                                 join p in _context.Products on r.ProductName equals p.Name
                                 where p.Brand.Contains(SearchString)
+                                group r by new { r.ProductName, r.StoreName } into grouped
+                                select grouped.OrderByDescending(r => r.SubmitionDate).First();
+                    break;
+
+                /* If the type of search is by "Model"*/
+                case "Modelo":
+                    registers = from r in _context.Registers
+                                join p in _context.Products on r.ProductName equals p.Name
+                                where p.Model.Contains(SearchString)
                                 group r by new { r.ProductName, r.StoreName } into grouped
                                 select grouped.OrderByDescending(r => r.SubmitionDate).First();
                     break;
