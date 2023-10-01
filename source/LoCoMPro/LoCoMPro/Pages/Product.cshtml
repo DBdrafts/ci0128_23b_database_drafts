@@ -16,41 +16,75 @@
 <body>
     <!-- Name of product requested -->
     <div class="titleProduct">
-        Titulo del Producto solicitado
+        @Model.amountRegisterDisplayed
     </div>
+
+
 
     <!-- Section for columns of specifications from requested product -->
     <div class="container">
+        @{
+            var firstNonNullRegister = Model.Register.FirstOrDefault(r => r.StoreName != null);
+
+        }
+
         <!-- brand column -->
         <div class="column">
             <h2>Marca</h2>
-            <p>NombreMarca</p>
+            @{
+                if (firstNonNullRegister != null)
+                {
+                    <p>@Html.DisplayFor(modelItem => firstNonNullRegister.Product.Brand)</p>
+                }
+            }
         </div>
 
         <!-- model column -->
         <div class="column">
             <h2>Modelo</h2>
-            <p>NombreModelo</p>
-        </div>
+            @{
+                if (firstNonNullRegister != null)
+                {
+                    <p>@Html.DisplayFor(modelItem => firstNonNullRegister.Product.Model)</p>
+                }
+            }
+            </div>
 
         <!-- establishment column -->
         <div class="column">
             <h2>Establecimiento</h2>
-            <p>NombreEstablecimiento</p>
+            @{
+                if (firstNonNullRegister != null)
+                {
+                    <p>@Html.DisplayFor(modelItem => firstNonNullRegister.StoreName)</p>
+                }
+            }
         </div>
 
         <!-- cantón column -->
         <div class="column">
             <h2>Cantón</h2>
-            <p>NombreCantón</p>
+            @{
+                if (firstNonNullRegister != null)
+                {
+                    <p>@Html.DisplayFor(modelItem => firstNonNullRegister.CantonName)</p>
+                }
+            }
         </div>
 
         <!-- province column -->
         <div class="column">
             <h2>Provincia</h2>
-            <p>NombreProvincia</p>
-        </div>    
+            @{
+                if (firstNonNullRegister != null)
+                {
+                    <p>@Html.DisplayFor(modelItem => firstNonNullRegister.ProvinciaName)</p>
+                }
+            }
+        </div>
+
     </div>
+    
     <!-- Horizontal separating line -->
     <hr class="style-four">
 
