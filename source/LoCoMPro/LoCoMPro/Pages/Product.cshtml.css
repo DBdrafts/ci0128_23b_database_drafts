@@ -238,3 +238,12 @@ text-align: center;
 .register-block:hover {
      background-color: #9F9F9F;
 }
+
+/* Style for the search section */
+.search-section {
+    display: inline-block;
+    height: 100%;
+    width: 85%;
+    text-align: center;
+    align-items: center;
+}

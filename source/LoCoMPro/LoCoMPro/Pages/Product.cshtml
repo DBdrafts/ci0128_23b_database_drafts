@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "~/Product/{pageIndex:int}"
 @model LoCoMPro.Pages.ProductPageModel
 @{
     ViewData["Title"] = "SearchProduct";
@@ -14,12 +14,12 @@
 </head>
 
 <body>
-    <!-- Name of product requested -->
+    <!-- Name of product Search -->
     <div class="titleProduct">
-        @Model.requestedProductName
+        @Model.SearchProductName
     </div>
 
-    <!-- Section for columns of specifications from requested product -->
+    <!-- Section for columns of specifications from Search product -->
     <div class="container">
         @{ // select the first matches
             var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
@@ -86,7 +86,7 @@
     <hr class="style-four">
 
     <!-- Code for register list in the page -->
-    <!-- Name of product requested -->
+    <!-- Name of product Search -->
     <div class="titleListRegister">
         Lista de registros
     </div>
@@ -131,5 +131,69 @@
         
     </div>
 
-   </body>
+    <div class="search-section">
+        <!-- Disables the buttons if there´s no previous or next button -->
+        @{
+            var prevDisabled = !Model.Register.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.Register.HasNextPage ? "disabled" : "";
+        }
+
+        <!-- Search pagination section -->
+        <div class="pagination-section">
+            <!-- If there´s a previous page -->
+            @if (@prevDisabled != "disabled")
+            {
+                <!-- Link to go to the previous page -->
+                <a asp-page="./Product"
+                   asp-route-pageIndex="@(Model.Register.PageIndex - 1)"
+                   asp-route-SearchProductName="@Model.SearchProductName"
+                   asp-route-SearchStoreName="@Model.SearchStoreName"
+                   asp-route-SearchCantonName="@Model.SearchCantonName"
+                   asp-route-SearchProvinceName="@Model.SearchProvinceName"
+                   class="button-general pagination-button" id="pagination-button-left">
+                    <img src="~/img/ArrowLeftIcon.svg" alt="Anterior">
+                </a>
+            }
+
+            <!-- Page button section that behaves dynamically -->
+            @for (int i = Model.Register.PageIndex - 1; i <= Model.Register.TotalPages && i <= Model.Register.PageIndex + 3; i++)
+            {
+                <!-- If there´re previous pages higher that 0 -->
+                if (i >= 1)
+                {
+                    <!-- Pagination square of the pages -->
+                    <div id="pagination-square">
+                        <a asp-page="./Product"
+                           asp-route-pageIndex="@i"
+                           asp-route-SearchProductName="@Model.SearchProductName"
+                           asp-route-SearchStoreName="@Model.SearchStoreName"
+                           asp-route-SearchCantonName="@Model.SearchCantonName"
+                           asp-route-SearchProvinceName="@Model.SearchProvinceName"
+                           class="@(i == Model.Register.PageIndex ? "pagination-square-active" : "")">
+                            <p>@i</p>
+                        </a>
+                    </div>
+                }
+            }
+
+            <!-- If there´s a next page -->
+            @if (nextDisabled != "disabled")
+            {
+                <!-- Link to go to the next page -->
+                <a asp-page="./Product"
+                   asp-route-pageIndex="@(Model.Register.PageIndex + 1)"
+                   asp-route-SearchProductName="@Model.SearchProductName"
+                   asp-route-SearchStoreName="@Model.SearchStoreName"
+                   asp-route-SearchCantonName="@Model.SearchCantonName"
+                   asp-route-SearchProvinceName="@Model.SearchProvinceName"
+                   class="button-general pagination-button" id="pagination-button-right">
+                    <img src="~/img/ArrowRightIcon.svg" alt="Siguiente">
+                </a>
+            }
+        </div>
+
+    </div>
+
+</body>
+
 </html>
