@@ -17,7 +17,7 @@
     background-color: #BABAB8;
     padding: 0px 15px;
     margin: 0px;
-    width: 15%;
+    width: 17%;
     height: 100%;
     text-align: center;
 }
@@ -45,7 +45,7 @@ select.button-general option {
 
 /* Style for the search input box */
 #search-input {
-    width: 89%;
+    width: 65%;
     border: none;
     border-radius: 15px;
     background-color: #E2E3E3;

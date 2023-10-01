@@ -44,6 +44,7 @@
 
 /* Style for the logo that work as a link to the main page */
 .logo-link {
+    display: inline-block;
     height: 50px;
     width: 150px;
     margin: 0px 15px;
@@ -51,8 +52,8 @@
 
 /* Style for the image of the logo that work as a link to the main page */
 .logo-link img {
-    max-height: 100%;
-    max-width: 100%;
+    height: 50px;
+    width: 150px;
 }
 
 /* Style for the pagination section */

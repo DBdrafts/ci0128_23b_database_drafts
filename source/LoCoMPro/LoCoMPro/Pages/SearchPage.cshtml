@@ -38,7 +38,7 @@
     <!-- Search result section -->
     <div class="search-section">
         <!-- Search section title -->
-        <h1> Resultados "@Model.SearchString" - Búsqueda por "Placeholder" </h1>
+        <h1> Resultados "@Model.SearchString" - Búsqueda por "@Model.SearchType" </h1>
          
         <!-- Search section header -->
         <div class="search-title">
@@ -54,9 +54,12 @@
         @foreach (var register in Model.Register)
         {
             <!-- Search result section -->
-            <a asp-page="ProductPage"
-                asp-page-productName="register.ProductName"
-                asp-page-storeName="register.StoreName"
+            <a asp-page="./Product"
+               asp-route-pageIndex="1"
+               asp-route-SearchProductName="register.ProductName"
+               asp-route-SearchStoreName="register.StoreName"
+               asp-route-SearchCantonName="register.CantonName"
+               asp-route-SearchProvinceName="register.ProvinciaName"
                class="result-section">
                     <!-- Individual registers -->
                     <div class="result-block">
