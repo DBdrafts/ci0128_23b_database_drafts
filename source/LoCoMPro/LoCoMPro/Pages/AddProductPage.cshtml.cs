@@ -106,6 +106,15 @@ namespace LoCoMPro.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
+            /*
+             * Checked for:
+             *  - New Product AND New Store pass
+             *  - Known Store AND New Product pass
+             *  - Know Store AND New Product pass
+             *  - New Store AND Known Product pass
+             *  
+             *  Have to add code to check for errors :)
+             */
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -134,79 +143,61 @@ namespace LoCoMPro.Pages
             Debug.WriteLine($"Comentario: {comment}");
 
 
-            
-            if (!_context.Products.Any(p => p.Name == productName))  // If the product doesn't exists
+            var productToAdd = _context.Products.Find(productName);
+            var store = AddStoreRelation(storeName, cantonName, provinciaName);
+            if (productToAdd == null)  // If the product doesn't exists
             {
                 // Create new product
-                Product newProduct = new()
+                productToAdd = new()
                 {
                     Name = productName,
                     Brand = brandName,
                     Model = modelName,
+                    // May want to Check this line of code.
                     Categories = new List<Category>() { _context.Categories.FirstOrDefault(c => c.CategoryName == chosenCategory) }
                 };
-                _context.Products.Add(newProduct);
-                _context.SaveChanges();
-
-                AddStoreRelation(storeName, cantonName, provinciaName);
-                //var store = _context.Stores.First(s => s.Name == storeName && s.CantonName == cantonName && s.ProvinciaName == provinciaName);
-                // Use raw SQL to insert data into the table
-                string sql = "INSERT INTO Sells (ProductName, StoreName, ProvinceName, CantonName) VALUES ({0}, {1}, {2}, {3})";
-                _context.Database.ExecuteSqlRaw(sql, productName, storeName, provinciaName, cantonName);
-                //_context.Add("Sells").
-                //store.Products?.Add(newProduct);
-                //_context.Database.
-            } else
-            {
-                AddStoreRelation(storeName, cantonName, provinciaName);
-                string sql = "SELECT 1 FROM Sells WHERE ProductName = {0} AND StoreName = {1}";
-                var result = _context.Database.ExecuteSqlRaw(sql, productName, storeName);
-                if (result < 0)
-                {
-                    sql = "INSERT INTO Sells (ProductName, StoreName, ProvinceName, CantonName) VALUES ({0}, {1}, {2}, {3})";
-                    _context.Database.ExecuteSqlRaw(sql, productName, storeName, provinciaName, cantonName);
-                }
-                //Product product = _context.Products.First(p => p.Name == productName);
-                //if (!_context.Stores.First(s => s.Name == storeName).Products.Contains(product))
-                //{
-                //    _context.Stores.First(s => s.Name == storeName).Products.Add(product);
-                //}
-
+                _context.Products.Add(productToAdd);
             }
-            _context.SaveChanges();
+            store.Products.Add(productToAdd);
+            //_context.SaveChanges();
 
             // Create new Register
             Register newRegister = new()
             {
                 SubmitionDate = DateTime.Now,
                 Contributor = _context.Users.First(u => u.UserName == userName), // TODO: CHANGE STATIC USER!
-                Product = _context.Products.First(p => p.Name == productName),
-                Store = _context.Stores.First(s => s.Name == storeName),
+                Product = productToAdd,
+                Store = store,
                 Price = price,
                 Comment = comment
             };
             _context.Registers.Add(newRegister);
+            //productToAdd.Registers?.Add(newRegister);
 
             await _context.SaveChangesAsync();
             return RedirectToPage("/Index");
         }
 
-        private void AddStoreRelation(string storeName, string cantonName, string provinceName) {
+        private Store AddStoreRelation(string storeName, string cantonName, string provinceName) {
             //var store = _context.Stores.First(p => p.Name == storeName && p.CantonName == cantonName && p.ProvinciaName == provinceName);
-            if (!_context.Stores.Any(s => s.Name == storeName /*&& s.CantonName == cantonName && s.ProvinciaName == provinceName*/)) // If the store doesn't exist
+            var store = _context.Stores.Find(storeName, cantonName, provinceName);
+            if (store == null) // If the store doesn't exist
             {
                 // Create new store
-                Store newStore = new()
+                store = new()
                 {
                     Name = storeName,
                     Location = _context.Cantones.First(c => c.CantonName == cantonName),
                     Products = new List<Product>()
                 };
-                _context.Stores.Add(newStore);
-                _context.SaveChanges();
+                _context.Stores.Add(store);
+                //_context.SaveChanges();
+            } else
+            {
+                // Entity framework does not initialize the list, apparentely
+                store.Products = new();
             }
-
-
+            return store;
         }
     }
 }
