@@ -106,15 +106,6 @@ namespace LoCoMPro.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            /*
-             * Checked for:
-             *  - New Product AND New Store pass
-             *  - Known Store AND New Product pass
-             *  - Know Store AND Know Product pass
-             *  - New Store AND Known Product pass
-             *  
-             *  Have to add code to check for errors :)
-             */
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -154,7 +145,21 @@ namespace LoCoMPro.Pages
 
                 _context.Products.Add(productToAdd);
             }
-            store.Products!.Add(productToAdd);
+            
+            _context.SaveChanges();
+            string sqlQuery =
+                "IF NOT EXISTS (SELECT * FROM Sells WHERE ProductName = {0} AND StoreName = {1} AND ProvinceName = {2} AND CantonName = {3})\n" +
+                "BEGIN\n" +
+                "    INSERT INTO Sells (ProductName, StoreName, ProvinceName, CantonName) VALUES ({0}, {1}, {2}, {3})\n" +
+                "END";
+            try
+            {
+                _ = _context.Database.ExecuteSqlRaw(sqlQuery, productName, storeName, provinciaName, cantonName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
 
             // Create new Register
             Register newRegister = new()
@@ -169,6 +174,7 @@ namespace LoCoMPro.Pages
             _context.Registers.Add(newRegister);
 
             await _context.SaveChangesAsync();
+
             return RedirectToPage("/Index");
         }
 
@@ -201,4 +207,3 @@ namespace LoCoMPro.Pages
         }
     }
 }
-
