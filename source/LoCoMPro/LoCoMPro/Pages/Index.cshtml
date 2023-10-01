@@ -2,11 +2,8 @@
 @model IndexModel
 @{
     Layout = "_Layout";
+    // ViewBag.ShowNavigation = false;
 }
-
-<head>
-    <link rel="stylesheet" href="~/css/SharedStyles.css" />
-</head>
 
  <div class="text-center">
      <!-- Logo image of LoCoMPro -->
@@ -15,26 +12,6 @@
     </div>
 
     <!-- Section of the search bar and buttons -->
-    <div class="search-bar">
-        <!-- Type selector button -->
-        <button class="button-general" id="type-search-selector">
-            <span>Buscar por</span>
-            <img src="~/img/ArrowDownIcon.svg"/>
-        </button>
-
-        <!-- Input box for the search -->
-        <input type="text" id="search-input" placeholder="Buscar.." />
-
-        <!-- Search button -->
-        <button class="button-general" id="search-button">
-            <img src="~/img/SearchIcon.svg" />
-        </button>
-
-        <!-- Location butoon -->
-        <button class="button-general" id="location-selector">
-            <img src="~/img/LocationIcon.svg" />
-            <span> Placeholder </span>
-        </button>
-    </div>
+    @await Html.PartialAsync("_SearchBar")
 </div>
 

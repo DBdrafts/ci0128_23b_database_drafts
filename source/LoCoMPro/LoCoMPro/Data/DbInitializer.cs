@@ -80,10 +80,10 @@ namespace LoCoMPro.Data
             // Add the products
             products.Add(new Product() { Name = "Leche Dos Pinos 1 litros", Brand = "Dos Pinos"
                 , Categories = new List<Category>() { categories[0] } });
-            products.Add(new Product() { Name = "Celular IPhone 15 Pro color beige", Brand = "IPhone", Model = "15 Pro"
-                , Categories = new List<Category>() { categories[1] } });
             products.Add(new Product() { Name = "Camisa deportiva negra Nike", Brand = "Nike"
                 , Categories = new List<Category>() { categories[2] } });
+            products.Add(new Product() { Name = "Celular IPhone 15 Pro color beige", Brand = "IPhone", Model = "15 Pro"
+                , Categories = new List<Category>() { categories[1] } });
 
             context.Products.AddRange(products);
             context.SaveChanges();
@@ -131,42 +131,25 @@ namespace LoCoMPro.Data
             , ref List<Register> registers, ref List<User> users
             , ref List<Product> products, ref List<Store> stores)
         {
-            // Add the users
-            registers.Add(new Register() { Product = products[0], Contributor = users[0], Store = stores[0]
-                , Price = 2000, SubmitionDate = new DateTime(2023, 1, 10, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[0], Contributor = users[1], Store = stores[0]
-                , Price = 2100, SubmitionDate = new DateTime(2023, 1, 11, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[0], Contributor = users[2], Store = stores[0]
-                , Price = 1900, SubmitionDate = new DateTime(2023, 1, 8, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[0], Contributor = users[3], Store = stores[0]
-                , Price = 2000, SubmitionDate = new DateTime(2023, 1, 1, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[0], Contributor = users[1], Store = stores[0]
-                , Price = 2300, SubmitionDate = new DateTime(2022, 12, 31, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[0], Contributor = users[0], Store = stores[0]
-                , Price = 2250, SubmitionDate = new DateTime(2023, 1, 15, 12, 0, 0, DateTimeKind.Utc) });
+            string comment = "Lorem ipsum dolor sit amet, consectetur adipiscing elit" +
+                ", sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum pulvinar etiam non quam. ";
 
-            registers.Add(new Register() { Product = products[2], Contributor = users[2], Store = stores[0]
-                , Price = 25500, SubmitionDate = new DateTime(2023, 8, 8, 12, 0, 0, DateTimeKind.Utc) });
-
-            registers.Add(new Register() { Product = products[0], Contributor = users[4], Store = stores[1]
-                , Price = 1000000, SubmitionDate = new DateTime(2023, 4, 4, 12, 0, 0, DateTimeKind.Utc) });
-
-            registers.Add(new Register() { Product = products[1], Contributor = users[2], Store = stores[1]
-                , Price = 900000, SubmitionDate = new DateTime(2023, 3, 28, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[1], Contributor = users[0], Store = stores[1]
-                , Price = 904000, SubmitionDate = new DateTime(2023, 3, 14, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[1], Contributor = users[4], Store = stores[1]
-                , Price = 910000, SubmitionDate = new DateTime(2023, 3, 1, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[1], Contributor = users[2], Store = stores[1]
-                , Price = 810000, SubmitionDate = new DateTime(2023, 4, 19, 12, 0, 0, DateTimeKind.Utc) });
-
-            registers.Add(new Register() { Product = products[2], Contributor = users[1], Store = stores[2]
-                , Price = 21000, SubmitionDate = new DateTime(2023, 8, 30, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[2], Contributor = users[3], Store = stores[2]
-                , Price = 19000, SubmitionDate = new DateTime(2023, 8, 24, 12, 0, 0, DateTimeKind.Utc) });
-
-            registers.Add(new Register() { Product = products[2], Contributor = users[3], Store = stores[1]
-                , Price = 26000, SubmitionDate = new DateTime(2023, 6, 24, 12, 0, 0, DateTimeKind.Utc) });
+            /* Generates the registers by using the index of the products, users, stores and the dates */
+            for (int productIndex = 0; productIndex < products.Count; productIndex++)
+            {
+                for (int usersIndex = 0; usersIndex < users.Count; usersIndex++)
+                {
+                    for (int storeIndex = 0; storeIndex < stores.Count; storeIndex++)
+                    {
+                        for (int dateIndex = 3; dateIndex < 5; dateIndex++)
+                        {
+                            registers.Add(new Register() { Product = products[productIndex], Contributor = users[usersIndex], Store = stores[storeIndex]
+                            , Price = (1500 + (1000 * (int) Math.Pow(10, productIndex)) + (100 * usersIndex * storeIndex * dateIndex))
+                            , SubmitionDate = new DateTime(2023, dateIndex, dateIndex + storeIndex + usersIndex, 12, 0, 0, DateTimeKind.Utc), Comment = comment });
+                        }
+                    }
+                }
+            }
 
             context.Registers.AddRange(registers);
             context.SaveChanges();
