@@ -1,0 +1,36 @@
+﻿<!-- Partial view of the search bar -->
+
+<head>
+    <!-- Shared style for several pages-->
+    <link rel="stylesheet" href="~/css/SearchBar.css" />
+</head>
+
+<!-- Section of the search bar and buttons for the layout -->
+<div class="search-bar justify-content-center">
+    <!-- Type selector button -->
+    <select class="button-general" id="type-search-selector">
+        <option value="nombre">
+            Nombre
+        </option>
+        <option value="marca">
+            Marca
+        </option>
+        <option value="modelo">
+            Modelo
+        </option>
+    </select>
+
+
+    <form method="get" asp-page="SearchPage" asp-route-pageIndex="1" class="search-inner-section">
+        <!-- Input box for the search -->
+        <input type="text" name="SearchString" id="search-input" maxlength="70" placeholder="Buscar..." required/>
+
+        <!-- Search button -->
+        <button type="submit" class="button-general" id="search-button">
+            <img src="~/img/SearchIcon.svg" />
+        </button>
+    </form>
+
+    <!-- Location button -->
+    @await Html.PartialAsync("_LocationButton")
+</div>
