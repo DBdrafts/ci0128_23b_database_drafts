@@ -71,14 +71,25 @@ namespace LoCoMPro.Pages
                 registers.AsNoTracking(), pageIndex ?? 1, pageSize);
         }
 
+        /* Gets the registers by using the type of search choose */
         public void GetRegistersByType(ref IQueryable<Register>? registers)
         {
             switch (SearchType)
             {
-                case "Nombre":
+                /* If the type of search is by "Name" or default */
+                case "Name":
                 default:
                     registers = from r in _context.Registers
                                 where r.ProductName.Contains(SearchString)
+                                group r by new { r.ProductName, r.StoreName } into grouped
+                                select grouped.OrderByDescending(r => r.SubmitionDate).First();
+                    break;
+
+                /* If the type of search is by "Brand"*/
+                case "Brand":
+                    registers = from r in _context.Registers
+                                join p in _context.Products on r.ProductName equals p.Name
+                                where p.Brand.Contains(SearchString)
                                 group r by new { r.ProductName, r.StoreName } into grouped
                                 select grouped.OrderByDescending(r => r.SubmitionDate).First();
                     break;
