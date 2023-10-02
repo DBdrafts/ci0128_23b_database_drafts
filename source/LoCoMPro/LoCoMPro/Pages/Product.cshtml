@@ -111,12 +111,22 @@
 				<a href="#">Precio</a>
 				<ul class="menu-vertical">
                     <li>
-                        <a href="#">Menor precio</a>
-
+                        <a asp-page="./Product"
+                           asp-route-SearchProductName="@Model.SearchProductName"
+                           asp-route-SearchStoreName="@Model.SearchStoreName"
+                           asp-route-SearchCantonName="@Model.SearchCantonName"
+                           asp-route-SearchProvinceName="@Model.SearchProvinceName"
+                           asp-route-sortOrder="" style="text-decoration: none;display: grid;font-size: 20px;
+                              color: white; text-align: center;"> Menores precios</a>
                     </li>
-                    <li>
-                        <a href="#">Mayor precio</a>
-
+                    <li>    
+                        <a asp-page="./Product"
+                           asp-route-SearchProductName="@Model.SearchProductName"
+                           asp-route-SearchStoreName="@Model.SearchStoreName"
+                           asp-route-SearchCantonName="@Model.SearchCantonName"
+                           asp-route-SearchProvinceName="@Model.SearchProvinceName"
+                           asp-route-sortOrder="price_desc" style="text-decoration: none;display: grid;font-size: 20px;
+                              color: white; text-align: center;"> Mayores precios</a>
                     </li>
 				</ul>
 			</li>
