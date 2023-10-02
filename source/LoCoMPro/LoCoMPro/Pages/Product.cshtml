@@ -28,7 +28,7 @@
         <!-- brand column -->
         <div class="column">
             <h2>Marca</h2>
-            @{
+            @{ // Get the name of the product brand
                 if (firstNonNullProduct != null)
                 {
                     <p>@firstNonNullProduct.Brand</p>
@@ -39,7 +39,7 @@
         <!-- model column -->
         <div class="column">
             <h2>Modelo</h2>
-            @{
+            @{ // Get the name of the product model
                 if (firstNonNullProduct != null)
                 {
                     <p>@firstNonNullProduct.Model</p>
@@ -50,7 +50,7 @@
         <!-- establishment column -->
         <div class="column">
             <h2>Establecimiento</h2>
-            @{
+            @{ // Get the name of the store
                 if (firstNonNullStore != null)
                 {
                     <p>@firstNonNullStore.Name</p>
@@ -61,7 +61,7 @@
         <!-- cantón column -->
         <div class="column">
             <h2>Cantón</h2>
-            @{
+            @{ // Get the name of the Canton Location
                 if (firstNonNullStore != null)
                 {
                     <p>@firstNonNullStore.CantonName</p>
@@ -72,14 +72,13 @@
         <!-- province column -->
         <div class="column">
             <h2>Provincia</h2>
-            @{
+            @{ // Get the name of the Province Location
                 if (firstNonNullStore != null)
                 {
                     <p>@firstNonNullStore.ProvinciaName</p>
                 }
             }
         </div>
-
     </div>
     
     <!-- Horizontal separating line -->
