@@ -235,6 +235,7 @@ namespace LoCoMPro.Pages
             var availableSuggestions = new List<string>() { "Hola" };
             if (field == "#store")
             {
+                // Look for saved Stores in current location
                 availableSuggestions = _context.Stores
                     .Where(s => s.ProvinciaName == provinceName && s.CantonName == cantonName)
                     .Select(s => s.Name)
@@ -242,11 +243,14 @@ namespace LoCoMPro.Pages
             }
             else if (field == "#productName")
             {
-                availableSuggestions = new List<string> {
-                    "Pan",
-                    "Vida",
-                    "Precios Bajos siempre"
-                };
+                // Look for products sold in current store.
+                string sqlQuery =
+                    "SELECT ProductName\n" +
+                    "FROM Sells\n" +
+                    "WHERE StoreName = @p0 AND\n" +
+                    "      ProvinceName = @p1 AND\n" +
+                    "      CantonName = @p2;";
+                availableSuggestions = _context.Database.SqlQueryRaw<string>(sqlQuery, storeName, provinceName, cantonName).ToList();
             }
 
             // Filter suggestions based on the user's input
