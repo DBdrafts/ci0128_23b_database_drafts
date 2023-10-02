@@ -103,48 +103,32 @@ namespace LoCoMPro.Pages
             LoadProvincias();
         }
 
-
+        // Get the data of the form and stores it in the DB
         public async Task<IActionResult> OnPostAsync()
         {
-            /*
-             * Checked for:
-             *  - New Product AND New Store pass
-             *  - Known Store AND New Product pass
-             *  - Know Store AND New Product pass
-             *  - New Store AND Known Product pass
-             *  
-             *  Have to add code to check for errors :)
-             */
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
+            // Get the information of the form
             string provinciaName = Request.Form["selectedProvince"]!;
             string cantonName = Request.Form["selectedCanton"]!;
-            string storeName= Request.Form["location"]!;
+            string storeName= Request.Form["store"]!;
             string productName = Request.Form["productName"]!;
             float price = Convert.ToSingle(Request.Form["price"]);
-            string chosenCategory = Request.Form["category"]!;
-            string brandName = Request.Form["brand"]!;
-            string modelName = Request.Form["model"]!;
-            string comment = Request.Form["comment"]!;
+            string? chosenCategory = Request.Form["category"];
+            string? brandName = CheckNull(Request.Form["brand"]);
+            string? modelName = CheckNull(Request.Form["model"]);
+            string? comment = CheckNull(Request.Form["comment"]);
 
             string userName = "Jose Miguel Garcia Lopez";  // STATIC USER
 
-            Debug.WriteLine($"provincia: {provinciaName}");
-            Debug.WriteLine($"canton: {cantonName}");
-            Debug.WriteLine($"Tienda: {storeName}");
-            Debug.WriteLine($"Producto: {productName}");
-            Debug.WriteLine($"Precio: {price}");
-            Debug.WriteLine($"Categoría: {chosenCategory}");
-            Debug.WriteLine($"Marca: {brandName}");
-            Debug.WriteLine($"Modelo: {modelName}");
-            Debug.WriteLine($"Comentario: {comment}");
 
+            var productToAdd = _context.Products.Find(productName);  // Get the product if exists in the context
+            var store = AddStoreRelation(storeName, cantonName, provinciaName);  // Check and create a new store if not exists
+            var category = _context.Categories.Find(chosenCategory);  // Get category/ can be null
 
-            var productToAdd = _context.Products.Find(productName);
-            var store = AddStoreRelation(storeName, cantonName, provinciaName);
             if (productToAdd == null)  // If the product doesn't exists
             {
                 // Create new product
@@ -153,13 +137,39 @@ namespace LoCoMPro.Pages
                     Name = productName,
                     Brand = brandName,
                     Model = modelName,
-                    // May want to Check this line of code.
-                    Categories = new List<Category>() { _context.Categories.FirstOrDefault(c => c.CategoryName == chosenCategory)! }
+                    Categories = new List<Category>()
                 };
+                
+                if (category != null)
+                {   // Add category-product relation
+                    productToAdd.Categories.Add(category);
+                }
+                // Add the product to the context
                 _context.Products.Add(productToAdd);
+
+            } else // if the product already exists
+            {   
+                if (category != null)
+                {   // Checks if the category-store (AsociatedWith) relationship already exists, if not, adds it
+                    string sqlCategoryQuery =
+                    "IF NOT EXISTS (SELECT * FROM AsociatedWith WHERE CategoryName = {0} AND ProductName = {1})\n" +
+                    "BEGIN\n" +
+                    "    INSERT INTO AsociatedWith (CategoryName, ProductName) VALUES ({0}, {1})\n" +
+                    "END";
+                    try
+                    {   // Apply SqlQuery
+                        _ = _context.Database.ExecuteSqlRaw(sqlCategoryQuery, chosenCategory!, productName);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"An error occurred: {ex.Message}");
+                    }
+                }
             }
             _context.SaveChanges();
-            string sqlQuery = 
+
+            // Checks if the produc-store (Sells) relationship already exists, if not, adds it
+            string sqlQuery =
                 "IF NOT EXISTS (SELECT * FROM Sells WHERE ProductName = {0} AND StoreName = {1} AND ProvinceName = {2} AND CantonName = {3})\n" +
                 "BEGIN\n" +
                 "    INSERT INTO Sells (ProductName, StoreName, ProvinceName, CantonName) VALUES ({0}, {1}, {2}, {3})\n" +
@@ -183,16 +193,14 @@ namespace LoCoMPro.Pages
                 Price = price,
                 Comment = comment
             };
-            _context.Registers.Add(newRegister);
-            //productToAdd.Registers?.Add(newRegister);
+            _context.Registers.Add(newRegister);  // Add the product to the context
 
-            await _context.SaveChangesAsync();
-            //_context.
+            await _context.SaveChangesAsync();  // Save all changes in the contextDB
+
             return RedirectToPage("/Index");
         }
 
         private Store AddStoreRelation(string storeName, string cantonName, string provinceName) {
-            //var store = _context.Stores.First(p => p.Name == storeName && p.CantonName == cantonName && p.ProvinciaName == provinceName);
             var store = _context.Stores.Find(storeName, cantonName, provinceName);
             if (store == null) // If the store doesn't exist
             {
@@ -204,49 +212,22 @@ namespace LoCoMPro.Pages
                     Products = new List<Product>()
                 };
                 _context.Stores.Add(store);
-                //_context.SaveChanges();
             } else
             {
-                // Entity framework does not initialize the list, apparentely
+                // Initialize product list
                 store.Products = new();
             }
             return store;
         }
 
-        public IActionResult OnGetAutocompleteSuggestions(string field, string term = "")
+        // Method that returns null for omitted attributes
+        static private string? CheckNull(string? attribute)
         {
-            // Simulated data source (replace with your data retrieval logic)
-            List<string> availableSuggestions = new List<string>(){ "Hola" };
-            if (field == "storeName")
+            if (attribute == "")
             {
-                availableSuggestions = new List<string>()
-                {
-                    "Mas X Menos",
-                    "Te Combiene",
-                    "Porque",
-                    "Encuentras",
-                    "Los precios",
-                    "Mas bajos Siempre"
-                };
-            } else if (field == "productName")
-            {
-                availableSuggestions = new List<string>()
-                {
-                    "Pejibaye",
-                    "Papa",
-                    "Cebolla",
-                    "Aguacate",
-                    "PiñaColada",
-                    "Nicolao"
-                };
+                attribute = null;
             }
-
-            // Filter suggestions based on the user's input
-            var filteredSuggestions = availableSuggestions!
-                .Where(suggestion => suggestion.Contains(term, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-
-            return new JsonResult(filteredSuggestions);
+            return attribute;
         }
     }
 }
