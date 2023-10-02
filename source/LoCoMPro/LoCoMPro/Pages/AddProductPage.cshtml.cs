@@ -136,14 +136,33 @@ namespace LoCoMPro.Pages
                     Name = productName,
                     Brand = brandName,
                     Model = modelName,
+                    Categories = new List<Category>()
                 };
                 
                 if (category != null)
                 {
-                    productToAdd.Categories = new List<Category>() { category };
+                    productToAdd.Categories.Add(category);
                 }
 
                 _context.Products.Add(productToAdd);
+            } else
+            {   
+                if (category != null)
+                {
+                    string sqlCategoryQuery =
+                    "IF NOT EXISTS (SELECT * FROM AsociatedWith WHERE CategoryName = {0} AND ProductName = {1})\n" +
+                    "BEGIN\n" +
+                    "    INSERT INTO AsociatedWith (CategoryName, ProductName) VALUES ({0}, {1})\n" +
+                    "END";
+                    try
+                    {
+                        _ = _context.Database.ExecuteSqlRaw(sqlCategoryQuery, chosenCategory!, productName);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"An error occurred: {ex.Message}");
+                    }
+                }
             }
             
             _context.SaveChanges();
