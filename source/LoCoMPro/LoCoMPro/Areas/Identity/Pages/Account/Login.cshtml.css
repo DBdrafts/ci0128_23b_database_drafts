@@ -22,11 +22,6 @@ body {
     max-width: 100%;
 }
 
-span.registr {
-    float: right;
-    margin-top: 10px;
-}
-
 /* Style for the form */
 .login-section {
     margin: auto;
@@ -55,6 +50,9 @@ label {
 }
 
 /* Style for text input fields, select, and textarea */
+
+
+/* Style for text input fields, select, and textarea */
 input[type="text"],
 select,
 textarea {
@@ -79,7 +77,6 @@ textarea {
     border: 1px solid #E2E3E3;
     border-radius: 15px;
 }
-
 
 /* Specific style for text input */
 button {

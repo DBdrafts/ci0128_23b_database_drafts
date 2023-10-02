@@ -9,6 +9,7 @@ body {
     align-items: center;
     min-height: 100vh;
 }
+
 .logo-image {
     height: auto;
     width: auto;
@@ -54,23 +55,20 @@ label {
 }
 
 /* Style for text input fields, select, and textarea */
-input[type="text"],
-select,
-textarea {
+/*.form-input {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #E2E3E3;
     border-radius: 5px;
-}
+}*/
 
 textarea {
     height: 100px;
 }
 
 /* Specific style for text input */
-input[type="text"],
-textarea {
+.form-input {
     background-color: #E2E3E3; /* Cambia el color de fondo aquí */
     width: 100%;
     padding: 10px;
@@ -98,9 +96,9 @@ button {
     margin-bottom: 8px;
 }
 
-#register:hover {
-    background-color: #39A4F4;
-}
+    #register:hover {
+        background-color: #39A4F4;
+    }
 
 .hasacc-section {
     margin: auto;
@@ -127,11 +125,11 @@ button {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.30);
     border-radius: 15px;
     border: 1px #BABAB8 solid
-} 
-
-#login:hover {
-    background-color:#BABAB8; 
 }
+
+    #login:hover {
+        background-color: #BABAB8;
+    }
 
 /* Style for the select field */
 select {

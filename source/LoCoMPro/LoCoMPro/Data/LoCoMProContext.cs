@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using LoCoMPro.Models;
 using System.Reflection.Metadata;
 
 namespace LoCoMPro.Data
 {
-    public class LoCoMProContext : DbContext
+    public class LoCoMProContext : IdentityDbContext<User>
     {
         public LoCoMProContext(DbContextOptions<LoCoMProContext> options)
             : base(options)
@@ -21,13 +23,13 @@ namespace LoCoMPro.Data
         public DbSet<Provincia> Provincias { get; set; }
         public DbSet<Register> Registers { get; set; }
         public DbSet<Store> Stores { get; set; }
-        public DbSet<User> Users { get; set; }
+
 
 
         // TODO: May want to create a builder for each class
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            base.OnModelCreating(modelBuilder);
             // Creating tables
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<Product>().ToTable("Product");
@@ -52,6 +54,9 @@ namespace LoCoMPro.Data
                 .HasOne(p => p.Location)
                 .WithMany(e => e.Users)
                 .HasForeignKey(c => new { c.CantonName, c.ProvinciaName });
+
+            modelBuilder.Entity<User>().Ignore(u => u.PhoneNumber);
+            modelBuilder.Entity<User>().Ignore(u => u.PhoneNumberConfirmed);
 
             modelBuilder.Entity<Category>()
                 .HasMany(p => p.Products)

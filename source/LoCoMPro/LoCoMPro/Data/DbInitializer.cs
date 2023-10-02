@@ -30,7 +30,7 @@ namespace LoCoMPro.Data
             InitializeCategories(context, ref categories);
             InitializeProducts(context, ref products, ref categories);
             InitializeStores(context, ref cantones, ref stores, ref products);
-            InitializeUsers(context, ref users, ref cantones);
+            //InitializeUsers(context, ref users, ref cantones);
             InitializeRegisters(context, ref registers, ref users, ref products, ref stores);
 
         }
@@ -107,24 +107,24 @@ namespace LoCoMPro.Data
         }
 
         /* Initialize the users data in the database */
-        public static void InitializeUsers(LoCoMProContext context
-            , ref List<User> users, ref List<Canton> cantones)
-        {
-            // Add the users
-            users.Add(new User() { UserName = "Jose Miguel Garcia Lopez", Email = "email1@gmail.com"
-                , Password = "Password.1", Location = cantones[0]});
-            users.Add(new User() { UserName = "Ana Maria Cerdas Lizano", Email = "email2@gmail.com"
-                , Password = "Password.2", Location = cantones[1]});
-            users.Add(new User() { UserName = "Keith Wilson Buzkova", Email = "email3gmail.com"
-                , Password = "Password.3", Location = cantones[2]});
-            users.Add(new User() { UserName = "Yordi Lopez Rodríguez", Email = "email4gmail.com"
-                , Password = "Password.4", Location = cantones[0]});
-            users.Add(new User() { UserName = "Tatiana Espinoza Villalobos", Email = "email5@gmail.com"
-                , Password = "Password.5", Location = cantones[1]});
+        //public static void InitializeUsers(LoCoMProContext context
+        //    , ref List<User> users, ref List<Canton> cantones)
+        //{
+        //    // Add the users
+        //    users.Add(new User() { UserName = "Jose Miguel Garcia Lopez", Email = "email1@gmail.com"
+        //        , Password = "Password.1", Location = cantones[0]});
+        //    users.Add(new User() { UserName = "Ana Maria Cerdas Lizano", Email = "email2@gmail.com"
+        //        , Password = "Password.2", Location = cantones[1]});
+        //    users.Add(new User() { UserName = "Keith Wilson Buzkova", Email = "email3gmail.com"
+        //        , Password = "Password.3", Location = cantones[2]});
+        //    users.Add(new User() { UserName = "Yordi Lopez Rodríguez", Email = "email4gmail.com"
+        //        , Password = "Password.4", Location = cantones[0]});
+        //    users.Add(new User() { UserName = "Tatiana Espinoza Villalobos", Email = "email5@gmail.com"
+        //        , Password = "Password.5", Location = cantones[1]});
 
-            context.Users.AddRange(users);
-            context.SaveChanges();
-        }
+        //    context.Users.AddRange(users);
+        //    context.SaveChanges();
+        //}
 
         /* Initialize the registers data in the database */
         public static void InitializeRegisters(LoCoMProContext context

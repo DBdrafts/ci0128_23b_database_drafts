@@ -1,0 +1,62 @@
+﻿@page
+@model RegisterModel
+@{
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cuenta</title>
+    <link rel="stylesheet" href="~/css/SharedStyles.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="logo-image">
+        <img src="~/img/LoCoMProLogo.svg" alt="LoCoMPro Logo">
+    </div>
+    <div class="register-section">
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <div id='CrAcc'>Crear Cuenta</div>
+            <div>
+                <label asp-for="Input.UserName">Nombre de Usuario</label>
+                <input asp-for="Input.UserName" id="usr" class="form-control" style="border-radius: 15px; 
+                    border: 2px black solid; margin-bottom: 8px; margin-top: 5px" placeholder="Usuario" aria-required="true">
+                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+            </div>
+            <div>
+            <label asp-for="Input.Email">Correo Electrónico</label>
+            <input asp-for="Input.Email" id="email" class="form-control" style="border-radius: 15px; 
+                border: 2px black solid; margin-bottom:8px; margin-top: 5px" placeholder="usuario@gmail.com" aria-required="true">
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div>
+            <label asp-for="Input.Password">Password</label>
+            <input asp-for="Input.Password" id="psw" class="form-control" style="border-radius: 15px; 
+                border: 2px black solid; margin-bottom:8px; margin-top: 5px" aria-required="true" />
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div>
+            <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+            <input asp-for="Input.ConfirmPassword" class="form-control" style="border-radius: 15px; 
+                border: 2px black solid; margin-bottom:8px; margin-top: 5px" aria-required="true" />
+            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <button class="button-general" id="register" type="submit">Registrarse</button>
+        </form>
+    </div>
+    <div class="hasacc-section">
+        <div id="separator"></div>
+        <div style="text-align: center">¿Ya te has registrado?</div>
+        <a asp-area="Identity" asp-page="/Account/Login">
+            <button class="button-general" id="login">Iniciar Sesión</button>
+        </a>
+    </div>
+</body>
+</html>
+
+@* @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+ *@
