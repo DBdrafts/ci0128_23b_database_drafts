@@ -1,14 +1,14 @@
 ﻿$(document).ready(function () {
     // Define the order of required fields in an array
     var requiredFields = [
-        "#location",
+        "#store",
         "#productName",
         "#price"
     ];
 
-    // Initially, disable all fields except the first one (Establecimiento)
+    // Initially, disable all fields
     $(".required-field").prop("disabled", true);
-    $(requiredFields[0]).prop("disabled", false);
+   // $(requiredFields[0]).prop("disabled", false);
 
     // Enable the next field in the sequence when the previous field is filled
     $(".required-field").on("input", function () {
@@ -29,5 +29,10 @@
                 }
             }
         }
+    });
+
+    // When a location is saved, enable store field
+    $("#saveLocation-button").on("click", function () {
+        $("#store").prop("disabled", false); 
     });
 });

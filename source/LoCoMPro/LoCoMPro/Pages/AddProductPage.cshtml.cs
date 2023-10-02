@@ -103,7 +103,7 @@ namespace LoCoMPro.Pages
             LoadProvincias();
         }
 
-
+        // Get the data of the form and stores it in the DB
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -111,9 +111,10 @@ namespace LoCoMPro.Pages
                 return Page();
             }
 
+            // Get the information of the form
             string provinciaName = Request.Form["selectedProvince"]!;
             string cantonName = Request.Form["selectedCanton"]!;
-            string storeName= Request.Form["location"]!;
+            string storeName= Request.Form["store"]!;
             string productName = Request.Form["productName"]!;
             float price = Convert.ToSingle(Request.Form["price"]);
             string? chosenCategory = Request.Form["category"];
@@ -124,9 +125,9 @@ namespace LoCoMPro.Pages
             string userName = "Jose Miguel Garcia Lopez";  // STATIC USER
 
 
-            var productToAdd = _context.Products.Find(productName);
-            var store = AddStoreRelation(storeName, cantonName, provinciaName);
-            var category = _context.Categories.Find(chosenCategory);
+            var productToAdd = _context.Products.Find(productName);  // Get the product if exists in the context
+            var store = AddStoreRelation(storeName, cantonName, provinciaName);  // Check and create a new store if not exists
+            var category = _context.Categories.Find(chosenCategory);  // Get category/ can be null
 
             if (productToAdd == null)  // If the product doesn't exists
             {
@@ -140,22 +141,23 @@ namespace LoCoMPro.Pages
                 };
                 
                 if (category != null)
-                {
+                {   // Add category-product relation
                     productToAdd.Categories.Add(category);
                 }
-
+                // Add the product to the context
                 _context.Products.Add(productToAdd);
-            } else
+
+            } else // if the product already exists
             {   
                 if (category != null)
-                {
+                {   // Checks if the category-store (AsociatedWith) relationship already exists, if not, adds it
                     string sqlCategoryQuery =
                     "IF NOT EXISTS (SELECT * FROM AsociatedWith WHERE CategoryName = {0} AND ProductName = {1})\n" +
                     "BEGIN\n" +
                     "    INSERT INTO AsociatedWith (CategoryName, ProductName) VALUES ({0}, {1})\n" +
                     "END";
                     try
-                    {
+                    {   // Apply SqlQuery
                         _ = _context.Database.ExecuteSqlRaw(sqlCategoryQuery, chosenCategory!, productName);
                     }
                     catch (Exception ex)
@@ -164,8 +166,9 @@ namespace LoCoMPro.Pages
                     }
                 }
             }
-            
             _context.SaveChanges();
+
+            // Checks if the produc-store (Sells) relationship already exists, if not, adds it
             string sqlQuery =
                 "IF NOT EXISTS (SELECT * FROM Sells WHERE ProductName = {0} AND StoreName = {1} AND ProvinceName = {2} AND CantonName = {3})\n" +
                 "BEGIN\n" +
@@ -190,9 +193,9 @@ namespace LoCoMPro.Pages
                 Price = price,
                 Comment = comment
             };
-            _context.Registers.Add(newRegister);
+            _context.Registers.Add(newRegister);  // Add the product to the context
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();  // Save all changes in the contextDB
 
             return RedirectToPage("/Index");
         }
@@ -211,11 +214,13 @@ namespace LoCoMPro.Pages
                 _context.Stores.Add(store);
             } else
             {
-                // Entity framework does not initialize the list, apparentely
+                // Initialize product list
                 store.Products = new();
             }
             return store;
         }
+
+        // Method that returns null for omitted attributes
         static private string? CheckNull(string? attribute)
         {
             if (attribute == "")
