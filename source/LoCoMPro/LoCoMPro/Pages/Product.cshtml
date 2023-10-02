@@ -98,12 +98,22 @@
 				<a href="#">Fecha</a>
 				<ul class="menu-vertical">
                     <li>
-                        <a href="#">Mas recientes</a>
-                        
+                        <a asp-page="./Product"
+                           asp-route-SearchProductName="@Model.SearchProductName"
+                           asp-route-SearchStoreName="@Model.SearchStoreName"
+                           asp-route-SearchCantonName="@Model.SearchCantonName"
+                           asp-route-SearchProvinceName="@Model.SearchProvinceName"
+                           asp-route-sortOrder="date" style="text-decoration: none;display: grid;font-size: 20px;
+                              color: white; text-align: center;"> Más recientes</a>
                     </li>
                     <li>
-                        <a href="#">Mas antiguos</a>
-
+                        <a asp-page="./Product"
+                           asp-route-SearchProductName="@Model.SearchProductName"
+                           asp-route-SearchStoreName="@Model.SearchStoreName"
+                           asp-route-SearchCantonName="@Model.SearchCantonName"
+                           asp-route-SearchProvinceName="@Model.SearchProvinceName"
+                           asp-route-sortOrder="date_desc" style="text-decoration: none;display: grid;font-size: 20px;
+                              color: white; text-align: center;"> Más antiguos</a>
                     </li>
 				</ul>
 			</li>

@@ -64,7 +64,7 @@ namespace LoCoMPro.Pages
             PriceSort = String.IsNullOrEmpty(sortOrder) ? "price_desc" : "";
             
             // if sortOrder is Date, match date else date_desc
-            DateSort = sortOrder == "Date" ? "date_desc" : "Date";
+            DateSort = sortOrder == "date" ? "date_desc" : "date";
             
             /* If the page registers is lower that 1 */
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
@@ -127,12 +127,12 @@ namespace LoCoMPro.Pages
                     registers = registers.OrderByDescending(r => r.Price);
                     break;
                 // Newest order for Submition Date
-                case "Date":     
-                    registers = registers.OrderBy(r => r.SubmitionDate);
+                case "date":     
+                    registers = registers.OrderByDescending(r => r.SubmitionDate);
                     break;
                 // Oldest order for Submition Date
                 case "date_desc":
-                    registers = registers.OrderByDescending(r => r.SubmitionDate);
+                    registers = registers.OrderBy(r => r.SubmitionDate);
                     break;
                 // Normal order for the price
                 default:
