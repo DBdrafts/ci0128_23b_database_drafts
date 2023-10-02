@@ -212,5 +212,41 @@ namespace LoCoMPro.Pages
             }
             return store;
         }
+
+        public IActionResult OnGetAutocompleteSuggestions(string field, string term = "")
+        {
+            // Simulated data source (replace with your data retrieval logic)
+            List<string> availableSuggestions = new List<string>(){ "Hola" };
+            if (field == "storeName")
+            {
+                availableSuggestions = new List<string>()
+                {
+                    "Mas X Menos",
+                    "Te Combiene",
+                    "Porque",
+                    "Encuentras",
+                    "Los precios",
+                    "Mas bajos Siempre"
+                };
+            } else if (field == "productName")
+            {
+                availableSuggestions = new List<string>()
+                {
+                    "Pejibaye",
+                    "Papa",
+                    "Cebolla",
+                    "Aguacate",
+                    "PiñaColada",
+                    "Nicolao"
+                };
+            }
+
+            // Filter suggestions based on the user's input
+            var filteredSuggestions = availableSuggestions!
+                .Where(suggestion => suggestion.Contains(term, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            return new JsonResult(filteredSuggestions);
+        }
     }
 }
