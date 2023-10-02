@@ -229,5 +229,32 @@ namespace LoCoMPro.Pages
             }
             return attribute;
         }
+        public IActionResult OnGetAutocompleteSuggestions(string field, string term, string provinceName, string cantonName, string storeName)
+        {
+            // Create a list withe the available suggestions, given the current inputs
+            var availableSuggestions = new List<string>() { "Hola" };
+            if (field == "#store")
+            {
+                availableSuggestions = _context.Stores
+                    .Where(s => s.ProvinciaName == provinceName && s.CantonName == cantonName)
+                    .Select(s => s.Name)
+                    .ToList();
+            }
+            else if (field == "#productName")
+            {
+                availableSuggestions = new List<string> {
+                    "Pan",
+                    "Vida",
+                    "Precios Bajos siempre"
+                };
+            }
+
+            // Filter suggestions based on the user's input
+            var filteredSuggestions = availableSuggestions
+                .Where(suggestion => suggestion.Contains(term, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            return new JsonResult(filteredSuggestions);
+        }
     }
 }

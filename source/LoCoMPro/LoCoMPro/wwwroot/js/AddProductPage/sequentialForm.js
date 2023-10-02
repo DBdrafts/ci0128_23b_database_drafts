@@ -3,7 +3,9 @@
     var requiredFields = [
         "#store",
         "#productName",
-        "#price"
+        "#price",
+        "#brand",
+        "#model",
     ];
 
     // Initially, disable all fields

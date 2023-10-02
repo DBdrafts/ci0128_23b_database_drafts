@@ -1,33 +1,34 @@
 var jq = jQuery.noConflict()
 jq(document).ready(function () {
-    jq("#location").autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                url: "/AddProductPage?handler=AutocompleteSuggestions", // Use the correct URL for your page
-                data: { field: "storeName", term: request.term },
-                success: function (data) {
-                    response(data);
-                }
+    var fields = [
+        "#store",
+        "#productName",
+        "#price",
+        "#brand",
+        "#model"
+    ];
+    $(".required-field").on("input", function () {
+        var $this = $(this); // Capture the current field as a jQuery object
+        var currentField = "#" + $this.attr("id");
+        var province = document.getElementById("selectedProvince").value;
+        var canton = document.getElementById("selectedCanton").value;
+        var store = document.getElementById("store").value;
+        if (fields.includes(currentField)) {
+            jq(currentField).autocomplete({
+                // Ask the database for information to fill the autocomplete
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/AddProductPage?handler=AutocompleteSuggestions",
+                        data: { field: currentField, term: request.term, provinceName: province , cantonName: canton, storeName: store},
+                        success: function (data) {
+                            response(data);
+                        }
+                    });
+                },
+                // Minimum characters to trigger autocomplete
+                minLength: 2
             });
-        },
-        minLength: 2 // Minimum characters to trigger autocomplete
-    });
-    jq("#productName").autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                url: "/AddProductPage?handler=AutocompleteSuggestions", // Use the correct URL for your page
-                data: { field: "productName", term: request.term },
-                success: function (data) {
-                    response(data);
-                }
-            });
-        },
-        minLength: 2 // Minimum characters to trigger autocomplete
-    });
-    jq("brand").autocomplete({
-        source: availableTags
-    });
-    jq("#model").autocomplete({
-        source: availableTags
+        }
     });
 });
+
