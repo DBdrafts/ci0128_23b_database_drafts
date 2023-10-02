@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Security.Policy;
 using LoCoMPro.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -25,14 +27,52 @@ namespace LoCoMPro.Data
             List<Register> registers = new();
 
             //  Initialize all the database tables
-            InitializeProvincias(context, ref provincias);
-            InitializeCantones(context, ref provincias, ref cantones);
+            InitializeLocation(context, ref provincias, ref cantones);
+            //InitializeProvincias(context, ref provincias);
+            //InitializeCantones(context, ref provincias, ref cantones);
             InitializeCategories(context, ref categories);
             InitializeProducts(context, ref products, ref categories);
             InitializeStores(context, ref cantones, ref stores, ref products);
             InitializeUsers(context, ref users, ref cantones);
             InitializeRegisters(context, ref registers, ref users, ref products, ref stores);
 
+        }
+
+        public static void InitializeLocation(LoCoMProContext context, ref List<Provincia> provinces, ref List<Canton> cantons)
+        {
+            var csvPath = "~/../../../../data/DTA-TABLA POR PROVINCIA-CANTÓN-DISTRITO 2022V3.csv";
+            var data = File.ReadAllLines(csvPath, System.Text.Encoding.UTF8)
+                .Skip(1)
+                .Select(line => line.Split(','))
+                .Select(columns => new
+                {
+                    ProvinceName = columns[2],
+                    CantonName = columns[4],
+                })
+                .Where(pair => !pair.ProvinceName.IsNullOrEmpty() && !pair.ProvinceName.Equals("PROVINCIA"));
+                provinces = data.GroupBy(j => j.ProvinceName)
+                .Select(group => new Provincia
+                {
+                    Name = group.Key.ToString(),
+                })
+                .ToList();
+
+            var grouppedData = data.GroupBy(pair => new { pair.ProvinceName, pair.CantonName });
+
+            foreach ( var group in grouppedData)
+            {
+                var province = provinces.Find(s => s.Name == group.Key.ProvinceName);
+              
+                var canton = new Canton
+                {
+                    CantonName = group.Key.CantonName,
+                    Provincia = province!,
+                };
+                cantons.Add(canton);
+            }
+            context.Provincias.AddRange(provinces);
+            context.Cantones.AddRange(cantons);
+            context.SaveChanges();
         }
 
         /* Initialize the provincias data in the database */
