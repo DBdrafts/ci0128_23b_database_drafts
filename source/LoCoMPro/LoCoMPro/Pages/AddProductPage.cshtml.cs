@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -260,5 +261,34 @@ namespace LoCoMPro.Pages
 
             return new JsonResult(filteredSuggestions);
         }
+        public IActionResult OnGetProductAutofillData(string productName)
+        {
+            var data = new Dictionary<string, string>();
+
+            // Get first Pro uct Match
+            Product? productMatch = _context.Products.FirstOrDefault(p => p.Name == productName);
+            
+            // If no product was found with the given input return empty dictionary
+            if (productMatch == null) return new JsonResult(data);
+
+            // Get product Brand and model into the dictionary.
+            data["#brand"] = productMatch.Brand ?? "";
+            data["#model"] = productMatch.Model ?? "";
+            // Get First Category into the dictionary.
+            string sqlQuery =
+                    "SELECT TOP 1 CategoryName as Value\n" +
+                    "FROM AsociatedWith a \n" +
+                    "WHERE ProductName = @productName";
+            // Parameters
+            var parameters = new SqlParameter("@productName", SqlDbType.VarChar) { Value = productName };
+
+            // Get first Category result or null
+            var categoryName = _context.Database.SqlQueryRaw<string>(sqlQuery, parameters).FirstOrDefault();//.FirstOrDefault();
+            //FirstOrDefault();
+            data["#category"] = categoryName ?? "";
+            // Return Result
+            return new JsonResult(data);
+        }
     }
+
 }

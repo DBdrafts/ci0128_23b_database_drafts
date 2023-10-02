@@ -8,6 +8,6 @@ namespace LoCoMPro.Models
     {
         public required string CategoryName { get; set; }
 
-        public List<Product>? Products { get; set; }
+        public ICollection<Product>? Products { get; set; }
     }
 }

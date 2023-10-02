@@ -19,11 +19,35 @@ jq(document).ready(function () {
                 source: function (request, response) {
                     $.ajax({
                         url: "/AddProductPage?handler=AutocompleteSuggestions",
-                        data: { field: currentField, term: request.term, provinceName: province , cantonName: canton, storeName: store},
+                        data: { field: currentField, term: request.term, provinceName: province, cantonName: canton, storeName: store },
                         success: function (data) {
                             response(data);
                         }
                     });
+                },
+                // Selection of a suggestion
+                select: function (event, ui) {
+                    // Handle selection of a suggestion
+                    var selectedValue = ui.item.value;
+                    $(currentField).val(selectedValue);
+                    if (currentField == "#productName") {
+                        //$("#model").val("alguno");
+                        var product = selectedValue;
+                        $.ajax({
+                            url: "/AddProductPage?handler=ProductAutofillData",
+                            data: { productName: product },
+                            success: function (data) {
+                                for (const field in data) {
+                                    if (data.hasOwnProperty(field)) {
+                                        $(field).val(data[field]);
+                                    }
+                                }
+                            },
+                            error: function (error) {
+                                console.error('Error: ', error);
+                            }
+                        });
+                    }
                 },
                 // Minimum characters to trigger autocomplete
                 minLength: 2
@@ -31,4 +55,3 @@ jq(document).ready(function () {
         }
     });
 });
-
