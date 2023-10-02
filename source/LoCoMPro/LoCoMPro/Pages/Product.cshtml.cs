@@ -52,6 +52,9 @@ namespace LoCoMPro.Pages
         [BindProperty(SupportsGet = true)]
         public string PriceSort { get; set; }
 
+        // Attr for sort the date register
+        [BindProperty(SupportsGet = true)]
+        public string DateSort { get; set; }
 
 
         public async Task OnGetAsync(string searchProductName, string searchStoreName, string searchProvinceName, 
@@ -59,8 +62,10 @@ namespace LoCoMPro.Pages
         {
             CurrentSort = sortOrder;
             PriceSort = String.IsNullOrEmpty(sortOrder) ? "price_desc" : "";
-            //TODO: ADD date
-
+            
+            // if sortOrder is Date, match date else date_desc
+            DateSort = sortOrder == "Date" ? "date_desc" : "Date";
+            
             /* If the page registers is lower that 1 */
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
 
@@ -117,9 +122,17 @@ namespace LoCoMPro.Pages
             // Code to order
             switch (sortOrder)
             {
-                // Order in case of price_descending 
-                case "price_desc":
+                // Order in case of price_descending
+                case "price_desc":   
                     registers = registers.OrderByDescending(r => r.Price);
+                    break;
+                // Newest order for Submition Date
+                case "Date":     
+                    registers = registers.OrderBy(r => r.SubmitionDate);
+                    break;
+                // Oldest order for Submition Date
+                case "date_desc":
+                    registers = registers.OrderByDescending(r => r.SubmitionDate);
                     break;
                 // Normal order for the price
                 default:
@@ -133,7 +146,6 @@ namespace LoCoMPro.Pages
             // Gets the Data From Databasse 
             Register = await PaginatedList<Register>.CreateAsync(
                 registers.AsNoTracking(), pageIndex ?? 1, pageSize);
-
         }
     } 
 }
