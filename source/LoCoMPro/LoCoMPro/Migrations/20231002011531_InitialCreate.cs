@@ -6,28 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LoCoMPro.Migrations
 {
     /// <inheritdoc />
-    public partial class UseIdentitu : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Products",
-                table: "Products");
-
-            migrationBuilder.DropColumn(
-                name: "Category",
-                table: "Products");
-
-            migrationBuilder.RenameTable(
-                name: "Products",
-                newName: "Product");
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Product",
-                table: "Product",
-                column: "Name");
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -51,6 +34,19 @@ namespace LoCoMPro.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.CategoryName);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Product",
+                columns: table => new
+                {
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Model = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Product", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -434,6 +430,9 @@ namespace LoCoMPro.Migrations
                 name: "User");
 
             migrationBuilder.DropTable(
+                name: "Product");
+
+            migrationBuilder.DropTable(
                 name: "Store");
 
             migrationBuilder.DropTable(
@@ -441,25 +440,6 @@ namespace LoCoMPro.Migrations
 
             migrationBuilder.DropTable(
                 name: "Provincia");
-
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Product",
-                table: "Product");
-
-            migrationBuilder.RenameTable(
-                name: "Product",
-                newName: "Products");
-
-            migrationBuilder.AddColumn<string>(
-                name: "Category",
-                table: "Products",
-                type: "nvarchar(max)",
-                nullable: true);
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Products",
-                table: "Products",
-                column: "Name");
         }
     }
 }

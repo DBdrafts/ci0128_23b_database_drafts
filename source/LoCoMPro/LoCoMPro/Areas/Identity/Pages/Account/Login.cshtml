@@ -23,14 +23,16 @@
             <div id='inises'>Iniciar Sesión</div>
 
             <label asp-for="Input.Email">Correo Electrónico</label>
-            <input asp-for="Input.Email" placeholder="usuario@gmail.com" aria-required="true">
+            <input asp-for="Input.Email" placeholder="usuario@gmail.com" class="form-control" style="border-radius: 15px;
+                    border: 2px black solid; margin-bottom: 8px; margin-top: 5px" aria-required="true">
 
             <label asp-for="Input.Password">Contraseña</label>
-            <input asp-for="Input.Password" id="psw" placeholder="Contraseña" aria-required="true">
+            <input asp-for="Input.Password" id="psw" placeholder="Contraseña" class="form-control" style="border-radius: 15px;
+                    border: 2px black solid; margin-bottom: 8px; margin-top: 5px" aria-required="true">
             
             @* <span asp-validation-for="Input.Password" class="text-danger"></span> *@
 
-            <input type="checkbox" onclick="shwPass()">Mostrar Contraseña
+            <input type="checkbox" onclick="shwPass()"> Mostrar Contraseña
 
             <button id="iniSesion" type="submit">Iniciar Sesión</button>
             <div id="forgotpsw"><a asp-page="./ForgotPassword">¿Has olvidado tu contraseña?</a></div>

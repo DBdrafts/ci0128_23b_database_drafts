@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoCoMPro.Migrations
 {
     [DbContext(typeof(LoCoMProContext))]
-    [Migration("20230930181449_UseIdentitu")]
-    partial class UseIdentitu
+    [Migration("20231002011531_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

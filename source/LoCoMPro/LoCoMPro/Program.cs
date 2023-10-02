@@ -10,7 +10,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<LoCoMProContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("LoCoMProContext") ?? throw new InvalidOperationException("Connection string 'LoCoMProContext' not found.")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<LoCoMProContext>();
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<LoCoMProContext>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
