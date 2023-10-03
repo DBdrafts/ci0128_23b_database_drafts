@@ -66,7 +66,7 @@
             @foreach (var register in Model.Register)
             {
                 <!-- Search result section -->
-                <a asp-page="./Product"
+                <a asp-page="./ProductPage"
                    asp-route-pageIndex="1"
                    asp-route-SearchProductName="@register.ProductName"
                    asp-route-SearchStoreName="@register.StoreName"
