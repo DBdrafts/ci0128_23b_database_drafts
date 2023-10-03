@@ -5,11 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LoCoMPro.Models
 {
-    [PrimaryKey(nameof(ContributorName), nameof(ProductName), nameof(StoreName), nameof(SubmitionDate))]
+    [PrimaryKey(nameof(ContributorId), nameof(ProductName), nameof(StoreName), nameof(SubmitionDate))]
     public class Register
     {
         // Primary Keys
-        [ForeignKey(nameof(ContributorName))]
+        [ForeignKey(nameof(ContributorId))]
         public required User Contributor { get; set; }
         [ForeignKey(nameof(ProductName))]
         public required Product Product { get; set; }
@@ -26,7 +26,7 @@ namespace LoCoMPro.Models
         public string? Comment { get; set; }
 
         // Navegation atributtes
-        public string? ContributorName { get; set; }
+        public string? ContributorId { get; set; }
         public string? ProductName { get; set; }
         public string? StoreName { get; set; }
         public string? CantonName { get; set; } 
