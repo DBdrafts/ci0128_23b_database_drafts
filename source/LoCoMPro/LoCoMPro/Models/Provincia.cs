@@ -10,6 +10,6 @@ namespace LoCoMPro.Models
         public required string Name { get; set; }
 
         // Navegation atributte
-        public List<Canton>? Cantones { get; set; }
+        public ICollection<Canton>? Cantones { get; set; } = new List<Canton>();
     }
 }
