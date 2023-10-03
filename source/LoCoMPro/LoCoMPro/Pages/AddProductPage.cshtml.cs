@@ -215,7 +215,7 @@ namespace LoCoMPro.Pages
             } else
             {
                 // Initialize product list
-                store.Products = new();
+                store.Products = new List<Product> ();
             }
             return store;
         }
