@@ -1,0 +1,329 @@
+﻿
+/* Style for the form */
+form {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    border: none;
+    box-shadow: none;
+}
+
+/* Style for labels */
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+
+/* Style for text input fields, select, and textarea */
+input[type="text"], input[type="number"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #E2E3E3;
+}
+
+
+textarea {
+    /* Comment box heigh*/
+    height: 100px;
+}
+
+
+/* Specific style for text input */
+input[type="text"], input[type="number"],
+textarea {
+    background-color: #E2E3E3;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 25px;
+    border: 1px solid #E2E3E3;
+    border-radius: 15px;
+}
+
+
+/* Style for disabled fields */
+.required-field:disabled {
+    background-color: #D0D0D0;
+}
+
+/* Disabled placeholder fields style*/
+.required-field:disabled::placeholder {
+    color: #9F9F9F;
+}
+/* Enabled placeholder fields style*/
+.required-field:enabled::placeholder {
+    color: #6b6b6b;
+}
+
+/* Style for the container of brand and model */
+.brand-model-container {
+    display: flex;
+    justify-content: space-between; /* Add space between the fields */
+}
+
+/* Style for each field and label of brand and model */
+.brand-model-field-group {
+    flex: 1; /* Distribute available space evenly between fields */
+    display: flex;
+    flex-direction: column; /* Place the label above the input field */
+    align-items: flex-start; /* Align elements to the left */
+}
+
+
+/* Style for the input fields */
+.brand-model-field-group input[type="text"] {
+    width: 100%; /* Make both input fields the same width */
+    padding: 10px;
+    border: 1px solid #E2E3E3;
+}
+
+/* White space between fields*/
+.brand-model-field-group:first-child {
+    margin-right: 30px;
+}
+
+
+/* Style for the container of price and category */
+.price-category-container {
+display: flex;
+justify-content: space-between; /* Add space between the fields */
+}
+
+/* Style for each field and label of price and category */
+.price-category-field-group {
+flex: 1; /* Distribute available space evenly between fields */
+display: flex;
+flex-direction: column; /* Place the label above the input field */
+align-items: flex-start; /* Align elements to the left */
+}
+
+
+/* Style for the input fields */
+.price-category-field-group input[type="text"] {
+    width: 100%; /* Make both input fields the same width */
+    padding: 10px;
+    border: 1px solid #E2E3E3;
+}
+
+/* White space between fields*/
+.price-category-field-group:first-child {
+    margin-right: 30px;
+}
+
+
+/* Style for select field */
+select {
+    background-color: #E2E3E3;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 25px;
+    border: 1px solid #E2E3E3;
+    border-radius: 15px;
+}
+
+/* Title Style */
+h2 {
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Title Separator Style*/
+.title-separator {
+    height: 50px;
+    background-color: #9F9F9F;
+    margin-bottom: 20px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25)!important;
+}
+
+/* Specific style for input button */
+.submit-button {
+    background-color: #F5AA38;
+    color: #000000;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.30);
+    margin-left:auto;
+}
+
+
+/* Style for submit-button when hover*/
+.submit-button:hover {
+    background-color: #F59500;
+}
+
+
+/* Text in button*/
+.button-text {
+    font-weight: 500;
+    margin-right: 8px;
+    order: 1;
+}
+    
+/* Style for icon in submit botton*/
+.button-content img {
+    height: 25px;
+    margin-left: 0px;
+    opacity: 1;
+    order: 2;
+}
+
+/* Style for location button*/
+.location-button {
+    background-color: #74C2F8;
+    color: #000000;
+    border: none;
+    padding: 6px 20px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    font-weight: 500;
+    width: auto;
+    white-space: nowrap;
+    box-shadow: 0px 4px 4px 0px rgba(80, 158, 224, 0.5);
+    margin-right:40px;
+}
+
+/* Style for location button when hover*/
+.location-button:hover {
+    background-color: #5AABE2;
+}
+
+/* Style for location container*/
+.location-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Style for location input*/
+.location-input {
+    flex: 1;
+    background-color: #E2E3E3;
+    padding: 10px;
+    margin-left: 10px;
+    border: 1px solid #E2E3E3;
+    border-radius: 5px;
+}
+
+#locationInfo {
+    display: none;
+    background-color: #FFFFFF;
+    padding: 6px;
+    border: none;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+
+/*Style for pop up*/
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+}
+
+/* Style for pop up content*/
+.popup-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    width: 20%;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+/* Style for location options and location box*/
+#chosenLocationLabel,
+#chosenLocation {
+    display: none;
+    width: 50%;
+    padding: 6px;
+    margin-bottom: 15px;
+    border: 1px solid #FFFFFF;
+    border-radius: 15px;
+    background-color: #FFFFFF;
+    margin-bottom: 0px;
+}
+
+/* Style for saveLocation botton*/
+#saveLocation-button {
+    background-color: #74C2F8;
+    color: #000000;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0px 4px 4px 0px rgba(80, 158, 224, 0.5);
+    float: right;
+    width:auto;
+}
+
+/* SaveLocation-button when hover*/
+#saveLocation-button:hover {
+    background-color: #5AABE2;
+}
+
+
+/* Style for save closePopup botton*/
+#closePopup-button {
+    background-color: #F87474;
+    color: #000000;
+    border: none;
+    padding: 6px 21px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0px 4px 4px 0px rgba(224, 80, 80, 0.5);
+    width: auto;
+}
+
+/* SaveLocation-button when hover*/
+#closePopup-button:hover {
+    background-color: #E25A5A;
+}
+
+
+
+/* Style for the asterisk of required fields*/
+.required-marker {
+    color: red;
+    margin-left: 3px;
+}
+
+/* Hide asterisk message*/
+.required-tooltip {
+    display: none;
+    color: red;
+    margin-left: 5px;
+}
+
+/* Show message when hovering over asterisk*/
+.required-marker:hover + .required-tooltip {
+    display: inline-block;
+ }
+

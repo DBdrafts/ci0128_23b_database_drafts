@@ -1,33 +1,48 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - LoCoMPro</title>
+    <title>@ViewData["Title"] LoCoMPro</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LoCoMPro.styles.css" asp-append-version="true" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Shortcut icon of the layout -->
+    <link rel="shortcut icon" type="image/svg" href="~/img/LoCoMProLogo.svg"/>
+    <!-- Shared style for several pages-->
+    <link rel="stylesheet" href="~/css/SharedStyles.css" />
 </head>
 <body>
     <header>
+        <!-- Navegation bar of the layout -->
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">LoCoMPro</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
+            <div class="w-100 d-flex">
+                @if (ViewBag.ShowNavigation ?? true)
+                {
+                    <!-- Logo link to the main page -->
+                    <div class="logo-link justify-content-left">
+                        <a href="/" class="button-general">
+                            <img src="~/img/LoCoMProLogo.svg" alt="Agregar Registro">
+                        </a>
+                    </div>
+                    <!-- Section of the search bar and buttons for the layout -->
+                    @await Html.PartialAsync("_SearchBar")
+                }
+                <!-- Navegation bar buttons -->
+                <div class="d-flex justify-content-end">
+                    <!-- Add register button of the layout -->
+                    <a href="/AddProductPage" class="layout-button button-general">
+                        <img src="~/img/AddRegisterIcon.svg" alt="Agregar Registro">
+                        <p>Agregar</p>
+                    </a>
+                    <!-- USer configuration button of the layout -->
+                    <button class="layout-button button-general">
+                        <img src="~/img/UserIcon.svg" alt="Opciones de Usuario">
+                        <p>Usuario</p>
+                    </button>
                 </div>
-            </div>
+            </div>  
         </nav>
     </header>
     <div class="container">
@@ -35,7 +50,8 @@
             @RenderBody()
         </main>
     </div>
-
+    
+    <!-- Footer of the layout -->
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2023 - LoCoMPro - <a asp-area="" asp-page="/Privacy">Privacy</a>

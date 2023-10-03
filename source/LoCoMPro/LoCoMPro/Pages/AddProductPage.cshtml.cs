@@ -136,6 +136,10 @@ namespace LoCoMPro.Pages
             // Get category can be null
             var category = _context.Categories.Find(chosenCategory);  
 
+            var productToAdd = _context.Products.Find(productName);  // Get the product if exists in the context
+            var store = AddStoreRelation(storeName, cantonName, provinciaName);  // Check and create a new store if not exists
+            var category = _context.Categories.Find(chosenCategory);  // Get category/ can be null
+
             if (productToAdd == null)  // If the product doesn't exists
             {
                 // Create new product
@@ -275,7 +279,11 @@ namespace LoCoMPro.Pages
             data["#brand"] = productMatch.Brand ?? "";
             data["#model"] = productMatch.Model ?? "";
             data["#category"] = (productMatch.Categories != null)? productMatch.Categories!.First().CategoryName : "";
-            
+
+            // Get first Category result or null
+            var categoryName = _context.Database.SqlQueryRaw<string>(sqlQuery, parameters).FirstOrDefault();//.FirstOrDefault();
+            //FirstOrDefault();
+            data["#category"] = categoryName ?? "";
             // Return Result
             return new JsonResult(data);
         }
