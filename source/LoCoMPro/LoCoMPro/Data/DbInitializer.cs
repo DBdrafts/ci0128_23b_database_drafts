@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Security.Policy;
 using LoCoMPro.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -25,14 +27,53 @@ namespace LoCoMPro.Data
             List<Register> registers = new();
 
             //  Initialize all the database tables
-            InitializeProvincias(context, ref provincias);
-            InitializeCantones(context, ref provincias, ref cantones);
+            InitializeLocation(context, ref provincias, ref cantones);
+            //InitializeProvincias(context, ref provincias);
+            //InitializeCantones(context, ref provincias, ref cantones);
             InitializeCategories(context, ref categories);
             InitializeProducts(context, ref products, ref categories);
             InitializeStores(context, ref cantones, ref stores, ref products);
             InitializeUsers(context, ref users, ref cantones);
             InitializeRegisters(context, ref registers, ref users, ref products, ref stores);
 
+        }
+
+        public static void InitializeLocation(LoCoMProContext context, ref List<Provincia> provinces, ref List<Canton> cantons)
+        {
+            var csvPath = "~/../../../../data/DTA-TABLA POR PROVINCIA-CANTÓN-DISTRITO 2022V3.csv";
+            var data = File.ReadAllLines(csvPath, System.Text.Encoding.Latin1)
+                .Skip(1)
+                .Select(line => line.Split(','))
+                .Select(columns => new
+                {
+                    ProvinceName = columns[2],
+                    CantonName = columns[4],
+                })
+                .Where(pair => !pair.ProvinceName.IsNullOrEmpty() && !pair.ProvinceName.Equals("PROVINCIA"));
+                provinces = data.GroupBy(j => j.ProvinceName)
+                .Select(group => new Provincia
+                {
+                    Name = group.Key.ToString(),
+                })
+                .ToList();
+
+
+            var grouppedData = data.GroupBy(pair => new { pair.ProvinceName, pair.CantonName });
+
+            foreach ( var group in grouppedData)
+            {
+                var province = provinces.Find(s => s.Name == group.Key.ProvinceName);
+              
+                var canton = new Canton
+                {
+                    CantonName = group.Key.CantonName,
+                    Provincia = province!,
+                };
+                cantons.Add(canton);
+            }
+            context.Provincias.AddRange(provinces);
+            context.Cantones.AddRange(cantons);
+            context.SaveChanges();
         }
 
         /* Initialize the provincias data in the database */
@@ -80,10 +121,10 @@ namespace LoCoMPro.Data
             // Add the products
             products.Add(new Product() { Name = "Leche Dos Pinos 1 litros", Brand = "Dos Pinos"
                 , Categories = new List<Category>() { categories[0] } });
-            products.Add(new Product() { Name = "Celular IPhone 15 Pro color beige", Brand = "IPhone", Model = "15 Pro"
-                , Categories = new List<Category>() { categories[1] } });
             products.Add(new Product() { Name = "Camisa deportiva negra Nike", Brand = "Nike"
                 , Categories = new List<Category>() { categories[2] } });
+            products.Add(new Product() { Name = "Celular IPhone 15 Pro color beige", Brand = "IPhone", Model = "15 Pro"
+                , Categories = new List<Category>() { categories[1] } });
 
             context.Products.AddRange(products);
             context.SaveChanges();
@@ -111,15 +152,15 @@ namespace LoCoMPro.Data
             , ref List<User> users, ref List<Canton> cantones)
         {
             // Add the users
-            users.Add(new User() { UserName = "Jose Miguel Garcia Lopez", Email = "email1@gmail.com"
+            users.Add(new User() { Id = "01", UserName = "Jose Miguel Garcia Lopez", Email = "email1@gmail.com"
                 , Password = "Password.1", Location = cantones[0]});
-            users.Add(new User() { UserName = "Ana Maria Cerdas Lizano", Email = "email2@gmail.com"
+            users.Add(new User() { Id = "02", UserName = "Ana Maria Cerdas Lizano", Email = "email2@gmail.com"
                 , Password = "Password.2", Location = cantones[1]});
-            users.Add(new User() { UserName = "Keith Wilson Buzkova", Email = "email3gmail.com"
+            users.Add(new User() { Id = "03", UserName = "Keith Wilson Buzkova", Email = "email3gmail.com"
                 , Password = "Password.3", Location = cantones[2]});
-            users.Add(new User() { UserName = "Yordi Lopez Rodríguez", Email = "email4gmail.com"
+            users.Add(new User() { Id = "04", UserName = "Yordi Lopez Rodríguez", Email = "email4gmail.com"
                 , Password = "Password.4", Location = cantones[0]});
-            users.Add(new User() { UserName = "Tatiana Espinoza Villalobos", Email = "email5@gmail.com"
+            users.Add(new User() { Id = "05", UserName = "Tatiana Espinoza Villalobos", Email = "email5@gmail.com"
                 , Password = "Password.5", Location = cantones[1]});
 
             context.Users.AddRange(users);
@@ -131,42 +172,25 @@ namespace LoCoMPro.Data
             , ref List<Register> registers, ref List<User> users
             , ref List<Product> products, ref List<Store> stores)
         {
-            // Add the users
-            registers.Add(new Register() { Product = products[0], Contributor = users[0], Store = stores[0]
-                , Price = 2000, SubmitionDate = new DateTime(2023, 1, 10, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[0], Contributor = users[1], Store = stores[0]
-                , Price = 2100, SubmitionDate = new DateTime(2023, 1, 11, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[0], Contributor = users[2], Store = stores[0]
-                , Price = 1900, SubmitionDate = new DateTime(2023, 1, 8, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[0], Contributor = users[3], Store = stores[0]
-                , Price = 2000, SubmitionDate = new DateTime(2023, 1, 1, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[0], Contributor = users[1], Store = stores[0]
-                , Price = 2300, SubmitionDate = new DateTime(2022, 12, 31, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[0], Contributor = users[0], Store = stores[0]
-                , Price = 2250, SubmitionDate = new DateTime(2023, 1, 15, 12, 0, 0, DateTimeKind.Utc) });
+            string comment = "Lorem ipsum dolor sit amet, consectetur adipiscing elit" +
+                ", sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum pulvinar etiam non quam. ";
 
-            registers.Add(new Register() { Product = products[2], Contributor = users[2], Store = stores[0]
-                , Price = 25500, SubmitionDate = new DateTime(2023, 8, 8, 12, 0, 0, DateTimeKind.Utc) });
-
-            registers.Add(new Register() { Product = products[0], Contributor = users[4], Store = stores[1]
-                , Price = 1000000, SubmitionDate = new DateTime(2023, 4, 4, 12, 0, 0, DateTimeKind.Utc) });
-
-            registers.Add(new Register() { Product = products[1], Contributor = users[2], Store = stores[1]
-                , Price = 900000, SubmitionDate = new DateTime(2023, 3, 28, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[1], Contributor = users[0], Store = stores[1]
-                , Price = 904000, SubmitionDate = new DateTime(2023, 3, 14, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[1], Contributor = users[4], Store = stores[1]
-                , Price = 910000, SubmitionDate = new DateTime(2023, 3, 1, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[1], Contributor = users[2], Store = stores[1]
-                , Price = 810000, SubmitionDate = new DateTime(2023, 4, 19, 12, 0, 0, DateTimeKind.Utc) });
-
-            registers.Add(new Register() { Product = products[2], Contributor = users[1], Store = stores[2]
-                , Price = 21000, SubmitionDate = new DateTime(2023, 8, 30, 12, 0, 0, DateTimeKind.Utc) });
-            registers.Add(new Register() { Product = products[2], Contributor = users[3], Store = stores[2]
-                , Price = 19000, SubmitionDate = new DateTime(2023, 8, 24, 12, 0, 0, DateTimeKind.Utc) });
-
-            registers.Add(new Register() { Product = products[2], Contributor = users[3], Store = stores[1]
-                , Price = 26000, SubmitionDate = new DateTime(2023, 6, 24, 12, 0, 0, DateTimeKind.Utc) });
+            /* Generates the registers by using the index of the products, users, stores and the dates */
+            for (int productIndex = 0; productIndex < products.Count; productIndex++)
+            {
+                for (int usersIndex = 0; usersIndex < users.Count; usersIndex++)
+                {
+                    for (int storeIndex = 0; storeIndex < stores.Count; storeIndex++)
+                    {
+                        for (int dateIndex = 3; dateIndex < 5; dateIndex++)
+                        {
+                            registers.Add(new Register() { Product = products[productIndex], Contributor = users[usersIndex], Store = stores[storeIndex]
+                            , Price = (1500 + (1000 * (int) Math.Pow(10, productIndex)) + (100 * usersIndex * storeIndex * dateIndex))
+                            , SubmitionDate = new DateTime(2023, dateIndex, dateIndex + storeIndex + usersIndex, 12, 0, 0, DateTimeKind.Utc), Comment = comment });
+                        }
+                    }
+                }
+            }
 
             context.Registers.AddRange(registers);
             context.SaveChanges();
