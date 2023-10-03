@@ -41,7 +41,7 @@ namespace LoCoMPro.Data
         public static void InitializeLocation(LoCoMProContext context, ref List<Provincia> provinces, ref List<Canton> cantons)
         {
             var csvPath = "~/../../../../data/DTA-TABLA POR PROVINCIA-CANTÓN-DISTRITO 2022V3.csv";
-            var data = File.ReadAllLines(csvPath, System.Text.Encoding.UTF8)
+            var data = File.ReadAllLines(csvPath, System.Text.Encoding.Latin1)
                 .Skip(1)
                 .Select(line => line.Split(','))
                 .Select(columns => new
@@ -56,6 +56,7 @@ namespace LoCoMPro.Data
                     Name = group.Key.ToString(),
                 })
                 .ToList();
+
 
             var grouppedData = data.GroupBy(pair => new { pair.ProvinceName, pair.CantonName });
 
