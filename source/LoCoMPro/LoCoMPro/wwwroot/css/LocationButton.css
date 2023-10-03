@@ -2,21 +2,22 @@
 
 /* Style for the location selector button */
 .location-selector {
-    flex: none;
+    display: inline-flex;
     background-color: #88C8F8;
-    padding: 0px 30px;
-    margin: 0px -25px;
+    padding: 0px;
+    margin: 0px;
     z-index: 0;
     overflow: hidden;
-    white-space: nowrap;
+    text-overflow: ellipsis;
     width: 20%;
+    max-height: 100%;
 }
 
 /* Style for the image of the location selector button */
 .location-selector img {
-    width: 27px;
-    height: 27px;
-    padding: 0px 5px;
+    width: 20px;
+    height: 20px;
+    margin: 4px 10px 0px 10px;
 }
 
 /* Style for the location selector button when the cursor is on the button */

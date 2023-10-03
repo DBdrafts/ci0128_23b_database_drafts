@@ -6,21 +6,30 @@
 </head>
 
 <!-- Section of the search bar and buttons for the layout -->
-<div class="search-bar justify-content-center">
+
+<form method="get" asp-page="SearchPage" asp-route-pageIndex="1" class="search-bar justify-content-center">
     <!-- Type selector button -->
-    <button class="button-general" id="type-search-selector">
-        <span>Buscar por</span>
-        <img src="~/img/ArrowDownIcon.svg" />
-    </button>
+    <select class="button-general" name="SearchType" id="type-search-selector">
+        <!-- Usa name en lugar de id -->
+        <option value="Nombre">
+            Nombre
+        </option>
+        <option value="Marca">
+            Marca
+        </option>
+        <option value="Modelo">
+            Modelo
+        </option>
+    </select>
 
     <!-- Input box for the search -->
-    <input type="text" id="search-input" placeholder="Buscar.." />
+    <input type="text" name="SearchString" class="search-inner-section" id="search-input" maxlength="70" placeholder="Buscar..." required />
 
     <!-- Search button -->
-    <button class="button-general" id="search-button">
+    <button type="submit" class="button-general" id="search-button">
         <img src="~/img/SearchIcon.svg" />
     </button>
 
     <!-- Location button -->
     @await Html.PartialAsync("_LocationButton")
-</div>
+</form>
