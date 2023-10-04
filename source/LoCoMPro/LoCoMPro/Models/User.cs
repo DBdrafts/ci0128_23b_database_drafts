@@ -5,10 +5,11 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace LoCoMPro.Models
 {
-    [PrimaryKey(nameof(UserName))]
+    [PrimaryKey(nameof(Id))]
     public class User
     {
         // Primary Key
+        public required string Id { get; set; }
         public required string UserName { get; set; }
         public required string Email { get; set; }
         public required string Password { get; set; }
