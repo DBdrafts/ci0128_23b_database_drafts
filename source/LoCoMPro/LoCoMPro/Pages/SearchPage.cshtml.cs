@@ -70,6 +70,11 @@ namespace LoCoMPro.Pages
             Register = await PaginatedList<Register>.CreateAsync(
                 registers.AsNoTracking(), pageIndex ?? 1, pageSize);
         }
+        /* OnPost method that sent request */
+        public IActionResult OnPost()
+        {
+            return Page();
+        }
 
         /* Gets the registers by using the type of search choose */
         public void GetRegistersByType(ref IQueryable<Register>? registers)
@@ -103,12 +108,6 @@ namespace LoCoMPro.Pages
                                 select grouped.OrderByDescending(r => r.SubmitionDate).First();
                     break;
             }
-        }
-
-        /* OnPost method that sent request */
-        public IActionResult OnPost()
-        {
-            return Page();
         }
     }
 }
