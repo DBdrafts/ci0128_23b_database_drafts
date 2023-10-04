@@ -143,7 +143,7 @@
             @if (@prevDisabled != "disabled")
             {
                 <!-- Link to go to the previous page -->
-                <a asp-page="./Product"
+                <a asp-page="./ProductPage"
                    asp-route-pageIndex="@(Model.Register.PageIndex - 1)"
                    asp-route-SearchProductName="@Model.SearchProductName"
                    asp-route-SearchStoreName="@Model.SearchStoreName"
@@ -162,7 +162,7 @@
                 {
                     <!-- Pagination square of the pages -->
                     <div id="pagination-square">
-                        <a asp-page="./Product"
+                        <a asp-page="./ProductPage"
                            asp-route-pageIndex="@i"
                            asp-route-SearchProductName="@Model.SearchProductName"
                            asp-route-SearchStoreName="@Model.SearchStoreName"
@@ -179,7 +179,7 @@
             @if (nextDisabled != "disabled")
             {
                 <!-- Link to go to the next page -->
-                <a asp-page="./Product"
+                <a asp-page="./ProductPage"
                    asp-route-pageIndex="@(Model.Register.PageIndex + 1)"
                    asp-route-SearchProductName="@Model.SearchProductName"
                    asp-route-SearchStoreName="@Model.SearchStoreName"
