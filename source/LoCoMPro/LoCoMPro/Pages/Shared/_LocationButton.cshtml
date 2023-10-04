@@ -6,7 +6,28 @@
 </head>
 
 <!-- Location button -->
-<button type="button" class="button-general location-selector">
+<button type="button" class="button-general location-selector" id="locationButton">
     <img src="~/img/LocationIcon.svg"/>
-    <span> Placeholder de prueba s dsadsadasd  sad</span>
+    <span> Ubicación </span>
+    <div id="locationInfo" style="display: none;"></div>
 </button>
+
+<div id="locationPopup" class="popup">
+    <div class="popup-content">
+        <h2>Seleccionar ubicación</h2>
+        <label for="province">Provincia:</label>
+        <select id="province" name="province">
+            <option value="" disabled selected hidden>Seleccionar provincia</option>
+            @foreach (var provincia in Model._LocationButtonModel.ProvinciaList!)
+            {
+                <option value="@provincia.Value">@provincia.Text</option>
+            }
+        </select>
+        <label for="canton">Cantón:</label>
+        <select id="canton" name="canton" disabled>
+            <option value="" disabled selected hidden>Seleccione una provincia primero</option>
+        </select>
+        <button type="button" id="closePopup-button">Cerrar</button>
+        <button type="button" id="saveLocation-button">Guardar</button>
+    </div>
+</div>
