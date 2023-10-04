@@ -252,9 +252,10 @@ namespace LoCoMPro.Pages
             // Get product Brand and model into the dictionary.
             data["#brand"] = productMatch.Brand ?? "";
             data["#model"] = productMatch.Model ?? "";
-            
+
             // Get first Category result or null
-            data["#category"] = (productMatch.Categories != null)? productMatch.Categories!.First().CategoryName : "";
+            //data["#category"] = (productMatch.Categories != null) ? productMatch.Categories!.First().CategoryName : "";
+            data["#category"] = (productMatch.Categories != null && productMatch.Categories.Any()) ? productMatch.Categories.First().CategoryName : "";
 
             return new JsonResult(data);
         }
