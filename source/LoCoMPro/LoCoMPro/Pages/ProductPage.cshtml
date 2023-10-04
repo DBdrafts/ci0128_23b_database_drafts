@@ -1,0 +1,89 @@
+﻿@page "~/ProductPage/{pageIndex:int}"
+@model LoCoMPro.Pages.ProductPageModel
+@{
+    ViewData["Title"] = "SearchProduct";
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=utf-8 />
+    <title>Product Visualization</title>
+    <link rel="stylesheet" href="~/css/SharedStyles.css" />
+</head>
+
+<body>
+    <!-- Name of product Search -->
+    <div class="titleProduct">
+        @Model.SearchProductName
+    </div>
+
+    <!-- Section for columns of specifications from Search product -->
+    <div class="container">
+        @{ // select the first matches
+            var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
+            var firstNonNullStore = Model.Store.FirstOrDefault(r => r.Name != null);
+        }
+        <!-- brand column -->
+        <div class="column">
+            <h2>Marca</h2>
+            @{ // Get the name of the product brand
+                if (firstNonNullProduct != null)
+                {
+                    <p>@firstNonNullProduct.Brand</p>
+                }
+            }
+        </div>
+
+        <!-- model column -->
+        <div class="column">
+            <h2>Modelo</h2>
+            @{ // Get the name of the product model
+                if (firstNonNullProduct != null)
+                {
+                    <p>@firstNonNullProduct.Model</p>
+                }
+            }
+            </div>
+
+        <!-- establishment column -->
+        <div class="column">
+            <h2>Establecimiento</h2>
+            @{ // Get the name of the store
+                if (firstNonNullStore != null)
+                {
+                    <p>@firstNonNullStore.Name</p>
+                }
+            }
+        </div>
+
+        <!-- cantón column -->
+        <div class="column">
+            <h2>Cantón</h2>
+            @{ // Get the name of the Canton Location
+                if (firstNonNullStore != null)
+                {
+                    <p>@firstNonNullStore.CantonName</p>
+                }
+            }
+        </div>
+
+        <!-- province column -->
+        <div class="column">
+            <h2>Provincia</h2>
+            @{ // Get the name of the Province Location
+                if (firstNonNullStore != null)
+                {
+                    <p>@firstNonNullStore.ProvinciaName</p>
+                }
+            }
+        </div>
+    </div>
+    
+    <!-- Horizontal separating line -->
+    <hr class="style-four">
+
+</body>
+
+</html>
