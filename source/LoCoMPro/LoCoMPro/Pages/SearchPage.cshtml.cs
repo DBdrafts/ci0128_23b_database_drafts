@@ -42,15 +42,28 @@ namespace LoCoMPro.Pages
         [BindProperty(SupportsGet = true)]
         public string? SearchType { get; set; }
 
+        /* Current type of sort */
+        [BindProperty(SupportsGet = true)]
+        public string? CurrentSort { get; set; }
+
+        /* Type of sort by price */
+        [BindProperty(SupportsGet = true)]
+        public string PriceSort { get; set; }
+
         /* OnGet method that manage the GET request */
-        public async Task OnGetAsync(string searchType, string searchString, int? pageIndex)
+        public async Task OnGetAsync(string searchType, string searchString, int? pageIndex, string sortOrder)
         {
             /* If the page index is lower that 1 */
             pageIndex = pageIndex < 1 ? 1: pageIndex;
 
+            /* Get the type of sort by price */
+            PriceSort = String.IsNullOrEmpty(sortOrder) ? "price_desc" : "";
+
             SearchString = searchString;
 
             SearchType = searchType;
+
+            CurrentSort = sortOrder;
 
             /* Prepares the query to get the data from the database */
             var categories = from c in _context.Categories
@@ -60,6 +73,8 @@ namespace LoCoMPro.Pages
                             select r;
 
             GetRegistersByType(ref registers);
+
+            OrderRegisters(ref registers, sortOrder);
 
 
             /* Get th amount of pages that will be needed for all the registers */
@@ -108,6 +123,22 @@ namespace LoCoMPro.Pages
                                 select grouped.OrderByDescending(r => r.SubmitionDate).First();
                     break;
             }
+        }
+
+        /* Order the registers by the sort order */
+        public void OrderRegisters(ref IQueryable<Register>? registers, string sortOrder)
+        {
+            //switch(sortOrder)
+            //{
+            //    /* Order in case of price_descending*/
+            //    case "price_desc":
+            //        registers = registers.OrderByDescending(r => r.Price);
+            //        break;
+            //    /* Normal order for the price */
+            //    default:
+            //        registers = registers.OrderBy(r => r.Price);
+            //        break;
+            //}
         }
     }
 }
