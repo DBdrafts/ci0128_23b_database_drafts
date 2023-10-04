@@ -41,7 +41,7 @@ namespace LoCoMPro.Data
         public static void InitializeLocation(LoCoMProContext context, ref List<Provincia> provinces, ref List<Canton> cantons)
         {
             var csvPath = "~/../../../../data/DTA-TABLA POR PROVINCIA-CANTÓN-DISTRITO 2022V3.csv";
-            var data = File.ReadAllLines(csvPath, System.Text.Encoding.UTF8)
+            var data = File.ReadAllLines(csvPath, System.Text.Encoding.Latin1)
                 .Skip(1)
                 .Select(line => line.Split(','))
                 .Select(columns => new
@@ -56,6 +56,7 @@ namespace LoCoMPro.Data
                     Name = group.Key.ToString(),
                 })
                 .ToList();
+
 
             var grouppedData = data.GroupBy(pair => new { pair.ProvinceName, pair.CantonName });
 
@@ -147,20 +148,20 @@ namespace LoCoMPro.Data
         }
 
         /* Initialize the users data in the database */
-        //public static void InitializeUsers(LoCoMProContext context
-        //    , ref List<User> users, ref List<Canton> cantones)
-        //{
-        //    // Add the users
-        //    users.Add(new User() { UserName = "Jose Miguel Garcia Lopez", Email = "email1@gmail.com"
-        //        , Password = "Password.1", Location = cantones[0]});
-        //    users.Add(new User() { UserName = "Ana Maria Cerdas Lizano", Email = "email2@gmail.com"
-        //        , Password = "Password.2", Location = cantones[1]});
-        //    users.Add(new User() { UserName = "Keith Wilson Buzkova", Email = "email3gmail.com"
-        //        , Password = "Password.3", Location = cantones[2]});
-        //    users.Add(new User() { UserName = "Yordi Lopez Rodríguez", Email = "email4gmail.com"
-        //        , Password = "Password.4", Location = cantones[0]});
-        //    users.Add(new User() { UserName = "Tatiana Espinoza Villalobos", Email = "email5@gmail.com"
-        //        , Password = "Password.5", Location = cantones[1]});
+        public static void InitializeUsers(LoCoMProContext context
+            , ref List<User> users, ref List<Canton> cantones)
+        {
+            // Add the users
+            users.Add(new User() { Id = "01", UserName = "Jose Miguel Garcia Lopez", Email = "email1@gmail.com"
+                , Password = "Password.1", Location = cantones[0]});
+            users.Add(new User() { Id = "02", UserName = "Ana Maria Cerdas Lizano", Email = "email2@gmail.com"
+                , Password = "Password.2", Location = cantones[1]});
+            users.Add(new User() { Id = "03", UserName = "Keith Wilson Buzkova", Email = "email3gmail.com"
+                , Password = "Password.3", Location = cantones[2]});
+            users.Add(new User() { Id = "04", UserName = "Yordi Lopez Rodríguez", Email = "email4gmail.com"
+                , Password = "Password.4", Location = cantones[0]});
+            users.Add(new User() { Id = "05", UserName = "Tatiana Espinoza Villalobos", Email = "email5@gmail.com"
+                , Password = "Password.5", Location = cantones[1]});
 
         //    context.Users.AddRange(users);
         //    context.SaveChanges();
