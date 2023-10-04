@@ -9,7 +9,7 @@
 
 <form method="get" asp-page="SearchPage" asp-route-pageIndex="1" class="w-100 search-bar justify-content-center">
     <!-- Type selector button -->
-    <select class="button-general" name="SearchType" id="type-search-selector">
+    <select class="button-general" name="searchType" id="type-search-selector">
         <!-- Usa name en lugar de id -->
         <option value="Name">
             Nombre
@@ -23,7 +23,7 @@
     </select>
 
     <!-- Input box for the search -->
-    <input type="text" name="SearchString" class="search-inner-section" id="search-input" maxlength="70" placeholder="Buscar..." required />
+    <input type="text" name="searchString" class="search-inner-section" id="search-input" maxlength="70" placeholder="Buscar..." required />
 
     <!-- Search button -->
     <button type="submit" class="button-general" id="search-button">

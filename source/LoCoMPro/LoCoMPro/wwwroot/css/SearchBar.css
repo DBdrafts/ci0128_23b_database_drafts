@@ -15,7 +15,7 @@
 /* Style for the selector of types */
 #type-search-selector {
     background-color: #BABAB8;
-    padding: 0px 15px;
+    padding: 0px;
     margin: 0px;
     width: 17%;
     height: 100%;
@@ -63,12 +63,14 @@ select.button-general option {
     z-index: 0;
     width: 10%;
     height: auto;
+    border-radius: 15px 0px 0px 15px;
 }
 
 /* Style for the image of the search button */
 #search-button img {
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
+    padding-bottom: 5px;
 }
 
 /* Style for the search button when the cursor is on the button */
