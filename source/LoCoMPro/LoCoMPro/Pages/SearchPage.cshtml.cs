@@ -56,66 +56,53 @@ namespace LoCoMPro.Pages
         public string PriceSort { get; set; }
 
         /* OnGet method that manage the GET request */
-        public async Task OnGetAsync(string searchType, string searchString, int? pageIndex, string sortOrder, string selectedCategories)
+        public async Task OnGetAsync(string searchType, string searchString, int? pageIndex, string sortOrder)
         {
-            
-
-            /* If the page index is lower that 1 */
+            /* Si el índice de página es menor que 1 */
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
 
-            /* Get the type of sort by price */
+            /* Obtén el tipo de orden por precio */
             PriceSort = String.IsNullOrEmpty(sortOrder) ? "price_desc" : "";
 
             SearchString = searchString;
-
             SearchType = searchType;
-
             CurrentSort = sortOrder;
 
-            /* Prepares the query to get the data from the database */
+            /* Prepara la consulta para obtener los datos de la base de datos */
             var categories = from c in _context.Categories
                              select c;
 
             var registers = from r in _context.Registers
                             select r;
 
+            /* Obtén la cantidad de páginas que se necesitarán para todos los registros */
+            var pageSize = Configuration.GetValue("PageSize", 1);
 
-            /* Get th amount of pages that will be needed for all the registers */
-            var pageSize = Configuration.GetValue("PageSize", 5);
-
-            /* Gets the data from the database */
+            /* Obtiene los datos de la base de datos */
             Category = await categories.ToListAsync();
 
-            if (selectedCategories != null)
-            {
-                var split = selectedCategories.Split(',');
-                SelectedCategories = (split != null) ? split!.ToList() : null;
-            }
-
-            if (SelectedCategories != null && SelectedCategories.Count() > 0)
+            if (SelectedCategories != null && SelectedCategories.Count > 0 && SelectedCategories[0] != null)
             {
                 var filteredProducts = _context.Products
                     .Where(p => p.Categories.Any(c => SelectedCategories.Contains(c.CategoryName)))
                     .Select(p => p.Name)
                     .ToList();
-                //registers = registers.Where(r => filteredProducts.Contains(r.ProductName));
-            
+
                 registers = registers.Where(r => filteredProducts.Contains(r.ProductName));
             }
 
-            /* Gets the registers by using the type of search choose */
+            /* Obtiene los registros según el tipo de búsqueda seleccionado */
             IQueryable<Register> registersQuery = GetRegistersByType(registers);
 
-
-            /* Gets a unordered list of registers */
-            PaginatedList<Register> UnorderedList = (await PaginatedList<Register>.CreateAsync(
+            /* Obtiene una lista desordenada de registros */
+            PaginatedList<Register> unorderedList = (await PaginatedList<Register>.CreateAsync(
                 registersQuery, pageIndex ?? 1, pageSize));
 
-            /* Copy the information of the registers ordered */
-            Register = new PaginatedList<Register>(OrderRegisters(UnorderedList.ToList(), sortOrder)
-                , UnorderedList.PageIndex, UnorderedList.TotalPages);
-
+            /* Copia la información de los registros ordenados */
+            Register = new PaginatedList<Register>(OrderRegisters(unorderedList.ToList(), sortOrder),
+                unorderedList.PageIndex, unorderedList.TotalPages);
         }
+
 
         /* OnPost method that sent request */
         public IActionResult OnPost()

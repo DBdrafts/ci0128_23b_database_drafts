@@ -27,7 +27,7 @@
             <!-- Search filter title -->
             <h4> Filtros </h4>
 
-            <form method="get" asp-page="./SearchPage">
+            <form method="get" asp-page="./SearchPage" id="searchForm">
                 @foreach (var category in Model.Category)
                 {
                     <div class="filter-line">
@@ -36,13 +36,9 @@
                     </div>
                 }
 
-                <input type="hidden" name="searchType" value="@Model.SearchType" />
-                <input type="hidden" name="searchString" value="@Model.SearchString" />
-                <input type="hidden" name="sortOrder" value="@Model.CurrentSort" />
-
-                <button type="submit" class="button-general">
-                    Filtrar
-                </button>
+                <input type="hidden" name="searchType" id="searchType" value="@Model.SearchType" />
+                <input type="hidden" name="searchString" id="searchString" value="@Model.SearchString" />
+                <input type="hidden" name="sortOrder" id="sortOrder" value="@Model.CurrentSort" />
             </form>
 
 
@@ -176,5 +172,6 @@
                 }
             </div>
         </div>
+        <script src="~/js/filterCategory.js"></script>
     }
 </div>

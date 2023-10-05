@@ -1,24 +1,24 @@
 ﻿$(document).ready(function () {
-    // Manejar cambios en los checkboxes de categorías
-    $(".category-checkbox").change(function () {
-        // Recopilar todas las categorías seleccionadas
-        var selectedCategories = [];
-        $(".category-checkbox:checked").each(function () {
-            selectedCategories.push($(this).data("category-name"));
-        });
+    // Selector para todas las casillas de verificación
+    $('input[type="checkbox"]').change(function () {
+        // Obtén todas las casillas de verificación seleccionadas
+        var selectedCategories = $('input[type="checkbox"]:checked').map(function () {
+            return $(this).val();
+        }).get();
 
-        // Realizar una solicitud AJAX al servidor para obtener los resultados filtrados
-        $.ajax({
-            url: "/SearchPage", 
-            type: "GET",
-            data: { selectedCategories: selectedCategories },
-            success: function (data) {
-                // Actualizar el contenido de la sección de resultados con los nuevos resultados
-                $(".search-section").html(data);
-            },
-            error: function (error) {
-                console.error(error);
-            }
-        });
+        // Obtén los valores de otros campos ocultos
+        var searchType = $('#searchType').val();
+        var searchString = $('#searchString').val();
+        var sortOrder = $('#sortOrder').val();
+
+        // Construye la URL con los parámetros
+        var url = "/SearchPage/1?SelectedCategories=" + selectedCategories.join('&SelectedCategories=') +
+                    "&searchType=" + searchType +
+                    "&searchString=" + searchString +
+                    "&sortOrder=" + sortOrder;
+
+        // Redirige al usuario a la nueva URL
+        window.location.href = url;
     });
 });
+
