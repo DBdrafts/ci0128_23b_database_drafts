@@ -127,12 +127,19 @@ namespace LoCoMPro.Pages
 
             string userName = "Jose Miguel Garcia Lopez";  // STATIC USER
 
+            // Get the product if exists in the context
+            var productToAdd = _context.Products
+                .Include(p => p.Registers)
+                .Include(p => p.Stores)
+                .Include(p => p.Categories)
+                .FirstOrDefault(p => p.Name == productName);
+            // Check and create a new store if not exists
+            var store = AddStoreRelation(storeName, cantonName, provinciaName);
+            // Get category can be null
+            var category = _context.Categories.FirstOrDefault(c => c.CategoryName == chosenCategory);
 
-            var productToAdd = _context.Products.Find(productName);  // Get the product if exists in the context
-            var store = AddStoreRelation(storeName, cantonName, provinciaName);  // Check and create a new store if not exists
-            var category = _context.Categories.Find(chosenCategory);  // Get category/ can be null
-
-            if (productToAdd == null)  // If the product doesn't exists
+            // If the product doesn't exists
+            if (productToAdd == null)  
             {
                 // Create new product
                 productToAdd = new()
@@ -140,51 +147,23 @@ namespace LoCoMPro.Pages
                     Name = productName,
                     Brand = brandName,
                     Model = modelName,
-                    Categories = new List<Category>()
                 };
                 
                 if (category != null)
                 {   // Add category-product relation
-                    productToAdd.Categories.Add(category);
+                    productToAdd.Categories!.Add(category);
                 }
                 // Add the product to the context
                 _context.Products.Add(productToAdd);
-
-            } else // if the product already exists
-            {   
-                if (category != null)
-                {   // Checks if the category-store (AsociatedWith) relationship already exists, if not, adds it
-                    string sqlCategoryQuery =
-                    "IF NOT EXISTS (SELECT * FROM AsociatedWith WHERE CategoryName = {0} AND ProductName = {1})\n" +
-                    "BEGIN\n" +
-                    "    INSERT INTO AsociatedWith (CategoryName, ProductName) VALUES ({0}, {1})\n" +
-                    "END";
-                    try
-                    {   // Apply SqlQuery
-                        _ = _context.Database.ExecuteSqlRaw(sqlCategoryQuery, chosenCategory!, productName);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"An error occurred: {ex.Message}");
-                    }
-                }
             }
-            _context.SaveChanges();
+            // Checks if the category-store (AsociatedWith) relationship already exists, if not, adds it
+            else if (category != null && !productToAdd.Categories!.Contains(category))
+            {
+                productToAdd.Categories.Add(category);
+            }
 
             // Checks if the produc-store (Sells) relationship already exists, if not, adds it
-            string sqlQuery =
-                "IF NOT EXISTS (SELECT * FROM Sells WHERE ProductName = {0} AND StoreName = {1} AND ProvinceName = {2} AND CantonName = {3})\n" +
-                "BEGIN\n" +
-                "    INSERT INTO Sells (ProductName, StoreName, ProvinceName, CantonName) VALUES ({0}, {1}, {2}, {3})\n" +
-                "END";
-            try
-            {
-                _ = _context.Database.ExecuteSqlRaw(sqlQuery, productName, storeName, provinciaName, cantonName);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-            }
+            if (!productToAdd.Stores!.Contains(store)) productToAdd.Stores.Add(store);
 
             // Create new Register
             Register newRegister = new()
@@ -196,9 +175,11 @@ namespace LoCoMPro.Pages
                 Price = price,
                 Comment = comment
             };
-            _context.Registers.Add(newRegister);  // Add the product to the context
+            // Add the product to the context
+            _context.Registers.Add(newRegister);
 
-            await _context.SaveChangesAsync();  // Save all changes in the contextDB
+            // Save all changes in the contextDB
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("/Index");
         }
@@ -212,13 +193,8 @@ namespace LoCoMPro.Pages
                 {
                     Name = storeName,
                     Location = _context.Cantones.First(c => c.CantonName == cantonName),
-                    Products = new List<Product>()
                 };
                 _context.Stores.Add(store);
-            } else
-            {
-                // Initialize product list
-                store.Products = new List<Product> ();
             }
             return store;
         }
@@ -232,10 +208,13 @@ namespace LoCoMPro.Pages
             }
             return attribute;
         }
+
+        // Suggests data for autocomplete on required inputs of page.
         public IActionResult OnGetAutocompleteSuggestions(string field, string term, string provinceName, string cantonName, string storeName)
         {
-            // Create a list withe the available suggestions, given the current inputs
-            var availableSuggestions = new List<string>() { "Hola" };
+            // Create a list with the available suggestions, given the current inputs
+            List<String> availableSuggestions = new List<string>() { "" };
+            // When aked for the autofill for store
             if (field == "#store")
             {
                 // Look for saved Stores in current location
@@ -244,16 +223,12 @@ namespace LoCoMPro.Pages
                     .Select(s => s.Name)
                     .ToList();
             }
+            // When asked for the autofill for product
             else if (field == "#productName")
             {
-                // Look for products sold in current store.
-                string sqlQuery =
-                    "SELECT ProductName\n" +
-                    "FROM Sells\n" +
-                    "WHERE StoreName = @p0 AND\n" +
-                    "      ProvinceName = @p1 AND\n" +
-                    "      CantonName = @p2;";
-                availableSuggestions = _context.Database.SqlQueryRaw<string>(sqlQuery, storeName, provinceName, cantonName).ToList();
+                // Take the available sources form the store inventory or from the total number of produts.
+                availableSuggestions = _context.Products.Select(p => p.Name)
+                                                        .ToList();
             }
 
             // Filter suggestions based on the user's input
@@ -263,12 +238,15 @@ namespace LoCoMPro.Pages
 
             return new JsonResult(filteredSuggestions);
         }
+        // Autofills model, brand and category based on product name
         public IActionResult OnGetProductAutofillData(string productName)
         {
             var data = new Dictionary<string, string>();
 
             // Get first Pro uct Match
-            Product? productMatch = _context.Products.FirstOrDefault(p => p.Name == productName);
+            Product? productMatch = _context.Products
+                .Include(p => p.Categories)
+                .FirstOrDefault(p => p.Name == productName);
             
             // If no product was found with the given input return empty dictionary
             if (productMatch == null) return new JsonResult(data);
@@ -276,19 +254,11 @@ namespace LoCoMPro.Pages
             // Get product Brand and model into the dictionary.
             data["#brand"] = productMatch.Brand ?? "";
             data["#model"] = productMatch.Model ?? "";
-            // Get First Category into the dictionary.
-            string sqlQuery =
-                    "SELECT TOP 1 CategoryName as Value\n" +
-                    "FROM AsociatedWith a \n" +
-                    "WHERE ProductName = @productName";
-            // Parameters
-            var parameters = new SqlParameter("@productName", SqlDbType.VarChar) { Value = productName };
 
             // Get first Category result or null
-            var categoryName = _context.Database.SqlQueryRaw<string>(sqlQuery, parameters).FirstOrDefault();//.FirstOrDefault();
-            //FirstOrDefault();
-            data["#category"] = categoryName ?? "";
-            // Return Result
+            //data["#category"] = (productMatch.Categories != null) ? productMatch.Categories!.First().CategoryName : "";
+            data["#category"] = (productMatch.Categories != null && productMatch.Categories.Any()) ? productMatch.Categories.First().CategoryName : "";
+
             return new JsonResult(data);
         }
     }

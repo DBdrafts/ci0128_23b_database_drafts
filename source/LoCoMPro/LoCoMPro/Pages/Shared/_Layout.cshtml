@@ -25,19 +25,22 @@
         <!-- Navegation bar of the layout -->
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="w-100 d-flex">
-                @if (ViewBag.ShowNavigation ?? true)
+                @if (ViewBag.ShowLogoLink ?? true)
                 {
                     <!-- Logo link to the main page -->
-                    <div class="logo-link justify-content-left">
+                    <div class="w-100 logo-link justify-content-left">
                         <a href="/" class="button-general">
                             <img src="~/img/LoCoMProLogo.svg" alt="Agregar Registro">
                         </a>
                     </div>
+                }
+                @if (ViewBag.ShowSearchBar ?? true)
+                {
                     <!-- Section of the search bar and buttons for the layout -->
                     @await Html.PartialAsync("_SearchBar")
                 }
                 <!-- Navegation bar buttons -->
-                <div class="d-flex justify-content-end">
+                <div class="w-100 d-flex justify-content-end">
                     
                     @if (SignInManager.IsSignedIn(User))
                     {

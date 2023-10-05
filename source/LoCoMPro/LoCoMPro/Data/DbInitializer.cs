@@ -119,7 +119,7 @@ namespace LoCoMPro.Data
         {
 
             // Add the products
-            products.Add(new Product() { Name = "Leche Dos Pinos 1 litros", Brand = "Dos Pinos"
+            products.Add(new Product() { Name = "Leche Dos Pinos 1 litros", Brand = "Dos Pinos" 
                 , Categories = new List<Category>() { categories[0] } });
             products.Add(new Product() { Name = "Camisa deportiva negra Nike", Brand = "Nike"
                 , Categories = new List<Category>() { categories[2] } });
@@ -176,9 +176,9 @@ namespace LoCoMPro.Data
                 NormalizedUserName = "ALONSO111", Email = "Julio444@ucr.ac.cr", NormalizedEmail = "ALONSO111@GMAIL.COM"
                 , PasswordHash = "AQAAAAIAAYagAAAAEDcvQfXxtswPnX0ixY3T5EipIoGSk85MVeGdNAVs0tGrkfgseQnfRidNltc5BFSFvw==", 
                 Location = cantones[0]});
-        //    context.Users.AddRange(users);
-        //    context.SaveChanges();
-        //}
+            context.Users.AddRange(users);
+            context.SaveChanges();
+        }
 
         /* Initialize the registers data in the database */
         public static void InitializeRegisters(LoCoMProContext context

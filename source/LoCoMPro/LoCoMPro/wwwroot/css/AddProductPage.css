@@ -1,6 +1,6 @@
 ﻿
 /* Style for the form */
-form {
+.register-section form {
     background-color: #FFFFFF;
     padding: 20px;
     border-radius: 5px;
@@ -11,7 +11,7 @@ form {
 }
 
 /* Style for labels */
-label {
+.register-section label {
     display: block;
     margin-bottom: 10px;
     font-weight: 500;
@@ -29,8 +29,8 @@ textarea {
 }
 
 
-textarea {
-    /* Comment box heigh*/
+.register-section textarea {
+    /* Comment box height */
     height: 100px;
 }
 
@@ -118,7 +118,7 @@ align-items: flex-start; /* Align elements to the left */
 
 
 /* Style for select field */
-select {
+.register-section select {
     background-color: #E2E3E3;
     width: 100%;
     padding: 10px;
@@ -128,7 +128,7 @@ select {
 }
 
 /* Title Style */
-h2 {
+.register-section h2 {
     font-weight: bold;
     font-size: 24px;
     margin-bottom: 20px;
