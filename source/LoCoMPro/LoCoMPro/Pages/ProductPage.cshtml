@@ -1,19 +1,17 @@
-﻿@page "~/Product/{pageIndex:int}"
+﻿@page "~/ProductPage/{pageIndex:int}"
 @model LoCoMPro.Pages.ProductPageModel
 @{
-    ViewData["Title"] = "SearchProduct";
+    ViewData["Title"] = "Visialización Producto";
     Layout = "_Layout";
+    ViewBag.ShowSearchBar = true;
+    ViewBag.ShowLogoLink = true;
 }
 
-<!DOCTYPE html>
-<html>
 <head>
-    <meta charset=utf-8 />
-    <title>Product Visualization</title>
-    <link rel="stylesheet" href="~/css/SharedStyles.css" />
+    <link rel="stylesheet" href="~/css/ProductPage.css" />
 </head>
 
-<body>
+<div class="product-page">
     <!-- Name of product Search -->
     <div class="titleProduct">
         @Model.SearchProductName
@@ -28,7 +26,7 @@
         <!-- brand column -->
         <div class="column">
             <h2>Marca</h2>
-            @{
+            @{ // Get the name of the product brand
                 if (firstNonNullProduct != null)
                 {
                     <p>@firstNonNullProduct.Brand</p>
@@ -39,7 +37,7 @@
         <!-- model column -->
         <div class="column">
             <h2>Modelo</h2>
-            @{
+            @{ // Get the name of the product model
                 if (firstNonNullProduct != null)
                 {
                     <p>@firstNonNullProduct.Model</p>
@@ -50,7 +48,7 @@
         <!-- establishment column -->
         <div class="column">
             <h2>Establecimiento</h2>
-            @{
+            @{ // Get the name of the store
                 if (firstNonNullStore != null)
                 {
                     <p>@firstNonNullStore.Name</p>
@@ -61,7 +59,7 @@
         <!-- cantón column -->
         <div class="column">
             <h2>Cantón</h2>
-            @{
+            @{ // Get the name of the Canton Location
                 if (firstNonNullStore != null)
                 {
                     <p>@firstNonNullStore.CantonName</p>
@@ -72,14 +70,13 @@
         <!-- province column -->
         <div class="column">
             <h2>Provincia</h2>
-            @{
+            @{ // Get the name of the Province Location
                 if (firstNonNullStore != null)
                 {
                     <p>@firstNonNullStore.ProvinciaName</p>
                 }
             }
         </div>
-
     </div>
     
     <!-- Horizontal separating line -->
@@ -98,7 +95,7 @@
 				<a href="#">Fecha</a>
 				<ul class="menu-vertical">
                     <li>
-                        <a asp-page="./Product"
+                        <a asp-page="./ProductPage"
                            asp-route-SearchProductName="@Model.SearchProductName"
                            asp-route-SearchStoreName="@Model.SearchStoreName"
                            asp-route-SearchCantonName="@Model.SearchCantonName"
@@ -107,7 +104,7 @@
                               color: white; text-align: center;"> Más recientes</a>
                     </li>
                     <li>
-                        <a asp-page="./Product"
+                        <a asp-page="./ProductPage"
                            asp-route-SearchProductName="@Model.SearchProductName"
                            asp-route-SearchStoreName="@Model.SearchStoreName"
                            asp-route-SearchCantonName="@Model.SearchCantonName"
@@ -121,7 +118,7 @@
 				<a href="#">Precio</a>
 				<ul class="menu-vertical">
                     <li>
-                        <a asp-page="./Product"
+                        <a asp-page="./ProductPage"
                            asp-route-SearchProductName="@Model.SearchProductName"
                            asp-route-SearchStoreName="@Model.SearchStoreName"
                            asp-route-SearchCantonName="@Model.SearchCantonName"
@@ -129,8 +126,8 @@
                            asp-route-sortOrder="" style="text-decoration: none;display: grid;font-size: 20px;
                               color: white; text-align: center;"> Menores precios</a>
                     </li>
-                    <li>
-                        <a asp-page="./Product"
+                    <li>    
+                        <a asp-page="./ProductPage"
                            asp-route-SearchProductName="@Model.SearchProductName"
                            asp-route-SearchStoreName="@Model.SearchStoreName"
                            asp-route-SearchCantonName="@Model.SearchCantonName"
@@ -152,7 +149,6 @@
         @foreach (var register in Model.Register)
         {
             <!-- Search result section -->
-          
                 <!-- Individual registers -->
                 <div class="register-block">
                 <p>@Html.DisplayFor(modelItem => register.SubmitionDate)</p>
@@ -163,7 +159,7 @@
         
     </div>
 
-    <div class="search-section">
+    <div class="product-pagination">
         <!-- Disables the buttons if there´s no previous or next button -->
         @{
             var prevDisabled = !Model.Register.HasPreviousPage ? "disabled" : "";
@@ -176,7 +172,7 @@
             @if (@prevDisabled != "disabled")
             {
                 <!-- Link to go to the previous page -->
-                <a asp-page="./Product"
+                <a asp-page="./ProductPage"
                    asp-route-pageIndex="@(Model.Register.PageIndex - 1)"
                    asp-route-SearchProductName="@Model.SearchProductName"
                    asp-route-SearchStoreName="@Model.SearchStoreName"
@@ -195,7 +191,7 @@
                 {
                     <!-- Pagination square of the pages -->
                     <div id="pagination-square">
-                        <a asp-page="./Product"
+                        <a asp-page="./ProductPage"
                            asp-route-pageIndex="@i"
                            asp-route-SearchProductName="@Model.SearchProductName"
                            asp-route-SearchStoreName="@Model.SearchStoreName"
@@ -212,7 +208,7 @@
             @if (nextDisabled != "disabled")
             {
                 <!-- Link to go to the next page -->
-                <a asp-page="./Product"
+                <a asp-page="./ProductPage"
                    asp-route-pageIndex="@(Model.Register.PageIndex + 1)"
                    asp-route-SearchProductName="@Model.SearchProductName"
                    asp-route-SearchStoreName="@Model.SearchStoreName"
@@ -228,6 +224,4 @@
 
     </div>
 
-</body>
-
-</html>
+</div>

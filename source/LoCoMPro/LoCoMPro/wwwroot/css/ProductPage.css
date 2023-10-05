@@ -1,5 +1,5 @@
 ﻿/* Styles for the producto visualization page*/
- 
+
 /* Style for the title of product requested */
 .titleProduct {
     width: 1152px;
@@ -34,7 +34,7 @@
 }
 
 /* Horizontal line of separation with the list of records */
-hr.style-four {
+.product-page hr.style-four {
     background: #9F9F9F;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.50);
     margin-bottom: 20px;
@@ -64,10 +64,10 @@ hr.style-four {
     background-image: url('/img/ArrowDownIcon.svg');
     background-repeat: no-repeat;
     background-position: 200px 22px;
-}   
+}
 
 /*Style for the text in the columns*/
-nav {
+.product-page nav {
     background-color: #FFF;
     font-size: 30px;
     text-align: center
@@ -95,8 +95,8 @@ nav {
 }
 
 /*Style for text in the selected option of the list */
-.containerListRegistercolumns > li:hover > a  {
-   color: #208EE0; 
+.containerListRegistercolumns > li:hover > a {
+    color: #208EE0;
 }
 
 /*Style for the vertical menu */
@@ -121,10 +121,6 @@ nav {
     color: #208EE0;
 }
 
-.menu-vertical li a {
-    padding-left: 0px;
-}
-
 /*Style for text in the vertical menu */
 .menu-vertical li a {
     display: grid;
@@ -142,63 +138,6 @@ nav {
     font-size: 30px;
     margin: 0px;
     padding: 15px 20px;
-}
-
-/* Style for pagination box */
-.pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    bottom: 75px;
-    left: 0;
-    width: 100%;
-}
-
-/* Style for pagination box text */
-.pagination a {
-color: black;
-float: left;
-padding: 8px 16px;
-text-decoration: none;
-margin: 0 5px;
-border-radius: 5px;
-transition: background-color .3s;
-border: 1px solid #ddd; /* Gray border */
-font-size: 22px;
-}
-
-/* Style for the active pagination link */
-.pagination a.active {
-    background-color: #208EE0; 
-    color: white; 
-}
-
-/* Style for hover effect on pagination links */
-.pagination a:hover:not(.active) {
-    background-color: #ddd; 
-}
-
-/* Additional style for the active pagination link's border radius */
-.pagination a.active {
-    border-radius: 5px;
-}
-
-/* Style for the first child pagination link (leftmost) */
-.pagination a:first-child {
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-}
-
-/* Style for the last child pagination link (rightmost) */
-.pagination a:last-child {
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-
-/* Center align text inside the pagination box */
-.center {
-text-align: center;
 }
 
 /* Style for the result section */
@@ -236,14 +175,12 @@ text-align: center;
 
 /* Style for the result block when hover */
 .register-block:hover {
-     background-color: #9F9F9F;
+    background-color: #9F9F9F;
 }
 
 /* Style for the search section */
-.search-section {
-    display: inline-block;
+.product-pagination {
     height: 100%;
-    width: 85%;
     text-align: center;
     align-items: center;
 }

@@ -9,40 +9,41 @@ namespace LoCoMPro.Pages
 {
     public class ProductPageModel : PageModel
     {
-        /* Context of the data base */
+        // Context of the data base
         private readonly LoCoMPro.Data.LoCoMProContext _context;
 
-        /* Configuration for the page */
+        // Configuration for the page 
         private readonly IConfiguration Configuration;
-        /* Product Page constructor */
+        
+        // Product Page constructor 
         public ProductPageModel(LoCoMProContext context, IConfiguration configuration)
         {
             _context = context;
             Configuration = configuration;
         }
 
-        /* List of the product that exist in the database */
+        // List of the product that exist in the database 
         public IList<Product> Product { get; set; } = default!;
 
-        /* List of the stores that exist in the database */
+        // List of the stores that exist in the database 
         public IList<Store> Store { get; set; } = default!;
 
-        /* List of the registers that exist in the database */
+        // List of the registers that exist in the database 
         public PaginatedList<Register> Register { get; set; } = default!;
 
-        /* Product resquested name */
+        // Product resquested name 
         [BindProperty(SupportsGet = true)]
         public string? SearchProductName { get; set; }
 
-        /* Store resquested name */
+        // Store resquested name 
         [BindProperty(SupportsGet = true)]
         public string? SearchStoreName { get; set; }
 
-        /* Province resquested name */
+        // Province resquested name 
         [BindProperty(SupportsGet = true)]
         public string? SearchProvinceName { get; set; }
 
-        /* Canton resquested name */
+        // Canton resquested name 
         [BindProperty(SupportsGet = true)]
         public string? SearchCantonName { get; set; }
 
@@ -69,7 +70,7 @@ namespace LoCoMPro.Pages
             /* If the page registers is lower that 1 */
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
 
-            // Search Name to search
+            // Attr of the product from the params of method
             SearchProductName = searchProductName;
             SearchStoreName = searchStoreName;
             SearchProvinceName = searchProvinceName;
@@ -80,7 +81,6 @@ namespace LoCoMPro.Pages
 
             // Initial request for all the stores in the database
             var stores = from s in _context.Stores select s;
-
 
             // If the name of the productResquested is not null
             if (!string.IsNullOrEmpty(SearchProductName))
@@ -140,12 +140,43 @@ namespace LoCoMPro.Pages
                     break;
             }
 
-            // Get th amount of pages that will be needed for all the registers 
+            // Get th amount of pages that will be needed for all the registers
             var pageSize = Configuration.GetValue("PageSize", 5);
 
             // Gets the Data From Databasse 
             Register = await PaginatedList<Register>.CreateAsync(
                 registers.AsNoTracking(), pageIndex ?? 1, pageSize);
+        }
+
+        public IOrderedEnumerable<Register> OrderRegistersByPrice(string orderName, ref ICollection<Register> registers)
+        {
+            switch (orderName)
+            {
+                // Order in case of price_descending 
+                case "price_desc":
+                    return registers.OrderByDescending(r => r.Price);
+                // Normal order for the price
+                default:
+                    return registers.OrderBy(r => r.Price);
+                    
+            }
+        }
+
+        public IOrderedEnumerable<Register> OrderRegistersByDate(string orderName, ref ICollection<Register> registers)
+        {
+            switch (orderName)
+            {
+                // Order in case of date_descending 
+                case "date_desc":
+                    return registers.OrderByDescending(r => r.SubmitionDate);
+                // Normal order for the date
+                case "date":
+                    return registers.OrderBy(r => r.SubmitionDate);
+                // Normal order in case date null
+                default:
+                    return registers.OrderBy(r => r.Price);
+
+            }
         }
     } 
 }
