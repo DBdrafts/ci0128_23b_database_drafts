@@ -5,6 +5,7 @@ using LoCoMPro.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System.Collections.Generic;
@@ -14,52 +15,50 @@ namespace LoCoMPro.Pages
 {
     public class SearchPageModel : PageModel
     {
-        /* Context of the data base */
+        // Context of the data base 
         private readonly LoCoMPro.Data.LoCoMProContext _context;
-        /* Configuration for the page */
+        // Configuration for the page 
         private readonly IConfiguration Configuration;
 
-        /* Search Page constructor */
+        // Search Page constructor 
         public SearchPageModel(LoCoMProContext context, IConfiguration configuration)
         {
             _context = context;
             Configuration = configuration;
         }
 
-        /* Determinate if the check-box was activated */
+        // Determinate if the check-box was activated 
         [BindProperty]
         public bool IsChecked { get; set; }
 
-        /* List of the categories that exist in the database */
+        // List of the categories that exist in the database 
         public IList<Category> Category { get; set; } = default!;
 
-        /* List of the registers that match with the search string */
+        // List of the registers that match with the search string 
         public PaginatedList<Register> Register { get; set; } = default!;
 
-        /* Text enters as the search attribute */
+        // Text enters as the search attribute 
         [BindProperty(SupportsGet = true)]
         public string? SearchString { get; set; }
 
-        /* Text enters as the search type attribute */
+        // Text enters as the search type attribute 
         [BindProperty(SupportsGet = true)]
         public string? SearchType { get; set; }
 
-        /* Current type of sort */
+        // Current type of sort 
         [BindProperty(SupportsGet = true)]
         public string? CurrentSort { get; set; }
 
-        /* Type of sort by price */
+        // Type of sort by price 
         [BindProperty(SupportsGet = true)]
         public string PriceSort { get; set; }
 
-        /* OnGet method that manage the GET request */
-        public async Task OnGetAsync(string searchType, string searchString, int? pageIndex, string sortOrder)
+        // OnGet method that manage the GET request 
+        public async Task OnGetAsync(string searchType, string searchString
+            , int? pageIndex, string sortOrder)
         {
-            /* If the page index is lower that 1 */
-            pageIndex = pageIndex < 1 ? 1 : pageIndex;
 
-            /* Get the type of sort by price */
-            PriceSort = String.IsNullOrEmpty(sortOrder) ? "price_desc" : "";
+            PriceSort = GetSortOrder(sortOrder);
 
             SearchString = searchString;
 
@@ -67,58 +66,59 @@ namespace LoCoMPro.Pages
 
             CurrentSort = sortOrder;
 
-            /* Prepares the query to get the data from the database */
+            // Prepares the query to get the data from the database 
             var categories = from c in _context.Categories
                              select c;
 
             var registers = from r in _context.Registers
                             select r;
 
-            /* Gets the registers by using the type of search choose */
+            // Gets the registers by using the type of search choose 
             IQueryable<Register> registersQuery = GetRegistersByType(registers);
 
 
-            /* Get th amount of pages that will be needed for all the registers */
+            // Get th amount of pages that will be needed for all the registers 
             var pageSize = Configuration.GetValue("PageSize", 5);
 
-            /* Gets the data from the database */
+            // Gets the data from the database 
             Category = await categories.ToListAsync();
 
-            /* Gets a unordered list of registers */
+            // Gets a unordered list of registers 
             PaginatedList<Register> UnorderedList = (await PaginatedList<Register>.CreateAsync(
                 registersQuery, pageIndex ?? 1, pageSize));
 
-            /* Copy the information of the registers ordered */
+            // Copy the information of the registers ordered 
             Register = new PaginatedList<Register>(OrderRegisters(UnorderedList.ToList(), sortOrder)
                 , UnorderedList.PageIndex, UnorderedList.TotalPages);
 
         }
-        /* OnPost method that sent request */
+
+        // OnPost method that sent request 
         public IActionResult OnPost()
         {
             return Page();
         }
 
-        /* Gets the registers by using the type of search choose */
+        // Gets the registers by using the type of search choose 
         public IQueryable<Register> GetRegistersByType(IQueryable<Register>? registersQuery)
         {
             IQueryable<Register> resultQuery;
 
-            /* Filter the the register by the type of search choose */
+            // Filter the the register by the type of search choose 
             switch (SearchType)
             {
                 case "Nombre":
                 default:
                     resultQuery = registersQuery
-                        .Where(r => r.ProductName.Contains(SearchString));
+                        .Where(r => r.ProductName.Contains(SearchString!));
                     break;
                 case "Marca":
                     resultQuery = registersQuery
-                        .Where(r => _context.Products.Any(p => p.Name == r.ProductName && p.Brand.Contains(SearchString)));
+                        .Where(r => _context.Products.Any(p => p.Name == r.ProductName && p.Brand.Contains(SearchString!)));
                     break;
                 case "Modelo":
                     resultQuery = registersQuery
-                        .Where(r => _context.Products.Any(p => p.Name == r.ProductName && p.Model.Contains(SearchString)));
+                        .Where(r => _context.Products.Any(p => p.Name == r.ProductName && p.Model.Contains(SearchString!)));
                     break;
             }
 
@@ -128,27 +128,34 @@ namespace LoCoMPro.Pages
             return resultQuery;
         }
 
-        /* Order the registers by the sort order choose */
+        // Order the registers by the sort order choose 
         public List<Register> OrderRegisters(List<Register>? unorderedList, string sortOrder)
         {
             List<Register> orderedList;
 
-            /* Sort the list depending of the parameter */
+            // Sort the list depending of the parameter 
             switch (sortOrder)
             {
-                /* Order in case of price_descending*/
+                // Order in case of price_descending
                 case "price_desc":
-                    orderedList = unorderedList.OrderByDescending(r => r.Price).ToList();
+                    orderedList = unorderedList!.OrderByDescending(r => r.Price).ToList();
                     break;
 
-                /* Normal order for the price */
+                // Normal order for the price 
                 case "price_asc":
                 default:
-                    orderedList = unorderedList.OrderBy(r => r.Price).ToList();
+                    orderedList = unorderedList!.OrderBy(r => r.Price).ToList();
                     break;
             }
 
             return orderedList;
+        }
+
+        // Gets the sort order of the registers 
+        public string GetSortOrder(string sortOrder)
+        {
+            // If null, the order by price as default 
+             return String.IsNullOrEmpty(sortOrder) ? "price_asc" : sortOrder;
         }
     }
 }

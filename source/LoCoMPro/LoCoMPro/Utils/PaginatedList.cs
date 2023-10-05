@@ -4,44 +4,52 @@ using System.Linq;
 using System.Threading.Tasks;
 using LoCoMPro.Models;
 using LoCoMPro.Pages;
+using Microsoft.CodeAnalysis.FlowAnalysis;
 using Microsoft.EntityFrameworkCore;
 
 namespace LoCoMPro.Utils
 {
-    /* Class to manipulate paginated list */
+    // Class to manipulate paginated list 
     public class PaginatedList<T> : List<T>
     {
-        /* Index of the actual page */
+        // Index of the actual page 
         public int PageIndex { get; private set; }
 
-        /* Total amount of pages */
+        // Total amount of pages 
         public int TotalPages { get; private set; }
 
-        /* Constructor of the paginated list */
+        // Constructor of the paginated list 
         public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
         {
-            PageIndex = pageIndex;
+            PageIndex = GetPageIndex(pageIndex);
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
 
             AddRange(items);
         }
 
-        /* Constructor of the paginated list by copying the parameters */
+        // Constructor of the paginated list by copying the parameters 
         public PaginatedList(List<T> items, int pageIndex, int totalPages)
         {
-            PageIndex = pageIndex;
+            PageIndex = GetPageIndex(pageIndex);
             TotalPages = totalPages;
 
             AddRange(items);
         }
 
-        /* Check if have a previous page */
+        // Check if have a previous page 
         public bool HasPreviousPage => PageIndex > 1;
 
-        /* Check if have a next page */
+        // Check if have a next page 
         public bool HasNextPage => PageIndex < TotalPages;
 
-        /* Gets and stores the content of the pages */
+        // Gets the page index of the paginated list 
+        public int GetPageIndex(int? pageIndex)
+        {
+            // If the page index is lower that 1 or null 
+            return !pageIndex.HasValue || pageIndex < 1 ? 1 : pageIndex.Value;
+        }
+
+        // Gets and stores the content of the pages 
         public static async Task<PaginatedList<T>> CreateAsync(
             IQueryable<T> source, int pageIndex, int pageSize)
         {
