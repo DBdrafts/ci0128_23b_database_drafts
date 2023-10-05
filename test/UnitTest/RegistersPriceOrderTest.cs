@@ -60,6 +60,7 @@ namespace RegistersPriceOrderTest
             {
                 Assert.IsTrue(response[i].Price <= response[i + 1].Price);
             }
+
         }
     }
 }
