@@ -97,11 +97,31 @@ namespace LoCoMPro.Pages
             return new JsonResult(CantonList);
         }
 
+        public JsonResult OnGetProvinces()
+        {
+            var provinces = _context.Provincias.ToList();
+            var provinceList = provinces
+                .Select(provincia => new SelectListItem
+                {
+                    Value = provincia.Name,
+                    Text = provincia.Name
+                })
+                .ToList();
+
+            // Checks if there is at least one province
+            if (provinces.Any())
+            {
+                LoadCantones(provinces.First().Name);
+            }
+            return new JsonResult(provinceList);
+
+        }
+
         // Method called in response to an HTTP GET request
         public void OnGet()
         {
             LoadCategories();
-            LoadProvincias();
+            
         }
 
         // Get the data of the form and stores it in the DB

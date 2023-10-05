@@ -1,4 +1,5 @@
 ﻿using LoCoMPro.Data;
+using LoCoMPro.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -85,6 +86,26 @@ namespace LoCoMPro.Pages.Shared
         {
             LoadCategories();
             LoadProvincias();
+        }
+
+        public JsonResult OnGetProvinces()
+        {
+            var provinces = _context.Provincias.ToList();
+            var provinceList = provinces
+                .Select(provincia => new SelectListItem
+                {
+                    Value = provincia.Name,
+                    Text = provincia.Name
+                })
+                .ToList();
+
+            // Checks if there is at least one province
+            if (provinces.Any())
+            {
+                LoadCantones(provinces.First().Name);
+            }
+            return new JsonResult(provinceList);
+
         }
     }
 }

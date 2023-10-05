@@ -1,4 +1,6 @@
 // Wait for the DOM to be fully loaded before executing the code
+
+var js = 
 document.addEventListener("DOMContentLoaded", function () {
     // Get references to HTML elements by their IDs
     const locationButton = document.getElementById("locationButton"); // Button to open the popup
@@ -8,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const saveLocationButton = document.getElementById("saveLocation-button"); // Button to save location
     const addProductForm = document.getElementById("addProductForm"); // Form
     const closePopupButton = document.getElementById("closePopup-button"); // Button to close the popup
+    var span = document.getElementById("buttonSpan");
 
     // Add a click event to the button to open the popup
     locationButton.addEventListener("click", function () {
@@ -19,10 +22,25 @@ document.addEventListener("DOMContentLoaded", function () {
         locationPopup.style.display = "none"; // Hide the popup when clicking the close button
     });
 
+    // Ask for the Province list
+    $.ajax({
+        url: "/AddProductPage?handler=Provinces",
+        success: function (provinceList) {
+            // Populate the select options
+            provinceList.forEach(p => {
+                const option = document.createElement("option");
+                option.value = p.value;
+                option.text = p.text;
+                provinceSelect.appendChild(option);
+            })
+        }
+    });
+
     // Add a change event to the province select
     provinceSelect.addEventListener("change", function () {
         const selectedProvince = provinceSelect.value;
         if (selectedProvince) {
+            span.textContent = selectedProvince;
             // Make a fetch request to get the cantons of the selected province
             fetch(`/AddProductPage?handler=Cantones&provincia=${selectedProvince}`)
                 .then(response => response.json()) // Convert the response to JSON
@@ -36,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         cantonSelect.appendChild(option);
                     });
                     cantonSelect.removeAttribute("disabled"); // Enable the canton select
+                    
                 })
                 .catch(error => {
                     console.error("Error getting cantons:", error); // Error handling
@@ -43,6 +62,15 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             cantonSelect.setAttribute("disabled", "disabled"); // Disable the canton select if no province is selected
             cantonSelect.innerHTML = '<option value="" disabled selected hidden>Select a canton</option>'; // Restore the default value
+        }
+    });
+
+    cantonSelect.addEventListener("change", function () {
+        const selectedCanton = cantonSelect.value;
+        if (selectedCanton) {
+            var text = span.textContent;
+            text = text + ", " + selectedCanton;
+            span.textContent = text;
         }
     });
 

@@ -3,25 +3,28 @@
 <head>
     <!-- Shared style for several pages-->
     <link rel="stylesheet" href="~/css/LocationButton.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/selectLocation.js"></script>
+    <link rel="stylesheet" href="~/css/LocationButton.css">
 </head>
 
 <!-- Location button -->
 <button type="button" class="button-general location-selector" id="locationButton">
     <img src="~/img/LocationIcon.svg"/>
-    <span> Ubicación </span>
-    <div id="locationInfo" style="display: none;"></div>
+    <span id="buttonSpan"> Ubicación </span>
+    <div id="locationInfo" style="display: none;">
+        <span id="chosenProvince">KK</span>
+        <span id="chosenCanton">CK</span>
+    </div>
 </button>
 
+<!-- Location Popup -->
 <div id="locationPopup" class="popup">
     <div class="popup-content">
         <h2>Seleccionar ubicación</h2>
         <label for="province">Provincia:</label>
         <select id="province" name="province">
             <option value="" disabled selected hidden>Seleccionar provincia</option>
-            @foreach (var provincia in Model._LocationButtonModel.ProvinciaList!)
-            {
-                <option value="@provincia.Value">@provincia.Text</option>
-            }
         </select>
         <label for="canton">Cantón:</label>
         <select id="canton" name="canton" disabled>
