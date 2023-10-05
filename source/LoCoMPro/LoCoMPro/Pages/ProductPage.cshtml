@@ -1,19 +1,17 @@
 ﻿@page "~/ProductPage/{pageIndex:int}"
 @model LoCoMPro.Pages.ProductPageModel
 @{
-    ViewData["Title"] = "SearchProduct";
+    ViewData["Title"] = "Visialización Producto";
     Layout = "_Layout";
+    ViewBag.ShowSearchBar = true;
+    ViewBag.ShowLogoLink = true;
 }
 
-<!DOCTYPE html>
-<html>
 <head>
-    <meta charset=utf-8 />
-    <title>Product Visualization</title>
-    <link rel="stylesheet" href="~/css/SharedStyles.css" />
+    <link rel="stylesheet" href="~/css/ProductPage.css" />
 </head>
 
-<body>
+<div class="product-page">
     <!-- Name of product Search -->
     <div class="titleProduct">
         @Model.SearchProductName
@@ -151,7 +149,7 @@
         
     </div>
 
-    <div class="search-section">
+    <div class="product-pagination">
         <!-- Disables the buttons if there´s no previous or next button -->
         @{
             var prevDisabled = !Model.Register.HasPreviousPage ? "disabled" : "";
@@ -216,6 +214,4 @@
 
     </div>
 
-</body>
-
-</html>
+</div>
