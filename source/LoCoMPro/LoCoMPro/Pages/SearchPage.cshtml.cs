@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
+using System.Collections.Generic;
 using System.Drawing.Printing;
 
 namespace LoCoMPro.Pages
@@ -42,15 +44,28 @@ namespace LoCoMPro.Pages
         [BindProperty(SupportsGet = true)]
         public string? SearchType { get; set; }
 
+        /* Current type of sort */
+        [BindProperty(SupportsGet = true)]
+        public string? CurrentSort { get; set; }
+
+        /* Type of sort by price */
+        [BindProperty(SupportsGet = true)]
+        public string PriceSort { get; set; }
+
         /* OnGet method that manage the GET request */
-        public async Task OnGetAsync(string searchType, string searchString, int? pageIndex)
+        public async Task OnGetAsync(string searchType, string searchString, int? pageIndex, string sortOrder)
         {
             /* If the page index is lower that 1 */
-            pageIndex = pageIndex < 1 ? 1: pageIndex;
+            pageIndex = pageIndex < 1 ? 1 : pageIndex;
+
+            /* Get the type of sort by price */
+            PriceSort = String.IsNullOrEmpty(sortOrder) ? "price_desc" : "";
 
             SearchString = searchString;
 
             SearchType = searchType;
+
+            CurrentSort = sortOrder;
 
             /* Prepares the query to get the data from the database */
             var categories = from c in _context.Categories
@@ -59,7 +74,8 @@ namespace LoCoMPro.Pages
             var registers = from r in _context.Registers
                             select r;
 
-            GetRegistersByType(ref registers);
+            /* Gets the registers by using the type of search choose */
+            IQueryable<Register> registersQuery = GetRegistersByType(registers);
 
 
             /* Get th amount of pages that will be needed for all the registers */
@@ -67,8 +83,15 @@ namespace LoCoMPro.Pages
 
             /* Gets the data from the database */
             Category = await categories.ToListAsync();
-            Register = await PaginatedList<Register>.CreateAsync(
-                registers.AsNoTracking(), pageIndex ?? 1, pageSize);
+
+            /* Gets a unordered list of registers */
+            PaginatedList<Register> UnorderedList = (await PaginatedList<Register>.CreateAsync(
+                registersQuery, pageIndex ?? 1, pageSize));
+
+            /* Copy the information of the registers ordered */
+            Register = new PaginatedList<Register>(OrderRegisters(UnorderedList.ToList(), sortOrder)
+                , UnorderedList.PageIndex, UnorderedList.TotalPages);
+
         }
         /* OnPost method that sent request */
         public IActionResult OnPost()
@@ -77,37 +100,55 @@ namespace LoCoMPro.Pages
         }
 
         /* Gets the registers by using the type of search choose */
-        public void GetRegistersByType(ref IQueryable<Register>? registers)
+        public IQueryable<Register> GetRegistersByType(IQueryable<Register>? registersQuery)
         {
+            IQueryable<Register> resultQuery;
+
+            /* Filter the the register by the type of search choose */
             switch (SearchType)
             {
-                /* If the type of search is by "Name" or default */
                 case "Nombre":
                 default:
-                    registers = from r in _context.Registers
-                                where r.ProductName.Contains(SearchString)
-                                group r by new { r.ProductName, r.StoreName } into grouped
-                                select grouped.OrderByDescending(r => r.SubmitionDate).First();
+                    resultQuery = registersQuery
+                        .Where(r => r.ProductName.Contains(SearchString));
                     break;
-
-                /* If the type of search is by "Brand"*/
                 case "Marca":
-                    registers = from r in _context.Registers
-                                join p in _context.Products on r.ProductName equals p.Name
-                                where p.Brand.Contains(SearchString)
-                                group r by new { r.ProductName, r.StoreName } into grouped
-                                select grouped.OrderByDescending(r => r.SubmitionDate).First();
+                    resultQuery = registersQuery
+                        .Where(r => _context.Products.Any(p => p.Name == r.ProductName && p.Brand.Contains(SearchString)));
                     break;
-
-                /* If the type of search is by "Model"*/
                 case "Modelo":
-                    registers = from r in _context.Registers
-                                join p in _context.Products on r.ProductName equals p.Name
-                                where p.Model.Contains(SearchString)
-                                group r by new { r.ProductName, r.StoreName } into grouped
-                                select grouped.OrderByDescending(r => r.SubmitionDate).First();
+                    resultQuery = registersQuery
+                        .Where(r => _context.Products.Any(p => p.Name == r.ProductName && p.Model.Contains(SearchString)));
                     break;
             }
+
+            resultQuery = resultQuery.GroupBy(r => new { r.ProductName, r.StoreName })
+                        .Select(grouped => grouped.OrderByDescending(r => r.SubmitionDate).First());
+
+            return resultQuery;
+        }
+
+        /* Order the registers by the sort order choose */
+        public List<Register> OrderRegisters(List<Register>? unorderedList, string sortOrder)
+        {
+            List<Register> orderedList;
+
+            /* Sort the list depending of the parameter */
+            switch (sortOrder)
+            {
+                /* Order in case of price_descending*/
+                case "price_desc":
+                    orderedList = unorderedList.OrderByDescending(r => r.Price).ToList();
+                    break;
+
+                /* Normal order for the price */
+                case "price_asc":
+                default:
+                    orderedList = unorderedList.OrderBy(r => r.Price).ToList();
+                    break;
+            }
+
+            return orderedList;
         }
     }
 }
