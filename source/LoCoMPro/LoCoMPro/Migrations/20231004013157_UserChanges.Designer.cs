@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoCoMPro.Migrations
 {
     [DbContext(typeof(LoCoMProContext))]
-    [Migration("20231002011531_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231004013157_UserChanges")]
+    partial class UserChanges
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,28 +45,12 @@ namespace LoCoMPro.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
                     b.Property<string>("CantonName")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -81,12 +65,6 @@ namespace LoCoMPro.Migrations
 
                     b.Property<string>("ProvinciaName")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
@@ -160,7 +138,7 @@ namespace LoCoMPro.Migrations
 
             modelBuilder.Entity("LoCoMPro.Models.Register", b =>
                 {
-                    b.Property<string>("ContributorName")
+                    b.Property<string>("ContributorId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProductName")
@@ -184,7 +162,7 @@ namespace LoCoMPro.Migrations
                     b.Property<string>("ProvinciaName")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("ContributorName", "ProductName", "StoreName", "SubmitionDate");
+                    b.HasKey("ContributorId", "ProductName", "StoreName", "SubmitionDate");
 
                     b.HasIndex("ProductName");
 
@@ -408,7 +386,7 @@ namespace LoCoMPro.Migrations
                 {
                     b.HasOne("LoCoMPro.Data.User", "Contributor")
                         .WithMany("Registers")
-                        .HasForeignKey("ContributorName")
+                        .HasForeignKey("ContributorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -2,6 +2,7 @@ using Azure;
 using Humanizer;
 using LoCoMPro.Data;
 using LoCoMPro.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -21,6 +22,7 @@ using System.Threading.Tasks;
 
 namespace LoCoMPro.Pages
 {
+    [Authorize]
     public class AddProductPageModel : PageModel
     {
         private readonly LoCoMPro.Data.LoCoMProContext _context;

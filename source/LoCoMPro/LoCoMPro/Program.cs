@@ -3,6 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using LoCoMPro.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Builder;
+using LoCoMPro.Areas.Identity.Pages.Account.Manage;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +16,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<LoCoMProContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("LoCoMProContext") ?? throw new InvalidOperationException("Connection string 'LoCoMProContext' not found.")));
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<LoCoMProContext>();
-
+// Added default IdentityUser and configured it to not require a confirmed account, also added custom signInManager that overrides PasswordSignInAsync()
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false).AddSignInManager<MySignInManager>().AddEntityFrameworkStores<LoCoMProContext>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var app = builder.Build();

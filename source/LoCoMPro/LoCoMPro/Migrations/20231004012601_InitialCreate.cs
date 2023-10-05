@@ -288,7 +288,7 @@ namespace LoCoMPro.Migrations
                 columns: table => new
                 {
                     SubmitionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ContributorName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ContributorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProductName = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     StoreName = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
@@ -298,7 +298,7 @@ namespace LoCoMPro.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Register", x => new { x.ContributorName, x.ProductName, x.StoreName, x.SubmitionDate });
+                    table.PrimaryKey("PK_Register", x => new { x.ContributorId, x.ProductName, x.StoreName, x.SubmitionDate });
                     table.ForeignKey(
                         name: "FK_Register_Product_ProductName",
                         column: x => x.ProductName,
@@ -311,8 +311,8 @@ namespace LoCoMPro.Migrations
                         principalTable: "Store",
                         principalColumns: new[] { "Name", "CantonName", "ProvinciaName" });
                     table.ForeignKey(
-                        name: "FK_Register_User_ContributorName",
-                        column: x => x.ContributorName,
+                        name: "FK_Register_User_ContributorId",
+                        column: x => x.ContributorId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);

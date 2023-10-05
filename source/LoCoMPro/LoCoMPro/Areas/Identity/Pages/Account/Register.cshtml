@@ -20,36 +20,39 @@
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <div id='CrAcc'>Crear Cuenta</div>
             <div>
+                <!-- Space to enter UserName -->
                 <label asp-for="Input.UserName">Nombre de Usuario</label>
                 <input asp-for="Input.UserName" id="usr" class="form-control" style="border-radius: 15px; 
                     border: 2px black solid; margin-bottom: 8px; margin-top: 5px" placeholder="Usuario" aria-required="true">
-                <span asp-validation-for="Input.UserName" class="text-danger"></span>
             </div>
             <div>
-            <label asp-for="Input.Email">Correo Electrónico</label>
-            <input asp-for="Input.Email" id="email" class="form-control" style="border-radius: 15px; 
-                border: 2px black solid; margin-bottom:8px; margin-top: 5px" placeholder="usuario@gmail.com" aria-required="true">
-            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                <!-- Space to enter Email -->
+                <label asp-for="Input.Email">Correo Electrónico</label>
+                <input asp-for="Input.Email" id="email" class="form-control" style="border-radius: 15px; 
+                    border: 2px black solid; margin-bottom:8px; margin-top: 5px" placeholder="usuario@gmail.com" aria-required="true">
             </div>
             <div>
-            <label asp-for="Input.Password">Password</label>
-            <input asp-for="Input.Password" id="psw" class="form-control" style="border-radius: 15px; 
-                border: 2px black solid; margin-bottom:8px; margin-top: 5px" aria-required="true" />
-            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                <!-- Space to enter Password -->
+                <label asp-for="Input.Password">Password</label>
+                <input asp-for="Input.Password" id="psw" class="form-control" style="border-radius: 15px; 
+                    border: 2px black solid; margin-bottom:8px; margin-top: 5px" aria-required="true" />
             </div>
             <div>
-            <label asp-for="Input.ConfirmPassword">Confirm Password</label>
-            <input asp-for="Input.ConfirmPassword" class="form-control" style="border-radius: 15px; 
-                border: 2px black solid; margin-bottom:8px; margin-top: 5px" aria-required="true" />
-            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                <!-- Space to enter confirm Password -->
+                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+                <input asp-for="Input.ConfirmPassword" class="form-control" style="border-radius: 15px; 
+                    border: 2px black solid; margin-bottom:8px; margin-top: 5px" aria-required="true" />
             </div>
+            <!-- Button to submit the form -->
             <button class="button-general" id="register" type="submit">Registrarse</button>
         </form>
     </div>
     <div class="hasacc-section">
+        <!-- Show all validation alerts -->
         <div asp-validation-summary="All" class="text-danger"></div>
         <div id="separator"></div>
         <div style="text-align: center">¿Ya te has registrado?</div>
+        <!-- Button that redirects to Login page -->
         <a asp-area="Identity" asp-page="/Account/Login">
             <button class="button-general" id="login">Iniciar Sesión</button>
         </a>

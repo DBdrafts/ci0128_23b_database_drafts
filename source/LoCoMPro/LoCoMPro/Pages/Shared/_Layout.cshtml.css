@@ -57,6 +57,15 @@ button.accept-policy {
     background-color: #39A4F4;
 }
 
+#logout-button {
+    background-color: #F87474;
+}
+
+#logout-button:hover {
+    background-color: #E25A5A;
+}
+
+
 .popup {
     display: none;
     position: fixed;

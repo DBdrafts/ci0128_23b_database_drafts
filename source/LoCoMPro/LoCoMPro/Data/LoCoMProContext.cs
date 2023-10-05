@@ -50,13 +50,22 @@ namespace LoCoMPro.Data
                 .WithMany(e => e.Registers)
                 .HasForeignKey(c => new { c.StoreName, c.CantonName, c.ProvinciaName });
 
+            // Building relationships for Register
             modelBuilder.Entity<User>()
                 .HasOne(p => p.Location)
                 .WithMany(e => e.Users)
                 .HasForeignKey(c => new { c.CantonName, c.ProvinciaName });
 
+            // Ignoring columns from default IdentityUser
             modelBuilder.Entity<User>().Ignore(u => u.PhoneNumber);
             modelBuilder.Entity<User>().Ignore(u => u.PhoneNumberConfirmed);
+            modelBuilder.Entity<User>().Ignore(u => u.EmailConfirmed);
+            modelBuilder.Entity<User>().Ignore(u => u.SecurityStamp);
+            modelBuilder.Entity<User>().Ignore(u => u.ConcurrencyStamp);
+            modelBuilder.Entity<User>().Ignore(u => u.TwoFactorEnabled);
+            modelBuilder.Entity<User>().Ignore(u => u.LockoutEnabled);
+            modelBuilder.Entity<User>().Ignore(u => u.LockoutEnd);
+            modelBuilder.Entity<User>().Ignore(u => u.AccessFailedCount);
 
             modelBuilder.Entity<Category>()
                 .HasMany(p => p.Products)

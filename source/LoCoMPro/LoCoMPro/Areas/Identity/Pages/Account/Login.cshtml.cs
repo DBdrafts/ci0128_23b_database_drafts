@@ -112,7 +112,11 @@ namespace LoCoMPro.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                System.Diagnostics.Debug.WriteLine("Model is valid");
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                System.Diagnostics.Debug.WriteLine(Input.Email);
+                System.Diagnostics.Debug.WriteLine(Input.Password);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
