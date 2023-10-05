@@ -69,8 +69,9 @@
                     <li>
                         <div class="textComment">Provincia</div>
                     </li>
+                    <!-- Price column title that uses a PopUp -->
                     <li>
-                        <a href="#">Precio</a>
+                        <a href="">Precio</a>
                         <img src="~/img/ArrowDownIcon.svg" alt="Anterior">
                         <ul class="menu-vertical">
                             <li>
@@ -78,7 +79,7 @@
                                     asp-route-pageIndex="1"
                                     asp-route-searchType="@Model.SearchType"
                                     asp-route-searchString="@Model.SearchString"
-                                    asp-route-sortOrder="">Menores precios
+                                   asp-route-sortOrder="price_asc">Menores precios
                                 </a>
                             </li>
                             <li>

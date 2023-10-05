@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LoCoMPro.Models;
+using LoCoMPro.Pages;
 using Microsoft.EntityFrameworkCore;
 
 namespace LoCoMPro.Utils
@@ -20,6 +22,15 @@ namespace LoCoMPro.Utils
         {
             PageIndex = pageIndex;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+
+            AddRange(items);
+        }
+
+        /* Constructor of the paginated list by copying the parameters */
+        public PaginatedList(List<T> items, int pageIndex, int totalPages)
+        {
+            PageIndex = pageIndex;
+            TotalPages = totalPages;
 
             AddRange(items);
         }
