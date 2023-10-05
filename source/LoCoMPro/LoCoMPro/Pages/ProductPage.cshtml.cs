@@ -53,8 +53,6 @@ namespace LoCoMPro.Pages
         [BindProperty(SupportsGet = true)]
         public string PriceSort { get; set; }
 
-
-
         public async Task OnGetAsync(string searchProductName, string searchStoreName, string searchProvinceName, 
             string searchCantonName, int? pageIndex, string sortOrder)
         {
@@ -133,6 +131,20 @@ namespace LoCoMPro.Pages
             // Gets the Data From Databasse 
             Register = await PaginatedList<Register>.CreateAsync(
                 registers.AsNoTracking(), pageIndex ?? 1, pageSize);
+        }
+
+        public IOrderedEnumerable<Register> OrderRegistersByPrice(string orderName, ref ICollection<Register> registers)
+        {
+            switch (orderName)
+            {
+                // Order in case of price_descending 
+                case "price_desc":
+                    return registers.OrderByDescending(r => r.Price);
+                // Normal order for the price
+                default:
+                    return registers.OrderBy(r => r.Price);
+                    
+            }
         }
     } 
 }

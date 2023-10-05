@@ -110,7 +110,7 @@
 				<a href="#">Precio</a>
 				<ul class="menu-vertical">
                     <li>
-                        <a asp-page="./Product"
+                        <a asp-page="./ProductPage"
                            asp-route-SearchProductName="@Model.SearchProductName"
                            asp-route-SearchStoreName="@Model.SearchStoreName"
                            asp-route-SearchCantonName="@Model.SearchCantonName"
@@ -119,7 +119,7 @@
                               color: white; text-align: center;"> Menores precios</a>
                     </li>
                     <li>    
-                        <a asp-page="./Product"
+                        <a asp-page="./ProductPage"
                            asp-route-SearchProductName="@Model.SearchProductName"
                            asp-route-SearchStoreName="@Model.SearchStoreName"
                            asp-route-SearchCantonName="@Model.SearchCantonName"
@@ -141,7 +141,6 @@
         @foreach (var register in Model.Register)
         {
             <!-- Search result section -->
-          
                 <!-- Individual registers -->
                 <div class="register-block">
                 <p>@Html.DisplayFor(modelItem => register.SubmitionDate)</p>
@@ -165,7 +164,7 @@
             @if (@prevDisabled != "disabled")
             {
                 <!-- Link to go to the previous page -->
-                <a asp-page="./Product"
+                <a asp-page="./ProductPage"
                    asp-route-pageIndex="@(Model.Register.PageIndex - 1)"
                    asp-route-SearchProductName="@Model.SearchProductName"
                    asp-route-SearchStoreName="@Model.SearchStoreName"
@@ -184,7 +183,7 @@
                 {
                     <!-- Pagination square of the pages -->
                     <div id="pagination-square">
-                        <a asp-page="./Product"
+                        <a asp-page="./ProductPage"
                            asp-route-pageIndex="@i"
                            asp-route-SearchProductName="@Model.SearchProductName"
                            asp-route-SearchStoreName="@Model.SearchStoreName"
@@ -201,7 +200,7 @@
             @if (nextDisabled != "disabled")
             {
                 <!-- Link to go to the next page -->
-                <a asp-page="./Product"
+                <a asp-page="./ProductPage"
                    asp-route-pageIndex="@(Model.Register.PageIndex + 1)"
                    asp-route-SearchProductName="@Model.SearchProductName"
                    asp-route-SearchStoreName="@Model.SearchStoreName"
