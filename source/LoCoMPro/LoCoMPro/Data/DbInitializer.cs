@@ -119,7 +119,7 @@ namespace LoCoMPro.Data
         {
 
             // Add the products
-            products.Add(new Product() { Name = "Leche Dos Pinos 1 litros", Brand = "Dos Pinos"
+            products.Add(new Product() { Name = "Leche Dos Pinos 1 litros", Brand = "Dos Pinos" 
                 , Categories = new List<Category>() { categories[0] } });
             products.Add(new Product() { Name = "Camisa deportiva negra Nike", Brand = "Nike"
                 , Categories = new List<Category>() { categories[2] } });
