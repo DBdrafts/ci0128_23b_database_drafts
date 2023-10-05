@@ -27,24 +27,24 @@
             <!-- Search filter title -->
             <h4> Filtros </h4>
 
-            @* Commented for later use *@
-            @* <form method="post"> *@
-            <!-- Razor directive that gets all the categories names -->
-            @foreach (var category in Model.Category)
-            {
-                <!-- Individuals categories -->
-                <div class="filter-line">
-                    <input asp-for="IsChecked" type="checkbox" />
-                    <label asp-for="IsChecked">
-                        @Html.DisplayFor(modelItem => category.CategoryName)
-                    </label>
-                </div>
-            }
+            <form method="get" asp-page="./SearchPage">
+                @foreach (var category in Model.Category)
+                {
+                    <div class="filter-line">
+                        <input type="checkbox" name="SelectedCategories" value="@category.CategoryName" @(Model.SelectedCategories.Contains(category.CategoryName) ? "checked" : "") />
+                        <label>@Html.DisplayFor(modelItem => category.CategoryName)</label>
+                    </div>
+                }
 
-            <button class="button-general">
-                Filtrar
-            </button>
-            @* </form> *@
+                <input type="hidden" name="searchType" value="@Model.SearchType" />
+                <input type="hidden" name="searchString" value="@Model.SearchString" />
+                <input type="hidden" name="sortOrder" value="@Model.CurrentSort" />
+
+                <button type="submit" class="button-general">
+                    Filtrar
+                </button>
+            </form>
+
 
         </div>
 

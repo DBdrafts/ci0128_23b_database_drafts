@@ -30,6 +30,9 @@ namespace LoCoMPro.Pages
         [BindProperty]
         public bool IsChecked { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public List<string> SelectedCategories { get; set; }
+
         /* List of the categories that exist in the database */
         public IList<Category> Category { get; set; } = default!;
 
@@ -53,8 +56,10 @@ namespace LoCoMPro.Pages
         public string PriceSort { get; set; }
 
         /* OnGet method that manage the GET request */
-        public async Task OnGetAsync(string searchType, string searchString, int? pageIndex, string sortOrder)
+        public async Task OnGetAsync(string searchType, string searchString, int? pageIndex, string sortOrder, string selectedCategories)
         {
+            
+
             /* If the page index is lower that 1 */
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
 
@@ -74,15 +79,33 @@ namespace LoCoMPro.Pages
             var registers = from r in _context.Registers
                             select r;
 
-            /* Gets the registers by using the type of search choose */
-            IQueryable<Register> registersQuery = GetRegistersByType(registers);
-
 
             /* Get th amount of pages that will be needed for all the registers */
             var pageSize = Configuration.GetValue("PageSize", 5);
 
             /* Gets the data from the database */
             Category = await categories.ToListAsync();
+
+            if (selectedCategories != null)
+            {
+                var split = selectedCategories.Split(',');
+                SelectedCategories = (split != null) ? split!.ToList() : null;
+            }
+
+            if (SelectedCategories != null && SelectedCategories.Count() > 0)
+            {
+                var filteredProducts = _context.Products
+                    .Where(p => p.Categories.Any(c => SelectedCategories.Contains(c.CategoryName)))
+                    .Select(p => p.Name)
+                    .ToList();
+                //registers = registers.Where(r => filteredProducts.Contains(r.ProductName));
+            
+                registers = registers.Where(r => filteredProducts.Contains(r.ProductName));
+            }
+
+            /* Gets the registers by using the type of search choose */
+            IQueryable<Register> registersQuery = GetRegistersByType(registers);
+
 
             /* Gets a unordered list of registers */
             PaginatedList<Register> UnorderedList = (await PaginatedList<Register>.CreateAsync(
@@ -93,6 +116,7 @@ namespace LoCoMPro.Pages
                 , UnorderedList.PageIndex, UnorderedList.TotalPages);
 
         }
+
         /* OnPost method that sent request */
         public IActionResult OnPost()
         {
