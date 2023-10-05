@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Security.Policy;
 using LoCoMPro.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -25,14 +27,53 @@ namespace LoCoMPro.Data
             List<Register> registers = new();
 
             //  Initialize all the database tables
-            InitializeProvincias(context, ref provincias);
-            InitializeCantones(context, ref provincias, ref cantones);
+            InitializeLocation(context, ref provincias, ref cantones);
+            //InitializeProvincias(context, ref provincias);
+            //InitializeCantones(context, ref provincias, ref cantones);
             InitializeCategories(context, ref categories);
             InitializeProducts(context, ref products, ref categories);
             InitializeStores(context, ref cantones, ref stores, ref products);
             InitializeUsers(context, ref users, ref cantones);
             InitializeRegisters(context, ref registers, ref users, ref products, ref stores);
 
+        }
+
+        public static void InitializeLocation(LoCoMProContext context, ref List<Provincia> provinces, ref List<Canton> cantons)
+        {
+            var csvPath = "~/../../../../data/DTA-TABLA POR PROVINCIA-CANTÓN-DISTRITO 2022V3.csv";
+            var data = File.ReadAllLines(csvPath, System.Text.Encoding.Latin1)
+                .Skip(1)
+                .Select(line => line.Split(','))
+                .Select(columns => new
+                {
+                    ProvinceName = columns[2],
+                    CantonName = columns[4],
+                })
+                .Where(pair => !pair.ProvinceName.IsNullOrEmpty() && !pair.ProvinceName.Equals("PROVINCIA"));
+                provinces = data.GroupBy(j => j.ProvinceName)
+                .Select(group => new Provincia
+                {
+                    Name = group.Key.ToString(),
+                })
+                .ToList();
+
+
+            var grouppedData = data.GroupBy(pair => new { pair.ProvinceName, pair.CantonName });
+
+            foreach ( var group in grouppedData)
+            {
+                var province = provinces.Find(s => s.Name == group.Key.ProvinceName);
+              
+                var canton = new Canton
+                {
+                    CantonName = group.Key.CantonName,
+                    Provincia = province!,
+                };
+                cantons.Add(canton);
+            }
+            context.Provincias.AddRange(provinces);
+            context.Cantones.AddRange(cantons);
+            context.SaveChanges();
         }
 
         /* Initialize the provincias data in the database */
@@ -78,7 +119,7 @@ namespace LoCoMPro.Data
         {
 
             // Add the products
-            products.Add(new Product() { Name = "Leche Dos Pinos 1 litros", Brand = "Dos Pinos"
+            products.Add(new Product() { Name = "Leche Dos Pinos 1 litros", Brand = "Dos Pinos" 
                 , Categories = new List<Category>() { categories[0] } });
             products.Add(new Product() { Name = "Camisa deportiva negra Nike", Brand = "Nike"
                 , Categories = new List<Category>() { categories[2] } });
@@ -111,15 +152,15 @@ namespace LoCoMPro.Data
             , ref List<User> users, ref List<Canton> cantones)
         {
             // Add the users
-            users.Add(new User() { UserName = "Jose Miguel Garcia Lopez", Email = "email1@gmail.com"
+            users.Add(new User() { Id = "01", UserName = "Jose Miguel Garcia Lopez", Email = "email1@gmail.com"
                 , Password = "Password.1", Location = cantones[0]});
-            users.Add(new User() { UserName = "Ana Maria Cerdas Lizano", Email = "email2@gmail.com"
+            users.Add(new User() { Id = "02", UserName = "Ana Maria Cerdas Lizano", Email = "email2@gmail.com"
                 , Password = "Password.2", Location = cantones[1]});
-            users.Add(new User() { UserName = "Keith Wilson Buzkova", Email = "email3gmail.com"
+            users.Add(new User() { Id = "03", UserName = "Keith Wilson Buzkova", Email = "email3gmail.com"
                 , Password = "Password.3", Location = cantones[2]});
-            users.Add(new User() { UserName = "Yordi Lopez Rodríguez", Email = "email4gmail.com"
+            users.Add(new User() { Id = "04", UserName = "Yordi Lopez Rodríguez", Email = "email4gmail.com"
                 , Password = "Password.4", Location = cantones[0]});
-            users.Add(new User() { UserName = "Tatiana Espinoza Villalobos", Email = "email5@gmail.com"
+            users.Add(new User() { Id = "05", UserName = "Tatiana Espinoza Villalobos", Email = "email5@gmail.com"
                 , Password = "Password.5", Location = cantones[1]});
 
             context.Users.AddRange(users);

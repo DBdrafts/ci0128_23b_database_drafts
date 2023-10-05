@@ -69,6 +69,41 @@ namespace LoCoMPro.Data
                     , l => l.HasOne(typeof(Product)).WithMany().HasForeignKey("ProductName")
                     , r => r.HasOne(typeof(Store)).WithMany().HasForeignKey("StoreName", "CantonName", "ProvinceName"));
 
+            modelBuilder.Entity<Store>()
+                .Navigation(s => s.Products)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Store>()
+                .Navigation(s => s.Registers)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Product>()
+                .Navigation(p => p.Stores)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Product>()
+                .Navigation(p => p.Registers)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Product>()
+                .Navigation(p => p.Categories)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<User>()
+                .Navigation(u => u.Registers)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Category>()
+                .Navigation(c => c.Products)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Canton>()
+                .Navigation(c => c.Stores)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Provincia>()
+                .Navigation(p => p.Cantones)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
         }
 
     }
