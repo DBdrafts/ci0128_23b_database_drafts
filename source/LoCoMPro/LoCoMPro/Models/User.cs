@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace LoCoMPro.Models
 {
+    // Todo(Any): Assure that this is modeled correctly.
     [PrimaryKey(nameof(Id))]
     public class User
     {
