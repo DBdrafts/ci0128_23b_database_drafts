@@ -13,7 +13,7 @@ using Assert = NUnit.Framework.Assert;
 using System;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace UnitTest
+namespace RegistersPriceOrderTest
 {
     [TestClass]
     // Declaration of the test class
@@ -60,7 +60,10 @@ namespace UnitTest
             var response = pageModel.OrderRegistersByPrice("price_desc", ref registers).ToArray();
 
             // Assert to check if first element is higher to second
-            Assert.IsTrue(response[0].Price > response[1].Price);
+            for (int i = 0; i < response.Length - 1; i++)
+            {
+                Assert.IsTrue(response[i].Price >= response[i + 1].Price);
+            }
 
         }
 
@@ -80,11 +83,14 @@ namespace UnitTest
             var response = pageModel.OrderRegistersByPrice(" ", ref registers).ToArray();
 
             // Assert to check if first element is lower to second
-            Assert.IsTrue(response[0].Price < response[1].Price);
+            for (int i = 0; i < response.Length - 1; i++)
+            {
+                Assert.IsTrue(response[i].Price <= response[i + 1].Price);
+            }
 
         }
 
-        // Method to In
+        // Method to Initialize the registers
         public List<Register> InitRegisters()
         {
             // Create an instance of Province 
