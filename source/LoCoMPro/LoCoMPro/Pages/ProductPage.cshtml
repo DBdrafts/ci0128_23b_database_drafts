@@ -1,0 +1,194 @@
+﻿@page "~/ProductPage/{pageIndex:int}"
+@model LoCoMPro.Pages.ProductPageModel
+@{
+    ViewData["Title"] = "Visialización Producto";
+    Layout = "_Layout";
+    ViewBag.ShowSearchBar = true;
+    ViewBag.ShowLogoLink = true;
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/ProductPage.css" />
+</head>
+
+<div class="product-page">
+    <!-- Name of product Search -->
+    <div class="titleProduct">
+        @Model.SearchProductName
+    </div>
+
+    <!-- Section for columns of specifications from Search product -->
+    <div class="container">
+        @{ // select the first matches
+            var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
+            var firstNonNullStore = Model.Store.FirstOrDefault(r => r.Name != null);
+        }
+        <!-- brand column -->
+        <div class="column">
+            <h2>Marca</h2>
+            @{ // Get the name of the product brand
+                if (firstNonNullProduct != null)
+                {
+                    <p>@firstNonNullProduct.Brand</p>
+                }
+            }
+        </div>
+
+        <!-- model column -->
+        <div class="column">
+            <h2>Modelo</h2>
+            @{ // Get the name of the product model
+                if (firstNonNullProduct != null)
+                {
+                    <p>@firstNonNullProduct.Model</p>
+                }
+            }
+            </div>
+
+        <!-- establishment column -->
+        <div class="column">
+            <h2>Establecimiento</h2>
+            @{ // Get the name of the store
+                if (firstNonNullStore != null)
+                {
+                    <p>@firstNonNullStore.Name</p>
+                }
+            }
+        </div>
+
+        <!-- cantón column -->
+        <div class="column">
+            <h2>Cantón</h2>
+            @{ // Get the name of the Canton Location
+                if (firstNonNullStore != null)
+                {
+                    <p>@firstNonNullStore.CantonName</p>
+                }
+            }
+        </div>
+
+        <!-- province column -->
+        <div class="column">
+            <h2>Provincia</h2>
+            @{ // Get the name of the Province Location
+                if (firstNonNullStore != null)
+                {
+                    <p>@firstNonNullStore.ProvinciaName</p>
+                }
+            }
+        </div>
+    </div>
+    
+    <!-- Horizontal separating line -->
+    <hr class="style-four">
+
+    <!-- Code for register list in the page -->
+    <!-- Name of product Search -->
+    <div class="titleListRegister">
+        Lista de registros
+    </div>
+
+    <!-- Container for column options -->
+   <nav>
+        <ul class="containerListRegistercolumns">
+			<li>
+				<a href="#">Fecha</a>
+				<ul class="menu-vertical">
+                    <li><a href="#">Ascendente</a></li>
+                    <li><a href="#">Descendente</a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">Precio</a>
+				<ul class="menu-vertical">
+                    <li><a href="#">Ascendente  </a></li>
+                    <li><a href="#">Descendente</a></li>
+				</ul>
+			</li>
+            <li>
+                <div class="textComment">Comentarios</div>
+            </li>
+
+		</ul>
+	</nav>
+
+   <div class="register-section">
+        <!-- Individual registers -->
+        @foreach (var register in Model.Register)
+        {
+            <!-- Search result section -->
+          
+                <!-- Individual registers -->
+                <div class="register-block">
+                <p>@Html.DisplayFor(modelItem => register.SubmitionDate)</p>
+                <p>₡@Html.DisplayFor(modelItem => register.Price)</p>
+                <p>@Html.DisplayFor(modelItem => register.Comment)</p>
+                </div>
+        }
+        
+    </div>
+
+    <div class="product-pagination">
+        <!-- Disables the buttons if there´s no previous or next button -->
+        @{
+            var prevDisabled = !Model.Register.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.Register.HasNextPage ? "disabled" : "";
+        }
+
+        <!-- Search pagination section -->
+        <div class="pagination-section">
+            <!-- If there´s a previous page -->
+            @if (@prevDisabled != "disabled")
+            {
+                <!-- Link to go to the previous page -->
+                <a asp-page="./ProductPage"
+                   asp-route-pageIndex="@(Model.Register.PageIndex - 1)"
+                   asp-route-SearchProductName="@Model.SearchProductName"
+                   asp-route-SearchStoreName="@Model.SearchStoreName"
+                   asp-route-SearchCantonName="@Model.SearchCantonName"
+                   asp-route-SearchProvinceName="@Model.SearchProvinceName"
+                   class="button-general pagination-button" id="pagination-button-left">
+                    <img src="~/img/ArrowLeftIcon.svg" alt="Anterior">
+                </a>
+            }
+
+            <!-- Page button section that behaves dynamically -->
+            @for (int i = Model.Register.PageIndex - 1; i <= Model.Register.TotalPages && i <= Model.Register.PageIndex + 3; i++)
+            {
+                <!-- If there´re previous pages higher that 0 -->
+                if (i >= 1)
+                {
+                    <!-- Pagination square of the pages -->
+                    <div id="pagination-square">
+                        <a asp-page="./ProductPage"
+                           asp-route-pageIndex="@i"
+                           asp-route-SearchProductName="@Model.SearchProductName"
+                           asp-route-SearchStoreName="@Model.SearchStoreName"
+                           asp-route-SearchCantonName="@Model.SearchCantonName"
+                           asp-route-SearchProvinceName="@Model.SearchProvinceName"
+                           class="@(i == Model.Register.PageIndex ? "pagination-square-active" : "")">
+                            <p>@i</p>
+                        </a>
+                    </div>
+                }
+            }
+
+            <!-- If there´s a next page -->
+            @if (nextDisabled != "disabled")
+            {
+                <!-- Link to go to the next page -->
+                <a asp-page="./ProductPage"
+                   asp-route-pageIndex="@(Model.Register.PageIndex + 1)"
+                   asp-route-SearchProductName="@Model.SearchProductName"
+                   asp-route-SearchStoreName="@Model.SearchStoreName"
+                   asp-route-SearchCantonName="@Model.SearchCantonName"
+                   asp-route-SearchProvinceName="@Model.SearchProvinceName"
+                   class="button-general pagination-button" id="pagination-button-right">
+                    <img src="~/img/ArrowRightIcon.svg" alt="Siguiente">
+                </a>
+            }
+        </div>
+
+    </div>
+
+</div>
