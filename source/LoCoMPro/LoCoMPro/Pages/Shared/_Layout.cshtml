@@ -58,6 +58,10 @@
                         </button>
                         <!-- Popup displayed through the script -->
                         <div class="popup-user" id="popup-logged">
+                            <!-- Button to logout -->
+                            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+                                <button class="button-general" id="logout-button">Cerrar Sesión</button>
+                            </form>
                         </div>
                     } else {
                         <!-- Add register button of the layout -->
