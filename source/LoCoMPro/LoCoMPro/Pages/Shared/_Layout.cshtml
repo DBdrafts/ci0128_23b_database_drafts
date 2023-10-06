@@ -59,9 +59,6 @@
                         </button>
                         <!-- Popup displayed through the script -->
                         <div class="popup" id="popup-logged">
-                            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-                                <button class="button-general" id="logout-button">Cerrar Sesión</button>
-                            </form>
                         </div>
                     } else {
                         <!-- Add register button of the layout -->
@@ -72,7 +69,6 @@
                         </a>
 
                         <!-- Add user button of the layout -->
-                        <!-- If user is not signed in this button shows the popup containing the login and register user option -->
                         <button class="layout-button button-general" id="usr-not-logged">
                             <img src="~/img/UserIcon.svg" alt="Opciones de Usuario">
                             <p>Usuario</p>
@@ -81,9 +77,6 @@
                         <div class="popup" id="popup-not-logged">
                             <a asp-area="Identity" asp-page="/Account/Login" class="layout-button button-general">
                                 <button class="button-general" id="login-button">Iniciar Sesión</button>
-                            </a>
-                            <a asp-area="Identity" asp-page="/Account/Register">
-                                <button class="button-general" id="register-button">Registrarse</button>
                             </a>
                         </div>
                     }
