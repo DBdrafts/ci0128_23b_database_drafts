@@ -94,6 +94,7 @@ namespace LoCoMPro.Pages
         public JsonResult OnGetCantones(string provincia)
         {
             LoadCantones(provincia);
+            CantonList!.Insert(0, new SelectListItem { Value = "", Text = "ElegirCanton" });
             return new JsonResult(CantonList);
         }
 
@@ -111,7 +112,7 @@ namespace LoCoMPro.Pages
             // Checks if there is at least one province
             if (provinces.Any())
             {
-                LoadCantones(provinces.First().Name);
+                //LoadCantones(provinces.First().Name);
             }
             return new JsonResult(provinceList);
 

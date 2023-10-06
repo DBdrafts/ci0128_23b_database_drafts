@@ -41,6 +41,10 @@ namespace LoCoMPro.Pages
         /* Text enters as the search type attribute */
         [BindProperty(SupportsGet = true)]
         public string? SearchType { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string? Province { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string? Canton { get; set; }
 
         /* OnGet method that manage the GET request */
         public async Task OnGetAsync(string searchType, string searchString, int? pageIndex)

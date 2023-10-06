@@ -12,7 +12,27 @@ document.addEventListener("DOMContentLoaded", function () {
     const saveLocationButton = document.getElementById("saveLocation-button"); // Button to save location
     const addProductForm = document.getElementById("addProductForm"); // Form
     const closePopupButton = document.getElementById("closePopup-button"); // Button to close the popup
+    // Create a URLSearchParams object from the current URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchType = urlParams.get('searchType');
+    const searchString = urlParams.get('searchString');
+    const selectedProvince = urlParams.get('province');
+    const selectedCanton = urlParams.get('canton');
+
+    // Get the value of a specific parameter (e.g., 'param1')
+    // Get the current page's URL
+    const currentPageUrl = window.location.href;
     var span = document.getElementById("buttonSpan");
+    if (currentPageUrl.includes("/SearchPage") && selectedProvince && selectedProvince !== "") {
+        document.getElementById("type-search-selector").value = searchType;
+        document.getElementById("search-input").value = searchString;
+        
+        span.textContent = selectedProvince;
+        var text = span.textContent;
+        if (selectedCanton && selectedCanton !== "") {
+            span.textContent = span.textContent + ", " + selectedCanton;
+        }
+    }
 
     // Add a click event to the button to open the popup
     locationButton.addEventListener("click", function () {
@@ -68,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
     provinceSelect.addEventListener("change", function () {
         const selectedProvince = provinceSelect.value;
         if (selectedProvince) {
-            if (locationInfo == null) document.getElementById("chosenProvince").textContent = selectedProvince;
+            if (!currentPageUrl.includes("/AddProductPage") == null) document.getElementById("chosenProvince").textContent = selectedProvince;
             // Make a fetch request to get the cantons of the selected province
             fetch(`/AddProductPage?handler=Cantones&provincia=${selectedProvince}`)
                 .then(response => response.json()) // Convert the response to JSON
@@ -79,6 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         const option = document.createElement("option");
                         option.value = canton.value;
                         option.text = canton.text;
+                        if (canton.value == "") option.hidden = true;
                         cantonSelect.appendChild(option);
                     });
                     cantonSelect.removeAttribute("disabled"); // Enable the canton select
@@ -96,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
     cantonSelect.addEventListener("change", function () {
         const selectedCanton = cantonSelect.value;
         if (selectedCanton) {
-            if (locationInfo == null) {
+            if (!currentPageUrl.includes("/AddProductPage")) {
                 var text = span.textContent;
                 text = text + ", " + selectedCanton;
                 span.textContent = text;
@@ -123,9 +144,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const selectedProvince = provinceSelect.value;
         const selectedCanton = cantonSelect.value;
 
-        if (selectedProvince && selectedProvince !== "" && selectedCanton && selectedCanton !== "") {
+        if (selectedProvince && selectedProvince !== "") {
             // Update the location information in the "locationInfo" element
-            if (locationInfo != null) {
+            if (currentPageUrl.includes("/AddProductPage") && selectedCanton && selectedCanton !== "") {
                 locationInfo.textContent = `Ubicaci\u00F3n elegida: ${selectedProvince}, ${selectedCanton}`;
                 locationInfo.style.display = "block"; // Display the location information
                 document.getElementById("selectedProvince").value = selectedProvince; // Update hidden values in the form
@@ -133,9 +154,15 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 span.textContent = selectedProvince;
                 var text = span.textContent;
-                text = text + ", " + selectedCanton;
+                if (selectedCanton && selectedCanton !== "") {
+                    text = text + ", " + selectedCanton;
+                    document.getElementById("chosenCanton").textContent = selectedCanton;
+                }
                 span.textContent = text;
-                document.getElementById("chosenCanton").textContent = selectedCanton;
+                //var url = "/SearchProduct/1?searchType=" + $("#searchType").val() +
+                //    "&searchString=" + $("searchString").val() +
+                //    "&provinceName=" + $("#chosenProvince") +
+                //    "&cantonName" + $("#chosenCanton")
             }
             locationPopup.style.display = "none"; // Hide the popup after saving the location
         }
