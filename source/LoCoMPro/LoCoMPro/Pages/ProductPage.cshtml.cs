@@ -47,11 +47,20 @@ namespace LoCoMPro.Pages
         [BindProperty(SupportsGet = true)]
         public string? SearchCantonName { get; set; }
 
-        // Method to get the request and the params of the request
+        [BindProperty(SupportsGet = true)]
+        public string CurrentSort { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string PriceSort { get; set; }
+
         public async Task OnGetAsync(string searchProductName, string searchStoreName, string searchProvinceName, 
-            string searchCantonName, int? pageIndex)
+            string searchCantonName, int? pageIndex, string sortOrder)
         {
-            // If the page registers is lower that 1
+            CurrentSort = sortOrder;
+            PriceSort = String.IsNullOrEmpty(sortOrder) ? "price_desc" : "";
+            //TODO: ADD date
+
+            /* If the page registers is lower that 1 */
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
 
             // Attr of the product from the params of method
@@ -103,12 +112,39 @@ namespace LoCoMPro.Pages
 
             }
 
+            // Code to order
+            switch (sortOrder)
+            {
+                // Order in case of price_descending 
+                case "price_desc":
+                    registers = registers.OrderByDescending(r => r.Price);
+                    break;
+                // Normal order for the price
+                default:
+                    registers = registers.OrderBy(r => r.Price);
+                    break;
+            }
+
             // Get th amount of pages that will be needed for all the registers 
             var pageSize = Configuration.GetValue("PageSize", 5);
 
             // Gets the Data From Databasse 
             Register = await PaginatedList<Register>.CreateAsync(
                 registers.AsNoTracking(), pageIndex ?? 1, pageSize);
+        }
+
+        public IOrderedEnumerable<Register> OrderRegistersByPrice(string orderName, ref ICollection<Register> registers)
+        {
+            switch (orderName)
+            {
+                // Order in case of price_descending 
+                case "price_desc":
+                    return registers.OrderByDescending(r => r.Price);
+                // Normal order for the price
+                default:
+                    return registers.OrderBy(r => r.Price);
+                    
+            }
         }
     } 
 }

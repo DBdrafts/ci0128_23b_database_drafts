@@ -7,13 +7,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace LoCoMPro.Data
 {
-    [PrimaryKey(nameof(UserName))]
+    // Todo(Any): Assure that this is modeled correctly.
     public class User : IdentityUser
     {
-        // Primary Key
-        //public required string UserName { get; set; }
-        //public required string Email { get; set; }
-        //public required string Password { get; set; }
 
         // Navigation atributes
         public string? CantonName { get; set; }
