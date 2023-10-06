@@ -8,9 +8,9 @@ namespace LoCoMPro.Pages
     public class LoCoMProPageModel : PageModel
     {
         // Context of the data base 
-        public readonly LoCoMPro.Data.LoCoMProContext _context;
+        protected readonly LoCoMPro.Data.LoCoMProContext _context;
         // Configuration for the page 
-        public readonly IConfiguration Configuration;
+        protected readonly IConfiguration Configuration;
 
         // LoComPro Page constructor 
         public LoCoMProPageModel(LoCoMProContext context, IConfiguration configuration)
@@ -20,9 +20,9 @@ namespace LoCoMPro.Pages
         }
 
         // OnPost method that sent request 
-        public IActionResult OnPost()
-        {
-            return Page();
-        }
+        //public IActionResult OnPost()
+        //{
+        //    return Page();
+        //}
     }
 }

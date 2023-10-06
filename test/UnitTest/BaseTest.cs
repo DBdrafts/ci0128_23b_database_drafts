@@ -59,9 +59,10 @@ public class BaseTest
                 return new ProductPageModel(dbContext, mockConfiguration.Object);
 
             // Have to return a Add Register page
+            /*
             case "add_register_page":
                 return new AddProductPageModel(dbContext, mockConfiguration.Object);
-
+            */
             // Return a base page model
             default:
                 return new LoCoMProPageModel(dbContext, mockConfiguration.Object);
