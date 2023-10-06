@@ -54,63 +54,60 @@ namespace LoCoMPro.Pages
 
         /* Type of sort by price */
         [BindProperty(SupportsGet = true)]
-        public string PriceSort { get; set; }
+        public string? PriceSort { get; set; }
 
-        /* OnGet method that manage the GET request */
-        public async Task OnGetAsync(string searchType, string searchString, int? pageIndex, string sortOrder)
+        /* OnGet method that handles the GET request */
+        public async Task OnGetAsync(int? pageIndex, string sortOrder)
         {
-            /* Si el índice de página es menor que 1 */
+            /* If the page index is less than 1, set it to 1 */
             pageIndex = pageIndex < 1 ? 1 : pageIndex;
 
-            /* Obtén el tipo de orden por precio */
+            /* Get the price sorting order type */
             PriceSort = String.IsNullOrEmpty(sortOrder) ? "price_desc" : "";
 
-            SearchString = searchString;
-            SearchType = searchType;
-            CurrentSort = sortOrder;
-
-            /* Prepara la consulta para obtener los datos de la base de datos */
+            /* Prepare the query to retrieve data from the database */
             var categories = from c in _context.Categories
                              select c;
 
             var registers = from r in _context.Registers
                             select r;
 
-            /* Obtén la cantidad de páginas que se necesitarán para todos los registros */
-            var pageSize = Configuration.GetValue("PageSize", 1);
+            /* Get the number of pages required for all records */
+            var pageSize = Configuration.GetValue("PageSize", 5);
 
-            /* Obtiene los datos de la base de datos */
+            /* Retrieve data from the database */
             Category = await categories.ToListAsync();
 
-            List<string> SelectedCategoriesList = null;
+            List<string> SelectedCategoriesList = null!;
 
-            if (!String.IsNullOrEmpty(SelectedCategories))
-            {
-                SelectedCategoriesList = SelectedCategories.Split(',').ToList();
+            /* Check if SelectedCategories is null, if not, creates a list of the categories separated by ',' in the string */
+            SelectedCategoriesList = !String.IsNullOrEmpty(SelectedCategories) ? SelectedCategories.Split(',').ToList() : null!;
 
-            }
-
+            /* Filter by categories*/
             if (SelectedCategoriesList != null && SelectedCategoriesList.Count > 0 && SelectedCategoriesList[0] != null)
             {
+                /* A list is obtained with the names of all the products associated with any category on the SelectedCategoriesList.*/
                 var filteredProducts = _context.Products
-                    .Where(p => p.Categories.Any(c => SelectedCategoriesList.Contains(c.CategoryName)))
+                    .Where(p => p.Categories!.Any(c => SelectedCategoriesList.Contains(c.CategoryName)))
                     .Select(p => p.Name)
                     .ToList();
 
-                registers = registers.Where(r => filteredProducts.Contains(r.ProductName));
+                /* The registers associated with the selected categories are obtained */
+                registers = registers.Where(r => filteredProducts.Contains(r.ProductName!));
             }
 
-            /* Obtiene los registros según el tipo de búsqueda seleccionado */
+            /* Get registers based on the selected search type */
             IQueryable<Register> registersQuery = GetRegistersByType(registers);
 
-            /* Obtiene una lista desordenada de registros */
+            /* Get an unordered list of registers */
             PaginatedList<Register> unorderedList = (await PaginatedList<Register>.CreateAsync(
                 registersQuery, pageIndex ?? 1, pageSize));
 
-            /* Copia la información de los registros ordenados */
+            /* Copy the information of ordered registers */
             Register = new PaginatedList<Register>(OrderRegisters(unorderedList.ToList(), sortOrder),
                 unorderedList.PageIndex, unorderedList.TotalPages);
         }
+
 
 
         /* OnPost method that sent request */
@@ -129,16 +126,16 @@ namespace LoCoMPro.Pages
             {
                 case "Nombre":
                 default:
-                    resultQuery = registersQuery
-                        .Where(r => r.ProductName.Contains(SearchString));
+                    resultQuery = registersQuery!
+                        .Where(r => r.ProductName!.Contains(SearchString!));
                     break;
                 case "Marca":
-                    resultQuery = registersQuery
-                        .Where(r => _context.Products.Any(p => p.Name == r.ProductName && p.Brand.Contains(SearchString)));
+                    resultQuery = registersQuery!
+                        .Where(r => _context.Products.Any(p => p.Name == r.ProductName && p.Brand!.Contains(SearchString!)));
                     break;
                 case "Modelo":
-                    resultQuery = registersQuery
-                        .Where(r => _context.Products.Any(p => p.Name == r.ProductName && p.Model.Contains(SearchString)));
+                    resultQuery = registersQuery!
+                        .Where(r => _context.Products.Any(p => p.Name == r.ProductName && p.Model!.Contains(SearchString!)));
                     break;
             }
 
@@ -158,16 +155,15 @@ namespace LoCoMPro.Pages
             {
                 /* Order in case of price_descending*/
                 case "price_desc":
-                    orderedList = unorderedList.OrderByDescending(r => r.Price).ToList();
+                    orderedList = unorderedList!.OrderByDescending(r => r.Price).ToList();
                     break;
 
                 /* Normal order for the price */
                 case "price_asc":
                 default:
-                    orderedList = unorderedList.OrderBy(r => r.Price).ToList();
+                    orderedList = unorderedList!.OrderBy(r => r.Price).ToList();
                     break;
             }
-
             return orderedList;
         }
     }
