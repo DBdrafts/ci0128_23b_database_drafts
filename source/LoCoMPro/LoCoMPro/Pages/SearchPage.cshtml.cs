@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32;
 using System.Collections.Generic;
 using System.Drawing.Printing;
@@ -117,28 +118,31 @@ namespace LoCoMPro.Pages
         // Order the registers by the sort order choose 
         public List<Register> OrderRegisters(List<Register>? unorderedList, string sortOrder)
         {
-            List<Register> orderedList;
+            List<Register> orderedList = new List<Register>();
 
-            // Sort the list depending of the parameter 
-            switch (sortOrder)
+            if (!unorderedList.IsNullOrEmpty())
             {
-                // Order in case of price_descending
-                case "price_desc":
-                    orderedList = unorderedList!.OrderByDescending(r => r.Price).ToList();
-                    break;
+                // Sort the list depending of the parameter 
+                switch (sortOrder)
+                {
+                    // Order in case of price_descending
+                    case "price_desc":
+                        orderedList = unorderedList!.OrderByDescending(r => r.Price).ToList();
+                        break;
 
-                // Normal order for the price 
-                case "price_asc":
-                default:
-                    orderedList = unorderedList!.OrderBy(r => r.Price).ToList();
-                    break;
+                    // Normal order for the price 
+                    case "price_asc":
+                    default:
+                        orderedList = unorderedList!.OrderBy(r => r.Price).ToList();
+                        break;
+                }
             }
 
             return orderedList;
         }
 
         // Gets the sort order of the registers 
-        public string GetSortOrder(string sortOrder)
+        public string GetSortOrder(string? sortOrder)
         {
             // If null, the order by price as default 
              return String.IsNullOrEmpty(sortOrder) ? "price_asc" : sortOrder;
