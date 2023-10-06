@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using LoCoMPro.Data;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
@@ -12,6 +17,7 @@
     <link rel="shortcut icon" type="image/svg" href="~/img/LoCoMProLogo.svg"/>
     <!-- Shared style for several pages-->
     <link rel="stylesheet" href="~/css/SharedStyles.css" />
+
 </head>
 <body>
     <header>
@@ -34,16 +40,45 @@
                 }
                 <!-- Navegation bar buttons -->
                 <div class="w-100 d-flex justify-content-end">
-                    <!-- Add register button of the layout -->
-                    <a href="/AddProductPage" class="layout-button button-general">
-                        <img src="~/img/AddRegisterIcon.svg" alt="Agregar Registro">
-                        <p>Agregar</p>
-                    </a>
-                    <!-- USer configuration button of the layout -->
-                    <button class="layout-button button-general">
-                        <img src="~/img/UserIcon.svg" alt="Opciones de Usuario">
-                        <p>Usuario</p>
-                    </button>
+                    
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <!-- Add register button of the layout -->
+                        <!-- If user is signed in this button redirects to AddProduct page -->
+                        <a href="/AddProductPage" class="layout-button button-general">
+                            <img src="~/img/AddRegisterIcon.svg" alt="Agregar Registro">
+                            <p>Agregar</p>
+                        </a>
+
+                        <!-- Add user button of the layout -->
+                        <!-- If user is signed in this button shows the popup containing the logout option -->
+                        <button class="layout-button button-general" id="usr-logged">
+                            <img src="~/img/UserIconSignedIn.svg" alt="Opciones de Usuario">
+                            <p>Usuario</p>
+                        </button>
+                        <!-- Popup displayed through the script -->
+                        <div class="popup-user" id="popup-logged">
+                        </div>
+                    } else {
+                        <!-- Add register button of the layout -->
+                        <!-- If user is not signed in this button redirects to Login page -->
+                        <a asp-area="Identity" asp-page="/Account/Login" class="layout-button button-general">
+                            <img src="~/img/AddRegisterIcon.svg" alt="Agregar Registro">
+                            <p>Agregar</p>
+                        </a>
+
+                        <!-- Add user button of the layout -->
+                        <button class="layout-button button-general" id="usr-not-logged">
+                            <img src="~/img/UserIcon.svg" alt="Opciones de Usuario">
+                            <p>Usuario</p>
+                        </button>
+                        <!-- Popup displayed through the script -->
+                        <div class="popup-user" id="popup-not-logged">
+                            <a asp-area="Identity" asp-page="/Account/Login">
+                                <button class="button-general" id="login-button">Iniciar Sesión</button>
+                            </a>
+                        </div>
+                    }
                 </div>
             </div>  
         </nav>
@@ -64,6 +99,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/userPopUp.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
