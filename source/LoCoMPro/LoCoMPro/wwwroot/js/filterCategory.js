@@ -12,7 +12,7 @@
         var sortOrder = $('#sortOrder').val();
 
         // Construye la URL con los parámetros
-        var url = "/SearchPage/1?SelectedCategories=" + selectedCategories.join('&SelectedCategories=') +
+        var url = "/SearchPage/1?SelectedCategories=" + selectedCategories.join(',') +
                     "&searchType=" + searchType +
                     "&searchString=" + searchString +
                     "&sortOrder=" + sortOrder;

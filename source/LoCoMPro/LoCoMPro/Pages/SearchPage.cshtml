@@ -31,7 +31,7 @@
                 @foreach (var category in Model.Category)
                 {
                     <div class="filter-line">
-                        <input type="checkbox" name="SelectedCategories" value="@category.CategoryName" @(Model.SelectedCategories.Contains(category.CategoryName) ? "checked" : "") />
+                        <input type="checkbox" name="SelectedCategories" value="@category.CategoryName" @(Model.SelectedCategories != null && Model.SelectedCategories.Contains(category.CategoryName) ? "checked" : "") />
                         <label>@Html.DisplayFor(modelItem => category.CategoryName)</label>
                     </div>
                 }
@@ -124,12 +124,6 @@
             <!-- Search pagination section -->
             <div class="pagination-section">
 
-                @{
-                    var selectedCategories = Model.SelectedCategories != null
-                    ? string.Join("&SelectedCategories=", Model.SelectedCategories)
-                    : "";
-                }
-
 
                 <!-- If there´s a previous page -->
                 @if (@prevDisabled != "disabled")
@@ -139,7 +133,7 @@
                        asp-route-searchType="@Model.SearchType"
                        asp-route-searchString="@Model.SearchString"
                        asp-route-pageIndex="@(Model.Register.PageIndex - 1)"
-                       asp-route-SelectedCategories="@selectedCategories"
+                       asp-route-SelectedCategories="@(Model.SelectedCategories)"
                        class="button-general pagination-button" id="pagination-button-left">
                         <img src="~/img/ArrowLeftIcon.svg" alt="Anterior">
                     </a>
@@ -158,7 +152,7 @@
                                asp-route-searchType="@Model.SearchType"
                                asp-route-searchString="@Model.SearchString"
                                asp-route-pageIndex="@i"
-                               asp-route-SelectedCategories="@selectedCategories"
+                               asp-route-SelectedCategories="@(Model.SelectedCategories)"
                                class="@(i == Model.Register.PageIndex ? "pagination-square-active" : "")" id="squareBotton">
                                 <p>@i</p>
                             </a>
@@ -174,7 +168,7 @@
                        asp-route-searchType="@Model.SearchType"
                        asp-route-searchString="@Model.SearchString"
                        asp-route-pageIndex="@(Model.Register.PageIndex + 1)"
-                       asp-route-SelectedCategories="@selectedCategories"
+                       asp-route-SelectedCategories="@(Model.SelectedCategories)"
                        class="button-general pagination-button" id="pagination-button-right">
                         <img src="~/img/ArrowRightIcon.svg" alt="Siguiente">
                     </a>

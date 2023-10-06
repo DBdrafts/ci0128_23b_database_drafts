@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32;
 using System.Collections.Generic;
 using System.Drawing.Printing;
@@ -31,7 +32,7 @@ namespace LoCoMPro.Pages
         public bool IsChecked { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public List<string> SelectedCategories { get; set; }
+        public string? SelectedCategories{ get; set; }
 
         /* List of the categories that exist in the database */
         public IList<Category> Category { get; set; } = default!;
@@ -76,15 +77,23 @@ namespace LoCoMPro.Pages
                             select r;
 
             /* Obtén la cantidad de páginas que se necesitarán para todos los registros */
-            var pageSize = Configuration.GetValue("PageSize", 3);
+            var pageSize = Configuration.GetValue("PageSize", 1);
 
             /* Obtiene los datos de la base de datos */
             Category = await categories.ToListAsync();
 
-            if (SelectedCategories != null && SelectedCategories.Count > 0 && SelectedCategories[0] != null)
+            List<string> SelectedCategoriesList = null;
+
+            if (!String.IsNullOrEmpty(SelectedCategories))
+            {
+                SelectedCategoriesList = SelectedCategories.Split(',').ToList();
+
+            }
+
+            if (SelectedCategoriesList != null && SelectedCategoriesList.Count > 0 && SelectedCategoriesList[0] != null)
             {
                 var filteredProducts = _context.Products
-                    .Where(p => p.Categories.Any(c => SelectedCategories.Contains(c.CategoryName)))
+                    .Where(p => p.Categories.Any(c => SelectedCategoriesList.Contains(c.CategoryName)))
                     .Select(p => p.Name)
                     .ToList();
 
