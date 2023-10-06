@@ -55,14 +55,48 @@
 
 
             <!-- Search section header -->
-            <div class="search-title">
-                <p>Producto</p>
-                <p>Tienda</p>
-                <p>Cantón</p>
-                <p>Provincia</p>
-                <p>Precio</p>
-                <p>Fecha</p>
-            </div>
+            <nav>
+                <ul class="containerListRegisterColumns">
+                    <li>
+                        <div class="textComment">Producto</div>
+                    </li>
+                    <li>
+                        <div class="textComment">Tienda</div>
+                    </li>
+                    <li>
+                        <div class="textComment">Cantón</div>
+                    </li>
+                    <li>
+                        <div class="textComment">Provincia</div>
+                    </li>
+                    <!-- Price column title that uses a PopUp -->
+                    <li>
+                        <a href="">Precio</a>
+                        <img src="~/img/ArrowDownIcon.svg" alt="Anterior">
+                        <ul class="menu-vertical">
+                            <li>
+                                <a asp-page="./SearchPage"
+                                    asp-route-pageIndex="1"
+                                    asp-route-searchType="@Model.SearchType"
+                                    asp-route-searchString="@Model.SearchString"
+                                   asp-route-sortOrder="price_asc">Menores precios
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-page="./SearchPage"
+                                    asp-route-pageIndex="1"
+                                    asp-route-searchType="@Model.SearchType"
+                                    asp-route-searchString="@Model.SearchString"
+                                    asp-route-sortOrder="price_desc">Mayores precios
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="textComment">Fecha</div>
+                    </li>
+                </ul>
+            </nav>
 
             <!-- Razor directives that gets all the registers that match with the search string -->
             @foreach (var register in Model.Register)

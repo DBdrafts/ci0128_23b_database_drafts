@@ -25,16 +25,25 @@ using System.Threading.Tasks;
 namespace LoCoMPro.Pages
 {
     [Authorize]
-    public class AddProductPageModel : PageModel
+    public class AddProductPageModel : LoCoMProPageModel
     {
         private readonly UserManager<User> _userManager;
-        private readonly LoCoMPro.Data.LoCoMProContext _context;
 
+        public AddProductPageModel(LoCoMProContext context, IConfiguration configuration, UserManager<User> userManager)
+           : base(context, configuration) {
+            _userManager = userManager;
+        }
+
+        /*
         public AddProductPageModel(LoCoMProContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
-        }
+        }*/
+
+        /*
+        public AddProductPageModel(LoCoMProContext context, IConfiguration configuration)
+            : base(context, configuration) { } */
 
         public List<SelectListItem>? CategoryList { get; set; }
         public List<SelectListItem>? ProvinciaList { get; set; }
