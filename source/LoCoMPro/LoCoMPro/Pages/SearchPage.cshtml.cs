@@ -13,19 +13,11 @@ using System.Drawing.Printing;
 
 namespace LoCoMPro.Pages
 {
-    public class SearchPageModel : PageModel
+    public class SearchPageModel : LoCoMProPageModel
     {
-        // Context of the data base 
-        private readonly LoCoMPro.Data.LoCoMProContext _context;
-        // Configuration for the page 
-        private readonly IConfiguration Configuration;
-
         // Search Page constructor 
         public SearchPageModel(LoCoMProContext context, IConfiguration configuration)
-        {
-            _context = context;
-            Configuration = configuration;
-        }
+            : base(context, configuration) { }
 
         // Determinate if the check-box was activated 
         [BindProperty]
@@ -51,7 +43,7 @@ namespace LoCoMPro.Pages
 
         // Type of sort by price 
         [BindProperty(SupportsGet = true)]
-        public string PriceSort { get; set; }
+        public string? PriceSort { get; set; }
 
         // OnGet method that manage the GET request 
         public async Task OnGetAsync(string searchType, string searchString
@@ -93,18 +85,12 @@ namespace LoCoMPro.Pages
 
         }
 
-        // OnPost method that sent request 
-        public IActionResult OnPost()
-        {
-            return Page();
-        }
-
         // Gets the registers by using the type of search choose 
         public IQueryable<Register> GetRegistersByType(IQueryable<Register>? registersQuery)
         {
             IQueryable<Register> resultQuery;
 
-            // Filter the the register by the type of search choose 
+            // Filter the register by the type of search choose 
             switch (SearchType)
             {
                 case "Nombre":

@@ -18,10 +18,10 @@ using Microsoft.AspNetCore.Http.HttpResults;
 public class BaseTest
 {
     // Method to create the mock of the Razor Page Model.
-    protected ProductPageModel CreatePageModel()
+    protected LoCoMProPageModel CreatePageModel(string pageType)
     {
-        // Create a simulation object (mock) de IConfiguration
-        // Simule the real behavior of the real object with the configuration
+        // Create a simulation object (mock) IConfiguration
+        // Simulate the real behavior of the real object with the configuration
         var mockConfiguration = new Mock<IConfiguration>();
 
         // Set the mock's behavior and then return "TestSettingValue" when setup done
@@ -39,8 +39,33 @@ public class BaseTest
 
         // return the new instance of new ProductPageModel instance
         // created with the database context and mock configuration
-        // real intance
-        return new ProductPageModel(dbContext, mockConfiguration.Object);
+        // real instance
+        return CreateLoCoMProPageModel(dbContext, mockConfiguration, pageType);
+    }
+
+    // Create LoCoMPro page model depending of the string received
+    protected LoCoMProPageModel CreateLoCoMProPageModel(LoCoMProContext dbContext
+        , Mock<IConfiguration> mockConfiguration, string pageType)
+    {
+        // Return the type of the LoCoMPro 
+        switch (pageType)
+        {
+            // Have to return a Search page
+            case "search_page":
+                return new SearchPageModel(dbContext, mockConfiguration.Object);
+
+            // Have to return a Product page
+            case "product_page":
+                return new ProductPageModel(dbContext, mockConfiguration.Object);
+
+            // Have to return a Add Register page
+            case "add_register_page":
+                return new AddProductPageModel(dbContext, mockConfiguration.Object);
+
+            // Return a base page model
+            default:
+                return new LoCoMProPageModel(dbContext, mockConfiguration.Object);
+        }
     }
 
     // Method to Initialize the registers
@@ -55,7 +80,7 @@ public class BaseTest
         { Name = "Tienda", CantonName = "Cartago", ProvinciaName = "Cartago", Location = canton };
         // Create an instance of User
         var user = new User()
-        { Id = "03", UserName = "Persona",Password = "123456", Email = "email@gmail.com",Location = canton };
+        { Id = "03", UserName = "Persona", Password = "123456", Email = "email@gmail.com", Location = canton };
 
         // Create an instance of class for random values
         Random random = new Random();

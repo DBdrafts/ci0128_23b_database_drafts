@@ -7,20 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LoCoMPro.Pages
 {
-    public class ProductPageModel : PageModel
+    public class ProductPageModel : LoCoMProPageModel
     {
-        // Context of the data base
-        private readonly LoCoMPro.Data.LoCoMProContext _context;
-
-        // Configuration for the page 
-        private readonly IConfiguration Configuration;
         
         // Product Page constructor 
         public ProductPageModel(LoCoMProContext context, IConfiguration configuration)
-        {
-            _context = context;
-            Configuration = configuration;
-        }
+            : base(context, configuration) { }
 
         // List of the product that exist in the database 
         public IList<Product> Product { get; set; } = default!;

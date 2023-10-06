@@ -21,14 +21,10 @@ using System.Threading.Tasks;
 
 namespace LoCoMPro.Pages
 {
-    public class AddProductPageModel : PageModel
+    public class AddProductPageModel : LoCoMProPageModel
     {
-        private readonly LoCoMPro.Data.LoCoMProContext _context;
-
-        public AddProductPageModel(LoCoMProContext context)
-        {
-            _context = context;
-        }
+        public AddProductPageModel(LoCoMProContext context, IConfiguration configuration)
+            : base(context, configuration) { }
 
         public List<SelectListItem>? CategoryList { get; set; }
         public List<SelectListItem>? ProvinciaList { get; set; }
