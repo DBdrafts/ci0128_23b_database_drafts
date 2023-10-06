@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using LoCoMPro.Data;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
