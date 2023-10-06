@@ -1,5 +1,5 @@
 ﻿/* Set a base style for the entire page body */
-body {
+/*body {
     background-color: #FFFFFF;
     font-family: Arial, sans-serif;
     margin: 0;
@@ -8,7 +8,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-}
+}*/
 
 .logo-image {
     height: auto;
@@ -43,7 +43,7 @@ body {
 }
 
 /* Style for labels */
-label {
+.login-section label {
     display: block;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -53,7 +53,7 @@ label {
 
 
 /* Style for text input fields, select, and textarea */
-input[type="text"],
+/*input[type="text"],
 select,
 textarea {
     width: 100%;
@@ -61,25 +61,25 @@ textarea {
     margin-bottom: 15px;
     border: 1px solid #E2E3E3;
     border-radius: 5px;
-}
+}*/
 
-textarea {
+/*textarea {
     height: 100px;
-}
+}*/
 
 /* Specific style for text input */
-input[type="text"], input[type="password"],
+/*input[type="text"], input[type="password"],
 textarea {
-    background-color: #E2E3E3; /* Cambia el color de fondo aquí */
-    width: 100%;
+    background-color: #E2E3E3;*/ /* Cambia el color de fondo aquí */
+    /*width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #E2E3E3;
     border-radius: 15px;
-}
+}*/
 
 /* Specific style for text input */
-button {
+.login-section button, .noacc-section button {
     background-color: #F5AA38;
     color: #000000;
     border: none;
@@ -139,11 +139,11 @@ button {
 }
 
 /* Style for the select field */
-select {
+/*select {
     background-color: #E2E3E3;
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #E2E3E3;
     border-radius: 15px;
-}
+}*/

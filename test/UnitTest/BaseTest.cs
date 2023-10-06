@@ -54,8 +54,12 @@ public class BaseTest
         var store = new Store() 
         { Name = "Tienda", CantonName = "Cartago", ProvinciaName = "Cartago", Location = canton };
         // Create an instance of User
-        var user = new User()
-        { Id = "03", UserName = "Persona",Password = "123456", Email = "email@gmail.com",Location = canton };
+        var user = new User
+        { Id = "3af5899a-3957-415a-9675-be20966ba6d7", UserName = "Prueba123", 
+            NormalizedUserName = "PRUEBA123", Email = "prueba123@gmail.com", 
+            NormalizedEmail = "PRUEBA123@GMAIL.COM", 
+            PasswordHash = "AQAAAAIAAYagAAAAEJfi9TUT6VewLFHdzos2qZ29eaoRr4s0YjS60YhkekCR0Mzbe5LMp3sYgj+elkblVA==", 
+            Location = canton };
 
         // Create an instance of class for random values
         Random random = new Random();

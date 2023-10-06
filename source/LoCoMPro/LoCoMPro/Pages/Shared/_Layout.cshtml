@@ -12,13 +12,12 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LoCoMPro.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/userPopUp.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Shortcut icon of the layout -->
     <link rel="shortcut icon" type="image/svg" href="~/img/LoCoMProLogo.svg"/>
     <!-- Shared style for several pages-->
     <link rel="stylesheet" href="~/css/SharedStyles.css" />
-    <script src="~/js/userPopUp.js"></script>
+
 </head>
 <body>
     <header>
@@ -58,7 +57,7 @@
                             <p>Usuario</p>
                         </button>
                         <!-- Popup displayed through the script -->
-                        <div class="popup" id="popup-logged">
+                        <div class="popup-user" id="popup-logged">
                         </div>
                     } else {
                         <!-- Add register button of the layout -->
@@ -74,8 +73,8 @@
                             <p>Usuario</p>
                         </button>
                         <!-- Popup displayed through the script -->
-                        <div class="popup" id="popup-not-logged">
-                            <a asp-area="Identity" asp-page="/Account/Login" class="layout-button button-general">
+                        <div class="popup-user" id="popup-not-logged">
+                            <a asp-area="Identity" asp-page="/Account/Login">
                                 <button class="button-general" id="login-button">Iniciar Sesión</button>
                             </a>
                         </div>
@@ -100,6 +99,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/userPopUp.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
