@@ -16,10 +16,10 @@
     margin-right: 40px;
 }
 
-    /* Style for location button when hover*/
-    .location-button:hover {
-        background-color: #5AABE2;
-    }
+/* Style for location button when hover*/
+.location-button:hover {
+    background-color: #5AABE2;
+}
 
 /* Style for location container*/
 .location-container {
@@ -101,10 +101,10 @@
     width: auto;
 }
 
-    /* SaveLocation-button when hover*/
-    #saveLocation-button:hover {
-        background-color: #5AABE2;
-    }
+/* SaveLocation-button when hover*/
+#saveLocation-button:hover {
+    background-color: #5AABE2;
+}
 
 
 /* Style for save closePopup botton*/
@@ -121,10 +121,10 @@
     width: auto;
 }
 
-    /* SaveLocation-button when hover*/
-    #closePopup-button:hover {
-        background-color: #E25A5A;
-    }
+/* SaveLocation-button when hover*/
+#closePopup-button:hover {
+    background-color: #E25A5A;
+}
 
 /* Style for the location selector button */
 .location-selector {

@@ -1,9 +1,11 @@
 // Wait for the DOM to be fully loaded before executing the code
 
-var js = 
+// Define a flag to track if the population has already occurred
+let hasPopulatedProvinceSelect = false;
 document.addEventListener("DOMContentLoaded", function () {
     // Get references to HTML elements by their IDs
     const locationButton = document.getElementById("locationButton"); // Button to open the popup
+    const locationInfo = document.getElementById("locationInfo");
     const locationPopup = document.getElementById("locationPopup"); // The popup itself
     const provinceSelect = document.getElementById("province"); // Province select
     const cantonSelect = document.getElementById("canton"); // Canton select
@@ -22,25 +24,51 @@ document.addEventListener("DOMContentLoaded", function () {
         locationPopup.style.display = "none"; // Hide the popup when clicking the close button
     });
 
-    // Ask for the Province list
-    $.ajax({
-        url: "/AddProductPage?handler=Provinces",
-        success: function (provinceList) {
-            // Populate the select options
-            provinceList.forEach(p => {
-                const option = document.createElement("option");
-                option.value = p.value;
-                option.text = p.text;
-                provinceSelect.appendChild(option);
-            })
+    // Function to populate the provinceSelect
+    function populateProvinceSelect() {
+        // Check if the population has already occurred
+        if (hasPopulatedProvinceSelect) {
+            return; // Exit the function if already populated
         }
-    });
+
+        // Ask for the Province list
+        $.ajax({
+            url: "/AddProductPage?handler=Provinces",
+            success: function (provinceList) {
+                // Create a Set to store unique values
+                const uniqueValues = new Set();
+
+                // Iterate through the received provinceList
+                provinceList.forEach(p => {
+                    // Check if the value is not already in the Set
+                    if (!uniqueValues.has(p.value)) {
+                        // Add the value to the Set to mark it as seen
+                        uniqueValues.add(p.value);
+
+                        // Create a new option element
+                        const option = document.createElement("option");
+                        option.value = p.value;
+                        option.text = p.text;
+
+                        // Append the option to the provinceSelect
+                        provinceSelect.appendChild(option);
+                    }
+                });
+
+                // Set the flag to indicate that population has occurred
+                hasPopulatedProvinceSelect = true;
+            }
+        });
+    }
+
+    // Call the function to populate provinceSelect only once
+    populateProvinceSelect();
 
     // Add a change event to the province select
     provinceSelect.addEventListener("change", function () {
         const selectedProvince = provinceSelect.value;
         if (selectedProvince) {
-            span.textContent = selectedProvince;
+            if (locationInfo == null) document.getElementById("chosenProvince").textContent = selectedProvince;
             // Make a fetch request to get the cantons of the selected province
             fetch(`/AddProductPage?handler=Cantones&provincia=${selectedProvince}`)
                 .then(response => response.json()) // Convert the response to JSON
@@ -68,22 +96,27 @@ document.addEventListener("DOMContentLoaded", function () {
     cantonSelect.addEventListener("change", function () {
         const selectedCanton = cantonSelect.value;
         if (selectedCanton) {
-            var text = span.textContent;
-            text = text + ", " + selectedCanton;
-            span.textContent = text;
+            if (locationInfo == null) {
+                var text = span.textContent;
+                text = text + ", " + selectedCanton;
+                span.textContent = text;
+                document.getElementById("chosenCanton").textContent = selectedCanton;
+            }
         }
     });
 
-    // Add a submit event to the form
-    addProductForm.addEventListener("submit", function (event) {
-        const selectedProvince = provinceSelect.value;
-        const selectedCanton = cantonSelect.value;
+    if (addProductForm != null) {
+        // Add a submit event to the form
+        addProductForm.addEventListener("submit", function (event) {
+            const selectedProvince = provinceSelect.value;
+            const selectedCanton = cantonSelect.value;
 
-        if (!selectedProvince || selectedProvince === "" || !selectedCanton || selectedCanton === "") {
-            event.preventDefault(); // Prevent the form from being submitted if information is missing
-            alert("Debe seleccionar una ubicaci\u00F3n antes de enviar el formulario."); // Display an alert to the user
-        }
-    });
+            if (!selectedProvince || selectedProvince === "" || !selectedCanton || selectedCanton === "") {
+                event.preventDefault(); // Prevent the form from being submitted if information is missing
+                alert("Debe seleccionar una ubicaci\u00F3n antes de enviar el formulario."); // Display an alert to the user
+            }
+        });
+    }
 
     // Add a click event to the button to save the location
     saveLocationButton.addEventListener("click", function () {
@@ -92,11 +125,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (selectedProvince && selectedProvince !== "" && selectedCanton && selectedCanton !== "") {
             // Update the location information in the "locationInfo" element
-            const locationInfo = document.getElementById("locationInfo");
-            locationInfo.textContent = `Ubicaci\u00F3n elegida: ${selectedProvince}, ${selectedCanton}`;
-            locationInfo.style.display = "block"; // Display the location information
-            document.getElementById("selectedProvince").value = selectedProvince; // Update hidden values in the form
-            document.getElementById("selectedCanton").value = selectedCanton;
+            if (locationInfo != null) {
+                locationInfo.textContent = `Ubicaci\u00F3n elegida: ${selectedProvince}, ${selectedCanton}`;
+                locationInfo.style.display = "block"; // Display the location information
+                document.getElementById("selectedProvince").value = selectedProvince; // Update hidden values in the form
+                document.getElementById("selectedCanton").value = selectedCanton;
+            } else {
+                span.textContent = selectedProvince;
+                var text = span.textContent;
+                text = text + ", " + selectedCanton;
+                span.textContent = text;
+                document.getElementById("chosenCanton").textContent = selectedCanton;
+            }
             locationPopup.style.display = "none"; // Hide the popup after saving the location
         }
     });

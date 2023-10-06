@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "AgregarProducto";
     Layout = "_Layout";
-    ViewBag.ShowSearchBar = true;
+    ViewBag.ShowSearchBar = false;
     ViewBag.ShowLogoLink = true;
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
@@ -71,16 +71,12 @@
             <label for="comment">Comentario:</label>
             <textarea id="comment" name="comment" placeholder="Comentario adicional del producto..."></textarea>
 
-            <div id="locationPopup" class="popup">
+           <div id="locationPopup" class="popup">
                 <div class="popup-content">
                     <h2>Seleccionar ubicación</h2>
                     <label for="province">Provincia:</label>
                     <select id="province" name="province">
                         <option value="" disabled selected hidden>Seleccionar provincia</option>
-@*                         @foreach (var provincia in Model.ProvinciaList!)
-                        {
-                            <option value="@provincia.Value">@provincia.Text</option>
-                        } *@
                     </select>
                     <label for="canton">Cantón:</label>
                     <select id="canton" name="canton" disabled>
