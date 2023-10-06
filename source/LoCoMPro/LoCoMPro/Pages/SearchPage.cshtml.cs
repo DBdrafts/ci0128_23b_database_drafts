@@ -63,6 +63,14 @@ namespace LoCoMPro.Pages
             var registers = from r in _context.Registers
                             select r;
 
+           if (Province is not null and not "")
+            {
+                registers = registers.Where(r => r.ProvinciaName == Province);
+                if (Canton is not null and not "")
+                {
+                    registers = registers.Where(r => r.CantonName == Canton);
+                }
+            }
             GetRegistersByType(ref registers);
 
 
@@ -88,7 +96,7 @@ namespace LoCoMPro.Pages
                 /* If the type of search is by "Name" or default */
                 case "Nombre":
                 default:
-                    registers = from r in _context.Registers
+                    registers = from r in registers
                                 where r.ProductName.Contains(SearchString)
                                 group r by new { r.ProductName, r.StoreName } into grouped
                                 select grouped.OrderByDescending(r => r.SubmitionDate).First();

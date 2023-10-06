@@ -100,21 +100,9 @@ namespace LoCoMPro.Pages
 
         public JsonResult OnGetProvinces()
         {
-            var provinces = _context.Provincias.ToList();
-            var provinceList = provinces
-                .Select(provincia => new SelectListItem
-                {
-                    Value = provincia.Name,
-                    Text = provincia.Name
-                })
-                .ToList();
-
-            // Checks if there is at least one province
-            if (provinces.Any())
-            {
-                //LoadCantones(provinces.First().Name);
-            }
-            return new JsonResult(provinceList);
+            LoadProvincias();
+            ProvinciaList!.Insert(0, new SelectListItem { Value = "", Text = "ElegirProvincia" });
+            return new JsonResult(ProvinciaList);
 
         }
 

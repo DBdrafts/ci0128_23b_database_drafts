@@ -12,28 +12,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const saveLocationButton = document.getElementById("saveLocation-button"); // Button to save location
     const addProductForm = document.getElementById("addProductForm"); // Form
     const closePopupButton = document.getElementById("closePopup-button"); // Button to close the popup
-    // Create a URLSearchParams object from the current URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchType = urlParams.get('searchType');
-    const searchString = urlParams.get('searchString');
-    const selectedProvince = urlParams.get('province');
-    const selectedCanton = urlParams.get('canton');
-
-    // Get the value of a specific parameter (e.g., 'param1')
-    // Get the current page's URL
-    const currentPageUrl = window.location.href;
     var span = document.getElementById("buttonSpan");
-    if (currentPageUrl.includes("/SearchPage") && selectedProvince && selectedProvince !== "") {
-        document.getElementById("type-search-selector").value = searchType;
-        document.getElementById("search-input").value = searchString;
-        
-        span.textContent = selectedProvince;
-        var text = span.textContent;
-        if (selectedCanton && selectedCanton !== "") {
-            span.textContent = span.textContent + ", " + selectedCanton;
-        }
-    }
-
+    const currentPageUrl = window.location.href;
     // Add a click event to the button to open the popup
     locationButton.addEventListener("click", function () {
         locationPopup.style.display = "block"; // Display the popup when clicking the button
@@ -59,17 +39,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 const uniqueValues = new Set();
 
                 // Iterate through the received provinceList
-                provinceList.forEach(p => {
+                provinceList.forEach(province => {
                     // Check if the value is not already in the Set
-                    if (!uniqueValues.has(p.value)) {
+                    if (!uniqueValues.has(province.value)) {
                         // Add the value to the Set to mark it as seen
-                        uniqueValues.add(p.value);
+                        uniqueValues.add(province.value);
 
                         // Create a new option element
                         const option = document.createElement("option");
-                        option.value = p.value;
-                        option.text = p.text;
-
+                        option.value = province.value;
+                        option.text = province.text;
+                        if (province.value == "") option.hidden = true;
                         // Append the option to the provinceSelect
                         provinceSelect.appendChild(option);
                     }
@@ -159,10 +139,25 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById("chosenCanton").textContent = selectedCanton;
                 }
                 span.textContent = text;
-                //var url = "/SearchProduct/1?searchType=" + $("#searchType").val() +
-                //    "&searchString=" + $("searchString").val() +
-                //    "&provinceName=" + $("#chosenProvince") +
-                //    "&cantonName" + $("#chosenCanton")
+                if (currentPageUrl.includes("/SearchPage")) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const searchType = urlParams.get('searchType');
+                    const searchString = urlParams.get('searchString');
+                    if (!selectedProvince || selectedProvince === "") {
+                        selectedProvince = urlParams.get('province');
+                        if (!selectedCanton || selectedCanton === "") {
+                            selectedCanton = urlParams.get('canton');
+                        }
+                    }
+                    var url = `/SearchPage/1?searchType=${searchType ? searchType : ""}&searchString=${searchString ? searchString : ""}`;
+                    if (selectedProvince && selectedProvince !== "") {
+                        url += `&province=${selectedProvince ? selectedProvince : ""}`
+                        if (selectedCanton && selectedCanton !== "") {
+                            url += `&canton=${selectedCanton ? selectedCanton : ""}`
+                        }
+                    }
+                    window.location.href = url;
+                }
             }
             locationPopup.style.display = "none"; // Hide the popup after saving the location
         }
