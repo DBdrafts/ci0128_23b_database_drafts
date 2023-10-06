@@ -76,7 +76,7 @@ namespace LoCoMPro.Pages
                             select r;
 
             /* Obtén la cantidad de páginas que se necesitarán para todos los registros */
-            var pageSize = Configuration.GetValue("PageSize", 1);
+            var pageSize = Configuration.GetValue("PageSize", 3);
 
             /* Obtiene los datos de la base de datos */
             Category = await categories.ToListAsync();

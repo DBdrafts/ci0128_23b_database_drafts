@@ -40,8 +40,6 @@
                 <input type="hidden" name="searchString" id="searchString" value="@Model.SearchString" />
                 <input type="hidden" name="sortOrder" id="sortOrder" value="@Model.CurrentSort" />
             </form>
-
-
         </div>
 
         <!-- Search result section -->
@@ -125,6 +123,14 @@
 
             <!-- Search pagination section -->
             <div class="pagination-section">
+
+                @{
+                    var selectedCategories = Model.SelectedCategories != null
+                    ? string.Join("&SelectedCategories=", Model.SelectedCategories)
+                    : "";
+                }
+
+
                 <!-- If there´s a previous page -->
                 @if (@prevDisabled != "disabled")
                 {
@@ -133,6 +139,7 @@
                        asp-route-searchType="@Model.SearchType"
                        asp-route-searchString="@Model.SearchString"
                        asp-route-pageIndex="@(Model.Register.PageIndex - 1)"
+                       asp-route-SelectedCategories="@selectedCategories"
                        class="button-general pagination-button" id="pagination-button-left">
                         <img src="~/img/ArrowLeftIcon.svg" alt="Anterior">
                     </a>
@@ -140,7 +147,7 @@
 
                 <!-- Page button section that behaves dynamically -->
                 @for (int i = Model.Register.PageIndex - 1; i <= Model.Register.TotalPages
-               && i <= Model.Register.PageIndex + 3; i++)
+               && i <= Model.Register.PageIndex + 3; ++i)
                 {
                     <!-- If there´re previous pages higher that 0 -->
                     if (i >= 1)
@@ -151,7 +158,8 @@
                                asp-route-searchType="@Model.SearchType"
                                asp-route-searchString="@Model.SearchString"
                                asp-route-pageIndex="@i"
-                               class="@(i == Model.Register.PageIndex ? "pagination-square-active" : "")">
+                               asp-route-SelectedCategories="@selectedCategories"
+                               class="@(i == Model.Register.PageIndex ? "pagination-square-active" : "")" id="squareBotton">
                                 <p>@i</p>
                             </a>
                         </div>
@@ -166,6 +174,7 @@
                        asp-route-searchType="@Model.SearchType"
                        asp-route-searchString="@Model.SearchString"
                        asp-route-pageIndex="@(Model.Register.PageIndex + 1)"
+                       asp-route-SelectedCategories="@selectedCategories"
                        class="button-general pagination-button" id="pagination-button-right">
                         <img src="~/img/ArrowRightIcon.svg" alt="Siguiente">
                     </a>
