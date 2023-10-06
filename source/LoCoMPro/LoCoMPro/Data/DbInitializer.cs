@@ -169,11 +169,11 @@ namespace LoCoMPro.Data
                 , PasswordHash = "AQAAAAIAAYagAAAAEOT77XEI5fND1riqa9P5VKsRTPfAY5i3piTJ0HTzAPDA7+33lAvWvbUmerrQdXwxag==", 
                 Location = cantones[0]});
             users.Add(new User { Id = "eabef9c3-0e08-4372-a88c-6f63075c4a0b", UserName = "Julio444", 
-                NormalizedUserName = "JULIO444", Email = "Julio444@ucr.ac.cr", NormalizedEmail = "JULIO444@UCR.AC.CR"
+                NormalizedUserName = "JULIO444", Email = "julio444@ucr.ac.cr", NormalizedEmail = "JULIO444@UCR.AC.CR"
                 , PasswordHash = "AQAAAAIAAYagAAAAEBSumaRyX1siCcQ3b8TXll5Km5TWXJry6oq6euj1Bj1JaKgVWIat1jxDrhwvSwZJwA==", 
                 Location = cantones[0]});
             users.Add(new User { Id = "f4232f1d-5696-4537-b0a1-02fd36e27dd7", UserName = "Alonso111", 
-                NormalizedUserName = "ALONSO111", Email = "Julio444@ucr.ac.cr", NormalizedEmail = "ALONSO111@GMAIL.COM"
+                NormalizedUserName = "ALONSO111", Email = "alonso111@gmail.com", NormalizedEmail = "ALONSO111@GMAIL.COM"
                 , PasswordHash = "AQAAAAIAAYagAAAAEDcvQfXxtswPnX0ixY3T5EipIoGSk85MVeGdNAVs0tGrkfgseQnfRidNltc5BFSFvw==", 
                 Location = cantones[0]});
             context.Users.AddRange(users);
