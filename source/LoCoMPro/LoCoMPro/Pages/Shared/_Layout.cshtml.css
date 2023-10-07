@@ -65,6 +65,14 @@ button.accept-policy {
     background-color: #E25A5A;
 }
 
+#register-button {
+    background-color: #E2E3E3;
+}
+
+    #register-button:hover {
+        background-color: #ccc;
+    }
+
 
 .popup-user {
     display: none;
@@ -78,7 +86,6 @@ button.accept-policy {
     padding: 10px;
     z-index: 1;
 }
-
 .popup-user button {
     cursor: pointer;
     display: inline-block;

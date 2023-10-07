@@ -82,6 +82,7 @@ namespace LoCoMPro.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [EmailAddress]
+            [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?$", ErrorMessage = "The Email is not valid.")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
