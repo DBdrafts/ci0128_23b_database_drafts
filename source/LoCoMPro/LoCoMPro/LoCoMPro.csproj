@@ -4,6 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="EWSoftware.SHFB" Version="2023.7.8" />
+    <PackageReference Include="EWSoftware.SHFB.NETFramework" Version="4.8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.11" />

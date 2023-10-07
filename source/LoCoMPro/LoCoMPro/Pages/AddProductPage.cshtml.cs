@@ -24,11 +24,20 @@ using System.Threading.Tasks;
 
 namespace LoCoMPro.Pages
 {
+    /// <summary>
+    /// Model Page for AddProductPage, handles the functionality related to handling database operations, HTTP requests, and checking for user authorization.
+    /// </summary>
     [Authorize]
     public class AddProductPageModel : LoCoMProPageModel
-    {
+    {  
         private readonly UserManager<User> _userManager;
 
+        /// <summary>
+        /// Creates a new AddProductPageModel instance.
+        /// </summary>
+        /// <param name="context">Database context to utilize.</param>
+        /// <param name="configuration">Routing configuration for WebPage.</param>
+        /// <param name="userManager">User manager to handle user permissions.</param>
         public AddProductPageModel(LoCoMProContext context, IConfiguration configuration, UserManager<User> userManager)
            : base(context, configuration) {
             _userManager = userManager;
