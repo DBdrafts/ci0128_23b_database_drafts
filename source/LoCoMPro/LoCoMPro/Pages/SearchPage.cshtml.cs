@@ -27,8 +27,19 @@ namespace LoCoMPro.Pages
         [BindProperty(SupportsGet = true)]
         public string? SelectedCategories{ get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string? SelectedProvinces { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string? SelectedCantons { get; set; }
+
         /* List of the categories that exist in the database */
         public IList<Category> Category { get; set; } = default!;
+
+        /* List of the Provinces that exist in the database */
+        public IList<Provincia> Provinces { get; set; } = default!;
+        /* List of the Provinces that exist in the database */
+        public IList<Canton> Cantons { get; set; } = default!;
 
         // List of the registers that match with the search string 
         public PaginatedList<Register> Register { get; set; } = default!;
@@ -74,18 +85,17 @@ namespace LoCoMPro.Pages
                     registers = registers.Where(r => r.CantonName == Canton);
                 }
             }
-            GetRegistersByType(ref registers);
             /* Get the number of pages required for all records */
             var pageSize = Configuration.GetValue("PageSize", 5);
 
-            /* Retrieve data from the database */
-            Category = await categories.ToListAsync();
-
-            List<string> SelectedCategoriesList = null!;
-
             /* Check if SelectedCategories is null, if not, creates a list of the categories separated by ',' in the string */
-            SelectedCategoriesList = !String.IsNullOrEmpty(SelectedCategories) ? SelectedCategories.Split(',').ToList() : null!;
+            List<string> SelectedCategoriesList = !String.IsNullOrEmpty(SelectedCategories) ? SelectedCategories.Split(',').ToList() : null!;
+            /* Check if SelectedProvinces is null, if not, creates a list of the provinces separated by ',' in the string */
+            List<string> selectedProvincesList = !String.IsNullOrEmpty(SelectedProvinces) ? SelectedProvinces.Split(',').ToList() : null!;
+            /* Check if SelectedCantons is null, if not, creates a list of the categories separated by ',' in the string */
+            List<string> selectedCantonsList = !String.IsNullOrEmpty(SelectedCantons) ? SelectedCantons.Split(',').ToList() : null!;
 
+            IQueryable<Register> registersMatched = GetRegistersByType(registers);
             /* Filter by categories*/
             if (SelectedCategoriesList != null && SelectedCategoriesList.Count > 0 && SelectedCategoriesList[0] != null)
             {
@@ -98,9 +108,29 @@ namespace LoCoMPro.Pages
                 /* The registers associated with the selected categories are obtained */
                 registers = registers.Where(r => filteredProducts.Contains(r.ProductName!));
             }
+            registers = FilterByLocation(ref registers, selectedProvincesList, selectedCantonsList);
 
             /* Get registers based on the selected search type */
             IQueryable<Register> registersQuery = GetRegistersByType(registers);
+
+            /* Retrieve data from the database */
+            // Query to get all categories associated with at least one product in the register list
+            Category = await categories
+                            .Where(category => category.Products!.Any(product =>
+                                registersMatched.Any(register => register.ProductName == product.Name)))
+                            .ToListAsync();
+
+            // Query to get all provinces associated with at least one register in the register list
+            var provincias = _context.Provincias
+                            .Where(province => registersMatched.Any(register => register.ProvinciaName == province.Name))
+                            .ToList();
+            Provinces = provincias;
+
+            // Query to get all cantons associated with at least one register in the register list
+            var cantons = _context.Cantones
+                            .Where(canton => registersMatched.Any(register => register.CantonName == canton.CantonName))
+                            .ToList();
+            Cantons = cantons;
 
             /* Get an unordered list of registers */
             PaginatedList<Register> unorderedList = (await PaginatedList<Register>.CreateAsync(
@@ -112,6 +142,21 @@ namespace LoCoMPro.Pages
         }
 
 
+        public ref IQueryable<Register> FilterByLocation(ref IQueryable<Register> registers, List<string> selectedProvinces, List<string> selectedCantons)
+        {
+            // Filter by Province
+            if (selectedProvinces != null && selectedProvinces.Count > 0 && selectedProvinces[0] != null)
+            {
+                /* The registers associated with the Province are obtained */
+                registers = registers.Where(r => selectedProvinces.Contains(r.ProvinciaName!));
+            }
+            // Filter by Canton
+            if (selectedCantons != null && selectedCantons.Count > 0 && selectedCantons[0] != null)
+            {
+                registers = registers.Where(r => selectedCantons.Contains(r.CantonName!));
+            }
+            return ref registers;
+        }
 
         /* OnPost method that sent request */
         public IActionResult OnPost()

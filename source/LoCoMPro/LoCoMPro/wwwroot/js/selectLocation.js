@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Ask for the Province list
         $.ajax({
-            url: "/AddProductPage?handler=Provinces",
+            url: "/Index?handler=Provinces",
             success: function (provinceList) {
                 // Create a Set to store unique values
                 const uniqueValues = new Set();
@@ -57,6 +57,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Set the flag to indicate that population has occurred
                 hasPopulatedProvinceSelect = true;
+            },
+            error: function (error) {
+                console.error('Error: ', error);
             }
         });
     }
@@ -70,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (selectedProvince) {
             if (!currentPageUrl.includes("/AddProductPage") == null) document.getElementById("chosenProvince").textContent = selectedProvince;
             // Make a fetch request to get the cantons of the selected province
-            fetch(`/AddProductPage?handler=Cantones&provincia=${selectedProvince}`)
+            fetch(`/Index?handler=Cantones&provincia=${selectedProvince}`)
                 .then(response => response.json()) // Convert the response to JSON
                 .then(data => {
                     cantonSelect.innerHTML = ""; // Clear the canton select
