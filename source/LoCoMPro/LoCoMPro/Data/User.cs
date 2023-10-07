@@ -1,19 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LoCoMPro.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
-namespace LoCoMPro.Models
+namespace LoCoMPro.Data
 {
     // Todo(Any): Assure that this is modeled correctly.
-    [PrimaryKey(nameof(Id))]
-    public class User
+    public class User : IdentityUser
     {
-        // Primary Key
-        public required string Id { get; set; }
-        public required string UserName { get; set; }
-        public required string Email { get; set; }
-        public required string Password { get; set; }
 
         // Navigation atributes
         public string? CantonName { get; set; }
@@ -22,6 +18,6 @@ namespace LoCoMPro.Models
 
         //  Foreing Key
         public required Canton Location { get; set; }
-        
+
     };
 }

@@ -18,12 +18,13 @@ namespace RegistersPriceOrderTest
     // Declaration of the test class
     public class RazorPageTests : BaseTest
     {
+        //  Test by Omar Fabian Camacho Calvo C11476
         [Test]
         public void ProductPageOrdersByDateAscendent()
         {
             // Arrange for the mock configuration
             // Create an instance of the page model (pageModel) using the CreatePageModel().
-            var pageModel = CreatePageModel();
+            var pageModel = (ProductPageModel)CreatePageModel("product_page");
 
             // Initialize a collection of registers
             ICollection<Register> registers = InitRegisters();
@@ -40,12 +41,13 @@ namespace RegistersPriceOrderTest
 
         }
 
+        //  Test by Omar Fabian Camacho Calvo C11476
         [Test]
         public void ProductPageOrdersByDateDescend()
         {
             // Arrange for the mock configuration
             // Create an instance of the page model (pageModel) using the CreatePageModel().
-            var pageModel = CreatePageModel();
+            var pageModel = (ProductPageModel)CreatePageModel("product_page");
 
             // Initialize a collection of registers
             ICollection<Register> registers = InitRegisters();
@@ -60,6 +62,7 @@ namespace RegistersPriceOrderTest
             {
                 Assert.IsTrue(response[i].Price <= response[i + 1].Price);
             }
+
         }
     }
 }

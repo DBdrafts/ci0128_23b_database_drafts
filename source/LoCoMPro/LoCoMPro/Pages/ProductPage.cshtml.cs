@@ -7,20 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LoCoMPro.Pages
 {
-    public class ProductPageModel : PageModel
+    public class ProductPageModel : LoCoMProPageModel
     {
-        // Context of the data base
-        private readonly LoCoMPro.Data.LoCoMProContext _context;
-
-        // Configuration for the page 
-        private readonly IConfiguration Configuration;
         
         // Product Page constructor 
         public ProductPageModel(LoCoMProContext context, IConfiguration configuration)
-        {
-            _context = context;
-            Configuration = configuration;
-        }
+            : base(context, configuration) { }
 
         // List of the product that exist in the database 
         public IList<Product> Product { get; set; } = default!;
@@ -31,27 +23,27 @@ namespace LoCoMPro.Pages
         // List of the registers that exist in the database 
         public PaginatedList<Register> Register { get; set; } = default!;
 
-        // Product resquested name 
+        // Product requested name 
         [BindProperty(SupportsGet = true)]
         public string? SearchProductName { get; set; }
 
-        // Store resquested name 
+        // Store requested name 
         [BindProperty(SupportsGet = true)]
         public string? SearchStoreName { get; set; }
 
-        // Province resquested name 
+        // Province requested name 
         [BindProperty(SupportsGet = true)]
         public string? SearchProvinceName { get; set; }
 
-        // Canton resquested name 
+        // Canton requested name 
         [BindProperty(SupportsGet = true)]
         public string? SearchCantonName { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public string CurrentSort { get; set; }
+        public string? CurrentSort { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public string PriceSort { get; set; }
+        public string? PriceSort { get; set; }
 
         // Attr for sort the date register
         [BindProperty(SupportsGet = true)]
@@ -98,7 +90,7 @@ namespace LoCoMPro.Pages
                 stores = stores.Where(x => x.ProvinciaName != null && x.ProvinciaName.Contains(SearchProvinceName));
             }
 
-            // Gets the Data From Databasse 
+            // Gets the Data From Data base 
             Product = await products.ToListAsync();
             Store = await stores.ToListAsync();
 
@@ -143,7 +135,7 @@ namespace LoCoMPro.Pages
             // Get th amount of pages that will be needed for all the registers
             var pageSize = Configuration.GetValue("PageSize", 5);
 
-            // Gets the Data From Databasse 
+            // Gets the Data From data base 
             Register = await PaginatedList<Register>.CreateAsync(
                 registers.AsNoTracking(), pageIndex ?? 1, pageSize);
         }
