@@ -139,25 +139,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById("chosenCanton").textContent = selectedCanton;
                 }
                 span.textContent = text;
-                if (currentPageUrl.includes("/SearchPage")) {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const searchType = urlParams.get('searchType');
-                    const searchString = urlParams.get('searchString');
-                    if (!selectedProvince || selectedProvince === "") {
-                        selectedProvince = urlParams.get('province');
-                        if (!selectedCanton || selectedCanton === "") {
-                            selectedCanton = urlParams.get('canton');
-                        }
-                    }
-                    var url = `/SearchPage/1?searchType=${searchType ? searchType : ""}&searchString=${searchString ? searchString : ""}`;
-                    if (selectedProvince && selectedProvince !== "") {
-                        url += `&province=${selectedProvince ? selectedProvince : ""}`
-                        if (selectedCanton && selectedCanton !== "") {
-                            url += `&canton=${selectedCanton ? selectedCanton : ""}`
-                        }
-                    }
-                    window.location.href = url;
-                }
             }
             locationPopup.style.display = "none"; // Hide the popup after saving the location
         }
