@@ -4,6 +4,8 @@ using LoCoMPro.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using System.ComponentModel.DataAnnotations;
 
 namespace LoCoMPro.Pages
 {
@@ -45,6 +47,8 @@ namespace LoCoMPro.Pages
         [BindProperty(SupportsGet = true)]
         public string? PriceSort { get; set; }
 
+        public decimal AvgPrice { get; set; }
+
         public async Task OnGetAsync(string searchProductName, string searchStoreName, string searchProvinceName, 
             string searchCantonName, int? pageIndex, string sortOrder)
         {
@@ -84,6 +88,7 @@ namespace LoCoMPro.Pages
             // Gets the Data From Data base 
             Product = await products.ToListAsync();
             Store = await stores.ToListAsync();
+            double avg = 12.3;
 
             // Initial request for all the registers in the database
             var registers = from r in _context.Registers select r;
@@ -101,6 +106,11 @@ namespace LoCoMPro.Pages
                 registers = registers.Where(x => x.ProvinciaName != null && x.ProvinciaName.Contains(SearchProvinceName));
 
             }
+
+          
+
+            // Get the average of the registers within last month.
+            AvgPrice = GetAveragePrice(registers, DateTime.Now.AddYears(-1).Date, DateTime.Now) ;
 
             // Code to order
             switch (sortOrder)
@@ -135,6 +145,14 @@ namespace LoCoMPro.Pages
                     return registers.OrderBy(r => r.Price);
                     
             }
+        }
+
+        // Gets the average price of the registers within the given time frame
+        public decimal GetAveragePrice(IQueryable<Register> registers, DateTime from, DateTime to)
+        {
+            registers = registers.Where(r => (r.SubmitionDate >= from) && (r.SubmitionDate <= to));
+            double avgPrice = (registers is not null && registers.Count() > 1) ? registers.Average(r => r.Price) : 0.0;
+            return Convert.ToDecimal(avgPrice);
         }
     } 
 }
