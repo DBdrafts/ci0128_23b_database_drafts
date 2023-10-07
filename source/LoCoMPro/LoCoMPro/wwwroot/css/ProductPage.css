@@ -28,7 +28,7 @@
 }
 
 /* Container that wraps the product specification columns */
-.container {
+.product-page-section {
     display: flex;
     margin-bottom: 10px;
 }

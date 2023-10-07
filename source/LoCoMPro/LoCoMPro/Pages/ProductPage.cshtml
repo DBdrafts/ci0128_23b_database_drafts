@@ -18,7 +18,7 @@
     </div>
 
     <!-- Section for columns of specifications from Search product -->
-    <div class="container">
+    <div class="product-page-section">
         @{ // select the first matches
             var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
             var firstNonNullStore = Model.Store.FirstOrDefault(r => r.Name != null);

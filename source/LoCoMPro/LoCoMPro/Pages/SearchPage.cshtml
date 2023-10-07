@@ -27,25 +27,19 @@
             <!-- Search filter title -->
             <h4> Filtros </h4>
 
-            @* Commented for later use *@
-            @* <form method="post"> *@
-            <!-- Razor directive that gets all the categories names -->
-            @foreach (var category in Model.Category)
-            {
-                <!-- Individuals categories -->
-                <div class="filter-line">
-                    <input asp-for="IsChecked" type="checkbox" />
-                    <label asp-for="IsChecked">
-                        @Html.DisplayFor(modelItem => category.CategoryName)
-                    </label>
-                </div>
-            }
+            <form method="get" asp-page="./SearchPage" id="searchForm">
+                @foreach (var category in Model.Category)
+                {
+                    <div class="filter-line">
+                        <input type="checkbox" name="SelectedCategories" value="@category.CategoryName" @(Model.SelectedCategories != null && Model.SelectedCategories.Contains(category.CategoryName) ? "checked" : "") />
+                        <label>@Html.DisplayFor(modelItem => category.CategoryName)</label>
+                    </div>
+                }
 
-            <button class="button-general">
-                Filtrar
-            </button>
-            @* </form> *@
-
+                <input type="hidden" name="searchType" id="searchType" value="@Model.SearchType" />
+                <input type="hidden" name="searchString" id="searchString" value="@Model.SearchString" />
+                <input type="hidden" name="sortOrder" id="sortOrder" value="@Model.CurrentSort" />
+            </form>
         </div>
 
         <!-- Search result section -->
@@ -129,6 +123,8 @@
 
             <!-- Search pagination section -->
             <div class="pagination-section">
+
+
                 <!-- If there´s a previous page -->
                 @if (@prevDisabled != "disabled")
                 {
@@ -137,6 +133,7 @@
                        asp-route-searchType="@Model.SearchType"
                        asp-route-searchString="@Model.SearchString"
                        asp-route-pageIndex="@(Model.Register.PageIndex - 1)"
+                       asp-route-SelectedCategories="@(Model.SelectedCategories)"
                        class="button-general pagination-button" id="pagination-button-left">
                         <img src="~/img/ArrowLeftIcon.svg" alt="Anterior">
                     </a>
@@ -144,7 +141,7 @@
 
                 <!-- Page button section that behaves dynamically -->
                 @for (int i = Model.Register.PageIndex - 1; i <= Model.Register.TotalPages
-               && i <= Model.Register.PageIndex + 3; i++)
+               && i <= Model.Register.PageIndex + 3; ++i)
                 {
                     <!-- If there´re previous pages higher that 0 -->
                     if (i >= 1)
@@ -155,7 +152,8 @@
                                asp-route-searchType="@Model.SearchType"
                                asp-route-searchString="@Model.SearchString"
                                asp-route-pageIndex="@i"
-                               class="@(i == Model.Register.PageIndex ? "pagination-square-active" : "")">
+                               asp-route-SelectedCategories="@(Model.SelectedCategories)"
+                               class="@(i == Model.Register.PageIndex ? "pagination-square-active" : "")" id="squareBotton">
                                 <p>@i</p>
                             </a>
                         </div>
@@ -170,11 +168,13 @@
                        asp-route-searchType="@Model.SearchType"
                        asp-route-searchString="@Model.SearchString"
                        asp-route-pageIndex="@(Model.Register.PageIndex + 1)"
+                       asp-route-SelectedCategories="@(Model.SelectedCategories)"
                        class="button-general pagination-button" id="pagination-button-right">
                         <img src="~/img/ArrowRightIcon.svg" alt="Siguiente">
                     </a>
                 }
             </div>
         </div>
+        <script src="~/js/SearchPage/filterCategory.js"></script>
     }
 </div>
