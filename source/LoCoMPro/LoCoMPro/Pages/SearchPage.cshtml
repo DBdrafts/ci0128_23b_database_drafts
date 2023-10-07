@@ -31,42 +31,50 @@
             <!-- Search filter title -->
             <h4> Filtros </h4>
 
-            <!-- Filter by category -->
-            <h5> Categorías </h5>
-            <form method="get" asp-page="./SearchPage" id="searchForm">
-                @foreach (var category in Model.Category)
-                {
-                    <div class="filter-line">
-                        <input type="checkbox" name="SelectedCategories" value="@category.CategoryName" @(Model.SelectedCategories != null && Model.SelectedCategories.Contains(category.CategoryName) ? "checked" : "") />
-                        <label>@Html.DisplayFor(modelItem => category.CategoryName)</label>
-                    </div>
-                }
-            </form> 
+            @if (Model.Category.Count() > 1)
+            {
+                <!-- Filter by category -->
+                <h5> Categorías </h5>
+                <form method="get" asp-page="./SearchPage" id="searchForm">
+                    @foreach (var category in Model.Category)
+                    {
+                        <div class="filter-line">
+                            <input type="checkbox" name="SelectedCategories" value="@category.CategoryName" @(Model.SelectedCategories != null && Model.SelectedCategories.Contains(category.CategoryName) ? "checked" : "") />
+                            <label>@Html.DisplayFor(modelItem => category.CategoryName)</label>
+                        </div>
+                    }
+                </form>
+            }
 
             <!-- Filter by Province -->
-
-            <h5> Provincias </h5>
-            <form method="get" asp-page="./SearchPage" id="provinceFilterForm">
-                @foreach (var province in Model.Provinces)
-                {
-                    <div class="filter-line">
-                        <input type="checkbox" name="SelectedProvinces" value="@province.Name" @(Model.SelectedProvinces != null && Model.SelectedProvinces.Contains(province.Name) ? "checked" : "") />
-                        <label>@Html.DisplayFor(modelItem => province.Name)</label>
-                    </div>
-                }
-            </form>
+            @if (Model.Provinces.Count() > 1)
+            {
+                <h5> Provincias </h5>
+                <form method="get" asp-page="./SearchPage" id="provinceFilterForm">
+                    @foreach (var province in Model.Provinces)
+                    {
+                        <div class="filter-line">
+                            <input type="checkbox" name="SelectedProvinces" value="@province.Name" @(Model.SelectedProvinces != null && Model.SelectedProvinces.Contains(province.Name) ? "checked" : "") />
+                            <label>@Html.DisplayFor(modelItem => province.Name)</label>
+                        </div>
+                    }
+                </form>
+            }
 
             <!-- Filter by Canton -->
-            <h5> Cantons </h5>
-            <form method="get" asp-page="./SearchPage" id="cantonFilterForm">
-                @foreach (var canton in Model.Cantons)
-                {
-                    <div class="filter-line">
-                        <input type="checkbox" name="SelectedCantons" value="@canton.CantonName" @(Model.SelectedCantons != null && Model.SelectedCantons.Contains(canton.CantonName) ? "checked" : "") />
-                        <label>@Html.DisplayFor(modelItem => canton.CantonName)</label>
-                    </div>
-                }
-            </form>
+            @if (Model.Cantons.Count() > 1)
+            {
+                <h5> Cantons </h5>
+                <form method="get" asp-page="./SearchPage" id="cantonFilterForm">
+                    @foreach (var canton in Model.Cantons)
+                    {
+                        <div class="filter-line">
+                            <input type="checkbox" name="SelectedCantons" value="@canton.CantonName" @(Model.SelectedCantons != null && Model.SelectedCantons.Contains(canton.CantonName) ? "checked" : "") />
+                            <label>@Html.DisplayFor(modelItem => canton.CantonName)</label>
+                        </div>
+                    }
+                </form>
+            }
             
 
 

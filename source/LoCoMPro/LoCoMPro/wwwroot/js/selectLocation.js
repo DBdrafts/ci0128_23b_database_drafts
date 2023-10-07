@@ -2,7 +2,7 @@
 
 // Define a flag to track if the population has already occurred
 let hasPopulatedProvinceSelect = false;
-document.addEventListener("DOMContentLoaded", function () {
+document.ready(function () {
     // Get references to HTML elements by their IDs
     const locationButton = document.getElementById("locationButton"); // Button to open the popup
     const locationInfo = document.getElementById("locationInfo");
