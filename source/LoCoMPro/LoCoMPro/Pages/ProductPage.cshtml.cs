@@ -7,20 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LoCoMPro.Pages
 {
-    public class ProductPageModel : PageModel
+    public class ProductPageModel : LoCoMProPageModel
     {
-        // Context of the data base
-        private readonly LoCoMPro.Data.LoCoMProContext _context;
-
-        // Configuration for the page 
-        private readonly IConfiguration Configuration;
         
         // Product Page constructor 
         public ProductPageModel(LoCoMProContext context, IConfiguration configuration)
-        {
-            _context = context;
-            Configuration = configuration;
-        }
+            : base(context, configuration) { }
 
         // List of the product that exist in the database 
         public IList<Product> Product { get; set; } = default!;
@@ -31,28 +23,35 @@ namespace LoCoMPro.Pages
         // List of the registers that exist in the database 
         public PaginatedList<Register> Register { get; set; } = default!;
 
-        // Product resquested name 
+        // Product requested name 
         [BindProperty(SupportsGet = true)]
         public string? SearchProductName { get; set; }
 
-        // Store resquested name 
+        // Store requested name 
         [BindProperty(SupportsGet = true)]
         public string? SearchStoreName { get; set; }
 
-        // Province resquested name 
+        // Province requested name 
         [BindProperty(SupportsGet = true)]
         public string? SearchProvinceName { get; set; }
 
-        // Canton resquested name 
+        // Canton requested name 
         [BindProperty(SupportsGet = true)]
         public string? SearchCantonName { get; set; }
 
-        // Method to get the request and the params of the request
+        [BindProperty(SupportsGet = true)]
+        public string? CurrentSort { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string? PriceSort { get; set; }
+
         public async Task OnGetAsync(string searchProductName, string searchStoreName, string searchProvinceName, 
-            string searchCantonName, int? pageIndex)
+            string searchCantonName, int? pageIndex, string sortOrder)
         {
-            // If the page registers is lower that 1
-            pageIndex = pageIndex < 1 ? 1 : pageIndex;
+            CurrentSort = sortOrder;
+            PriceSort = String.IsNullOrEmpty(sortOrder) ? "price_desc" : "";
+            //TODO: ADD date
+
 
             // Attr of the product from the params of method
             SearchProductName = searchProductName;
@@ -82,7 +81,7 @@ namespace LoCoMPro.Pages
                 stores = stores.Where(x => x.ProvinciaName != null && x.ProvinciaName.Contains(SearchProvinceName));
             }
 
-            // Gets the Data From Databasse 
+            // Gets the Data From Data base 
             Product = await products.ToListAsync();
             Store = await stores.ToListAsync();
 
@@ -103,12 +102,39 @@ namespace LoCoMPro.Pages
 
             }
 
+            // Code to order
+            switch (sortOrder)
+            {
+                // Order in case of price_descending 
+                case "price_desc":
+                    registers = registers.OrderByDescending(r => r.Price);
+                    break;
+                // Normal order for the price
+                default:
+                    registers = registers.OrderBy(r => r.Price);
+                    break;
+            }
+
             // Get th amount of pages that will be needed for all the registers 
             var pageSize = Configuration.GetValue("PageSize", 5);
 
-            // Gets the Data From Databasse 
+            // Gets the Data From data base 
             Register = await PaginatedList<Register>.CreateAsync(
                 registers.AsNoTracking(), pageIndex ?? 1, pageSize);
+        }
+
+        public IOrderedEnumerable<Register> OrderRegistersByPrice(string orderName, ref ICollection<Register> registers)
+        {
+            switch (orderName)
+            {
+                // Order in case of price_descending 
+                case "price_desc":
+                    return registers.OrderByDescending(r => r.Price);
+                // Normal order for the price
+                default:
+                    return registers.OrderBy(r => r.Price);
+                    
+            }
         }
     } 
 }

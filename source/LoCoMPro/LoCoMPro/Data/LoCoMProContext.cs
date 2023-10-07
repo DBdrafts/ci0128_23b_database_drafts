@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using LoCoMPro.Models;
 using System.Reflection.Metadata;
 
 namespace LoCoMPro.Data
 {
-    public class LoCoMProContext : DbContext
+    public class LoCoMProContext : IdentityDbContext<User>
     {
         public LoCoMProContext(DbContextOptions<LoCoMProContext> options)
             : base(options)
@@ -21,13 +23,13 @@ namespace LoCoMPro.Data
         public DbSet<Provincia> Provincias { get; set; }
         public DbSet<Register> Registers { get; set; }
         public DbSet<Store> Stores { get; set; }
-        public DbSet<User> Users { get; set; }
+
 
 
         // TODO: May want to create a builder for each class
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            base.OnModelCreating(modelBuilder);
             // Creating tables
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<Product>().ToTable("Product");
@@ -48,10 +50,22 @@ namespace LoCoMPro.Data
                 .WithMany(e => e.Registers)
                 .HasForeignKey(c => new { c.StoreName, c.CantonName, c.ProvinciaName });
 
+            // Building relationships for Register
             modelBuilder.Entity<User>()
                 .HasOne(p => p.Location)
                 .WithMany(e => e.Users)
                 .HasForeignKey(c => new { c.CantonName, c.ProvinciaName });
+
+            // Ignoring columns from default IdentityUser
+            modelBuilder.Entity<User>().Ignore(u => u.PhoneNumber);
+            modelBuilder.Entity<User>().Ignore(u => u.PhoneNumberConfirmed);
+            modelBuilder.Entity<User>().Ignore(u => u.EmailConfirmed);
+            modelBuilder.Entity<User>().Ignore(u => u.SecurityStamp);
+            modelBuilder.Entity<User>().Ignore(u => u.ConcurrencyStamp);
+            modelBuilder.Entity<User>().Ignore(u => u.TwoFactorEnabled);
+            modelBuilder.Entity<User>().Ignore(u => u.LockoutEnabled);
+            modelBuilder.Entity<User>().Ignore(u => u.LockoutEnd);
+            modelBuilder.Entity<User>().Ignore(u => u.AccessFailedCount);
 
             modelBuilder.Entity<Category>()
                 .HasMany(p => p.Products)
@@ -69,6 +83,41 @@ namespace LoCoMPro.Data
                     , l => l.HasOne(typeof(Product)).WithMany().HasForeignKey("ProductName")
                     , r => r.HasOne(typeof(Store)).WithMany().HasForeignKey("StoreName", "CantonName", "ProvinceName"));
 
+            modelBuilder.Entity<Store>()
+                .Navigation(s => s.Products)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Store>()
+                .Navigation(s => s.Registers)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Product>()
+                .Navigation(p => p.Stores)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Product>()
+                .Navigation(p => p.Registers)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Product>()
+                .Navigation(p => p.Categories)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<User>()
+                .Navigation(u => u.Registers)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Category>()
+                .Navigation(c => c.Products)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Canton>()
+                .Navigation(c => c.Stores)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Provincia>()
+                .Navigation(p => p.Cantones)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
         }
 
     }
