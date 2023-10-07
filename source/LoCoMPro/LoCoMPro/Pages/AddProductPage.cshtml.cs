@@ -2,6 +2,8 @@ using Azure;
 using Humanizer;
 using LoCoMPro.Data;
 using LoCoMPro.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,19 +18,32 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace LoCoMPro.Pages
 {
-    public class AddProductPageModel : PageModel
+    [Authorize]
+    public class AddProductPageModel : LoCoMProPageModel
     {
-        private readonly LoCoMPro.Data.LoCoMProContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public AddProductPageModel(LoCoMProContext context)
+        public AddProductPageModel(LoCoMProContext context, IConfiguration configuration, UserManager<User> userManager)
+           : base(context, configuration) {
+            _userManager = userManager;
+        }
+
+        /*
+        public AddProductPageModel(LoCoMProContext context, UserManager<User> userManager)
         {
             _context = context;
-        }
+            _userManager = userManager;
+        }*/
+
+        /*
+        public AddProductPageModel(LoCoMProContext context, IConfiguration configuration)
+            : base(context, configuration) { } */
 
         public List<SelectListItem>? CategoryList { get; set; }
         public List<SelectListItem>? ProvinciaList { get; set; }
@@ -123,7 +138,7 @@ namespace LoCoMPro.Pages
             string? modelName = CheckNull(Request.Form["model"]);
             string? comment = CheckNull(Request.Form["comment"]);
 
-            string userName = "Jose Miguel Garcia Lopez";  // STATIC USER
+            string Id = _userManager.GetUserId(User);
 
             // Get the product if exists in the context
             var productToAdd = _context.Products
@@ -167,7 +182,7 @@ namespace LoCoMPro.Pages
             Register newRegister = new()
             {
                 SubmitionDate = DateTime.Now,
-                Contributor = _context.Users.First(u => u.UserName == userName), // TODO: CHANGE STATIC USER!
+                Contributor = _context.Users.First(u => u.Id == Id),
                 Product = productToAdd,
                 Store = store,
                 Price = price,
