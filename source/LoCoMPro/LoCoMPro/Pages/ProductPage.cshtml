@@ -95,12 +95,22 @@
 				<a href="#">Fecha</a>
 				<ul class="menu-vertical">
                     <li>
-                        <a href="#">Mas recientes</a>
-                        
+                        <a asp-page="./ProductPage"
+                           asp-route-SearchProductName="@Model.SearchProductName"
+                           asp-route-SearchStoreName="@Model.SearchStoreName"
+                           asp-route-SearchCantonName="@Model.SearchCantonName"
+                           asp-route-SearchProvinceName="@Model.SearchProvinceName"
+                           asp-route-sortOrder="date" style="text-decoration: none;display: grid;font-size: 20px;
+                              color: white; text-align: center;"> Más recientes</a>
                     </li>
                     <li>
-                        <a href="#">Mas antiguos</a>
-
+                        <a asp-page="./ProductPage"
+                           asp-route-SearchProductName="@Model.SearchProductName"
+                           asp-route-SearchStoreName="@Model.SearchStoreName"
+                           asp-route-SearchCantonName="@Model.SearchCantonName"
+                           asp-route-SearchProvinceName="@Model.SearchProvinceName"
+                           asp-route-sortOrder="date_desc" style="text-decoration: none;display: grid;font-size: 20px;
+                              color: white; text-align: center;"> Más antiguos</a>
                     </li>
 				</ul>
 			</li>
@@ -168,6 +178,7 @@
                    asp-route-SearchStoreName="@Model.SearchStoreName"
                    asp-route-SearchCantonName="@Model.SearchCantonName"
                    asp-route-SearchProvinceName="@Model.SearchProvinceName"
+                   asp-route-sortOrder="@Model.CurrentSort"
                    class="button-general pagination-button" id="pagination-button-left">
                     <img src="~/img/ArrowLeftIcon.svg" alt="Anterior">
                 </a>
@@ -187,6 +198,7 @@
                            asp-route-SearchStoreName="@Model.SearchStoreName"
                            asp-route-SearchCantonName="@Model.SearchCantonName"
                            asp-route-SearchProvinceName="@Model.SearchProvinceName"
+                           asp-route-sortOrder="@Model.CurrentSort"
                            class="@(i == Model.Register.PageIndex ? "pagination-square-active" : "")">
                             <p>@i</p>
                         </a>
@@ -204,6 +216,7 @@
                    asp-route-SearchStoreName="@Model.SearchStoreName"
                    asp-route-SearchCantonName="@Model.SearchCantonName"
                    asp-route-SearchProvinceName="@Model.SearchProvinceName"
+                   asp-route-sortOrder="@Model.CurrentSort"
                    class="button-general pagination-button" id="pagination-button-right">
                     <img src="~/img/ArrowRightIcon.svg" alt="Siguiente">
                 </a>

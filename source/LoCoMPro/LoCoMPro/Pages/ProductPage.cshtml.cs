@@ -45,13 +45,22 @@ namespace LoCoMPro.Pages
         [BindProperty(SupportsGet = true)]
         public string? PriceSort { get; set; }
 
+        // Attr for sort the date register
+        [BindProperty(SupportsGet = true)]
+        public string DateSort { get; set; }
+
+
         public async Task OnGetAsync(string searchProductName, string searchStoreName, string searchProvinceName, 
             string searchCantonName, int? pageIndex, string sortOrder)
         {
             CurrentSort = sortOrder;
             PriceSort = String.IsNullOrEmpty(sortOrder) ? "price_desc" : "";
-            //TODO: ADD date
-
+            
+            // if sortOrder is Date, match date else date_desc
+            DateSort = sortOrder == "date" ? "date_desc" : "date";
+            
+            /* If the page registers is lower that 1 */
+            pageIndex = pageIndex < 1 ? 1 : pageIndex;
 
             // Attr of the product from the params of method
             SearchProductName = searchProductName;
@@ -105,9 +114,17 @@ namespace LoCoMPro.Pages
             // Code to order
             switch (sortOrder)
             {
-                // Order in case of price_descending 
-                case "price_desc":
+                // Order in case of price_descending
+                case "price_desc":   
                     registers = registers.OrderByDescending(r => r.Price);
+                    break;
+                // Newest order for Submition Date
+                case "date":     
+                    registers = registers.OrderByDescending(r => r.SubmitionDate);
+                    break;
+                // Oldest order for Submition Date
+                case "date_desc":
+                    registers = registers.OrderBy(r => r.SubmitionDate);
                     break;
                 // Normal order for the price
                 default:
@@ -115,7 +132,7 @@ namespace LoCoMPro.Pages
                     break;
             }
 
-            // Get th amount of pages that will be needed for all the registers 
+            // Get th amount of pages that will be needed for all the registers
             var pageSize = Configuration.GetValue("PageSize", 5);
 
             // Gets the Data From data base 
@@ -134,6 +151,23 @@ namespace LoCoMPro.Pages
                 default:
                     return registers.OrderBy(r => r.Price);
                     
+            }
+        }
+
+        public IOrderedEnumerable<Register> OrderRegistersByDate(string orderName, ref ICollection<Register> registers)
+        {
+            switch (orderName)
+            {
+                // Order in case of date_descending 
+                case "date_desc":
+                    return registers.OrderByDescending(r => r.SubmitionDate);
+                // Normal order for the date
+                case "date":
+                    return registers.OrderBy(r => r.SubmitionDate);
+                // Normal order in case date null
+                default:
+                    return registers.OrderBy(r => r.Price);
+
             }
         }
     } 

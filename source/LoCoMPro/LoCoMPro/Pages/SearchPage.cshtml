@@ -129,7 +129,6 @@
                                    asp-route-SelectedProvinces="@(Model.SelectedProvinces)"
                                    asp-route-SelectedCantons="@(Model.SelectedCantons)"
                                    asp-route-sortOrder="price_desc">Mayores precios
-
                                 </a>
                             </li>
                         </ul>
@@ -178,9 +177,10 @@
                 {
                     <!-- Link to go to the previous page -->
                     <a asp-page="./SearchPage"
+                       asp-route-pageIndex="@(Model.Register.PageIndex - 1)"
                        asp-route-searchType="@Model.SearchType"
                        asp-route-searchString="@Model.SearchString"
-                       asp-route-pageIndex="@(Model.Register.PageIndex - 1)"
+                       asp-route-sortOrder="@Model.PriceSort"
                        asp-route-SelectedCategories="@(Model.SelectedCategories)"
                        asp-route-SelectedProvinces="@(Model.SelectedProvinces)"
                        asp-route-SelectedCantons="@(Model.SelectedCantons)"
@@ -199,9 +199,10 @@
                         <!-- Pagination square of the pages -->
                         <div id="pagination-square">
                             <a asp-page="./SearchPage"
+                               asp-route-pageIndex="@i"
                                asp-route-searchType="@Model.SearchType"
                                asp-route-searchString="@Model.SearchString"
-                               asp-route-pageIndex="@i"
+                               asp-route-sortOrder="@Model.PriceSort"
                                asp-route-SelectedCategories="@(Model.SelectedCategories)"
                                asp-route-SelectedProvinces="@(Model.SelectedProvinces)"
                                asp-route-SelectedCantons="@(Model.SelectedCantons)"
@@ -217,9 +218,10 @@
                 {
                     <!-- Link to go to the next page -->
                     <a asp-page="./SearchPage"
+                       asp-route-pageIndex="@(Model.Register.PageIndex + 1)"
                        asp-route-searchType="@Model.SearchType"
                        asp-route-searchString="@Model.SearchString"
-                       asp-route-pageIndex="@(Model.Register.PageIndex + 1)"
+                       asp-route-sortOrder="@Model.PriceSort"
                        asp-route-SelectedCategories="@(Model.SelectedCategories)"
                        asp-route-SelectedProvinces="@(Model.SelectedProvinces)"
                        asp-route-SelectedCantons="@(Model.SelectedCantons)"

@@ -14,57 +14,108 @@ using System.Drawing.Printing;
 
 namespace LoCoMPro.Pages
 {
+    /// <summary>
+    /// Page model for SearchPage, handels requests, database access, and preparing data for the page.
+    /// </summary>
     public class SearchPageModel : LoCoMProPageModel
     {
-        // Search Page constructor 
+        /// <summary>
+        /// Creates a new SearchPageModel, requires a context and configuration.
+        /// </summary>
+        /// <param name="context">DB context to use for page.</param>
+        /// <param name="configuration">Configuration for page.</param>
         public SearchPageModel(LoCoMProContext context, IConfiguration configuration)
             : base(context, configuration) { }
 
-        // Determinate if the check-box was activated 
+        /// <summary>
+        /// Wether or not the Page is Checked.
+        /// </summary>
         [BindProperty]
         public bool IsChecked { get; set; }
 
+        /// <summary>
+        /// Categories that the user wants to filter by.
+        /// <p>Its string with category names separated by a comma.</p>
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? SelectedCategories{ get; set; }
 
+        /// <summary>
+        /// Provinces that the user wants to filter by.
+        /// <p>Its string with province names separated by a comma.</p>
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? SelectedProvinces { get; set; }
 
+        /// <summary>
+        /// Cantons that the user wants to filter by.
+        /// <p>Its string with canton names separated by a comma.</p>
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? SelectedCantons { get; set; }
 
-        /* List of the categories that exist in the database */
+        /// <summary>
+        /// List of the categories that the user can filter by.
+        /// </summary>
         public IList<Category> Category { get; set; } = default!;
 
-        /* List of the Provinces that exist in the database */
+        /// <summary>
+        /// List of the provinces that the user can filter by.
+        /// </summary>
         public IList<Provincia> Provinces { get; set; } = default!;
-        /* List of the Provinces that exist in the database */
+
+        /// <summary>
+        /// List of the cantons that the user can filter by.
+        /// </summary>
         public IList<Canton> Cantons { get; set; } = default!;
 
-        // List of the registers that match with the search string 
+        /// <summary>
+        /// Lis of registers that match the <paramref name="SearchString"/>.
+        /// </summary>
         public PaginatedList<Register> Register { get; set; } = default!;
 
-        // Text enters as the search attribute 
+        /// <summary>
+        /// Search String introduced by the user.
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? SearchString { get; set; }
 
-        // Text enters as the search type attribute 
+        /// <summary>
+        /// Type of search the user is performing.
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? SearchType { get; set; }
+
+        /// <summary>
+        /// Province the user wants to base the search on.
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? Province { get; set; }
+
+        /// <summary>
+        /// Canton the user wants to base the search on.
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? Canton { get; set; }
 
-        // Current type of sort 
+        /// <summary>
+        /// Current type of sort.
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? CurrentSort { get; set; }
 
-        // Type of sort by price 
+        /// <summary>
+        /// Type of sort by price.
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? PriceSort { get; set; }
 
-        /* OnGet method that handles the GET request */
+        /// <summary>
+        /// OnGet method that handles the GET request.
+        /// </summary>
+        /// <param name="pageIndex">Paginated page index to see results of.</param>
+        /// <param name="sortOrder">Order to use when showing search results.</param>
+        /// <returns></returns>
         public async Task OnGetAsync(int? pageIndex, string sortOrder)
         {
 
@@ -142,7 +193,14 @@ namespace LoCoMPro.Pages
         }
 
 
-        public ref IQueryable<Register> FilterByLocation(ref IQueryable<Register> registers, List<string> selectedProvinces, List<string> selectedCantons)
+        /// <summary>
+        /// Filters the <paramref name="registers"/> by the <paramref name="selectedProvinces"/> and the <paramref name="selectedCantons"/>.
+        /// </summary>
+        /// <param name="registers">Registers to filter.</param>
+        /// <param name="selectedProvinces">Provinces to filter the registers by.</param>
+        /// <param name="selectedCantons">Cantons to filter the registers by.</param>
+        /// <returns>Filtered registers with the given selections.</returns>
+        public ref IQueryable<Register> FilterByLocation(ref IQueryable<Register> registers, List<string>? selectedProvinces = null, List<string>? selectedCantons = null)
         {
             // Filter by Province
             if (selectedProvinces != null && selectedProvinces.Count > 0 && selectedProvinces[0] != null)
@@ -158,13 +216,20 @@ namespace LoCoMPro.Pages
             return ref registers;
         }
 
-        /* OnPost method that sent request */
+        /// <summary>
+        /// OnPost method that sent request.
+        /// </summary>
+        /// <returns>Redirect to search results page.</returns>
         public IActionResult OnPost()
         {
             return Page();
         }
 
-        // Gets the registers by using the type of search choose 
+        /// <summary>
+        /// Gets the registers by using the type of search choose.
+        /// </summary>
+        /// <param name="registersQuery">Registers to base the search on.</param>
+        /// <returns></returns>
         public IQueryable<Register> GetRegistersByType(IQueryable<Register>? registersQuery)
         {
             IQueryable<Register> resultQuery;
@@ -193,7 +258,12 @@ namespace LoCoMPro.Pages
             return resultQuery;
         }
 
-        // Order the registers by the sort order choose 
+        /// <summary>
+        /// Order the registers by the sort order choose.
+        /// </summary>
+        /// <param name="unorderedList">List of registers to order.</param>
+        /// <param name="sortOrder">Type of order to use.</param>
+        /// <returns>Ordered list of registers.</returns>
         public List<Register> OrderRegisters(List<Register>? unorderedList, string sortOrder)
         {
             List<Register> orderedList = new List<Register>();
@@ -219,7 +289,11 @@ namespace LoCoMPro.Pages
             return orderedList;
         }
 
-        // Gets the sort order of the registers 
+        /// <summary>
+        /// Gets the sort order of the registers.
+        /// </summary>
+        /// <param name="sortOrder">Order selected by the user.</param>
+        /// <returns><paramref name="sortOrder"/> value if its is not empty or null, 'price_asc' otherwise.</returns>
         public string GetSortOrder(string? sortOrder)
         {
             // If null, the order by price as default 
