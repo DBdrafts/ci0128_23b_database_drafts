@@ -17,7 +17,12 @@ builder.Services.AddDbContext<LoCoMProContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("LoCoMProContext") ?? throw new InvalidOperationException("Connection string 'LoCoMProContext' not found.")));
 
 // Added default IdentityUser and configured it to not require a confirmed account, also added custom signInManager that overrides PasswordSignInAsync()
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false).AddSignInManager<MySignInManager>().AddEntityFrameworkStores<LoCoMProContext>();
+builder.Services.AddDefaultIdentity<User>(options => {
+    options.SignIn.RequireConfirmedAccount = false;
+    options.User.RequireUniqueEmail = true;
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 !*-._@+";
+}).AddSignInManager<MySignInManager>().AddEntityFrameworkStores<LoCoMProContext>();
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var app = builder.Build();
