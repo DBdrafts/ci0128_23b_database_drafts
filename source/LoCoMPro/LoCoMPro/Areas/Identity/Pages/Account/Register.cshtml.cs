@@ -11,6 +11,7 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using LoCoMPro.Data;
+using LoCoMPro.Pages;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -22,21 +23,24 @@ using Microsoft.Extensions.Logging;
 
 namespace LoCoMPro.Areas.Identity.Pages.Account
 {
-    public class RegisterModel : PageModel
+    public class RegisterModel : LoCoMProPageModel
     {
         private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
+        public readonly UserManager<User> _userManager;
         private readonly IUserStore<User> _userStore;
         private readonly IUserEmailStore<User> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
+            LoCoMProContext context,
+            IConfiguration configuration,
             UserManager<User> userManager,
             IUserStore<User> userStore,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
+            : base(context, configuration)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -115,14 +119,11 @@ namespace LoCoMPro.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            System.Diagnostics.Debug.WriteLine("ENTERED REGISTER ONPOSTASYNC");
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-                System.Diagnostics.Debug.WriteLine(Input.UserName);
-                System.Diagnostics.Debug.WriteLine(Input.Email);
                 await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -153,9 +154,6 @@ namespace LoCoMPro.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 } else
-                {
-                    System.Diagnostics.Debug.WriteLine("FAILED TO REGISTER");
-                }
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
