@@ -40,9 +40,11 @@
                 }
                 <!-- Navegation bar buttons -->
                 <div class="w-100 d-flex justify-content-end">
-                    
                     @if (SignInManager.IsSignedIn(User))
                     {
+                        var user = await UserManager.GetUserAsync(User);
+                        var email = await UserManager.GetEmailAsync(user!);
+
                         <!-- Add register button of the layout -->
                         <!-- If user is signed in this button redirects to AddProduct page -->
                         <a href="/AddProductPage" class="layout-button button-general">
@@ -57,7 +59,10 @@
                             <p>Usuario</p>
                         </button>
                         <!-- Popup displayed through the script -->
-                        <div class="popup-user" id="popup-logged">
+                        <div class="popup-user text-center" id="popup-logged">
+                            <h6>@email</h6>
+                            <img src="~/img/UserIconSignedIn.svg" alt="Imagen de Usuario">
+                            <h5>@user</h5>
                             <!-- Button to logout -->
                             <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
                                 <button class="button-general" id="logout-button">Cerrar Sesión</button>
