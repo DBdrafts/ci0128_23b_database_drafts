@@ -11,7 +11,13 @@ using Moq;
 using Assert = NUnit.Framework.Assert;
 using System;
 using Microsoft.AspNetCore.Http.HttpResults;
-
+using Microsoft.AspNetCore.Identity;
+using LoCoMPro.Areas.Identity.Pages.Account;
+using Microsoft.Extensions.Logging;
+using Castle.Core.Smtp;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication;
 
 [TestClass]
 // Declaration of the test class
@@ -37,15 +43,38 @@ public class BaseTest
         // Create a context instance of the DB using the configured options
         var dbContext = new LoCoMProContext(options);
 
+        // Create a UserStore to be used as a required argument in UserManager
+        var mockUserStore = new Mock<IUserStore<User>>();
+
+        // Create a ContextAccessor to be used as a required argument in SignInManager
+        var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
+
+        // Create a UserManager
+        var mockUserManager = new Mock<UserManager<User>>(mockUserStore.Object, null, null
+            , null, null, null, null, null, null);
+
+        // Create a UserClaimsPrincipalFactory to be used as a required argument in SigninManager
+        var mockUserClaimsPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<User>>();
+
+        // Create a SignInManager
+        var mockSignInManager = new Mock<SignInManager<User>>(
+            mockUserManager.Object,
+            mockHttpContextAccessor.Object,
+            mockUserClaimsPrincipalFactory.Object, null, null, null, null
+        );
+
         // return the new instance of new ProductPageModel instance
         // created with the database context and mock configuration
         // real instance
-        return CreateLoCoMProPageModel(dbContext, mockConfiguration, pageType);
+        return CreateLoCoMProPageModel(dbContext, mockConfiguration, mockUserManager, mockSignInManager
+            , mockUserStore, pageType);
     }
 
     // Create LoCoMPro page model depending of the string received
     protected LoCoMProPageModel CreateLoCoMProPageModel(LoCoMProContext dbContext
-        , Mock<IConfiguration> mockConfiguration, string pageType)
+        , Mock<IConfiguration> mockConfiguration, Mock<UserManager<User>> mockUserManager
+        , Mock<SignInManager<User>> mockSignInManager, Mock<IUserStore<User>> mockUserStore
+        , string pageType)
     {
         // Return the type of the LoCoMPro 
         switch (pageType)
@@ -59,10 +88,18 @@ public class BaseTest
                 return new ProductPageModel(dbContext, mockConfiguration.Object);
 
             // Have to return a Add Register page
-            /*
             case "add_register_page":
-                return new AddProductPageModel(dbContext, mockConfiguration.Object);
-            */
+                return new AddProductPageModel(dbContext, mockConfiguration.Object, mockUserManager.Object);
+
+            // Have to return a Login page
+            case "login_page":
+                return new LoginModel(dbContext, mockConfiguration.Object, mockSignInManager.Object, null);
+
+            // Have to return a Register page
+            case "register_page":
+                return new RegisterModel(dbContext, mockConfiguration.Object, mockUserManager.Object
+                    , mockUserStore.Object, mockSignInManager.Object, null, null);
+
             // Return a base page model
             default:
                 return new LoCoMProPageModel(dbContext, mockConfiguration.Object);
