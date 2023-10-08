@@ -4,52 +4,98 @@ using LoCoMPro.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using System.ComponentModel.DataAnnotations;
 
 namespace LoCoMPro.Pages
 {
+    /// <summary>
+    /// Page model for Product Page, handles requests, and access to database to show Web Page.
+    /// </summary>
     public class ProductPageModel : LoCoMProPageModel
     {
         
+        /// <summary>
+        /// Creates a new ProductPageModel.
+        /// </summary>
+        /// <param name="context">DB Context to pull data from.</param>
+        /// <param name="configuration">Configuration for page.</param>
         // Product Page constructor 
         public ProductPageModel(LoCoMProContext context, IConfiguration configuration)
             : base(context, configuration) { }
 
-        // List of the product that exist in the database 
+        /// <summary>
+        /// List of the product that exist in the databas.
+        /// </summary>
         public IList<Product> Product { get; set; } = default!;
 
-        // List of the stores that exist in the database 
+        /// <summary>
+        /// List of the stores that exist in the database.
+        /// </summary>
         public IList<Store> Store { get; set; } = default!;
 
-        // List of the registers that exist in the database 
+        /// <summary>
+        /// List of the registers that exist in the database.
+        /// </summary>
         public PaginatedList<Register> Register { get; set; } = default!;
 
-        // Product requested name 
+        /// <summary>
+        /// Requested product name.
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? SearchProductName { get; set; }
 
-        // Store requested name 
+        /// <summary>
+        /// Requested store name.
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? SearchStoreName { get; set; }
 
-        // Province requested name 
+        /// <summary>
+        /// Requested province name.
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? SearchProvinceName { get; set; }
 
-        // Canton requested name 
+        /// <summary>
+        /// Requested canton name.
+        /// </summary> 
         [BindProperty(SupportsGet = true)]
         public string? SearchCantonName { get; set; }
 
+        /// <summary>
+        /// Current sort being used by sort.
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? CurrentSort { get; set; }
 
+        /// <summary>
+        /// Price sort.
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? PriceSort { get; set; }
 
-        // Attr for sort the date register
+        /// <summary>
+        /// Attr for sort the date register.
+        /// </summary>
         [BindProperty(SupportsGet = true)]
-        public string DateSort { get; set; }
+        public string? DateSort { get; set; }
 
+        /// <summary>
+        /// Avg calculated price for product.
+        /// </summary>
+        public decimal AvgPrice { get; set; }
 
+        /// <summary>
+        /// GET HTTP request, initializes page values.
+        /// </summary>
+        /// <param name="searchProductName">Product to desplay data of.</param>
+        /// <param name="searchStoreName">Store where the product is sold.</param>
+        /// <param name="searchProvinceName">Province where the store is located.</param>
+        /// <param name="searchCantonName">Canton where the store is located.</param>
+        /// <param name="pageIndex">Page index of registers to visualize.</param>
+        /// <param name="sortOrder">Order to use when showing values.</param>
+        /// <returns></returns>
         public async Task OnGetAsync(string searchProductName, string searchStoreName, string searchProvinceName, 
             string searchCantonName, int? pageIndex, string sortOrder)
         {
@@ -111,6 +157,11 @@ namespace LoCoMPro.Pages
 
             }
 
+          
+
+            // Get the average of the registers within last month.
+            AvgPrice = GetAveragePrice(registers, DateTime.Now.AddYears(-1).Date, DateTime.Now) ;
+
             // Code to order
             switch (sortOrder)
             {
@@ -140,6 +191,12 @@ namespace LoCoMPro.Pages
                 registers.AsNoTracking(), pageIndex ?? 1, pageSize);
         }
 
+        /// <summary>
+        /// Orders <paramref name="registers"/> by <paramref name="orderName"/> price.
+        /// </summary>
+        /// <param name="orderName">Type of order to use.</param>
+        /// <param name="registers">Registers to order.</param>
+        /// <returns>Reqgisters ordered by <paramref name="orderName"/> price.</returns>
         public IOrderedEnumerable<Register> OrderRegistersByPrice(string orderName, ref ICollection<Register> registers)
         {
             switch (orderName)
@@ -154,6 +211,12 @@ namespace LoCoMPro.Pages
             }
         }
 
+        /// <summary>
+        /// Orders <paramref name="registers"/> by <paramref name="orderName"/> date.
+        /// </summary>
+        /// <param name="orderName">Type of order to use.</param>
+        /// <param name="registers">Registers to order.</param>
+        /// <returns>Reqgisters ordered by <paramref name="orderName"/> date.</returns>
         public IOrderedEnumerable<Register> OrderRegistersByDate(string orderName, ref ICollection<Register> registers)
         {
             switch (orderName)
@@ -169,6 +232,23 @@ namespace LoCoMPro.Pages
                     return registers.OrderBy(r => r.Price);
 
             }
+        }
+
+        /// <summary>
+        /// Gets the average price of the registers within the given time frame.
+        /// </summary>
+        /// <param name="registers">Registers to use for calculation.</param>
+        /// <param name="from">Starting date to take registers from for calculation.</param>
+        /// <param name="to">Ending date to take the registers from for calculation.</param>
+        /// <returns>Average price of the registers within the given time frame.</returns>
+        public decimal GetAveragePrice(IQueryable<Register> registers, DateTime? from, DateTime? to)
+        {
+            if (from != null && to != null)
+            {
+                registers = registers.Where(r => (r.SubmitionDate >= from) && (r.SubmitionDate <= to));
+            }
+            double avgPrice = (registers is not null && registers.Count() > 1) ? registers.Average(r => r.Price) : 0.0;
+            return Convert.ToDecimal(avgPrice);
         }
     } 
 }
