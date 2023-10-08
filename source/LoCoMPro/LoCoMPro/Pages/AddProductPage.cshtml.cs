@@ -30,7 +30,8 @@ namespace LoCoMPro.Pages
         private readonly UserManager<User> _userManager;
 
         public AddProductPageModel(LoCoMProContext context, IConfiguration configuration, UserManager<User> userManager)
-           : base(context, configuration) {
+           : base(context, configuration)
+        {
             _userManager = userManager;
         }
 
@@ -130,7 +131,7 @@ namespace LoCoMPro.Pages
             // Get the information of the form
             string provinciaName = Request.Form["selectedProvince"]!;
             string cantonName = Request.Form["selectedCanton"]!;
-            string storeName= Request.Form["store"]!;
+            string storeName = Request.Form["store"]!;
             string productName = Request.Form["productName"]!;
             float price = Convert.ToSingle(Request.Form["price"]);
             string? chosenCategory = Request.Form["category"];
@@ -138,34 +139,26 @@ namespace LoCoMPro.Pages
             string? modelName = CheckNull(Request.Form["model"]);
             string? comment = CheckNull(Request.Form["comment"]);
 
-            string Id = _userManager.GetUserId(User);
-
             // Get the product if exists in the context
             var productToAdd = _context.Products
                 .Include(p => p.Registers)
                 .Include(p => p.Stores)
                 .Include(p => p.Categories)
                 .FirstOrDefault(p => p.Name == productName);
+
+            // Get the user by their ID
+            var user = _context.Users.First(u => u.Id == _userManager.GetUserId(User));
             // Check and create a new store if not exists
             var store = AddStoreRelation(storeName, cantonName, provinciaName);
             // Get category can be null
             var category = _context.Categories.FirstOrDefault(c => c.CategoryName == chosenCategory);
 
             // If the product doesn't exists
-            if (productToAdd == null)  
+            if (productToAdd == null)
             {
                 // Create new product
-                productToAdd = new()
-                {
-                    Name = productName,
-                    Brand = brandName,
-                    Model = modelName,
-                };
-                
-                if (category != null)
-                {   // Add category-product relation
-                    productToAdd.Categories!.Add(category);
-                }
+                productToAdd = CreateProduct(productName, brandName, modelName, category);
+
                 // Add the product to the context
                 _context.Products.Add(productToAdd);
             }
@@ -179,15 +172,8 @@ namespace LoCoMPro.Pages
             if (!productToAdd.Stores!.Contains(store)) productToAdd.Stores.Add(store);
 
             // Create new Register
-            Register newRegister = new()
-            {
-                SubmitionDate = DateTime.Now,
-                Contributor = _context.Users.First(u => u.Id == Id),
-                Product = productToAdd,
-                Store = store,
-                Price = price,
-                Comment = comment
-            };
+            var newRegister = CreateRegister(productToAdd, store, price, comment, user);
+
             // Add the product to the context
             _context.Registers.Add(newRegister);
 
@@ -197,7 +183,9 @@ namespace LoCoMPro.Pages
             return RedirectToPage("/Index");
         }
 
-        private Store AddStoreRelation(string storeName, string cantonName, string provinceName) {
+        // Method that creates a new store if not exists
+        private Store AddStoreRelation(string storeName, string cantonName, string provinceName)
+        {
             var store = _context.Stores.Find(storeName, cantonName, provinceName);
             if (store == null) // If the store doesn't exist
             {
@@ -213,13 +201,46 @@ namespace LoCoMPro.Pages
         }
 
         // Method that returns null for omitted attributes
-        static private string? CheckNull(string? attribute)
+        static internal string? CheckNull(string? attribute)
         {
             if (attribute == "")
             {
                 attribute = null;
             }
             return attribute;
+        }
+
+        //Method that create and returns a new Product
+        internal Product CreateProduct(string productName, string? brandName, string? modelName, Category? category)
+        {
+            // Create new product
+            var productToAdd = new Product()
+            {
+                Name = productName,
+                Brand = brandName,
+                Model = modelName,
+            };
+
+            if (category != null)
+            {   // Add category-product relation
+                productToAdd.Categories!.Add(category);
+            }
+            return productToAdd;
+        }
+
+        internal Register CreateRegister(Product productToAdd, Store store, float price, string? comment, User user)
+        {
+            // Create new Register
+            Register newRegister = new()
+            {
+                SubmitionDate = DateTime.Now,
+                Contributor = user,
+                Product = productToAdd,
+                Store = store,
+                Price = price,
+                Comment = comment
+            };
+            return newRegister;
         }
 
         // Suggests data for autocomplete on required inputs of page.
@@ -260,7 +281,7 @@ namespace LoCoMPro.Pages
             Product? productMatch = _context.Products
                 .Include(p => p.Categories)
                 .FirstOrDefault(p => p.Name == productName);
-            
+
             // If no product was found with the given input return empty dictionary
             if (productMatch == null) return new JsonResult(data);
 
@@ -269,11 +290,9 @@ namespace LoCoMPro.Pages
             data["#model"] = productMatch.Model ?? "";
 
             // Get first Category result or null
-            //data["#category"] = (productMatch.Categories != null) ? productMatch.Categories!.First().CategoryName : "";
             data["#category"] = (productMatch.Categories != null && productMatch.Categories.Any()) ? productMatch.Categories.First().CategoryName : "";
 
             return new JsonResult(data);
         }
     }
-
 }

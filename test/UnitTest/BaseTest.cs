@@ -8,6 +8,7 @@ using LoCoMPro.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Moq;
+using Microsoft.AspNetCore.Identity;
 using Assert = NUnit.Framework.Assert;
 using System;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -23,6 +24,16 @@ using Microsoft.AspNetCore.Authentication;
 // Declaration of the test class
 public class BaseTest
 {
+    // Variable to save a mock user
+    protected UserManager<User> UserManager { get; }
+
+    // Constructor that creates the mock user
+    public BaseTest()
+    {
+        var userStore = new Mock<IUserStore<User>>();
+        UserManager = new UserManager<User>(userStore.Object, null!, null!, null!, null!, null!, null!, null!, null!);
+    }
+
     // Method to create the mock of the Razor Page Model.
     protected LoCoMProPageModel CreatePageModel(string pageType)
     {
