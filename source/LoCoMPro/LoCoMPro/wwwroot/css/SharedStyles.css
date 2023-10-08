@@ -12,7 +12,7 @@
 .logo-image {
     height: auto;
     width: auto;
-    margin: 30px auto;
+    margin: 50px;
     text-align: center;
 }
 
@@ -45,15 +45,16 @@
 /* Style for the logo that work as a link to the main page */
 .logo-link {
     display: inline-block;
-    height: 50px;
-    width: 150px;
-    margin: 0px 15px;
+    height: 40px;
+    width: 120px;
+    margin: 9px 0px 0px 15px;
+    vertical-align: middle;
 }
 
 /* Style for the image of the logo that work as a link to the main page */
 .logo-link img {
-    height: 50px;
-    width: 150px;
+    height: 40px;
+    width: 120px;
 }
 
 /* Style for the pagination section */
