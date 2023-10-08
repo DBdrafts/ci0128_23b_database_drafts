@@ -15,15 +15,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using LoCoMPro.Data;
+using LoCoMPro.Pages;
 
 namespace LoCoMPro.Areas.Identity.Pages.Account
 {
-    public class LoginModel : PageModel
+    public class LoginModel : LoCoMProPageModel
     {
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(LoCoMProContext context, IConfiguration configuration
+            , SignInManager<User> signInManager, ILogger<LoginModel> logger) : base(context, configuration)
         {
             _signInManager = signInManager;
             _logger = logger;
@@ -67,6 +69,8 @@ namespace LoCoMPro.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [EmailAddress]
+            [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?$", ErrorMessage = "The Email is not valid.")]
+            [Display(Name = "Email")]
             public string Email { get; set; }
 
             /// <summary>
