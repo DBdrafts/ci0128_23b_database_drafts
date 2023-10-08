@@ -43,21 +43,10 @@ namespace LoCoMPro.Pages
             _userManager = userManager;
         }
 
-        /*
-        public AddProductPageModel(LoCoMProContext context, UserManager<User> userManager)
-        {
-            _context = context;
-            _userManager = userManager;
-        }*/
-
-        /*
-        public AddProductPageModel(LoCoMProContext context, IConfiguration configuration)
-            : base(context, configuration) { } */
-
+        /// <summary>
+        /// Available categories for products.
+        /// </summary>
         public List<SelectListItem>? CategoryList { get; set; }
-        public List<SelectListItem>? ProvinciaList { get; set; }
-        public List<SelectListItem>? CantonList { get; set; }
-
 
         // NOTE: The following 3 methods can be modularized, but to improve understanding, they were left as is
         // maybe we can do it later
@@ -79,65 +68,21 @@ namespace LoCoMPro.Pages
                 .ToList();
         }
 
-        // Method for loading the list of provinces from the database
-        private void LoadProvincias()
-        {
-            var provincias = _context.Provincias.ToList();
-            ProvinciaList = provincias
-                .Select(provincia => new SelectListItem
-                {
-                    Value = provincia.Name,
-                    Text = provincia.Name
-                })
-                .ToList();
 
-            // Checks if there is at least one province
-            if (provincias.Any())
-            {
-                LoadCantones(provincias.First().Name);
-            }
-        }
 
-        // Method for loading the list of cantones from the database
-        private void LoadCantones(string provincia)
-        {
-            var cantones = _context.Cantones
-                .Where(c => c.ProvinciaName == provincia)
-                .ToList();
-
-            CantonList = cantones
-                .Select(canton => new SelectListItem
-                {
-                    Value = canton.CantonName,
-                    Text = canton.CantonName
-                })
-            .ToList();
-        }
-
-        // Method called in response to an HTTP GET request to retrieve the list of cantones associated with a specific province
-        public JsonResult OnGetCantones(string provincia)
-        {
-            LoadCantones(provincia);
-            CantonList!.Insert(0, new SelectListItem { Value = "", Text = "ElegirCanton" });
-            return new JsonResult(CantonList);
-        }
-
-        public JsonResult OnGetProvinces()
-        {
-            LoadProvincias();
-            ProvinciaList!.Insert(0, new SelectListItem { Value = "", Text = "ElegirProvincia" });
-            return new JsonResult(ProvinciaList);
-
-        }
-
-        // Method called in response to an HTTP GET request
+        /// <summary>
+        /// Method called in response to an HTTP GET request.
+        /// </summary>
         public void OnGet()
         {
             LoadCategories();
             
         }
 
-        // Get the data of the form and stores it in the DB
+        /// <summary>
+        /// Adds the product to the DB, and redirects to Main Page.
+        /// </summary>
+        /// <returns>Redirect to Same page if the product is not valid, and to /Index was added successfully.</returns>
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -240,7 +185,15 @@ namespace LoCoMPro.Pages
             return attribute;
         }
 
-        // Suggests data for autocomplete on required inputs of page.
+        /// <summary>
+        /// Suggests data for autocomplete on required inputs of AddProduct form.
+        /// </summary>
+        /// <param name="field"> Type of data to recommend.</param>
+        /// <param name="term"> Term to look up and recommend data for.</param>
+        /// <param name="provinceName"> Name of the Province asociated with the store.</param>
+        /// <param name="cantonName"> Name of the Canton asociated with the store.</param>
+        /// <param name="storeName"> Name of the store asociated with the product</param>
+        /// <returns>List of suggestions for the autocomplete</returns>
         public IActionResult OnGetAutocompleteSuggestions(string field, string term, string provinceName, string cantonName, string storeName)
         {
             // Create a list with the available suggestions, given the current inputs
@@ -270,6 +223,12 @@ namespace LoCoMPro.Pages
             return new JsonResult(filteredSuggestions);
         }
         // Autofills model, brand and category based on product name
+        
+        /// <summary>
+        /// Returs a Dictionary of the autofill data for a known product that the user selects.
+        /// </summary>
+        /// <param name="productName"> Name of the product to get the autofill data for.</param>
+        /// <returns>Dictionay of with the autofill data for requested product.</returns>
         public IActionResult OnGetProductAutofillData(string productName)
         {
             var data = new Dictionary<string, string>();
