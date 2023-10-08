@@ -47,25 +47,37 @@ button.accept-policy {
   line-height: 60px;
 }
 
-
+/* Style for the login button */
 #login-button {
-    background-color: #88C8F8;
+    background-color: #F5AA38;
 }
 
-    /* Style for the location selector button when the cursor is on the button */
+/* Style for the login button when the cursor is on the button */
 #login-button:hover{
-    background-color: #39A4F4;
+    background-color: #f6a01d;
 }
 
+/* Style for the logout button */
 #logout-button {
     background-color: #F87474;
 }
 
+/* Style for the logout button when the cursor is on the button */
 #logout-button:hover {
     background-color: #E25A5A;
 }
 
+/* Style for the register button */
+#register-button {
+    background-color: #88C8F8;
+}
 
+/* Style for the register button when the cursor is on the button */
+#register-button:hover {
+    background-color: #39A4F4;
+}
+
+/* Style for the user option PopUp */
 .popup-user {
     display: none;
     position: fixed;
@@ -75,10 +87,23 @@ button.accept-policy {
     border: 1px solid #ccc;
     border-radius: 15px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    padding: 10px;
     z-index: 1;
+    padding: 15px;
 }
 
+/* Style for the PopUp text */
+#popup-logged h6, h5 {
+    margin: 10px 0px;
+}
+
+/* Style for the PopUp image */
+#popup-logged img {
+    margin: 10px 0px;
+    height: 50px;
+    width: 50px;
+}
+
+/* Style for the PopUp button */
 .popup-user button {
     cursor: pointer;
     display: inline-block;
