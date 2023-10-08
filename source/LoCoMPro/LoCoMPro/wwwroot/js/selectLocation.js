@@ -1,5 +1,5 @@
 // Wait for the DOM to be fully loaded before executing the code
-
+// Todo: may need more documentation.
 // Define a flag to track if the population has already occurred
 let hasPopulatedProvinceSelect = false;
 document.addEventListener("DOMContentLoaded", function () {
