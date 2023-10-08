@@ -51,7 +51,7 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Gets the list of provinces for the app.
         /// </summary>
-        /// <returns>List of provinces known to the app.</returns>
+        /// <returns>A List of provinces known to the app.</returns>
         public JsonResult OnGetProvinces()
         {
             var provincias = _context.Provincias.ToList();
