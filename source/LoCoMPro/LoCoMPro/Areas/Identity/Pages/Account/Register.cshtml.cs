@@ -17,8 +17,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Build.Framework;
 using Microsoft.Extensions.Logging;
 
 namespace LoCoMPro.Areas.Identity.Pages.Account
@@ -75,8 +77,9 @@ namespace LoCoMPro.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required]
+            [System.ComponentModel.DataAnnotations.Required]
             [DataType(DataType.Text)]
+            [StringLength(12, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
             [Display(Name = "User Name")]
             public string UserName { get; set; }
 
@@ -84,7 +87,7 @@ namespace LoCoMPro.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [System.ComponentModel.DataAnnotations.Required]
             [EmailAddress]
             [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?$", ErrorMessage = "The Email is not valid.")]
             [Display(Name = "Email")]
@@ -94,9 +97,9 @@ namespace LoCoMPro.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [System.ComponentModel.DataAnnotations.Required]
             [DataType(DataType.Password)]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
@@ -110,7 +113,7 @@ namespace LoCoMPro.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-
+        
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
@@ -123,6 +126,14 @@ namespace LoCoMPro.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                string allowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 !*-._@+";
+
+                // Verifies if UserName contains allowed characters
+                if (!string.IsNullOrEmpty(allowedCharacters) && Input.UserName.Any(c => !allowedCharacters.Contains(c)))
+                {
+                    ModelState.AddModelError(string.Empty, "User name may only contain letters, numbers, spaces and this set of characters !*-._@+");
+                }
+
                 var user = CreateUser();
                 await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
