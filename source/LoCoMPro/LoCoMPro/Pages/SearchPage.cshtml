@@ -12,6 +12,64 @@
 </head>
 
 <div>
+    <div hidden>
+        <input id="selectedProvince" value="@Model.Province">
+        <input id="selectedCanton" value="@Model.Canton">
+    </div>
+    <!-- Search filter section -->
+    <div class="filter-section">
+        <!-- Search filter title -->
+        <h4> Filtros </h4>
+
+        @if (Model.Category.Count() > 1)
+        {
+            <!-- Filter by category -->
+            <h5> Categorías </h5>
+            <form method="get" asp-page="./SearchPage" id="searchForm">
+                @foreach (var category in Model.Category)
+                {
+                    <div class="filter-line">
+                        <input type="checkbox" name="SelectedCategories" value="@category.CategoryName" @(Model.SelectedCategories != null && Model.SelectedCategories.Contains(category.CategoryName) ? "checked" : "") />
+                        <label>@Html.DisplayFor(modelItem => category.CategoryName)</label>
+                    </div>
+                }
+            </form>
+        }
+
+        <!-- Filter by Province -->
+        @if (Model.Provinces.Count() > 1)
+        {
+            <h5> Provincias </h5>
+            <form method="get" asp-page="./SearchPage" id="provinceFilterForm">
+                @foreach (var province in Model.Provinces)
+                {
+                    <div class="filter-line">
+                        <input type="checkbox" name="SelectedProvinces" value="@province.Name" @(Model.SelectedProvinces != null && Model.SelectedProvinces.Contains(province.Name) ? "checked" : "") />
+                        <label>@Html.DisplayFor(modelItem => province.Name)</label>
+                    </div>
+                }
+            </form>
+        }
+
+        <!-- Filter by Canton -->
+        @if (Model.Cantons.Count() > 1)
+        {
+            <h5> Cantones </h5>
+            <form method="get" asp-page="./SearchPage" id="cantonFilterForm">
+                @foreach (var canton in Model.Cantons)
+                {
+                    <div class="filter-line">
+                        <input type="checkbox" name="SelectedCantons" value="@canton.CantonName" @(Model.SelectedCantons != null && Model.SelectedCantons.Contains(canton.CantonName) ? "checked" : "") />
+                        <label>@Html.DisplayFor(modelItem => canton.CantonName)</label>
+                    </div>
+                }
+            </form>
+        }
+
+        <input type="hidden" name="searchType" id="searchType" value="@Model.SearchType" />
+        <input type="hidden" name="searchString" id="searchString" value="@Model.SearchString" />
+        <input type="hidden" name="sortOrder" id="sortOrder" value="@Model.CurrentSort" />
+    </div>
     <!-- No product found message -->
     @if (Model.Register.Count() < 1)
     {
@@ -22,67 +80,6 @@
     }
     else
     {
-        <div hidden>
-            <input id="selectedProvince" value="@Model.Province">
-            <input id="selectedCanton" value="@Model.Canton">
-        </div>
-        <!-- Search filter section -->
-        <div class="filter-section">
-            <!-- Search filter title -->
-            <h4> Filtros </h4>
-
-            @if (Model.Category.Count() > 1)
-            {
-                <!-- Filter by category -->
-                <h5> Categorías </h5>
-                <form method="get" asp-page="./SearchPage" id="searchForm">
-                    @foreach (var category in Model.Category)
-                    {
-                        <div class="filter-line">
-                            <input type="checkbox" name="SelectedCategories" value="@category.CategoryName" @(Model.SelectedCategories != null && Model.SelectedCategories.Contains(category.CategoryName) ? "checked" : "") />
-                            <label>@Html.DisplayFor(modelItem => category.CategoryName)</label>
-                        </div>
-                    }
-                </form>
-            }
-
-            <!-- Filter by Province -->
-            @if (Model.Provinces.Count() > 1)
-            {
-                <h5> Provincias </h5>
-                <form method="get" asp-page="./SearchPage" id="provinceFilterForm">
-                    @foreach (var province in Model.Provinces)
-                    {
-                        <div class="filter-line">
-                            <input type="checkbox" name="SelectedProvinces" value="@province.Name" @(Model.SelectedProvinces != null && Model.SelectedProvinces.Contains(province.Name) ? "checked" : "") />
-                            <label>@Html.DisplayFor(modelItem => province.Name)</label>
-                        </div>
-                    }
-                </form>
-            }
-
-            <!-- Filter by Canton -->
-            @if (Model.Cantons.Count() > 1)
-            {
-                <h5> Cantones </h5>
-                <form method="get" asp-page="./SearchPage" id="cantonFilterForm">
-                    @foreach (var canton in Model.Cantons)
-                    {
-                        <div class="filter-line">
-                            <input type="checkbox" name="SelectedCantons" value="@canton.CantonName" @(Model.SelectedCantons != null && Model.SelectedCantons.Contains(canton.CantonName) ? "checked" : "") />
-                            <label>@Html.DisplayFor(modelItem => canton.CantonName)</label>
-                        </div>
-                    }
-                </form>
-            }
-            
-
-
-            <input type="hidden" name="searchType" id="searchType" value="@Model.SearchType" />
-            <input type="hidden" name="searchString" id="searchString" value="@Model.SearchString" />
-            <input type="hidden" name="sortOrder" id="sortOrder" value="@Model.CurrentSort" />
-        </div>
-
         <!-- Search result section -->
         <div class="search-section">
             <!-- Search section title -->
@@ -231,6 +228,6 @@
                 }
             </div>
         </div>
-        <script src="~/js/SearchPage/filterCategory.js"></script>
     }
+    <script src="~/js/SearchPage/filterCategory.js"></script>
 </div>
