@@ -6,7 +6,7 @@
     height: 100%;
     width: 14%;
     float: left;
-    margin: 50px 12px 0px 0px;
+    margin: 50px 10px 0px 0px;
     max-height: 450px;
     overflow-y: auto;
     overflow-x: auto;
@@ -46,7 +46,7 @@
 .search-section {
     display: inline-block;
     height: 100%;
-    width: 84%;
+    width: 83%;
     text-align: center;
 }
 

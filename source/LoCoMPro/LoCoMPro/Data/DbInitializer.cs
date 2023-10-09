@@ -28,8 +28,6 @@ namespace LoCoMPro.Data
 
             //  Initialize all the database tables
             InitializeLocation(context, ref provincias, ref cantones);
-            //InitializeProvincias(context, ref provincias);
-            //InitializeCantones(context, ref provincias, ref cantones);
             InitializeCategories(context, ref categories);
             InitializeProducts(context, ref products, ref categories);
             InitializeStores(context, ref cantones, ref stores, ref products);
@@ -76,38 +74,14 @@ namespace LoCoMPro.Data
             context.SaveChanges();
         }
 
-        /* Initialize the provincias data in the database */
-        public static void InitializeProvincias(LoCoMProContext context, ref List<Provincia> provincias)
-        {
-            // Add the provincias
-            provincias.Add(new Provincia() { Name = "San Jose"});
-            provincias.Add(new Provincia() { Name = "Heredia"});
-
-            context.Provincias.AddRange(provincias);
-            context.SaveChanges();
-        }
-
-        /* Initialize the cantones data in the database */
-        public static void InitializeCantones(LoCoMProContext context
-            , ref List<Provincia> provincias, ref List<Canton> cantones)
-        {
-            // Add the cantones
-            cantones.Add(new Canton() { CantonName = "Montes de Oca", Provincia = provincias[0] });
-            cantones.Add(new Canton() { CantonName = "Guadalupe", Provincia = provincias[0] });
-            cantones.Add(new Canton() { CantonName = "Santo Domingo", Provincia = provincias[1] });
-
-            context.Cantones.AddRange(cantones);
-            context.SaveChanges();
-        }
-
         /* Initialize the categories data in the database */
         public static void InitializeCategories(LoCoMProContext context
             , ref List<Category> categories)
         {
             // Add the categories
             categories.Add(new Category() { CategoryName = "Comida"});
-            categories.Add(new Category() { CategoryName = "Tecnología"});
             categories.Add(new Category() { CategoryName = "Ropa"});
+            categories.Add(new Category() { CategoryName = "Tecnología"});
 
             context.Categories.AddRange(categories);
             context.SaveChanges();
@@ -119,12 +93,16 @@ namespace LoCoMPro.Data
         {
 
             // Add the products
-            products.Add(new Product() { Name = "Leche Dos Pinos 1 litros", Brand = "Dos Pinos" 
+            products.Add(new Product() { Name = "Leche semidescremada 1 litro", Brand = "Dos Pinos" 
                 , Categories = new List<Category>() { categories[0] } });
-            products.Add(new Product() { Name = "Camisa deportiva negra Nike", Brand = "Nike"
-                , Categories = new List<Category>() { categories[2] } });
-            products.Add(new Product() { Name = "Celular IPhone 15 Pro color beige", Brand = "IPhone", Model = "15 Pro"
+            products.Add(new Product() { Name = "Leche descremada 1 litro", Brand = "Coronado" 
+                , Categories = new List<Category>() { categories[0] } });
+            products.Add(new Product() { Name = "Camisa deportiva negra", Brand = "Nike"
                 , Categories = new List<Category>() { categories[1] } });
+            products.Add(new Product() { Name = "Apple Watch rosa", Brand = "Apple", Model = "Serie 9"
+                , Categories = new List<Category>() { categories[1], categories[2] } });
+            products.Add(new Product() { Name = "Celular IPhone color beige", Brand = "Apple", Model = "15 Pro"
+                , Categories = new List<Category>() { categories[2] } });
 
             context.Products.AddRange(products);
             context.SaveChanges();
@@ -188,6 +166,8 @@ namespace LoCoMPro.Data
             string comment = "Lorem ipsum dolor sit amet, consectetur adipiscing elit" +
                 ", sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum pulvinar etiam non quam. ";
 
+            List<int> basePrice = new List<int>{ 2500, 2000, 20000, 300000, 1100000 };
+
             /* Generates the registers by using the index of the products, users, stores and the dates */
             for (int productIndex = 0; productIndex < products.Count; productIndex++)
             {
@@ -195,12 +175,10 @@ namespace LoCoMPro.Data
                 {
                     for (int storeIndex = 0; storeIndex < stores.Count; storeIndex++)
                     {
-                        for (int dateIndex = 3; dateIndex < 5; dateIndex++)
-                        {
-                            registers.Add(new Register() { Product = products[productIndex], Contributor = users[usersIndex], Store = stores[storeIndex]
-                            , Price = (1500 + (1000 * (int) Math.Pow(10, productIndex)) + (100 * usersIndex * storeIndex * dateIndex))
-                            , SubmitionDate = new DateTime(2023, dateIndex, dateIndex + storeIndex + usersIndex, 12, 0, 0, DateTimeKind.Utc), Comment = comment });
-                        }
+                        registers.Add(new Register() { Product = products[productIndex], Contributor = users[usersIndex], Store = stores[storeIndex]
+                        , Price = (basePrice[productIndex] + ((basePrice[productIndex] / 25) * usersIndex * storeIndex))
+                        , SubmitionDate = new DateTime(2023, 1 + usersIndex + storeIndex, 10 + productIndex + usersIndex + storeIndex, 12, 0, 0, DateTimeKind.Utc)
+                        , Comment = comment });
                     }
                 }
             }
