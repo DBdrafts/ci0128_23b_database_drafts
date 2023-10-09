@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32;
 using System.Collections.Generic;
 using System.Drawing.Printing;
+using System.Linq;
 
 namespace LoCoMPro.Pages
 {
@@ -119,7 +120,7 @@ namespace LoCoMPro.Pages
         public async Task OnGetAsync(int? pageIndex, string sortOrder)
         {
 
-            PriceSort = GetSortOrder(sortOrder);
+            CurrentSort = GetSortOrder(sortOrder);
 
             // Prepare the query to retrieve data from the database
             var categories = from c in _context.Categories
@@ -184,12 +185,11 @@ namespace LoCoMPro.Pages
             Cantons = cantons;
 
             /* Get an unordered list of registers */
-            PaginatedList<Register> unorderedList = (await PaginatedList<Register>.CreateAsync(
-                registersQuery, pageIndex ?? 1, pageSize));
+            List<Register> unorderedList = OrderRegisters(registersQuery.ToList(), sortOrder);
 
-            /* Copy the information of ordered registers */
-            Register = new PaginatedList<Register>(OrderRegisters(unorderedList.ToList(), sortOrder),
-                unorderedList.PageIndex, unorderedList.TotalPages);
+            /* Create the paginated list of registers from the list */
+            Register = (await PaginatedList<Register>.CreateAsync(unorderedList,
+                pageIndex ?? 1, pageSize));
         }
 
 

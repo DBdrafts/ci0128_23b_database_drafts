@@ -18,11 +18,5 @@ namespace LoCoMPro.Pages
             _context = context;
             Configuration = configuration;
         }
-
-        // OnPost method that sent request 
-        //public IActionResult OnPost()
-        //{
-        //    return Page();
-        //}
     }
 }
