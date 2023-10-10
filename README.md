@@ -38,6 +38,13 @@ al mismo tiempo beneficiarse de esta información para sus propias compras.
 |       \---mockups
 |           +---avance1
 |           \---avance2
+|   \---sprint1
+|      +---mockups
+|          +---avance1
+|      \---uml
+|          +---avance2
+|      \---database
+|          +---avance2
 +---source
 |   \---LoCoMPro
 |       \---LoCoMPro
@@ -59,12 +66,19 @@ al mismo tiempo beneficiarse de esta información para sus propias compras.
 |               |   +---AddProductPage
 |               |   \---SearchPage
 |               \---lib
+|   \---doc
+|       +---docgen
+|   \---test
 \---test
     \---UnitTest
 ```
 
-En el directorio _./design_ existen directorios referentes a cada iteración y avance del programa. Los diseños a su vez, se guardan en dos directorios(_./database_ y _./mockups_) con la información correspondiente a la base de datos y los mockups de la interfaz de usuario.
-
-## Enlaces adicionales
-
-- [Diseño](./design/design.md)
+- El directorio [./data/]("./data") contiene información importante para generar los datos para la base de datos
+- El directorio [./design/]("./design/") contiene los archivos de diseño
+- El directorio [./design/database/]("./design/database/") contiene los diagramas de la base de datos
+- El directorio [./design/mockups/]("./design/mockups/") contiene los mockups de las páginas implemetadas durante el sprint
+- El directorio [./design/uml/]("./design/uml/") contiene los diagramas del modelo del sistema
+- El directorio [./source/]("./source/") contiene el código e archivos importantes
+- El directorio [./source/LoCoMPro/LoCoMPro/]("./source/LoCoMPro/LoCoMPro/") contiene los archivos con el código del sistema
+- El directorio [./source/doc/]("./source/doc/") contiene los para realizar la documentación
+- El directorio [./source/test/]("./source/test/") contiene los test unitarios del proyecto
