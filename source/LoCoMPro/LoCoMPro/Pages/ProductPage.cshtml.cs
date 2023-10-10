@@ -7,49 +7,87 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LoCoMPro.Pages
 {
+    /// <summary>
+    /// Page model for Product Page, handles requests and business logic.
+    /// </summary>
     public class ProductPageModel : LoCoMProPageModel
     {
-        
-        // Product Page constructor 
+
+        /// <summary>
+        /// Product Page constructor.
+        /// </summary>
+        /// <param name="context">Db context to use for page.</param>
+        /// <param name="configuration">Configuration for Product Page.</param>
         public ProductPageModel(LoCoMProContext context, IConfiguration configuration)
             : base(context, configuration) { }
 
-        // List of the product that exist in the database 
+        /// <summary>
+        /// List of the product that exist in the database.
+        /// </summary>
         public IList<Product> Product { get; set; } = default!;
 
-        // List of the stores that exist in the database 
+        /// <summary>
+        /// List of the stores that exist in the database.
+        /// </summary>
         public IList<Store> Store { get; set; } = default!;
 
-        // List of the registers that exist in the database 
+        /// <summary>
+        /// List of the registers that exist in the database.
+        /// </summary> 
         public PaginatedList<Register> Register { get; set; } = default!;
 
-        // Product requested name 
+        /// <summary>
+        /// Product requested name.
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? SearchProductName { get; set; }
 
-        // Store requested name 
+        /// <summary>
+        /// Store requested name.
+        /// </summary> 
         [BindProperty(SupportsGet = true)]
         public string? SearchStoreName { get; set; }
 
-        // Province requested name 
+        /// <summary>
+        /// Province requested name.
+        /// </summary> 
         [BindProperty(SupportsGet = true)]
         public string? SearchProvinceName { get; set; }
 
-        // Canton requested name 
+        /// <summary>
+        /// Canton requested name.
+        /// </summary> 
         [BindProperty(SupportsGet = true)]
         public string? SearchCantonName { get; set; }
 
+        /// <summary>
+        /// Current sort type.
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? CurrentSort { get; set; }
 
+        /// <summary>
+        /// Current type of price sort.
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? PriceSort { get; set; }
 
-        // Attr for sort the date register
+        /// <summary>
+        /// Current type of date sort.
+        /// </summary>
         [BindProperty(SupportsGet = true)]
-        public string DateSort { get; set; }
+        public string? DateSort { get; set; }
 
-
+        /// <summary>
+        /// Handles get request for product page.
+        /// </summary>
+        /// <param name="searchProductName">Product that needs to be displayed.</param>
+        /// <param name="searchStoreName">Name of store that sells the product.</param>
+        /// <param name="searchProvinceName">Province where the product is sold.</param>
+        /// <param name="searchCantonName">Canton where the product is sold.</param>
+        /// <param name="pageIndex">Index of page being displayed.</param>
+        /// <param name="sortOrder">Sort order to user when displaying product registers.</param>
+        /// <returns>It's a task, threfore no value if returned.</returns>
         public async Task OnGetAsync(string searchProductName, string searchStoreName, string searchProvinceName, 
             string searchCantonName, int? pageIndex, string sortOrder)
         {
@@ -137,6 +175,12 @@ namespace LoCoMPro.Pages
                 registers.AsNoTracking(), pageIndex ?? 1, pageSize);
         }
 
+        /// <summary>
+        /// Orders <paramref name="registers"/> by <paramref name="orderName"/> according to price.
+        /// </summary>
+        /// <param name="orderName">Order to use for registers.</param>
+        /// <param name="registers">Registers that need ordering.</param>
+        /// <returns>Ordered registers.</returns>
         public IOrderedEnumerable<Register> OrderRegistersByPrice(string orderName, ref ICollection<Register> registers)
         {
             switch (orderName)
@@ -151,6 +195,12 @@ namespace LoCoMPro.Pages
             }
         }
 
+        /// <summary>
+        /// Orders <paramref name="registers"/> by <paramref name="orderName"/> according to date.
+        /// </summary>
+        /// <param name="orderName">Order to use for registers.</param>
+        /// <param name="registers">Registers that need ordering.</param>
+        /// <returns>Ordered registers.</returns>
         public IOrderedEnumerable<Register> OrderRegistersByDate(string orderName, ref ICollection<Register> registers)
         {
             switch (orderName)

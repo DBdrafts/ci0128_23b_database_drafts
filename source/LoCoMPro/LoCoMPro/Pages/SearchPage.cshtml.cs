@@ -71,7 +71,7 @@ namespace LoCoMPro.Pages
         public IList<Canton> Cantons { get; set; } = default!;
 
         /// <summary>
-        /// Lis of registers that match the <paramref name="SearchString"/>.
+        /// List of registers that match the Search string.
         /// </summary>
         public PaginatedList<Register> Register { get; set; } = default!;
 

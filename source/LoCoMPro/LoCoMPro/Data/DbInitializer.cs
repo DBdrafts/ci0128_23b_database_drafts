@@ -8,9 +8,15 @@ using Microsoft.Win32;
 
 namespace LoCoMPro.Data
 {
+    /// <summary>
+    /// Seeds the database with needed and testing data.
+    /// </summary>
     public class DbInitializer
     {
-        /* Initialize the seed data of the database */
+        /// <summary>
+        /// Initialize the seed data of the database.
+        /// </summary>
+        /// <param name="context">Context that is beeing intialized.</param>
         public static void Initialize(LoCoMProContext context)
         {
             if (context.Provincias.Any())
@@ -36,6 +42,12 @@ namespace LoCoMPro.Data
 
         }
 
+        /// <summary>
+        /// Initializes provinces and cantons for application.
+        /// </summary>
+        /// <param name="context">Context that needs initialized.</param>
+        /// <param name="provinces">List of provinces that will be filled.</param>
+        /// <param name="cantons">List of cantons that will be filled.</param>
         public static void InitializeLocation(LoCoMProContext context, ref List<Provincia> provinces, ref List<Canton> cantons)
         {
             var csvPath = "~/../../../../data/DTA-TABLA POR PROVINCIA-CANTÓN-DISTRITO 2022V3.csv";
@@ -74,7 +86,11 @@ namespace LoCoMPro.Data
             context.SaveChanges();
         }
 
-        /* Initialize the categories data in the database */
+        /// <summary>
+        /// Initialize the categories data in the database.
+        /// </summary>
+        /// <param name="context">Context to initialize.</param>
+        /// <param name="categories">List of categories that will be initialized.</param>
         public static void InitializeCategories(LoCoMProContext context
             , ref List<Category> categories)
         {
@@ -87,7 +103,12 @@ namespace LoCoMPro.Data
             context.SaveChanges();
         }
 
-        /* Initialize the products data in the database */
+        /// <summary>
+        /// Initialize the products data in the database.
+        /// </summary>
+        /// <param name="context">Context to initialize.</param>
+        /// <param name="products">List of products that will be initialized.</param>
+        /// <param name="categories">Initialized categories to asociate with products.</param>
         public static void InitializeProducts(LoCoMProContext context
             , ref List<Product> products, ref List<Category> categories)
         {
@@ -108,7 +129,13 @@ namespace LoCoMPro.Data
             context.SaveChanges();
         }
 
-        /* Initialize the stores data in the database */
+        /// <summary>
+        /// Initialize the stores data in the database.
+        /// </summary>
+        /// <param name="context">Context to initialize.</param>
+        /// <param name="cantones">Cantons to use to put stores into.</param>
+        /// <param name="stores">List of stores to initialize.</param>
+        /// <param name="product">Products that are sold in the store.</param>
         public static void InitializeStores(LoCoMProContext context
             , ref List<Canton> cantones, ref List<Store> stores
             , ref List<Product> product)
@@ -125,7 +152,12 @@ namespace LoCoMPro.Data
             context.SaveChanges();
         }
 
-        /* Initialize the users data in the database */
+        /// <summary>
+        /// Initialize the users data in the database.
+        /// </summary>
+        /// <param name="context">Context to initialize.</param>
+        /// <param name="users">List of users to initialize.</param>
+        /// <param name="cantones">Cantons to use as users default location.</param>
         public static void InitializeUsers(LoCoMProContext context
             , ref List<User> users, ref List<Canton> cantones)
         {
@@ -158,7 +190,14 @@ namespace LoCoMPro.Data
             context.SaveChanges();
         }
 
-        /* Initialize the registers data in the database */
+        /// <summary>
+        /// Initialize the registers data in the database.
+        /// </summary>
+        /// <param name="context">Context to initialize.</param>
+        /// <param name="registers">List of registers to initialize.</param>
+        /// <param name="users">Users to asociate with each register.</param>
+        /// <param name="products">Products wich the registers refer to.</param>
+        /// <param name="stores">Stores wich the registers refer to.</param>
         public static void InitializeRegisters(LoCoMProContext context
             , ref List<Register> registers, ref List<User> users
             , ref List<Product> products, ref List<Store> stores)

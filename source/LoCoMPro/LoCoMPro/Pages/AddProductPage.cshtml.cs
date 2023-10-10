@@ -49,10 +49,6 @@ namespace LoCoMPro.Pages
         /// </summary>
         public List<SelectListItem>? CategoryList { get; set; }
 
-        // NOTE: The following 3 methods can be modularized, but to improve understanding, they were left as is
-        // maybe we can do it later
-
-
         // Method for loading the list of categories from the database
         private void LoadCategories()
         {
@@ -68,8 +64,6 @@ namespace LoCoMPro.Pages
                 })
                 .ToList();
         }
-
-
 
         /// <summary>
         /// Method called in response to an HTTP GET request.
@@ -179,15 +173,13 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
-        /// Suggests data for autocomplete on required inputs of AddProduct form.
+        /// Creates a product with given data.
         /// </summary>
-        /// <param name="field"> Type of data to recommend.</param>
-        /// <param name="term"> Term to look up and recommend data for.</param>
-        /// <param name="provinceName"> Name of the Province asociated with the store.</param>
-        /// <param name="cantonName"> Name of the Canton asociated with the store.</param>
-        /// <param name="storeName"> Name of the store asociated with the product</param>
-        /// <returns>List of suggestions for the autocomplete</returns>
-        //Method that create and returns a new Product
+        /// <param name="productName">Name of the product to create.</param>
+        /// <param name="brandName">Brand of the product to create.</param>
+        /// <param name="modelName">Model of the product to create.</param>
+        /// <param name="category">Category asociated with the product.</param>
+        /// <returns>New product that was created.</returns>
         internal Product CreateProduct(string productName, string? brandName, string? modelName, Category? category)
         {
             // Create new product
@@ -205,6 +197,15 @@ namespace LoCoMPro.Pages
             return productToAdd;
         }
 
+        /// <summary>
+        /// Creates a register with given data.
+        /// </summary>
+        /// <param name="productToAdd">Product that the register refers to.</param>
+        /// <param name="store">Store where the product is sold.</param>
+        /// <param name="price">Price of the product.</param>
+        /// <param name="comment">Aditional comment left by the user.</param>
+        /// <param name="user">User that submitted the register.</param>
+        /// <returns>New register that was created.</returns>
         internal Register CreateRegister(Product productToAdd, Store store, float price, string? comment, User user)
         {
             // Create new Register
@@ -220,7 +221,15 @@ namespace LoCoMPro.Pages
             return newRegister;
         }
 
-        // Suggests data for autocomplete on required inputs of page.
+        /// <summary>
+        /// Suggests data for autocomplete on required inputs of AddProduct form.
+        /// </summary>
+        /// <param name="field"> Type of data to recommend.</param>
+        /// <param name="term"> Term to look up and recommend data for.</param>
+        /// <param name="provinceName"> Name of the Province asociated with the store.</param>
+        /// <param name="cantonName"> Name of the Canton asociated with the store.</param>
+        /// <param name="storeName"> Name of the store asociated with the product</param>
+        /// <returns>List of suggestions for the autocomplete</returns>
         public IActionResult OnGetAutocompleteSuggestions(string field, string term, string provinceName, string cantonName, string storeName)
         {
             // Create a list with the available suggestions, given the current inputs
@@ -249,7 +258,6 @@ namespace LoCoMPro.Pages
 
             return new JsonResult(filteredSuggestions);
         }
-        // Autofills model, brand and category based on product name
         
         /// <summary>
         /// Returs a Dictionary of the autofill data for a known product that the user selects.
