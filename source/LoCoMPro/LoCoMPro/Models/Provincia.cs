@@ -3,13 +3,20 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LoCoMPro.Models
 {
+    /// <summary>
+    /// Model for a Province entity.
+    /// </summary>
     [PrimaryKey(nameof(Name))]
     public class Provincia
     {
-        //  Primary Key
+        /// <summary>
+        /// Name of the Province.
+        /// </summary>
         public required string Name { get; set; }
 
-        // Navegation atributte
+        /// <summary>
+        /// Cantons that reside inside the province.
+        /// </summary>
         public ICollection<Canton>? Cantones { get; set; } = new List<Canton>();
     }
 }

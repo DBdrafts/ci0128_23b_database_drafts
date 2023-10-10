@@ -165,7 +165,9 @@ public class BaseTest
                 // Add a random number for the price
                 Price = random.Next(743, 1369),
                 SubmitionDate = randomDate,
-                Comment = "comment"
+                Comment = "comment",
+                CantonName = "Cartago",
+                ProvinciaName = "Cartago",
             });
         }
         // returns the list of initialized registers

@@ -8,15 +8,30 @@ using System.Diagnostics.CodeAnalysis;
 namespace LoCoMPro.Data
 {
     // Todo(Any): Assure that this is modeled correctly.
+    /// <summary>
+    /// Model for user entity.
+    /// </summary>
     public class User : IdentityUser
     {
 
-        // Navigation atributes
+        /// <summary>
+        /// Name of the canton that the user has saved as default location.
+        /// </summary>
         public string? CantonName { get; set; }
-        public string? ProvinciaName { get; set; }
-        public ICollection<Register>? Registers { get; set; } = new List<Register>();  // TODO: May have to change to FLUENT API notation
 
-        //  Foreing Key
+        /// <summary>
+        /// Name of the province that the user has saved as default location.
+        /// </summary>
+        public string? ProvinciaName { get; set; }
+
+        /// <summary>
+        /// Registers that the user has submitted.
+        /// </summary>
+        public ICollection<Register>? Registers { get; set; } = new List<Register>();
+
+        /// <summary>
+        /// Default location that the user has saved.
+        /// </summary>
         public required Canton Location { get; set; }
 
     };

@@ -8,9 +8,15 @@ using Microsoft.Win32;
 
 namespace LoCoMPro.Data
 {
+    /// <summary>
+    /// Seeds the database with needed and testing data.
+    /// </summary>
     public class DbInitializer
     {
-        /* Initialize the seed data of the database */
+        /// <summary>
+        /// Initialize the seed data of the database.
+        /// </summary>
+        /// <param name="context">Context that is beeing intialized.</param>
         public static void Initialize(LoCoMProContext context)
         {
             if (context.Provincias.Any())
@@ -28,8 +34,6 @@ namespace LoCoMPro.Data
 
             //  Initialize all the database tables
             InitializeLocation(context, ref provincias, ref cantones);
-            //InitializeProvincias(context, ref provincias);
-            //InitializeCantones(context, ref provincias, ref cantones);
             InitializeCategories(context, ref categories);
             InitializeProducts(context, ref products, ref categories);
             InitializeStores(context, ref cantones, ref stores, ref products);
@@ -38,6 +42,12 @@ namespace LoCoMPro.Data
 
         }
 
+        /// <summary>
+        /// Initializes provinces and cantons for application.
+        /// </summary>
+        /// <param name="context">Context that needs initialized.</param>
+        /// <param name="provinces">List of provinces that will be filled.</param>
+        /// <param name="cantons">List of cantons that will be filled.</param>
         public static void InitializeLocation(LoCoMProContext context, ref List<Provincia> provinces, ref List<Canton> cantons)
         {
             var csvPath = "~/../../../../data/DTA-TABLA POR PROVINCIA-CANTÓN-DISTRITO 2022V3.csv";
@@ -76,61 +86,56 @@ namespace LoCoMPro.Data
             context.SaveChanges();
         }
 
-        /* Initialize the provincias data in the database */
-        public static void InitializeProvincias(LoCoMProContext context, ref List<Provincia> provincias)
-        {
-            // Add the provincias
-            provincias.Add(new Provincia() { Name = "San Jose"});
-            provincias.Add(new Provincia() { Name = "Heredia"});
-
-            context.Provincias.AddRange(provincias);
-            context.SaveChanges();
-        }
-
-        /* Initialize the cantones data in the database */
-        public static void InitializeCantones(LoCoMProContext context
-            , ref List<Provincia> provincias, ref List<Canton> cantones)
-        {
-            // Add the cantones
-            cantones.Add(new Canton() { CantonName = "Montes de Oca", Provincia = provincias[0] });
-            cantones.Add(new Canton() { CantonName = "Guadalupe", Provincia = provincias[0] });
-            cantones.Add(new Canton() { CantonName = "Santo Domingo", Provincia = provincias[1] });
-
-            context.Cantones.AddRange(cantones);
-            context.SaveChanges();
-        }
-
-        /* Initialize the categories data in the database */
+        /// <summary>
+        /// Initialize the categories data in the database.
+        /// </summary>
+        /// <param name="context">Context to initialize.</param>
+        /// <param name="categories">List of categories that will be initialized.</param>
         public static void InitializeCategories(LoCoMProContext context
             , ref List<Category> categories)
         {
             // Add the categories
             categories.Add(new Category() { CategoryName = "Comida"});
-            categories.Add(new Category() { CategoryName = "Tecnología"});
             categories.Add(new Category() { CategoryName = "Ropa"});
+            categories.Add(new Category() { CategoryName = "Tecnología"});
 
             context.Categories.AddRange(categories);
             context.SaveChanges();
         }
 
-        /* Initialize the products data in the database */
+        /// <summary>
+        /// Initialize the products data in the database.
+        /// </summary>
+        /// <param name="context">Context to initialize.</param>
+        /// <param name="products">List of products that will be initialized.</param>
+        /// <param name="categories">Initialized categories to asociate with products.</param>
         public static void InitializeProducts(LoCoMProContext context
             , ref List<Product> products, ref List<Category> categories)
         {
 
             // Add the products
-            products.Add(new Product() { Name = "Leche Dos Pinos 1 litros", Brand = "Dos Pinos" 
+            products.Add(new Product() { Name = "Leche semidescremada 1 litro", Brand = "Dos Pinos" 
                 , Categories = new List<Category>() { categories[0] } });
-            products.Add(new Product() { Name = "Camisa deportiva negra Nike", Brand = "Nike"
-                , Categories = new List<Category>() { categories[2] } });
-            products.Add(new Product() { Name = "Celular IPhone 15 Pro color beige", Brand = "IPhone", Model = "15 Pro"
+            products.Add(new Product() { Name = "Leche descremada 1 litro", Brand = "Coronado" 
+                , Categories = new List<Category>() { categories[0] } });
+            products.Add(new Product() { Name = "Camisa deportiva negra", Brand = "Nike"
                 , Categories = new List<Category>() { categories[1] } });
+            products.Add(new Product() { Name = "Apple Watch rosa", Brand = "Apple", Model = "Serie 9"
+                , Categories = new List<Category>() { categories[1], categories[2] } });
+            products.Add(new Product() { Name = "Celular IPhone color beige", Brand = "Apple", Model = "15 Pro"
+                , Categories = new List<Category>() { categories[2] } });
 
             context.Products.AddRange(products);
             context.SaveChanges();
         }
 
-        /* Initialize the stores data in the database */
+        /// <summary>
+        /// Initialize the stores data in the database.
+        /// </summary>
+        /// <param name="context">Context to initialize.</param>
+        /// <param name="cantones">Cantons to use to put stores into.</param>
+        /// <param name="stores">List of stores to initialize.</param>
+        /// <param name="product">Products that are sold in the store.</param>
         public static void InitializeStores(LoCoMProContext context
             , ref List<Canton> cantones, ref List<Store> stores
             , ref List<Product> product)
@@ -147,7 +152,12 @@ namespace LoCoMPro.Data
             context.SaveChanges();
         }
 
-        /* Initialize the users data in the database */
+        /// <summary>
+        /// Initialize the users data in the database.
+        /// </summary>
+        /// <param name="context">Context to initialize.</param>
+        /// <param name="users">List of users to initialize.</param>
+        /// <param name="cantones">Cantons to use as users default location.</param>
         public static void InitializeUsers(LoCoMProContext context
             , ref List<User> users, ref List<Canton> cantones)
         {
@@ -180,13 +190,22 @@ namespace LoCoMPro.Data
             context.SaveChanges();
         }
 
-        /* Initialize the registers data in the database */
+        /// <summary>
+        /// Initialize the registers data in the database.
+        /// </summary>
+        /// <param name="context">Context to initialize.</param>
+        /// <param name="registers">List of registers to initialize.</param>
+        /// <param name="users">Users to asociate with each register.</param>
+        /// <param name="products">Products wich the registers refer to.</param>
+        /// <param name="stores">Stores wich the registers refer to.</param>
         public static void InitializeRegisters(LoCoMProContext context
             , ref List<Register> registers, ref List<User> users
             , ref List<Product> products, ref List<Store> stores)
         {
             string comment = "Lorem ipsum dolor sit amet, consectetur adipiscing elit" +
                 ", sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum pulvinar etiam non quam. ";
+
+            List<int> basePrice = new List<int>{ 2500, 2000, 20000, 300000, 1100000 };
 
             /* Generates the registers by using the index of the products, users, stores and the dates */
             for (int productIndex = 0; productIndex < products.Count; productIndex++)
@@ -195,12 +214,10 @@ namespace LoCoMPro.Data
                 {
                     for (int storeIndex = 0; storeIndex < stores.Count; storeIndex++)
                     {
-                        for (int dateIndex = 3; dateIndex < 5; dateIndex++)
-                        {
-                            registers.Add(new Register() { Product = products[productIndex], Contributor = users[usersIndex], Store = stores[storeIndex]
-                            , Price = (1500 + (1000 * (int) Math.Pow(10, productIndex)) + (100 * usersIndex * storeIndex * dateIndex))
-                            , SubmitionDate = new DateTime(2023, dateIndex, dateIndex + storeIndex + usersIndex, 12, 0, 0, DateTimeKind.Utc), Comment = comment });
-                        }
+                        registers.Add(new Register() { Product = products[productIndex], Contributor = users[usersIndex], Store = stores[storeIndex]
+                        , Price = (basePrice[productIndex] + ((basePrice[productIndex] / 25) * usersIndex * storeIndex))
+                        , SubmitionDate = new DateTime(2023, 1 + usersIndex + storeIndex, 10 + productIndex + usersIndex + storeIndex, 12, 0, 0, DateTimeKind.Utc)
+                        , Comment = comment });
                     }
                 }
             }
