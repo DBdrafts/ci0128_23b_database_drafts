@@ -63,22 +63,19 @@ al mismo tiempo beneficiarse de esta información para sus propias compras.
 |               +---css
 |               +---img
 |               +---js
-|               |   +---AddProductPage
-|               |   \---SearchPage
 |               \---lib
 |   \---doc
 |       +---docgen
-|   \---test
 \---test
     \---UnitTest
 ```
 
-- El directorio [./data/]("./data") contiene información importante para generar los datos para la base de datos
-- El directorio [./design/]("./design/") contiene los archivos de diseño
-- El directorio [./design/database/]("./design/database/") contiene los diagramas de la base de datos
-- El directorio [./design/mockups/]("./design/mockups/") contiene los mockups de las páginas implemetadas durante el sprint
-- El directorio [./design/uml/]("./design/uml/") contiene los diagramas del modelo del sistema
-- El directorio [./source/]("./source/") contiene el código e archivos importantes
-- El directorio [./source/LoCoMPro/LoCoMPro/]("./source/LoCoMPro/LoCoMPro/") contiene los archivos con el código del sistema
-- El directorio [./source/doc/]("./source/doc/") contiene los para realizar la documentación
-- El directorio [./source/test/]("./source/test/") contiene los test unitarios del proyecto
+- El directorio ["./data/"](./data) contiene información importante para generar los datos para la base de datos
+- El directorio ["./design/"](./design/) contiene los archivos de diseño
+- El directorio ["./design/database/"](./design/database/) contiene los diagramas de la base de datos
+- El directorio ["./design/mockups/"](./design/mockups/) contiene los mockups de las páginas implemetadas durante el sprint
+- El directorio ["./design/uml/"](./design/uml/) contiene los diagramas del modelo del sistema
+- El directorio ["./source/"](./source/) contiene el código e archivos importantes
+- El directorio ["./source/LoCoMPro/LoCoMPro/"](./source/LoCoMPro/LoCoMPro/) contiene los archivos con el código del sistema
+- El directorio ["./source/doc/"](./source/doc/) contiene los para realizar la documentación
+- El directorio ["./test/"](./test/) contiene los test unitarios del proyecto
