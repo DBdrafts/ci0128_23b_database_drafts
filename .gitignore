@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Do not include doc generated files
+**/LoCoMPro/doc/*
+**/LoCoMPro/doc/**
+

@@ -29,14 +29,38 @@ al mismo tiempo beneficiarse de esta información para sus propias compras.
 
 ## Estructura de archivos
 ```plaintext
-\---design
-    \---sprint0
-        +---database
-        |   +---avance1
-        |   \---avance2
-        \---mockups
-            +---avance1
-            \---avance2
++---data
++---design
+|   \---sprint0
+|       +---database
+|       |   +---avance1
+|       |   \---avance2
+|       \---mockups
+|           +---avance1
+|           \---avance2
++---source
+|   \---LoCoMPro
+|       \---LoCoMPro
+|           +---Areas
+|           |   \---Identity
+|           |       \---Pages
+|           |           \---Account
+|           |               \---Manage
+|           +---Data
+|           +---Models
+|           +---Pages
+|           |   \---Shared
+|           +---Properties
+|           +---Utils
+|           \---wwwroot
+|               +---css
+|               +---img
+|               +---js
+|               |   +---AddProductPage
+|               |   \---SearchPage
+|               \---lib
+\---test
+    \---UnitTest
 ```
 
 En el directorio _./design_ existen directorios referentes a cada iteración y avance del programa. Los diseños a su vez, se guardan en dos directorios(_./database_ y _./mockups_) con la información correspondiente a la base de datos y los mockups de la interfaz de usuario.
