@@ -12,6 +12,64 @@
 </head>
 
 <div>
+    <div hidden>
+        <input id="selectedProvince" value="@Model.Province">
+        <input id="selectedCanton" value="@Model.Canton">
+    </div>
+    <!-- Search filter section -->
+    <div class="filter-section">
+        <!-- Search filter title -->
+        <h4> Filtros </h4>
+
+        @if (Model.Category.Count() > 1)
+        {
+            <!-- Filter by category -->
+            <h5> Categorías </h5>
+            <form method="get" asp-page="./SearchPage" id="searchForm">
+                @foreach (var category in Model.Category)
+                {
+                    <div class="filter-line">
+                        <input type="checkbox" name="SelectedCategories" value="@category.CategoryName" @(Model.SelectedCategories != null && Model.SelectedCategories.Contains(category.CategoryName) ? "checked" : "") />
+                        <label>@Html.DisplayFor(modelItem => category.CategoryName)</label>
+                    </div>
+                }
+            </form>
+        }
+
+        <!-- Filter by Province -->
+        @if (Model.Provinces.Count() > 1)
+        {
+            <h5> Provincias </h5>
+            <form method="get" asp-page="./SearchPage" id="provinceFilterForm">
+                @foreach (var province in Model.Provinces)
+                {
+                    <div class="filter-line">
+                        <input type="checkbox" name="SelectedProvinces" value="@province.Name" @(Model.SelectedProvinces != null && Model.SelectedProvinces.Contains(province.Name) ? "checked" : "") />
+                        <label>@Html.DisplayFor(modelItem => province.Name)</label>
+                    </div>
+                }
+            </form>
+        }
+
+        <!-- Filter by Canton -->
+        @if (Model.Cantons.Count() > 1)
+        {
+            <h5> Cantones </h5>
+            <form method="get" asp-page="./SearchPage" id="cantonFilterForm">
+                @foreach (var canton in Model.Cantons)
+                {
+                    <div class="filter-line">
+                        <input type="checkbox" name="SelectedCantons" value="@canton.CantonName" @(Model.SelectedCantons != null && Model.SelectedCantons.Contains(canton.CantonName) ? "checked" : "") />
+                        <label>@Html.DisplayFor(modelItem => canton.CantonName)</label>
+                    </div>
+                }
+            </form>
+        }
+
+        <input type="hidden" name="searchType" id="searchType" value="@Model.SearchType" />
+        <input type="hidden" name="searchString" id="searchString" value="@Model.SearchString" />
+        <input type="hidden" name="sortOrder" id="sortOrder" value="@Model.CurrentSort" />
+    </div>
     <!-- No product found message -->
     @if (Model.Register.Count() < 1)
     {
@@ -22,26 +80,6 @@
     }
     else
     {
-        <!-- Search filter section -->
-        <div class="filter-section">
-            <!-- Search filter title -->
-            <h4> Filtros </h4>
-
-            <form method="get" asp-page="./SearchPage" id="searchForm">
-                @foreach (var category in Model.Category)
-                {
-                    <div class="filter-line">
-                        <input type="checkbox" name="SelectedCategories" value="@category.CategoryName" @(Model.SelectedCategories != null && Model.SelectedCategories.Contains(category.CategoryName) ? "checked" : "") />
-                        <label>@Html.DisplayFor(modelItem => category.CategoryName)</label>
-                    </div>
-                }
-
-                <input type="hidden" name="searchType" id="searchType" value="@Model.SearchType" />
-                <input type="hidden" name="searchString" id="searchString" value="@Model.SearchString" />
-                <input type="hidden" name="sortOrder" id="sortOrder" value="@Model.CurrentSort" />
-            </form>
-        </div>
-
         <!-- Search result section -->
         <div class="search-section">
             <!-- Search section title -->
@@ -70,18 +108,24 @@
                         <ul class="menu-vertical">
                             <li>
                                 <a asp-page="./SearchPage"
-                                    asp-route-pageIndex="1"
-                                    asp-route-searchType="@Model.SearchType"
-                                    asp-route-searchString="@Model.SearchString"
+                                   asp-route-pageIndex="1"
+                                   asp-route-searchType="@Model.SearchType"
+                                   asp-route-searchString="@Model.SearchString"
+                                   asp-route-SelectedCategories="@(Model.SelectedCategories)"
+                                   asp-route-SelectedProvinces="@(Model.SelectedProvinces)"
+                                   asp-route-SelectedCantons="@(Model.SelectedCantons)"
                                    asp-route-sortOrder="price_asc">Menores precios
                                 </a>
                             </li>
                             <li>
                                 <a asp-page="./SearchPage"
-                                    asp-route-pageIndex="1"
-                                    asp-route-searchType="@Model.SearchType"
-                                    asp-route-searchString="@Model.SearchString"
-                                    asp-route-sortOrder="price_desc">Mayores precios
+                                   asp-route-pageIndex="1"
+                                   asp-route-searchType="@Model.SearchType"
+                                   asp-route-searchString="@Model.SearchString"
+                                   asp-route-SelectedCategories="@(Model.SelectedCategories)"
+                                   asp-route-SelectedProvinces="@(Model.SelectedProvinces)"
+                                   asp-route-SelectedCantons="@(Model.SelectedCantons)"
+                                   asp-route-sortOrder="price_desc">Mayores precios
                                 </a>
                             </li>
                         </ul>
@@ -130,10 +174,13 @@
                 {
                     <!-- Link to go to the previous page -->
                     <a asp-page="./SearchPage"
+                       asp-route-pageIndex="@(Model.Register.PageIndex - 1)"
                        asp-route-searchType="@Model.SearchType"
                        asp-route-searchString="@Model.SearchString"
-                       asp-route-pageIndex="@(Model.Register.PageIndex - 1)"
+                       asp-route-sortOrder="@Model.CurrentSort"
                        asp-route-SelectedCategories="@(Model.SelectedCategories)"
+                       asp-route-SelectedProvinces="@(Model.SelectedProvinces)"
+                       asp-route-SelectedCantons="@(Model.SelectedCantons)"
                        class="button-general pagination-button" id="pagination-button-left">
                         <img src="~/img/ArrowLeftIcon.svg" alt="Anterior">
                     </a>
@@ -149,10 +196,13 @@
                         <!-- Pagination square of the pages -->
                         <div id="pagination-square">
                             <a asp-page="./SearchPage"
+                               asp-route-pageIndex="@i"
                                asp-route-searchType="@Model.SearchType"
                                asp-route-searchString="@Model.SearchString"
-                               asp-route-pageIndex="@i"
+                               asp-route-sortOrder="@Model.CurrentSort"
                                asp-route-SelectedCategories="@(Model.SelectedCategories)"
+                               asp-route-SelectedProvinces="@(Model.SelectedProvinces)"
+                               asp-route-SelectedCantons="@(Model.SelectedCantons)"
                                class="@(i == Model.Register.PageIndex ? "pagination-square-active" : "")" id="squareBotton">
                                 <p>@i</p>
                             </a>
@@ -165,16 +215,19 @@
                 {
                     <!-- Link to go to the next page -->
                     <a asp-page="./SearchPage"
+                       asp-route-pageIndex="@(Model.Register.PageIndex + 1)"
                        asp-route-searchType="@Model.SearchType"
                        asp-route-searchString="@Model.SearchString"
-                       asp-route-pageIndex="@(Model.Register.PageIndex + 1)"
+                       asp-route-sortOrder="@Model.CurrentSort"
                        asp-route-SelectedCategories="@(Model.SelectedCategories)"
+                       asp-route-SelectedProvinces="@(Model.SelectedProvinces)"
+                       asp-route-SelectedCantons="@(Model.SelectedCantons)"
                        class="button-general pagination-button" id="pagination-button-right">
                         <img src="~/img/ArrowRightIcon.svg" alt="Siguiente">
                     </a>
                 }
             </div>
         </div>
-        <script src="~/js/SearchPage/filterCategory.js"></script>
     }
+    <script src="~/js/SearchPage/filterCategory.js"></script>
 </div>

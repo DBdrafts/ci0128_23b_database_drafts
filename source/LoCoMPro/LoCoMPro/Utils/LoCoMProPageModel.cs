@@ -4,25 +4,30 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace LoCoMPro.Pages
 {
-    //  General PageModel for LoComPro system
+    /// <summary>
+    /// General PageModel for LoComPro system.
+    /// </summary>
     public class LoCoMProPageModel : PageModel
     {
-        // Context of the data base 
+        /// <summary>
+        /// Context to use for page.
+        /// </summary>
         protected readonly LoCoMPro.Data.LoCoMProContext _context;
-        // Configuration for the page 
+
+        /// <summary>
+        /// Configuration for the page.
+        /// </summary>
         protected readonly IConfiguration Configuration;
 
-        // LoComPro Page constructor 
+        /// <summary>
+        /// LoComPro Page constructor.
+        /// </summary>
+        /// <param name="context">DB context to use for page.</param>
+        /// <param name="configuration">Configuration for page.</param>
         public LoCoMProPageModel(LoCoMProContext context, IConfiguration configuration)
         {
             _context = context;
             Configuration = configuration;
         }
-
-        // OnPost method that sent request 
-        //public IActionResult OnPost()
-        //{
-        //    return Page();
-        //}
     }
 }
