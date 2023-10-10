@@ -100,13 +100,10 @@ namespace LoCoMPro.Pages
             string searchCantonName, int? pageIndex, string sortOrder)
         {
             CurrentSort = sortOrder;
-            PriceSort = String.IsNullOrEmpty(sortOrder) ? "price_desc" : "";
+            PriceSort = sortOrder == "price" ? "price_desc" : "price";
             
             // if sortOrder is Date, match date else date_desc
             DateSort = sortOrder == "date" ? "date_desc" : "date";
-            
-            /* If the page registers is lower that 1 */
-            pageIndex = pageIndex < 1 ? 1 : pageIndex;
 
             // Attr of the product from the params of method
             SearchProductName = searchProductName;
@@ -169,9 +166,9 @@ namespace LoCoMPro.Pages
                 case "price_desc":   
                     registers = registers.OrderByDescending(r => r.Price);
                     break;
-                // Newest order for Submition Date
-                case "date":     
-                    registers = registers.OrderByDescending(r => r.SubmitionDate);
+                //  Order in case of price
+                case "price":     
+                    registers = registers.OrderBy(r => r.Price);
                     break;
                 // Oldest order for Submition Date
                 case "date_desc":
@@ -179,7 +176,7 @@ namespace LoCoMPro.Pages
                     break;
                 // Normal order for the price
                 default:
-                    registers = registers.OrderBy(r => r.Price);
+                    registers = registers.OrderByDescending(r => r.SubmitionDate);
                     break;
             }
 

@@ -10,23 +10,57 @@ using System.Reflection.Metadata;
 
 namespace LoCoMPro.Data
 {
+    /// <summary>
+    /// DB context for application's database. Abstracts database usage to implement business logic.
+    /// </summary>
     public class LoCoMProContext : IdentityDbContext<User>
     {
+        /// <summary>
+        /// Creates a new LoCoMProContext.
+        /// </summary>
+        /// <param name="options">Options to initialize context with.</param>
         public LoCoMProContext(DbContextOptions<LoCoMProContext> options)
             : base(options)
         {
         }
 
+        /// <summary>
+        /// Cantons that reside in the Database.
+        /// </summary>
         public DbSet<Canton> Cantones { get; set; }
+
+        /// <summary>
+        /// Categories that reside in the Database.
+        /// </summary>
         public DbSet<Category> Categories { get; set; }
+
+        /// <summary>
+        /// Products that reside in the Database.
+        /// </summary>
         public DbSet<Product> Products { get; set; }
+
+        /// <summary>
+        /// Provinces that reside in the Database.
+        /// </summary>
         public DbSet<Provincia> Provincias { get; set; }
+
+        /// <summary>
+        /// Registers saved in the database.
+        /// </summary>
         public DbSet<Register> Registers { get; set; }
+
+        /// <summary>
+        /// Stores saved in the database.
+        /// </summary>
         public DbSet<Store> Stores { get; set; }
 
 
 
         // TODO: May want to create a builder for each class
+        /// <summary>
+        /// Model builder for LoCoMProContext, ensures the initialization and configuration of each table.
+        /// </summary>
+        /// <param name="modelBuilder">Builder that the context will use.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
