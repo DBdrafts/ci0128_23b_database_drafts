@@ -1,0 +1,102 @@
+﻿@page
+@model LoCoMPro.Pages.AddProductPageModel
+@{
+    ViewData["Title"] = "Agregar Producto";
+    Layout = "_Layout";
+    ViewBag.ShowSearchBar = false;
+    ViewBag.ShowLogoLink = true;
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Nuevo Registro</title>
+    <link rel="stylesheet" href="~/css/AddProductPage.css">
+</head>
+
+<body>
+    <div class="register-section">
+        <form id="addProductForm" method="post" asp-page="AddProductPage">
+            <h2>Nuevo registro de producto</h2>
+            <hr class="title-separator">
+
+
+            <label for="chosenlocation">Ubicación<span class="required-marker">*</span>
+                <span class="required-tooltip">Campo obligatorio</span></label>
+            <div class="location-container">
+                <button type="button" class="location-button" id="locationButton">Elegir ubicación</button>
+                <input type="text" id="chosenLocation" class="required-field" name="chosenLocation" style="display: none;" readonly>
+                <input type="hidden" id="selectedProvince" name="selectedProvince">
+                <input type="hidden" id="selectedCanton" name="selectedCanton">
+                <div id="locationInfo" style="display: none;"></div>
+            </div>
+
+            <label for="store">Establecimiento<span class="required-marker">*</span> 
+            <span class="required-tooltip">Campo obligatorio</span></label>
+            <input type="text" id="store" name="store" class="required-field" placeholder="Establecimiento" required>
+
+            <label for="productName">Nombre del Producto<span class="required-marker">*</span>
+                <span class="required-tooltip">Campo obligatorio</span></label>
+            <input type="text" id="productName" name="productName" class="required-field" placeholder="Nombre" required>
+
+            <div class="price-category-container">
+                <div class="price-category-field-group">
+                    <label for="price">Precio<span class="required-marker">*</span>
+                        <span class="required-tooltip">Campo obligatorio</span></label>
+                    <input type="number" id="price" name="price" min="0" class="required-field" placeholder="Precio" required>
+                </div>
+                <div class="price-category-field-group">
+                    <label for="category">Categoría</label>
+                    <select id="category" name="category" asp-items="@Model.CategoryList">
+                        <option value="">Elegir categoría</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="brand-model-container">
+                <div class="brand-model-field-group">
+                    <label for="brand">Marca</label>
+                    <input type="text" id="brand" name="brand" placeholder="Marca">
+                </div>
+                <div class="brand-model-field-group">
+                    <label for="model">Modelo</label>
+                    <input type="text" id="model" name="model" placeholder="Modelo">
+                </div>
+            </div>
+
+            <label for="comment">Comentario:</label>
+            <textarea id="comment" name="comment" placeholder="Comentario adicional del producto..."></textarea>
+
+           <div id="locationPopup" class="popup">
+                <div class="popup-content">
+                    <h2>Seleccionar ubicación</h2>
+                    <label for="province">Provincia:</label>
+                    <select id="province" name="province">
+                        <option value="" disabled selected hidden>Seleccionar provincia</option>
+                    </select>
+                    <label for="canton">Cantón:</label>
+                    <select id="canton" name="canton" disabled>
+                        <option value="" disabled selected hidden>Seleccione una provincia primero</option>
+                    </select>
+                    <button type="button" id="closePopup-button">Cerrar</button>
+                    <button type="button" id="saveLocation-button">Guardar</button>
+                </div>
+            </div>
+            <button type="submit" class="submit-button" form="addProductForm">
+                <div class="button-content">
+                    <span class="button-text">Publicar Registro</span>
+                    <img src="~/img/AddRegisterIcon.svg" alt="addRegIcon" class="icon">
+                </div>
+            </button>
+
+        </form>
+    </div>
+    <script src="~/js/selectLocation.js"></script>
+    <script src="~/js/AddProductPage/sequentialForm.js"></script>
+    <script src="~/js/AddProductPage/autocompleteAddProduct.js"></script>
+</body>
+</html>

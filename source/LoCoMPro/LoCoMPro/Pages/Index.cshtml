@@ -1,0 +1,18 @@
+﻿@page
+@model IndexModel
+@{
+    Layout = "_Layout";
+    ViewBag.ShowSearchBar = false;
+    ViewBag.ShowLogoLink = false;
+}
+
+ <div class="text-center">
+     <!-- Logo image of LoCoMPro -->
+    <div class="logo-image">
+        <img src="~/img/LoCoMProLogo.svg" alt="LoCoMPro Logo">
+    </div>
+
+    <!-- Section of the search bar and buttons -->
+    @await Html.PartialAsync("_SearchBar")
+</div>
+

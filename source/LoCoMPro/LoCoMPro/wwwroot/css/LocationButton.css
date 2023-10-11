@@ -1,0 +1,119 @@
+﻿/*Style for pop up*/
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+}
+
+/* Style for pop up content*/
+.popup-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    width: 20%;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    position: relative;
+    font-weight: 500;
+    text-align:left;
+    
+}
+
+/* Style for province options*/
+#province {
+    background-color: #E2E3E3;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 25px;
+    border: 1px solid #E2E3E3;
+    border-radius: 15px;
+}
+
+
+/* Style for canton options*/
+#canton {
+    background-color: #E2E3E3;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 25px;
+    border: 1px solid #E2E3E3;
+    border-radius: 15px;
+}
+
+.selectHeader {
+    font-size: 24px;
+    margin-bottom: 17px;
+    font-weight: 700;
+}
+
+/* Style for saveLocation botton*/
+#saveLocation-button {
+    background-color: #74C2F8;
+    color: #000000;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0px 4px 4px 0px rgba(80, 158, 224, 0.5);
+    float: right;
+    width: auto;
+}
+
+/* SaveLocation-button when hover*/
+#saveLocation-button:hover {
+    background-color: #5AABE2;
+}
+
+
+/* Style for save closePopup botton*/
+#closePopup-button {
+    background-color: #F87474;
+    color: #000000;
+    border: none;
+    padding: 6px 21px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0px 4px 4px 0px rgba(224, 80, 80, 0.5);
+    width: auto;
+}
+
+/* SaveLocation-button when hover*/
+#closePopup-button:hover {
+    background-color: #E25A5A;
+}
+
+/* Style for the location selector button */
+.location-selector {
+    display: inline-flex;
+    background-color: #88C8F8;
+    padding: 0px;
+    margin: 0px;
+    z-index: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 20%;
+    max-height: 100%;
+    border-radius: 0px 15px 15px 0px;
+    text-align: left;
+}
+
+/* Style for the image of the location selector button */
+.location-selector img {
+    width: 13px;
+    height: 18px;
+    margin: 4px 10px 0px 10px;
+}
+
+/* Style for the location selector button when the cursor is on the button */
+.location-selector:hover {
+    background-color: #39A4F4;
+}

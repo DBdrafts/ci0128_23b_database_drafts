@@ -1,0 +1,118 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using LoCoMPro.Data;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] LoCoMPro</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/LoCoMPro.styles.css" asp-append-version="true" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Shortcut icon of the layout -->
+    <link rel="shortcut icon" type="image/svg" href="~/img/LoCoMProLogo.svg"/>
+    <!-- Shared style for several pages-->
+    <link rel="stylesheet" href="~/css/SharedStyles.css" />
+
+</head>
+<body>
+    <header>
+        <!-- Navegation bar of the layout -->
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="w-100 d-flex">
+                @if (ViewBag.ShowLogoLink ?? true)
+                {
+                    <!-- Logo link to the main page -->
+                    <div class="w-100 logo-link justify-content-left">
+                        <a href="/" class="button-general">
+                            <img src="~/img/LoCoMProLogo.svg" alt="Agregar Registro">
+                        </a>
+                    </div>
+                }
+                @if (ViewBag.ShowSearchBar ?? true)
+                {
+                    <!-- Section of the search bar and buttons for the layout -->
+                    @await Html.PartialAsync("_SearchBar")
+                }
+                <!-- Navegation bar buttons -->
+                <div class="w-100 d-flex justify-content-end">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        var user = await UserManager.GetUserAsync(User);
+                        var email = await UserManager.GetEmailAsync(user!);
+
+                        <!-- Add register button of the layout -->
+                        <!-- If user is signed in this button redirects to AddProduct page -->
+                        <a href="/AddProductPage" class="layout-button button-general">
+                            <img src="~/img/AddRegisterIcon.svg" alt="Agregar Registro">
+                            <p>Agregar</p>
+                        </a>
+
+                        <!-- Add user button of the layout -->
+                        <!-- If user is signed in this button shows the popup containing the logout option -->
+                        <button class="layout-button button-general" id="usr-logged">
+                            <img src="~/img/UserIconSignedIn.svg" alt="Opciones de Usuario">
+                            <p>Usuario</p>
+                        </button>
+                        <!-- Popup displayed through the script -->
+                        <div class="popup-user text-center" id="popup-logged">
+                            <h6>@email</h6>
+                            <img src="~/img/UserIconSignedIn.svg" alt="Imagen de Usuario">
+                            <h5>@user</h5>
+                            <!-- Button to logout -->
+                            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+                                <button class="button-general" id="logout-button">Cerrar Sesión</button>
+                            </form>
+                        </div>
+                    } else {
+                        <!-- Add register button of the layout -->
+                        <!-- If user is not signed in this button redirects to Login page -->
+                        <a asp-area="Identity" asp-page="/Account/Login" class="layout-button button-general">
+                            <img src="~/img/AddRegisterIcon.svg" alt="Agregar Registro">
+                            <p>Agregar</p>
+                        </a>
+
+                        <!-- Add user button of the layout -->
+                        <button class="layout-button button-general" id="usr-not-logged">
+                            <img src="~/img/UserIcon.svg" alt="Opciones de Usuario">
+                            <p>Usuario</p>
+                        </button>
+                        <!-- Popup displayed through the script -->
+                        <div class="popup-user" id="popup-not-logged">
+                            <a asp-area="Identity" asp-page="/Account/Login" style="text-decoration: none">
+                                <button class="button-general" id="login-button">Iniciar Sesión</button>
+                            </a>
+                            <a asp-area="Identity" asp-page="/Account/Register" style="text-decoration: none">
+                                <button class="button-general" id="register-button">Registrarse</button>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>  
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    
+    <!-- Footer of the layout -->
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - LoCoMPro - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/userPopUp.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

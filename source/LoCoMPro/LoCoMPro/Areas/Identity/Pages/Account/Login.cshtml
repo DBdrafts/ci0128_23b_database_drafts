@@ -1,0 +1,57 @@
+﻿@page
+@model LoginModel
+@{
+    ViewBag.ShowSearchBar = true;
+    ViewBag.ShowLogoLink = true;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="~/js/Login.js"></script>
+</head>
+<body>
+    <!-- App logo -->
+    <div class="logo-image">
+        <img src="~/img/LoCoMProLogo.svg" alt="LoCoMPro Logo">
+    </div>
+    <div class="login-section">
+        <!-- Login Form -->
+        <form class="form-input" method="post">
+            <div id='inises'>Iniciar Sesión</div>
+
+            <!-- Space to enter email -->
+            <label asp-for="Input.Email">Correo Electrónico</label>
+            <input asp-for="Input.Email" placeholder="usuario@gmail.com" class="form-control" style="border-radius: 15px;
+                    border: 2px black solid; margin-bottom: 8px; margin-top: 5px" aria-required="true">
+
+            <!-- Space to enter password -->
+            <label asp-for="Input.Password">Contraseña</label>
+            <input asp-for="Input.Password" id="psw" placeholder="Contraseña" class="form-control" style="border-radius: 15px;
+                    border: 2px black solid; margin-bottom: 8px; margin-top: 5px" aria-required="true">
+
+            <!-- Check box to toggle show password -->
+            <input type="checkbox" onclick="shwPass()"> Mostrar Contraseña
+
+            <button id="iniSesion" type="submit">Iniciar Sesión</button>
+
+            <!-- Link to ./ForgotPassword for future sprints -->
+            <div id="forgotpsw"><a asp-page="">¿Has olvidado tu contraseña?</a></div>
+        </form>
+    </div>
+    <div class="noacc-section">
+        <!-- Show validation alerts -->
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div id="separator"></div>
+        <div style="text-align: center">¿No te has registrado?</div>
+        <!-- Button that redirects to register page -->
+        <a asp-area="Identity" asp-page="/Account/Register">
+            <button id="register">Registrarse</button>
+        </a>
+    </div>
+</body>
+</html>
