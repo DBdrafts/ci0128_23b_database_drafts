@@ -123,10 +123,10 @@
                                 @Html.DisplayFor(modelItem => register.ProductName)
                             </span>
                             <!-- remove hidden when css is fixed pls -->
-                            <span id="result-store-name" value="@register.StoreName" hidden>
+                            <span id="result-store-name" value="@register.StoreName">
                                 @Html.DisplayFor(modelItem => register.StoreName)
                             </span>
-                            <span id="result-province-name" value="@register.ProvinciaName" hidden>
+                            <span id="result-province-name" value="@register.ProvinciaName">
                                 @Html.DisplayFor(modelItem => register.ProvinciaName)
                             </span>
                             <span id="result-canton-name" value="@register.CantonName">
@@ -135,8 +135,8 @@
                             <span id="result-price" value="@register.Price">
                                 ₡ @Html.DisplayFor(modelItem => register.Price)
                             </span>
-                            <span id="result-date" value="@register.SubmitionDate.Date" hidden>
-                                @Html.DisplayFor(modelItem => register.SubmitionDate.Date)
+                            <span id="result-date" value="@register.SubmitionDate.Date">
+                                @register.SubmitionDate.ToShortDateString()
                             </span>
                             <span id="result-categories" value="@Model.CategoryMap[register.Product.Name]" hidden></span>
                         </a>
