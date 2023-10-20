@@ -9,6 +9,7 @@
 
 <head>
     <link rel="stylesheet" href="~/css/ProductPage.css" />
+    <script src="~/js/interactionsPopUp.js"></script>
 </head>
 
 <div class="product-page">
@@ -156,6 +157,7 @@
             <!-- Search result section -->
                 <!-- Individual registers -->
                 <div class="register-block">
+                <button onclick="openInteractionsPopup()">...</button>
                 <p>@Html.DisplayFor(modelItem => register.SubmitionDate)</p>
                 <p>₡@Html.DisplayFor(modelItem => register.Price)</p>
                 <p>@Html.DisplayFor(modelItem => register.Comment)</p>
@@ -229,6 +231,14 @@
         </div>
 
         <!-- Code for orders registers--> </>
+        <div class="interactions-popup">
+            <div class="interactions-popup-content">
+                <span class="interactions-close-button" onclick="closeInteractionsPopup()">&times;</span>
+                <h2>Reportar registro</h2>
+                <img id="reportIcon" src="~/img/DesactiveReportIcon.svg" alt="Reportar" onclick="toggleReport()" />
+                <button id="saveButton" onclick="saveInteractions()">Guardar</button>
+            </div>
+        </div>
 
     </div>
 
