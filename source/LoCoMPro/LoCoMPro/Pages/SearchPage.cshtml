@@ -9,8 +9,6 @@
 
 <head>
     <link rel="stylesheet" href="~/css/SearchPage.css" />
-    @* <script src="~/js/ordering.js"></script> *@
-    <script src="~/js/pagination.js"></script>
 </head>
 
 <div>
@@ -67,12 +65,12 @@
                 }
             </form>
         }
-
-        <input type="hidden" name="searchType" id="searchType" value="@Model.SearchType" />
-        <input type="hidden" name="searchString" id="searchString" value="@Model.SearchString" />
-        <input type="hidden" name="sortOrder" id="sortOrder" value="@Model.CurrentSort" />
     </div>
     <!-- No product found message -->
+    <div class="product-not-found text-center" id = "product-not-found-result" hidden>
+        <h2> No se encontrado resultados de "@Model.SearchString" al buscar por "@Model.SearchType" </h2>
+        <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
+    </div>
     @if (Model.Register.Count() < 1)
     {
         <div class="product-not-found text-center">
@@ -83,7 +81,7 @@
     else
     {
         <!-- Search result section -->
-        <div class="search-section">
+        <div class="search-section" id="search-results">
             <!-- Search section title -->
             <h1> Resultados "@Model.SearchString" - Búsqueda por "@Model.SearchType" </h1>
 
@@ -103,35 +101,6 @@
                     <li>
                         <div class="textComment">Provincia</div>
                     </li>
-                    <!-- Price column title that uses a PopUp -->
-                    @* <li>
-                        <a href="">Precio</a>
-                        <img src="~/img/ArrowDownIcon.svg" alt="Anterior">
-                        <ul class="menu-vertical">
-                            <li>
-                                <a asp-page="./SearchPage"
-                                   asp-route-pageIndex="1"
-                                   asp-route-searchType="@Model.SearchType"
-                                   asp-route-searchString="@Model.SearchString"
-                                   asp-route-SelectedCategories="@(Model.SelectedCategories)"
-                                   asp-route-SelectedProvinces="@(Model.SelectedProvinces)"
-                                   asp-route-SelectedCantons="@(Model.SelectedCantons)"
-                                   asp-route-sortOrder="price_asc">Menores precios
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-page="./SearchPage"
-                                   asp-route-pageIndex="1"
-                                   asp-route-searchType="@Model.SearchType"
-                                   asp-route-searchString="@Model.SearchString"
-                                   asp-route-SelectedCategories="@(Model.SelectedCategories)"
-                                   asp-route-SelectedProvinces="@(Model.SelectedProvinces)"
-                                   asp-route-SelectedCantons="@(Model.SelectedCantons)"
-                                   asp-route-sortOrder="price_desc">Mayores precios
-                                </a>
-                            </li>
-                        </ul>
-                    </li> *@
                     <li>
                         <button class="sort-button" data-sort-order="desc" target="#result-price">
                             <span class="textComment">Precio</span>
@@ -169,7 +138,7 @@
                             <span id="result-province-name" value="@register.ProvinciaName" hidden>
                                 @Html.DisplayFor(modelItem => register.ProvinciaName)
                             </span>
-                            <span id="result-canton-name" value="@register.CantonName" hidden>
+                            <span id="result-canton-name" value="@register.CantonName">
                                 @Html.DisplayFor(modelItem => register.CantonName)
                             </span>
                             <span id="result-price" value="@register.Price">
@@ -178,6 +147,7 @@
                             <span id="result-date" value="@register.SubmitionDate.Date" hidden>
                                 @Html.DisplayFor(modelItem => register.SubmitionDate.Date)
                             </span>
+                            @* <span id="result-categories" value="@register.Categories" hidden></span> *@
                         </a>
                     </li>
                 }
@@ -202,5 +172,6 @@
             </div>
         </div>
     }
-    <script src="~/js/SearchPage/filterCategory.js"></script>
+    <script src="~/js/SearchPage/pagination.js"></script>
+    <script src="~/js/SearchPage/filters.js"></script>
 </div>

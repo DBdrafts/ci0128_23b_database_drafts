@@ -1,42 +1,50 @@
-﻿function getOppositeOrder(order) {
+﻿let pageSize = 5;
+let queryResults = Array.from(document.querySelectorAll('.result-block'));
+let resultBlocks = Array.from(document.querySelectorAll('.result-block'));
+let filteredResultBlocks = null;
+let pageButtonsContainer = document.getElementById("pageButtonsContainer");
+let previousButton = document.getElementById('pagination-button-left');
+let nextButton = document.getElementById('pagination-button-right');
+let total = document.getElementById('total');
+
+let totalPages = Math.ceil(resultBlocks.length / pageSize);
+let queryTotalResults = resultBlocks.length;
+let currentPage = 1;
+function getOppositeOrder(order) {
     return order === "asc" ? "desc" : "asc";
 }
 document.addEventListener("DOMContentLoaded", function () {
-    const pageSize = 5;
-    const resultBlocks = Array.from(document.querySelectorAll('.result-block'));
-    const pageButtonsContainer = document.getElementById("pageButtonsContainer");
-    const previousButton = document.getElementById('pagination-button-left');
-    const nextButton = document.getElementById('pagination-button-right');
-    const total = document.getElementById('total');
-
-    let totalPages = Math.ceil(resultBlocks.length / pageSize);
-    let currentPage = 1;
-
     // Sort the result blocks based on the selected sorting criteria
-    function sortResultBlocks(sortOrder, field = "#result-price") {
+    window.sortResultBlocks = function (sortOrder, field = "#result-product-name") {
         // Implement your sorting logic here
         // Example: Sort by price
         resultBlocks.sort((a, b) => {
-            const priceA = parseFloat(a.querySelector(field).getAttribute("value"));
-            const priceB = parseFloat(b.querySelector(field).getAttribute("value"));
-            return sortOrder === 'asc' ? priceA - priceB : priceB - priceA;
+            const valueA = parseFloat(a.querySelector(field).getAttribute("value"));
+            const valueB = parseFloat(b.querySelector(field).getAttribute("value"));
+            return sortOrder === 'asc' ? valueA - valueB : valueB - valueA;
         });
-        const a = resultBlocks;
+
+        const parentContainer = resultBlocks[0].parentElement;
+        resultBlocks.forEach(block => {
+            parentContainer.appendChild(block); // Reorder the elements in the parent container
+        });
+
     }
 
     // Show current results page
-    function showPage(page) {
+    window.showPage = function (page) {
         const startIndex = (page - 1) * pageSize;
         const endIndex = startIndex + pageSize;
         resultBlocks.forEach((block, index) => {
             block.style.display = index >= startIndex && index < endIndex ? 'block' : 'none';
         });
+
         total.textContent = `Página ${currentPage} de ${totalPages}`;
 
     }
 
     // Hides left and right navigation buttons.
-    function updateNavigationButtons() {
+    window.updateNavigationButtons = function () {
         previousButton.hidden = currentPage === 1;
         nextButton.hidden = currentPage === totalPages;
 
