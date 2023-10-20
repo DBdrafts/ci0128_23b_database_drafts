@@ -14,17 +14,17 @@ let currentPage = 1;
 let activeButton = null;
 
 function getOppositeOrder(order) {
-    return order === "asc" ? "desc" : "asc";
+    return order === "desc" ? "asc" : "desc";
 }
 document.addEventListener("DOMContentLoaded", function () {
     // Sort the result blocks based on the selected sorting criteria
-    window.sortResultBlocks = function (sortOrder, field = "#result-product-name") {
+    window.sortResultBlocks = function (order, field = "#result-product-name") {
         // Implement your sorting logic here
         // Example: Sort by price
         resultBlocks.sort((a, b) => {
             const valueA = parseFloat(a.querySelector(field).getAttribute("value"));
             const valueB = parseFloat(b.querySelector(field).getAttribute("value"));
-            return sortOrder === 'asc' ? valueA - valueB : valueB - valueA;
+            return order === 'desc' ? valueA - valueB : valueB - valueA;
         });
 
         const parentContainer = resultBlocks[0].parentElement;

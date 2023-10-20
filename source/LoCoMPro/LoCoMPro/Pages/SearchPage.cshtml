@@ -25,7 +25,6 @@
         {
             <!-- Filter by category -->
             <h5> Categorías </h5>
-            <form method="get" asp-page="./SearchPage" id="searchForm">
                 @foreach (var category in Model.Category)
                 {
                     <div class="filter-line">
@@ -33,14 +32,12 @@
                         <label>@Html.DisplayFor(modelItem => category.CategoryName)</label>
                     </div>
                 }
-            </form>
         }
 
         <!-- Filter by Province -->
         @if (Model.Provinces.Count() > 1)
         {
             <h5> Provincias </h5>
-            <form method="get" asp-page="./SearchPage" id="provinceFilterForm">
                 @foreach (var province in Model.Provinces)
                 {
                     <div class="filter-line">
@@ -48,14 +45,12 @@
                         <label>@Html.DisplayFor(modelItem => province.Name)</label>
                     </div>
                 }
-            </form>
         }
 
         <!-- Filter by Canton -->
         @if (Model.Cantons.Count() > 1)
         {
             <h5> Cantones </h5>
-            <form method="get" asp-page="./SearchPage" id="cantonFilterForm">
                 @foreach (var canton in Model.Cantons)
                 {
                     <div class="filter-line">
@@ -63,7 +58,6 @@
                         <label>@Html.DisplayFor(modelItem => canton.CantonName)</label>
                     </div>
                 }
-            </form>
         }
     </div>
     <!-- No product found message -->
@@ -144,7 +138,7 @@
                             <span id="result-date" value="@register.SubmitionDate.Date" hidden>
                                 @Html.DisplayFor(modelItem => register.SubmitionDate.Date)
                             </span>
-                            @* <span id="result-categories" value="@register.Categories" hidden></span> *@
+                            <span id="result-categories" value="@Model.CategoryMap[register.Product.Name]" hidden></span>
                         </a>
                     </li>
                 }
