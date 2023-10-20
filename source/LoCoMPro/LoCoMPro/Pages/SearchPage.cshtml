@@ -25,7 +25,6 @@
         {
             <!-- Filter by category -->
             <h5> Categorías </h5>
-            <form method="get" asp-page="./SearchPage" id="searchForm">
                 @foreach (var category in Model.Category)
                 {
                     <div class="filter-line">
@@ -33,14 +32,12 @@
                         <label>@Html.DisplayFor(modelItem => category.CategoryName)</label>
                     </div>
                 }
-            </form>
         }
 
         <!-- Filter by Province -->
         @if (Model.Provinces.Count() > 1)
         {
             <h5> Provincias </h5>
-            <form method="get" asp-page="./SearchPage" id="provinceFilterForm">
                 @foreach (var province in Model.Provinces)
                 {
                     <div class="filter-line">
@@ -48,14 +45,12 @@
                         <label>@Html.DisplayFor(modelItem => province.Name)</label>
                     </div>
                 }
-            </form>
         }
 
         <!-- Filter by Canton -->
         @if (Model.Cantons.Count() > 1)
         {
             <h5> Cantones </h5>
-            <form method="get" asp-page="./SearchPage" id="cantonFilterForm">
                 @foreach (var canton in Model.Cantons)
                 {
                     <div class="filter-line">
@@ -63,7 +58,6 @@
                         <label>@Html.DisplayFor(modelItem => canton.CantonName)</label>
                     </div>
                 }
-            </form>
         }
     </div>
     <!-- No product found message -->
@@ -104,8 +98,9 @@
                     <li>
                         <button class="sort-button" data-sort-order="desc" target="#result-price">
                             <span class="textComment">Precio</span>
-                            <img src="~/img/ArrowDownIcon.svg" alt="order" hidden>
+                            <img src="~/img/ArrowDownIcon.svg" alt="order" class="arrow down">
                         </button>
+
                     </li>
 
                     <li>

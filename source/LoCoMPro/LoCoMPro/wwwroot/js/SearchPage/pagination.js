@@ -10,18 +10,22 @@ let total = document.getElementById('total');
 let totalPages = Math.ceil(resultBlocks.length / pageSize);
 let queryTotalResults = resultBlocks.length;
 let currentPage = 1;
+
+let sortOrder = "";
+let field = "";
+
 function getOppositeOrder(order) {
     return order === "asc" ? "desc" : "asc";
 }
 document.addEventListener("DOMContentLoaded", function () {
     // Sort the result blocks based on the selected sorting criteria
-    window.sortResultBlocks = function (sortOrder, field = "#result-product-name") {
+    window.sortResultBlocks = function (order, field = "#result-product-name") {
         // Implement your sorting logic here
         // Example: Sort by price
         resultBlocks.sort((a, b) => {
             const valueA = parseFloat(a.querySelector(field).getAttribute("value"));
             const valueB = parseFloat(b.querySelector(field).getAttribute("value"));
-            return sortOrder === 'asc' ? valueA - valueB : valueB - valueA;
+            return order === 'asc' ? valueA - valueB : valueB - valueA;
         });
 
         const parentContainer = resultBlocks[0].parentElement;
@@ -98,14 +102,36 @@ document.addEventListener("DOMContentLoaded", function () {
     const sortButtons = document.querySelectorAll(".sort-button");
     sortButtons.forEach((button) => {
         button.addEventListener('click', () => {
-            const sortOrder = getOppositeOrder(button.getAttribute("data-sort-order"));
-            const field = button.getAttribute("target");
+
+            // Reset all other buttons
+            sortButtons.forEach((btn) => {
+                if (btn !== button) {
+                    btn.removeAttribute("data-sort-order");
+                    btn.classList.remove("active");
+                }
+            });
+
+            // Toggle "up" and "down" classes for the arrow image
+            const arrow = button.querySelector(".arrow");
+            if (button.hasAttribute("data-sort-order")) {
+                sortOrder = getOppositeOrder(button.getAttribute("data-sort-order"));
+                arrow.classList.toggle("up", sortOrder === 'asc');
+                arrow.classList.toggle("down", sortOrder === 'desc');
+            } else {
+                arrow.classList.remove("up");
+                arrow.classList.add("down");
+            }
+
+            // Update the sorting order
+            sortOrder = getOppositeOrder(button.getAttribute("data-sort-order"));
+            field = button.getAttribute("target");
             sortResultBlocks(sortOrder, field);
             totalPages = Math.ceil(resultBlocks.length / pageSize);
             currentPage = 1;
             showPage(currentPage, sortOrder);
             updateNavigationButtons();
             button.setAttribute("data-sort-order", sortOrder);
+            button.classList.add("active");
         });
     });
 
