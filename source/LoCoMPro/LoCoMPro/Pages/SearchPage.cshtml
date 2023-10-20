@@ -102,10 +102,7 @@
                         <div class="textComment">Provincia</div>
                     </li>
                     <li>
-                        <button class="sort-button" data-sort-order="desc" target="#result-price">
-                            <span class="textComment">Precio</span>
-                            <img src="~/img/ArrowDownIcon.svg" alt="order">
-                        </button>
+                        @await Html.PartialAsync("_OrderButton", "Precio")
                     </li>
 
                     <li>

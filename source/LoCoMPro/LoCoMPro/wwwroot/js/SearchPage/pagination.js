@@ -10,6 +10,9 @@ let total = document.getElementById('total');
 let totalPages = Math.ceil(resultBlocks.length / pageSize);
 let queryTotalResults = resultBlocks.length;
 let currentPage = 1;
+
+let activeButton = null;
+
 function getOppositeOrder(order) {
     return order === "asc" ? "desc" : "asc";
 }
@@ -96,8 +99,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Sort buttons (e.g., "Menores precios" and "Mayores precios")
     const sortButtons = document.querySelectorAll(".sort-button");
+
     sortButtons.forEach((button) => {
         button.addEventListener('click', () => {
+
+            // Hides all the images of the order
+            sortButtons.forEach((btn) => {
+                const images = btn.querySelectorAll("img");
+                images.forEach((image) => {
+                    image.classList.add("hidden-image");
+                });
+            });
+
             const sortOrder = getOppositeOrder(button.getAttribute("data-sort-order"));
             const field = button.getAttribute("target");
             sortResultBlocks(sortOrder, field);
@@ -106,6 +119,12 @@ document.addEventListener("DOMContentLoaded", function () {
             showPage(currentPage, sortOrder);
             updateNavigationButtons();
             button.setAttribute("data-sort-order", sortOrder);
+
+            // Show the order button image
+            const currentImage = button.querySelector("." + sortOrder);
+            if (currentImage) {
+                currentImage.classList.remove("hidden-image");
+            }
         });
     });
 
