@@ -9,6 +9,8 @@
 
 <head>
     <link rel="stylesheet" href="~/css/SearchPage.css" />
+    @* <script src="~/js/ordering.js"></script> *@
+    <script src="~/js/pagination.js"></script>
 </head>
 
 <div>
@@ -102,7 +104,7 @@
                         <div class="textComment">Provincia</div>
                     </li>
                     <!-- Price column title that uses a PopUp -->
-                    <li>
+                    @* <li>
                         <a href="">Precio</a>
                         <img src="~/img/ArrowDownIcon.svg" alt="Anterior">
                         <ul class="menu-vertical">
@@ -129,103 +131,74 @@
                                 </a>
                             </li>
                         </ul>
+                    </li> *@
+                    <li>
+                        <button class="sort-button" data-sort-order="desc" target="#result-price">
+                            <span class="textComment">Precio</span>
+                            <img src="~/img/ArrowDownIcon.svg" alt="order">
+                        </button>
                     </li>
+
                     <li>
                         <div class="textComment">Fecha</div>
                     </li>
                 </ul>
             </nav>
 
-            <!-- Razor directives that gets all the registers that match with the search string -->
-            @foreach (var register in Model.Register)
-            {
-                <!-- Search result section -->
-                <a asp-page="./ProductPage"
-                   asp-route-pageIndex="1"
-                   asp-route-SearchProductName="@register.ProductName"
-                   asp-route-SearchStoreName="@register.StoreName"
-                   asp-route-SearchCantonName="@register.CantonName"
-                   asp-route-SearchProvinceName="@register.ProvinciaName"
-                   class="result-section">
-                    <!-- Individual registers -->
-                    <div class="result-block">
-                        <p>@Html.DisplayFor(modelItem => register.ProductName)</p>
-                        <p>@Html.DisplayFor(modelItem => register.StoreName)</p>
-                        <p>@Html.DisplayFor(modelItem => register.CantonName)</p>
-                        <p>@Html.DisplayFor(modelItem => register.ProvinciaName)</p>
-                        <p>₡ @Html.DisplayFor(modelItem => register.Price)</p>
-                        <p>@Html.DisplayFor(modelItem => register.SubmitionDate)</p>
-                    </div>
-                </a>
-            }
-
-            <!-- Disables the buttons if there´s no previous or next button -->
-            @{
-                var prevDisabled = !Model.Register.HasPreviousPage ? "disabled" : "";
-                var nextDisabled = !Model.Register.HasNextPage ? "disabled" : "";
-            }
+            <!-- Search results section -->
+            <ul class="result-section">
+                <!-- Put in all results -->
+                @foreach (var register in Model.Registers)
+                {
+                    <!-- A result block -->
+                    <li class="result-block">
+                        <!-- Route and data for each result -->
+                        <a asp-page="./ProductPage"
+                           asp-route-pageIndex="1"
+                           asp-route-SearchProductName="@register.ProductName"
+                           asp-route-SearchStoreName="@register.StoreName"
+                           asp-route-SearchCantonName="@register.CantonName"
+                           asp-route-SearchProvinceName="@register.ProvinciaName">
+                            <span id="result-product-name" value="@register.ProductName">
+                                @Html.DisplayFor(modelItem => register.ProductName)
+                            </span>
+                            <!-- remove hidden when css is fixed pls -->
+                            <span id="result-store-name" value="@register.StoreName" hidden>
+                                @Html.DisplayFor(modelItem => register.StoreName)
+                            </span>
+                            <span id="result-province-name" value="@register.ProvinciaName" hidden>
+                                @Html.DisplayFor(modelItem => register.ProvinciaName)
+                            </span>
+                            <span id="result-canton-name" value="@register.CantonName" hidden>
+                                @Html.DisplayFor(modelItem => register.CantonName)
+                            </span>
+                            <span id="result-price" value="@register.Price">
+                                ₡ @Html.DisplayFor(modelItem => register.Price)
+                            </span>
+                            <span id="result-date" value="@register.SubmitionDate.Date" hidden>
+                                @Html.DisplayFor(modelItem => register.SubmitionDate.Date)
+                            </span>
+                        </a>
+                    </li>
+                }
+            </ul>
 
             <!-- Search pagination section -->
             <div class="pagination-section">
+                <!-- Previous page button -->
+                <button class="button-general pagination-button" id="pagination-button-left" hidden>
+                    <img src="~/img/ArrowLeftIcon.svg" alt="Anterior">
+                </button>
 
+                <!-- Specific navigation page buttons -->
+                <span id="pageButtonsContainer"></span>
 
-                <!-- If there´s a previous page -->
-                @if (@prevDisabled != "disabled")
-                {
-                    <!-- Link to go to the previous page -->
-                    <a asp-page="./SearchPage"
-                       asp-route-pageIndex="@(Model.Register.PageIndex - 1)"
-                       asp-route-searchType="@Model.SearchType"
-                       asp-route-searchString="@Model.SearchString"
-                       asp-route-sortOrder="@Model.CurrentSort"
-                       asp-route-SelectedCategories="@(Model.SelectedCategories)"
-                       asp-route-SelectedProvinces="@(Model.SelectedProvinces)"
-                       asp-route-SelectedCantons="@(Model.SelectedCantons)"
-                       class="button-general pagination-button" id="pagination-button-left">
-                        <img src="~/img/ArrowLeftIcon.svg" alt="Anterior">
-                    </a>
-                }
+                <!-- Next page button -->
+                <button class="button-general pagination-button" id="pagination-button-right">
+                    <img src="~/img/ArrowRightIcon.svg" alt="Siguiente">
+                </button>
 
-                <!-- Page button section that behaves dynamically -->
-                @for (int i = Model.Register.PageIndex - 1; i <= Model.Register.TotalPages
-               && i <= Model.Register.PageIndex + 3; ++i)
-                {
-                    <!-- If there´re previous pages higher that 0 -->
-                    if (i >= 1)
-                    {
-                        <!-- Pagination square of the pages -->
-                        <div id="pagination-square">
-                            <a asp-page="./SearchPage"
-                               asp-route-pageIndex="@i"
-                               asp-route-searchType="@Model.SearchType"
-                               asp-route-searchString="@Model.SearchString"
-                               asp-route-sortOrder="@Model.CurrentSort"
-                               asp-route-SelectedCategories="@(Model.SelectedCategories)"
-                               asp-route-SelectedProvinces="@(Model.SelectedProvinces)"
-                               asp-route-SelectedCantons="@(Model.SelectedCantons)"
-                               class="@(i == Model.Register.PageIndex ? "pagination-square-active" : "")" id="squareBotton">
-                                <p>@i</p>
-                            </a>
-                        </div>
-                    }
-                }
-
-                <!-- If there´s a next page -->
-                @if (nextDisabled != "disabled")
-                {
-                    <!-- Link to go to the next page -->
-                    <a asp-page="./SearchPage"
-                       asp-route-pageIndex="@(Model.Register.PageIndex + 1)"
-                       asp-route-searchType="@Model.SearchType"
-                       asp-route-searchString="@Model.SearchString"
-                       asp-route-sortOrder="@Model.CurrentSort"
-                       asp-route-SelectedCategories="@(Model.SelectedCategories)"
-                       asp-route-SelectedProvinces="@(Model.SelectedProvinces)"
-                       asp-route-SelectedCantons="@(Model.SelectedCantons)"
-                       class="button-general pagination-button" id="pagination-button-right">
-                        <img src="~/img/ArrowRightIcon.svg" alt="Siguiente">
-                    </a>
-                }
+                <div id="total"></div>
             </div>
         </div>
     }

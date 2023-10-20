@@ -106,7 +106,7 @@
 }
 
 /* Style for the result section paragraph */
-.result-section p {
+.result-block div {
     font-size: medium;
     flex: 0 0 16%;
     text-align: center;

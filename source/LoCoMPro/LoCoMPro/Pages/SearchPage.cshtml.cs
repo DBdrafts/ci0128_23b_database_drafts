@@ -9,6 +9,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
@@ -112,6 +113,10 @@ namespace LoCoMPro.Pages
         public string? PriceSort { get; set; }
 
         /// <summary>
+        /// Resulr of the query.
+        /// </summary>
+        public IEnumerable<Register> Registers { get; set; } = new List<Register>();
+        /// <summary>
         /// OnGet method that handles the GET request.
         /// </summary>
         /// <param name="pageIndex">Paginated page index to see results of.</param>
@@ -147,20 +152,20 @@ namespace LoCoMPro.Pages
             /* Check if SelectedCantons is null, if not, creates a list of the categories separated by ',' in the string */
             List<string> selectedCantonsList = !String.IsNullOrEmpty(SelectedCantons) ? SelectedCantons.Split(',').ToList() : null!;
 
-            IQueryable<Register> registersMatched = GetRegistersByType(registers);
-            /* Filter by categories*/
-            if (SelectedCategoriesList != null && SelectedCategoriesList.Count > 0 && SelectedCategoriesList[0] != null)
-            {
-                /* A list is obtained with the names of all the products associated with any category on the SelectedCategoriesList.*/
-                var filteredProducts = _context.Products
-                    .Where(p => p.Categories!.Any(c => SelectedCategoriesList.Contains(c.CategoryName)))
-                    .Select(p => p.Name)
-                    .ToList();
+            var match = GetRegistersByType(registers);
 
-                /* The registers associated with the selected categories are obtained */
-                registers = registers.Where(r => filteredProducts.Contains(r.ProductName!));
-            }
-            registers = FilterByLocation(ref registers, selectedProvincesList, selectedCantonsList);
+            //if (SelectedCategoriesList != null && SelectedCategoriesList.Count > 0 && SelectedCategoriesList[0] != null)
+            //{
+            //    /* A list is obtained with the names of all the products associated with any category on the SelectedCategoriesList.*/
+            //    var filteredProducts = _context.Products
+            //        .Where(p => p.Categories!.Any(c => SelectedCategoriesList.Contains(c.CategoryName)))
+            //        .Select(p => p.Name)
+            //        .ToList();
+
+            //    /* The registers associated with the selected categories are obtained */
+            //    registers = registers.Where(r => filteredProducts.Contains(r.ProductName!));
+            //}
+            //registers = FilterByLocation(ref registers, selectedProvincesList, selectedCantonsList);
 
             /* Get registers based on the selected search type */
             IQueryable<Register> registersQuery = GetRegistersByType(registers);
@@ -169,18 +174,18 @@ namespace LoCoMPro.Pages
             // Query to get all categories associated with at least one product in the register list
             Category = await categories
                             .Where(category => category.Products!.Any(product =>
-                                registersMatched.Any(register => register.ProductName == product.Name)))
+                                match.Any(register => register.ProductName == product.Name)))
                             .ToListAsync();
 
             // Query to get all provinces associated with at least one register in the register list
             var provincias = _context.Provincias
-                            .Where(province => registersMatched.Any(register => register.ProvinciaName == province.Name))
+                            .Where(province => match.Any(register => register.ProvinciaName == province.Name))
                             .ToList();
             Provinces = provincias;
 
             // Query to get all cantons associated with at least one register in the register list
             var cantons = _context.Cantones
-                            .Where(canton => registersMatched.Any(register => register.CantonName == canton.CantonName))
+                            .Where(canton => match.Any(register => register.CantonName == canton.CantonName))
                             .ToList();
             Cantons = cantons;
 
@@ -190,6 +195,7 @@ namespace LoCoMPro.Pages
             /* Create the paginated list of registers from the list */
             Register = (await PaginatedList<Register>.CreateAsync(unorderedList,
                 pageIndex ?? 1, pageSize));
+            Registers = match.ToList();
         }
 
 
@@ -298,6 +304,17 @@ namespace LoCoMPro.Pages
         {
             // If null, the order by price as default 
              return String.IsNullOrEmpty(sortOrder) ? "price_asc" : sortOrder;
+        }
+
+        /// <summary>
+        /// Gets search results.
+        /// </summary>
+        /// <returns>Search Results.</returns>
+        public JsonResult OnGetRegisters()
+        {
+            Assert.IsNotNull(Registers);
+            return new JsonResult(Register.ToArray());
+
         }
     }
 }
