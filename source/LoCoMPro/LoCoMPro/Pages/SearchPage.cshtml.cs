@@ -113,9 +113,14 @@ namespace LoCoMPro.Pages
         public string? PriceSort { get; set; }
 
         /// <summary>
+        /// Maps product name to list of categories.
+        /// </summary>
+        [BindProperty(SupportsGet = true)]
+        public Dictionary<string, string> CategoryMap { get; set; } = default!;
+        /// <summary>
         /// Resulr of the query.
         /// </summary>
-        public IEnumerable<Register> Registers { get; set; } = new List<Register>();
+        public IEnumerable<Register>? Registers { get; set; } = new List<Register>();
         /// <summary>
         /// OnGet method that handles the GET request.
         /// </summary>
@@ -189,13 +194,40 @@ namespace LoCoMPro.Pages
                             .ToList();
             Cantons = cantons;
 
-            /* Get an unordered list of registers */
-            List<Register> unorderedList = OrderRegisters(registersQuery.ToList(), sortOrder);
+            if (match != null)
+            {
+                var productsInRegisters = _context.Products
+                    .Where(product => match.Any(register => register.ProductName == product.Name))
+                    .Include(product => product.Categories)
+                    .ToList(); // Fetch data from the database
+
+                if (productsInRegisters != null)
+                {
+                    var groupedProductsInRegisters = productsInRegisters
+                        .GroupBy(product => product.Name)
+                        .Where(group => group.Any(item => item.Categories != null)) // Filter out groups with null Categories
+                        .ToDictionary(
+                            group => group.Key,  // ProductName as the key
+                            group => string.Join(";", group.SelectMany(item => item.Categories!.Select(category => category.CategoryName)))
+                        );
+                    CategoryMap = groupedProductsInRegisters;
+                }
+
+                Registers = match;
+            }
+
+                /* Get an unordered list of registers */
+                List<Register> unorderedList = OrderRegisters(registersQuery.ToList(), sortOrder);
 
             /* Create the paginated list of registers from the list */
             Register = (await PaginatedList<Register>.CreateAsync(unorderedList,
                 pageIndex ?? 1, pageSize));
-            Registers = match.ToList();
+        }
+
+        private static IEnumerable<IGrouping<string, Product>> NewMethod(List<Product> productsInRegisters)
+        {
+            return productsInRegisters
+                                    .GroupBy(product => product.Name);
         }
 
 
