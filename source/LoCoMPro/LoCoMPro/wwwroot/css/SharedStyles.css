@@ -137,3 +137,33 @@
     border-bottom-right-radius: 15px;
     border-top-right-radius: 15px;
 }
+
+.sort-button {
+    background-color: #FFFFFF;
+    border: none;
+    text-decoration: none; /* Remove default text underline */
+/*    transition: transform 0.3s;*/
+}
+/* Add styles for the "up" and "down" classes of the arrow image */
+.sort-button.active .arrow.up {
+    display: inline; /* Display the arrow image when active */
+    transform: rotate(180deg);
+/*    transition: transform 0.3s;*/
+}
+
+.sort-button.active .arrow.down {
+    display: inline; /* Display the arrow image */
+}
+
+.sort-button.active span.textComment {
+    text-decoration: underline;
+}
+
+
+/*.sort-button .arrow {
+    display: block;
+}
+.sort-button.active .arrow {
+    display: block;
+}
+*/
