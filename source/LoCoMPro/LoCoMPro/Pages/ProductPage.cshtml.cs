@@ -247,5 +247,6 @@ namespace LoCoMPro.Pages
             double avgPrice = (registers is not null && registers.Count() > 1) ? registers.Average(r => r.Price) : 0.0;
             return Convert.ToDecimal(avgPrice);
         }
-    } 
+
+    }
 }

@@ -203,10 +203,10 @@
 
 .interactions-popup-content {
     background-color: #fff;
-    padding: 20px;
+    padding: 30px;
     border-radius: 5px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    width: 300px;
+    width: 400px;
 }
 
 .interactions-close-button {
@@ -222,4 +222,10 @@
 
 .report-icon.active {
     color: red;
+}
+
+.open-interactions-button {
+    float: right;
+    cursor: pointer;
+    font-size: 20px;
 }

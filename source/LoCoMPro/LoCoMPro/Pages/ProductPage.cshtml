@@ -154,14 +154,16 @@
         <!-- Individual registers -->
         @foreach (var register in Model.Register)
         {
+            char s = (char)31; // ASCII Control Unit Separator
             <!-- Search result section -->
-                <!-- Individual registers -->
-                <div class="register-block">
-                <button onclick="openInteractionsPopup()">...</button>
-                <p>@Html.DisplayFor(modelItem => register.SubmitionDate)</p>
-                <p>₡@Html.DisplayFor(modelItem => register.Price)</p>
-                <p>@Html.DisplayFor(modelItem => register.Comment)</p>
-                </div>
+            <!-- Individual registers -->
+            var registerKeys = $"{register.SubmitionDate.ToShortDateString()}{s}{register.ContributorId}{s}{register.ProductName}{s}{register.StoreName}{s}{register.Price.ToString("N0")}";
+            <div class="register-block">
+            <button class="open-interactions-button" data-register-id="@registerKeys" onclick="openInteractionsPopup(this)">...</button>
+            <p>@Html.DisplayFor(modelItem => register.SubmitionDate)</p>
+            <p>₡@Html.DisplayFor(modelItem => register.Price)</p>
+            <p>@Html.DisplayFor(modelItem => register.Comment)</p>
+            </div>
         }
         
     </div>
@@ -236,10 +238,12 @@
                 <span class="interactions-close-button" onclick="closeInteractionsPopup()">&times;</span>
                 <h2>Reportar registro</h2>
                 <img id="reportIcon" src="~/img/DesactiveReportIcon.svg" alt="Reportar" onclick="toggleReport()" />
+                <p><strong>Fecha:</strong> <span id="popup-submitionDate"></span></p>
+                <p><strong>Precio:</strong> <span id="popup-price"></span></p>
+                <p><strong>Aporde de:</strong> <span id="popup-userName"></span></p>
                 <button id="saveButton" onclick="saveInteractions()">Guardar</button>
             </div>
         </div>
-
     </div>
 
 </div>
