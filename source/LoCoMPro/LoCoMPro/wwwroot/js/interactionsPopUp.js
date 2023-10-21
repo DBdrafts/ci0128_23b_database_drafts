@@ -27,5 +27,18 @@ function toggleReport() {
 }
 
 function saveInteractions() {
+    if (reportActivated) {
+        $.ajax({
+            type: 'POST',
+            url: '°/ProductPage/HandleInteraction',
+            data: { registerKeys: registerKeys },
+            success: function (data) {
+                console.log('Report saved successfully');
+            },
+            error: function (error) {
+                console.error('Error saving report: ' + error);
+            }
+        });
+    }
     closeInteractionsPopup();
 }
