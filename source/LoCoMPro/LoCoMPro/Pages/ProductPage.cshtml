@@ -158,11 +158,15 @@
             <!-- Search result section -->
             <!-- Individual registers -->
             var registerKeys = $"{register.SubmitionDate.ToShortDateString()}{s}{register.ContributorId}{s}{register.ProductName}{s}{register.StoreName}{s}{register.Price.ToString("N0")}";
-            <div class="register-block">
-            <button class="open-interactions-button" data-register-id="@registerKeys" onclick="openInteractionsPopup(this)">...</button>
-            <p>@Html.DisplayFor(modelItem => register.SubmitionDate)</p>
-            <p>₡@Html.DisplayFor(modelItem => register.Price)</p>
-            <p>@Html.DisplayFor(modelItem => register.Comment)</p>
+            <div class="register-block align">
+                <p>@Html.DisplayFor(modelItem => register.SubmitionDate)</p>
+                <p>₡@Html.DisplayFor(modelItem => register.Price)</p>
+                <p>@Html.DisplayFor(modelItem => register.Comment)</p>
+                <div class="text-center align">
+                    <button class="open-interactions-button" data-register-id="@registerKeys" onclick="openInteractionsPopup(this)">
+                        <img src="~/img/MoreIcon.svg" alt="Más opciones">
+                    </button>
+                </div>
             </div>
         }
         
@@ -235,12 +239,12 @@
         <!-- Code for orders registers--> </>
         <div class="interactions-popup">
             <div class="interactions-popup-content">
-                <span class="interactions-close-button" onclick="closeInteractionsPopup()">&times;</span>
-                <h2>Reportar registro</h2>
+                <h3>Reportar registro</h3>
                 <img id="reportIcon" src="~/img/DesactiveReportIcon.svg" alt="Reportar" onclick="toggleReport()" />
-                <p><strong>Fecha:</strong> <span id="popup-submitionDate"></span></p>
-                <p><strong>Precio:</strong> <span id="popup-price"></span></p>
+                <p><strong>Fecha:</strong> <span id="popup-submitionDate"></span><strong>Precio:</strong> <span id="popup-price"></span></p>
                 <p><strong>Aporde de:</strong> <span id="popup-userName"></span></p>
+                @* <span class="interactions-close-button" onclick="closeInteractionsPopup()">&times;</span> *@
+                <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>
                 <button id="saveButton" onclick="saveInteractions()">Guardar</button>
             </div>
         </div>
