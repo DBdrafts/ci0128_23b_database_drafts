@@ -1,6 +1,7 @@
 using LoCoMPro.Data;
 using LoCoMPro.Models;
 using LoCoMPro.Utils;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,11 @@ namespace LoCoMPro.Pages
         /// List of the stores that exist in the database.
         /// </summary>
         public IList<Store> Store { get; set; } = default!;
+
+        /// <summary>
+        /// List of the users that exist in the database.
+        /// </summary>
+        public IList<User> Users { get; set; } = default!;
 
         /// <summary>
         /// List of the registers that exist in the database.
@@ -155,7 +161,7 @@ namespace LoCoMPro.Pages
 
             }
 
-          
+            
 
             // Get the average of the registers within last month.
             AvgPrice = GetAveragePrice(registers, DateTime.Now.AddYears(-1).Date, DateTime.Now) ;
@@ -183,6 +189,9 @@ namespace LoCoMPro.Pages
 
             // Get th amount of pages that will be needed for all the registers
             var pageSize = Configuration.GetValue("PageSize", 5);
+
+            List<string> userIds = registers.Select(r => r.ContributorId).Distinct().ToList()!;
+            Users = await _context.Users.Where(u => userIds.Contains(u.Id)).ToListAsync();
 
             // Gets the Data From data base 
             Register = await PaginatedList<Register>.CreateAsync(
@@ -249,21 +258,32 @@ namespace LoCoMPro.Pages
             return Convert.ToDecimal(avgPrice);
         }
 
-        [HttpPost]
-        public void HandleInteraction(string registerKeys)
+        /// <summary>
+        /// Hanldle report interactions
+        /// </summary>
+        /// <param registerKeys="from"> foreign keys for identification the specific register.</param>
+        /// 
+        public void OnGetHandleInteraction(string registerKeys)
         {
             string[] values = SplitString(registerKeys, '\x1F');
+            string submitionDate = values[0], contributorId = values[1], productName = values[2], storeName = values[3];
+            DateTime date = DateTime.Parse(submitionDate);
+            /*
+            var registerToUpdate = _context.Registers.First(r => r.SubmitionDate == date && r.ContributorId == contributorId
+                && r.ProductName == productName && r.StoreName == storeName);
 
-            string SubmitionDate = values[0];
-            string ContributorId = values[1];
-            string ProductName = values[2];
-            string StoreName = values[3];
+            */
+
+            var registerToUpdate = _context.Registers.First(r => r.ContributorId == contributorId
+                && r.SubmitionDate == date && r.ProductName == productName && r.StoreName == storeName);
         }
 
         static string[] SplitString(string input, char delimiter)
         {
             return input.Split(delimiter);
         }
+
+
 
     }
 }

@@ -186,8 +186,6 @@
     align-items: center;
 }
 
-
-
 /* Estilo para el pop-up */
 .interactions-popup {
     display: none;
@@ -202,31 +200,14 @@
 
 .interactions-popup-content {
     background-color: #fff;
-    padding: 30px;
+    margin: 11% auto;
+    padding: 20px;
+    width: 80%;
+    height: auto;
+    max-width: 400px;
     border-radius: 15px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    width: 400px;
-}
-
-.interactions-close-button {
-    background-color: #F87474;
-    border: none;
-    border-radius: 15px;
-    padding: 10px 15px;
-    margin: 10px 60px 10px 10px;
-}
-
-.interactions-close-button:hover {
-    background-color: #E25A5A;
-}
-
-.report-icon {
-    font-size: 20px;
-    color: gray;
-}
-
-.report-icon.active {
-    color: red;
+    position: relative;
 }
 
 .open-interactions-button {
@@ -237,12 +218,40 @@
 
 #saveButton {
     background-color: #74C2F8;
+    color: #000000;
     border: none;
+    padding: 6px 15px;
     border-radius: 15px;
-    padding: 10px 15px;
-    margin: 10px 10px 10px 60px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0px 4px 4px 0px rgba(80, 158, 224, 0.5);
+    float: right;
+    width: auto;
 }
 
 #saveButton:hover {
     background-color: #5AABE2;
+}
+
+.interactions-close-button {
+    background-color: #F87474;
+    color: #000000;
+    border: none;
+    padding: 6px 21px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0px 4px 4px 0px rgba(224, 80, 80, 0.5);
+    width: auto;
+    float:left;
+}
+
+.interactions-close-button:hover {
+    background-color: #E25A5A;
+}
+
+.open-interactions-button {
+    margin: 10px;
 }

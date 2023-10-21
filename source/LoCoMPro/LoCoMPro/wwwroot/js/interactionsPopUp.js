@@ -1,13 +1,15 @@
 ﻿function openInteractionsPopup(openButton) {
-    // Muestra el pop-up
     var interactionsPopup = document.querySelector('.interactions-popup');
     interactionsPopup.style.display = 'block';
     registerKeys = openButton.getAttribute('data-register-id');
 
-    var [SubmitionDate, ContributorId, ProductName, StoreName, Price] = registerKeys.split(String.fromCharCode(31));
-    document.getElementById('popup-submitionDate').textContent = SubmitionDate;
-    document.getElementById('popup-price').textContent = '₡' + Price;
-    document.getElementById('popup-userName').textContent = ContributorId;
+    var [submitionDate, userID, productName, storeName, price, date, userName, comment] = registerKeys.split(String.fromCharCode(31));
+
+    document.getElementById('popup-submitionDate').textContent = date;
+    document.getElementById('popup-price').textContent = '₡' + price;
+    document.getElementById('popup-userName').textContent = userName;
+    document.getElementById('popup-comment').textContent = comment;
+
 }
 
 function closeInteractionsPopup() {
@@ -29,10 +31,9 @@ function toggleReport() {
 function saveInteractions() {
     if (reportActivated) {
         $.ajax({
-            type: 'POST',
-            url: '°/ProductPage/HandleInteraction',
+            url: '/ProductPage/1?handler=HandleInteraction',
             data: { registerKeys: registerKeys },
-            success: function (data) {
+            success: function () {
                 console.log('Report saved successfully');
             },
             error: function (error) {

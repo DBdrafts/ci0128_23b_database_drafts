@@ -23,6 +23,7 @@
         @{ // select the first matches
             var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
             var firstNonNullStore = Model.Store.FirstOrDefault(r => r.Name != null);
+            System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("es-CR"); // Costa Rica datetime format
         }
         <!-- brand column -->
         <div class="column">
@@ -154,10 +155,14 @@
         <!-- Individual registers -->
         @foreach (var register in Model.Register)
         {
-            char s = (char)31; // ASCII Control Unit Separator
             <!-- Search result section -->
             <!-- Individual registers -->
-            var registerKeys = $"{register.SubmitionDate.ToShortDateString()}{s}{register.ContributorId}{s}{register.ProductName}{s}{register.StoreName}{s}{register.Price.ToString("N0")}";
+            char s = (char)31; // ASCII Control Unit Separator
+            var user = Model.Users.FirstOrDefault(u => u.Id == register.ContributorId)?.UserName;
+            var registerKeys = $"{register.SubmitionDate}{s}{register.ContributorId}{s}{register.ProductName}" +
+            $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToString("d", culture)}" +
+            $"{s}{user}{s}{register.Comment}";
+
             <div class="register-block align">
                 <p>@Html.DisplayFor(modelItem => register.SubmitionDate)</p>
                 <p>₡@Html.DisplayFor(modelItem => register.Price)</p>
@@ -239,11 +244,11 @@
         <!-- Code for orders registers--> </>
         <div class="interactions-popup">
             <div class="interactions-popup-content">
-                <h3>Reportar registro</h3>
+                <p><b>Fecha:</b> <span id="popup-submitionDate"> </span></p>
+                <p><b>Precio:</b> <span id="popup-price"></span></p>
+                <p><b>Aporde de:</b> <span id="popup-userName"></span></p>
+                <p><b>Comentario:</b> <span id="popup-comment"></span></p>
                 <img id="reportIcon" src="~/img/DesactiveReportIcon.svg" alt="Reportar" onclick="toggleReport()" />
-                <p><strong>Fecha:</strong> <span id="popup-submitionDate"></span><strong>Precio:</strong> <span id="popup-price"></span></p>
-                <p><strong>Aporde de:</strong> <span id="popup-userName"></span></p>
-                @* <span class="interactions-close-button" onclick="closeInteractionsPopup()">&times;</span> *@
                 <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>
                 <button id="saveButton" onclick="saveInteractions()">Guardar</button>
             </div>
