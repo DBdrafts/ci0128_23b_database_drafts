@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography.X509Certificates;
 
 namespace LoCoMPro.Pages
 {
@@ -246,6 +247,22 @@ namespace LoCoMPro.Pages
             }
             double avgPrice = (registers is not null && registers.Count() > 1) ? registers.Average(r => r.Price) : 0.0;
             return Convert.ToDecimal(avgPrice);
+        }
+
+        [HttpPost]
+        public void HandleInteraction(string registerKeys)
+        {
+            string[] values = SplitString(registerKeys, '\x1F');
+
+            string SubmitionDate = values[0];
+            string ContributorId = values[1];
+            string ProductName = values[2];
+            string StoreName = values[3];
+        }
+
+        static string[] SplitString(string input, char delimiter)
+        {
+            return input.Split(delimiter);
         }
 
     }
