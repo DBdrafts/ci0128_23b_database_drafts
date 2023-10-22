@@ -224,13 +224,6 @@ namespace LoCoMPro.Pages
                 pageIndex ?? 1, pageSize));
         }
 
-        private static IEnumerable<IGrouping<string, Product>> NewMethod(List<Product> productsInRegisters)
-        {
-            return productsInRegisters
-                                    .GroupBy(product => product.Name);
-        }
-
-
         /// <summary>
         /// Filters the <paramref name="registers"/> by the <paramref name="selectedProvinces"/> and the <paramref name="selectedCantons"/>.
         /// </summary>
