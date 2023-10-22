@@ -40,6 +40,14 @@
                 }
                 <!-- Navegation bar buttons -->
                 <div class="w-100 d-flex justify-content-end">
+
+                    <!-- Moderate button of the layout -->
+                    <!-- Only displayed when the user is a moderator -->
+                    <a href="/ModeratePage" class="layout-button button-general">
+                        <img src="~/img/ModerateIcon.svg" alt="Moderar">
+                        <p>Moderar</p>
+                    </a>
+
                     @if (SignInManager.IsSignedIn(User))
                     {
                         var user = await UserManager.GetUserAsync(User);
