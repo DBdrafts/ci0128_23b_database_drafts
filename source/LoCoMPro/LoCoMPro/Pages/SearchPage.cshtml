@@ -122,7 +122,6 @@
                             <span id="result-product-name" value="@register.ProductName">
                                 @Html.DisplayFor(modelItem => register.ProductName)
                             </span>
-                            <!-- remove hidden when css is fixed pls -->
                             <span id="result-store-name" value="@register.StoreName">
                                 @Html.DisplayFor(modelItem => register.StoreName)
                             </span>
@@ -146,17 +145,27 @@
 
             <!-- Search pagination section -->
             <div class="pagination-section">
+                <!-- First page button -->
+                <button class="button-general pagination-button" id="pagination-button-first" hidden>
+                    <img src="~/img/FirstIcon.svg" alt="Primera">
+                </button>
+
                 <!-- Previous page button -->
                 <button class="button-general pagination-button" id="pagination-button-left" hidden>
                     <img src="~/img/ArrowLeftIcon.svg" alt="Anterior">
                 </button>
 
                 <!-- Specific navigation page buttons -->
-                <span id="pageButtonsContainer"></span>
+                <span class="pagination-square" id="pageButtonsContainer"></span>
 
                 <!-- Next page button -->
                 <button class="button-general pagination-button" id="pagination-button-right">
                     <img src="~/img/ArrowRightIcon.svg" alt="Siguiente">
+                </button>
+
+                <!-- Last page button -->
+                <button class="button-general pagination-button" id="pagination-button-last">
+                    <img src="~/img/LastIcon.svg" alt="Última">
                 </button>
 
                 <div id="total"></div>

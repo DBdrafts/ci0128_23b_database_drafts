@@ -5,6 +5,8 @@ let filteredResultBlocks = null;
 let pageButtonsContainer = document.getElementById("pageButtonsContainer");
 let previousButton = document.getElementById('pagination-button-left');
 let nextButton = document.getElementById('pagination-button-right');
+let firstButton = document.getElementById('pagination-button-first');
+let lastButton = document.getElementById('pagination-button-last');
 let total = document.getElementById('total');
 
 let totalPages = Math.ceil(resultBlocks.length / pageSize);
@@ -48,8 +50,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Hides left and right navigation buttons.
     window.updateNavigationButtons = function () {
-        previousButton.hidden = currentPage === 1;
-        nextButton.hidden = currentPage === totalPages;
+        firstButton.hidden = previousButton.hidden = currentPage === 1;
+        lastButton.hidden = nextButton.hidden = currentPage === totalPages;
 
         pageButtonsContainer.innerHTML = ""; // Clear the container
 
@@ -95,6 +97,20 @@ document.addEventListener("DOMContentLoaded", function () {
             showPage(currentPage);
             updateNavigationButtons();
         }
+    });
+
+    // First Page Button
+    firstButton.addEventListener('click', () => {
+        currentPage = 1;
+        showPage(currentPage);
+        updateNavigationButtons();
+    });
+
+    // Last Page Button
+    lastButton.addEventListener('click', () => {
+        currentPage = totalPages;
+        showPage(currentPage);
+        updateNavigationButtons();
     });
 
     // Sort buttons (e.g., "Menores precios" and "Mayores precios")
