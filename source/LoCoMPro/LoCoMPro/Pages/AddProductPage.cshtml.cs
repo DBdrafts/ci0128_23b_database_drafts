@@ -208,16 +208,21 @@ namespace LoCoMPro.Pages
         /// <returns>New register that was created.</returns>
         internal Register CreateRegister(Product productToAdd, Store store, float price, string? comment, User user)
         {
+            DateTime dateTime = DateTime.Now;
+            dateTime = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day
+                , dateTime.Hour, dateTime.Minute, dateTime.Second, 0);
+
             // Create new Register
             Register newRegister = new()
             {
-                SubmitionDate = DateTime.Now,
+                SubmitionDate = dateTime,
                 Contributor = user,
                 Product = productToAdd,
                 Store = store,
                 Price = price,
                 Comment = comment
             };
+
             return newRegister;
         }
 

@@ -82,7 +82,7 @@ namespace LoCoMPro.Data
             modelBuilder.Entity<Register>()
                 .HasOne(p => p.Store)
                 .WithMany(e => e.Registers)
-                .HasForeignKey(c => new { c.StoreName, c.CantonName, c.ProvinciaName });
+                .HasForeignKey(c => new { c.StoreName, c.CantonName, c.ProvinciaName});
 
             // Building relationships for Register
             modelBuilder.Entity<User>()

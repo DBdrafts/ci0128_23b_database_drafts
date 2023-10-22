@@ -31,10 +31,15 @@ function toggleReport() {
 function saveInteractions() {
     if (reportActivated) {
         $.ajax({
-            url: '/ProductPage/1?handler=HandleInteraction',
+            type: 'POST',
+            url: '/ProductPage/1?handler=HandleInteraction', // Specify the handler
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
             data: { registerKeys: registerKeys },
-            success: function () {
-                console.log('Report saved successfully');
+            success: function (data) {
+                console.log('Report saved successfully' + data);
             },
             error: function (error) {
                 console.error('Error saving report: ' + error);
