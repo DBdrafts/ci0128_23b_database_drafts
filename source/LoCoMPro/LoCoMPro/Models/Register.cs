@@ -51,8 +51,8 @@ namespace LoCoMPro.Models
         /// Number of negative votes that the register has.
         /// Currently not implemented.
         /// </summary>
-        [NotMapped]
-        public uint? NumCorrections { get; set; }
+
+        public uint NumCorrections { get; set; }
 
         /// <summary>
         /// Comment that the user made about the current register.

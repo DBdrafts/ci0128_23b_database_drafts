@@ -24,6 +24,7 @@ builder.Services.AddDefaultIdentity<User>(options => {
 }).AddSignInManager<MySignInManager>().AddEntityFrameworkStores<LoCoMProContext>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
 var app = builder.Build();
 
@@ -48,6 +49,8 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
     DbInitializer.Initialize(context);
 }
+
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

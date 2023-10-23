@@ -1,0 +1,65 @@
+﻿function openInteractionsPopup(openButton) {
+    var interactionsPopup = document.querySelector('.interactions-popup');
+    interactionsPopup.style.display = 'block';
+    registerKeys = openButton.getAttribute('data-register-id');
+
+    var [submitionDate, userID, productName, storeName, price, date, userName, comment] = registerKeys.split(String.fromCharCode(31));
+
+    document.getElementById('popup-submitionDate').textContent = date;
+    document.getElementById('popup-price').textContent = '₡' + price;
+    document.getElementById('popup-userName').textContent = userName;
+    document.getElementById('popup-comment').textContent = comment;
+
+    document.getElementById('reportIcon').src = '/img/DesactiveReportIcon.svg';
+    reportActivated = false;
+
+}
+
+function closeInteractionsPopup() {
+    var popup = document.querySelector('.interactions-popup');
+    popup.style.display = 'none';
+}
+
+function toggleReport() {
+    if (reportIcon.src.endsWith('DesactiveReportIcon.svg')) {
+        reportIcon.src = '/img/ActiveReportIcon.svg';
+        reportActivated = true;
+    } else {
+        reportIcon.src = '/img/DesactiveReportIcon.svg';
+        reportActivated = false;
+    }
+}
+
+function saveInteractions() {
+    if (reportActivated) {
+        $.ajax({
+            type: 'POST',
+            url: '/ProductPage/1?handler=HandleInteraction', // Specify the handler
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: { registerKeys: registerKeys },
+            success: function (data) {
+                console.log('Report saved successfully' + data);
+                showFeedbackMessage('Su reporte se ha realizado correctamente!');
+            },
+            error: function (error) {
+                console.error('Error saving report: ' + error);
+                showFeedbackMessage('Error al realizar el reporte!');
+
+            }
+        });
+    }
+    closeInteractionsPopup();
+}
+
+function showFeedbackMessage(message) {
+    var feedbackMessage = document.getElementById('feedbackMessage');
+    feedbackMessage.textContent = message;
+    feedbackMessage.classList.add('active');
+
+    setTimeout(function () {
+        feedbackMessage.classList.remove('active');
+    }, 2500); // shows the message for 2.5 sg
+}
