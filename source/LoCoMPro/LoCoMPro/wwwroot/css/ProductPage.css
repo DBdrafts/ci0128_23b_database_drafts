@@ -255,3 +255,28 @@
 .open-interactions-button {
     margin: 10px;
 }
+
+.feedback-message {
+    background-color: #F5AA38;
+    margin: 26% auto;
+    color: black;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: 14px;
+    right: 5%;
+    transform: translateX(-50%);
+    display: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);/
+    transition: opacity 0.3s ease;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    font-weight: 500;
+}
+
+
+.feedback-message.active {
+    display: block; /* Mostrar el mensaje */
+    opacity: 1; /* Hacerlo visible */
+}

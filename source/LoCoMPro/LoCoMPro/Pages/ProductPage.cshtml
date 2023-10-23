@@ -19,6 +19,8 @@
         @Model.SearchProductName
     </div>
 
+
+    <div id="feedbackMessage" class="feedback-message"></div>
     <!-- Section for columns of specifications from Search product -->
     <div class="product-page-section">
         @{ // select the first matches
@@ -172,6 +174,7 @@
                     <button class="open-interactions-button" data-register-id="@registerKeys" onclick="openInteractionsPopup(this)">
                         <img src="~/img/MoreIcon.svg" alt="Más opciones">
                     </button>
+
                 </div>
             </div>
         }
@@ -254,7 +257,6 @@
                 <button id="saveButton" onclick="saveInteractions()">Guardar</button>
             </div>
         </div>
-
     </div>
 
 </div>

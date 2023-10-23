@@ -10,6 +10,9 @@
     document.getElementById('popup-userName').textContent = userName;
     document.getElementById('popup-comment').textContent = comment;
 
+    document.getElementById('reportIcon').src = '/img/DesactiveReportIcon.svg';
+    reportActivated = false;
+
 }
 
 function closeInteractionsPopup() {
@@ -18,7 +21,6 @@ function closeInteractionsPopup() {
 }
 
 function toggleReport() {
-    var reportButton = document.getElementById('reportIcon');
     if (reportIcon.src.endsWith('DesactiveReportIcon.svg')) {
         reportIcon.src = '/img/ActiveReportIcon.svg';
         reportActivated = true;
@@ -40,11 +42,24 @@ function saveInteractions() {
             data: { registerKeys: registerKeys },
             success: function (data) {
                 console.log('Report saved successfully' + data);
+                showFeedbackMessage('Su reporte se ha realizado correctamente!');
             },
             error: function (error) {
                 console.error('Error saving report: ' + error);
+                showFeedbackMessage('Error al realizar el reporte!');
+
             }
         });
     }
     closeInteractionsPopup();
+}
+
+function showFeedbackMessage(message) {
+    var feedbackMessage = document.getElementById('feedbackMessage');
+    feedbackMessage.textContent = message;
+    feedbackMessage.classList.add('active');
+
+    setTimeout(function () {
+        feedbackMessage.classList.remove('active');
+    }, 2500); // shows the message for 2.5 sg
 }

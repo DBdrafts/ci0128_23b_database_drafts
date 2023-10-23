@@ -84,6 +84,12 @@ namespace LoCoMPro.Data
                 .WithMany(e => e.Registers)
                 .HasForeignKey(c => new { c.StoreName, c.CantonName, c.ProvinciaName});
 
+            // Sets 0 to NumCorrecions by default for Register
+            modelBuilder.Entity<Register>()
+                .Property(r => r.NumCorrections)
+                .HasDefaultValue(0);
+
+
             // Building relationships for Register
             modelBuilder.Entity<User>()
                 .HasOne(p => p.Location)

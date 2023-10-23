@@ -2,6 +2,7 @@ using LoCoMPro.Data;
 using LoCoMPro.Models;
 using LoCoMPro.Utils;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -263,19 +264,30 @@ namespace LoCoMPro.Pages
         /// </summary>
         /// <param registerKeys="from"> foreign keys for identification the specific register.</param>
         /// 
-        public void OnPostHandleInteraction(string registerKeys)
+        public IActionResult OnPostHandleInteraction(string registerKeys)
         {
-            string[] values = SplitString(registerKeys, '\x1F');
+            string[] values = SplitString(registerKeys, '\x1F'); // Splits the string with the char31 as a delimitator
             string submitionDate = values[0], contributorId = values[1], productName = values[2], storeName = values[3];
             DateTime dateTime = DateTime.Parse(submitionDate);
 
             var registerToUpdate = _context.Registers.Include(r => r.Contributor).First(r => r.ContributorId == contributorId
                 && r.ProductName == productName && r.StoreName == storeName && r.SubmitionDate == dateTime);
 
-            uint userType = 1;  // TODO: Make an enumeration according to the user's role
+            uint reportValue = 1;
+            
+            // TODO: Get Rol
 
-            registerToUpdate.NumCorrections = userType;
+            /* This is just an example!
+            userRol = getUserRol(); 
+            if (userRol == mod)
+            {
+                reportValue = 2;
+            }
+            */
+
+            registerToUpdate.NumCorrections = reportValue;
             _context.SaveChanges();
+            return new JsonResult("OK");
         }
 
         static string[] SplitString(string input, char delimiter)

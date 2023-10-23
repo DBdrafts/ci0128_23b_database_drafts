@@ -52,7 +52,7 @@ namespace LoCoMPro.Models
         /// Currently not implemented.
         /// </summary>
 
-        public uint? NumCorrections { get; set; }
+        public uint NumCorrections { get; set; }
 
         /// <summary>
         /// Comment that the user made about the current register.
