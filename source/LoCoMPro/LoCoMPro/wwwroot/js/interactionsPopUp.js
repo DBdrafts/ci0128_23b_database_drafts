@@ -10,6 +10,9 @@
     document.getElementById('popup-userName').textContent = userName;
     document.getElementById('popup-comment').textContent = comment;
 
+    document.getElementById('reportIcon').src = '/img/DesactiveReportIcon.svg';
+    reportActivated = false;
+
 }
 
 function closeInteractionsPopup() {
@@ -18,7 +21,6 @@ function closeInteractionsPopup() {
 }
 
 function toggleReport() {
-    var reportButton = document.getElementById('reportIcon');
     if (reportIcon.src.endsWith('DesactiveReportIcon.svg')) {
         reportIcon.src = '/img/ActiveReportIcon.svg';
         reportActivated = true;
@@ -31,15 +33,33 @@ function toggleReport() {
 function saveInteractions() {
     if (reportActivated) {
         $.ajax({
-            url: '/ProductPage/1?handler=HandleInteraction',
+            type: 'POST',
+            url: '/ProductPage/1?handler=HandleInteraction', // Specify the handler
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
             data: { registerKeys: registerKeys },
-            success: function () {
-                console.log('Report saved successfully');
+            success: function (data) {
+                console.log('Report saved successfully' + data);
+                showFeedbackMessage('Su reporte se ha realizado correctamente!');
             },
             error: function (error) {
                 console.error('Error saving report: ' + error);
+                showFeedbackMessage('Error al realizar el reporte!');
+
             }
         });
     }
     closeInteractionsPopup();
+}
+
+function showFeedbackMessage(message) {
+    var feedbackMessage = document.getElementById('feedbackMessage');
+    feedbackMessage.textContent = message;
+    feedbackMessage.classList.add('active');
+
+    setTimeout(function () {
+        feedbackMessage.classList.remove('active');
+    }, 2500); // shows the message for 2.5 sg
 }

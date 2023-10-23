@@ -2,6 +2,7 @@ using LoCoMPro.Data;
 using LoCoMPro.Models;
 using LoCoMPro.Utils;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -231,27 +232,36 @@ namespace LoCoMPro.Pages
         /// </summary>
         /// <param registerKeys="from"> foreign keys for identification the specific register.</param>
         /// 
-        public void OnGetHandleInteraction(string registerKeys)
+        public IActionResult OnPostHandleInteraction(string registerKeys)
         {
-            string[] values = SplitString(registerKeys, '\x1F');
+            string[] values = SplitString(registerKeys, '\x1F'); // Splits the string with the char31 as a delimitator
             string submitionDate = values[0], contributorId = values[1], productName = values[2], storeName = values[3];
-            DateTime date = DateTime.Parse(submitionDate);
-            /*
-            var registerToUpdate = _context.Registers.First(r => r.SubmitionDate == date && r.ContributorId == contributorId
-                && r.ProductName == productName && r.StoreName == storeName);
+            DateTime dateTime = DateTime.Parse(submitionDate);
 
+            var registerToUpdate = _context.Registers.Include(r => r.Contributor).First(r => r.ContributorId == contributorId
+                && r.ProductName == productName && r.StoreName == storeName && r.SubmitionDate == dateTime);
+
+            uint reportValue = 1;
+            
+            // TODO: Get Rol
+
+            /* This is just an example!
+            userRol = getUserRol(); 
+            if (userRol == mod)
+            {
+                reportValue = 2;
+            }
             */
 
-            var registerToUpdate = _context.Registers.First(r => r.ContributorId == contributorId
-                && r.SubmitionDate == date && r.ProductName == productName && r.StoreName == storeName);
+            registerToUpdate.NumCorrections = reportValue;
+            _context.SaveChanges();
+            return new JsonResult("OK");
         }
 
         static string[] SplitString(string input, char delimiter)
         {
             return input.Split(delimiter);
         }
-
-
 
     }
 }

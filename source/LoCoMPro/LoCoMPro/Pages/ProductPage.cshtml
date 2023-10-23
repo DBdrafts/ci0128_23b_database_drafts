@@ -5,6 +5,7 @@
     Layout = "_Layout";
     ViewBag.ShowSearchBar = true;
     ViewBag.ShowLogoLink = true;
+    @Html.AntiForgeryToken();
 }
 
 <head>
@@ -18,6 +19,8 @@
         @Model.SearchProductName
     </div>
 
+
+    <div id="feedbackMessage" class="feedback-message"></div>
     <!-- Section for columns of specifications from Search product -->
     <div class="product-page-section">
         @{ // select the first matches
