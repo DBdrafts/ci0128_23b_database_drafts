@@ -1,0 +1,112 @@
+﻿.modTitle {
+    text-align: center;
+    font-size: xx-large;
+}
+
+/* Style for search title */
+.containerListRegisterColumns {
+    display: flex;
+    flex-direction:row;
+    height: auto;
+    width: 90%;
+    justify-content: space-around;
+    margin-top: 10px;
+    list-style: none;
+    padding-inline-start: 0px;
+}
+
+
+    /* Style for search title columns */
+    .containerListRegisterColumns li {
+        font-size: x-large;
+        text-align: center;
+    }
+
+    /* Style for columns */
+    .containerListRegisterColumns ul {  
+        margin: 0px;
+        padding: 0px;
+    }
+
+#productoCol, #result-prod {
+    width: 160px;
+}
+
+#usuarioCol, #result-usr {
+    width: 100px;
+}
+
+#veracidadCol, #result-stars {
+    width: 140px;
+}
+
+#tiendaCol, #result-store {
+    width: 100px;
+}
+
+#ubicacionCol, #result-loc {
+    width: 130px;
+}
+
+#precioCol {
+    width: 90px;
+} 
+#result-price {
+    width: 90px;
+    text-align: right;
+}
+
+#fechaCol, #result-date {
+    width: 170px;
+}
+
+/* Style for comment */
+.textComment {
+    text-align: center;
+    margin: 0px;
+}
+
+/* Style for the result section */
+.result-section {
+    height: auto;
+    width: 100%;
+    text-decoration: none;
+    font-size: 20px;
+    color: #000000;
+    list-style: none
+}
+
+/* Style for the result block */
+.result-block {
+    height: auto;
+    width: 100%;
+    text-decoration: none;
+    color: #000000;
+}
+
+.result-block a {
+    /*flex: 0 0 calc(16.67% - 20px);*/
+    display: flex;
+    height: 4em;
+    width: 100%;
+    background-color: #E2E3E3;
+    border-radius: 15px;
+    margin: 10px 0px;
+    justify-content:space-around;
+    padding: 0px 10px;
+    max-height: 4em;
+    text-decoration: none;
+    overflow: clip;
+    text-overflow: ellipsis;
+    color: #000000;
+}
+
+.result-block a span {
+    padding: 2px;
+    text-align: left
+}
+
+.result-block a img {
+    flex: 0 0 1%;
+    margin: 10px 0px;
+}

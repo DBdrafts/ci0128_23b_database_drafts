@@ -1,0 +1,73 @@
+﻿@page
+@model LoCoMPro.Pages.ModeratePageModel
+@{
+    ViewData["Title"] = "Registros reportados";
+    Layout = "_Layout";
+    ViewBag.ShowSearchBar = true;
+    ViewBag.ShowLogoLink = true;
+}
+@using Microsoft.AspNetCore.Identity
+@using LoCoMPro.Data;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+
+<head>
+    <link rel="stylesheet" href="~/css/ModeratePage.css" />
+    <script src="~/js/SearchPage/pagination.js"></script>
+</head>
+
+<div class="modTitle">Registos Reportados</div>
+<ul class="containerListRegisterColumns">
+    <li id="productoCol">Producto</li>
+    <li id="usuarioCol">Usuario</li>
+    <li id="veracidadCol">Veracidad</li>
+    <li id="tiendaCol">Tienda</li>
+    <li id="ubicacionCol">Ubicación</li>
+    <li id="precioCol">Precio</li>
+    <li id="fechaCol">Fecha</li>
+    <li></li>
+</ul>
+<div class="result-section">
+    @foreach (var register in Model.Register)
+    {
+        <!-- Individual registers -->
+        <div class="result-block">
+            @{
+                string contributorName = Model.Users
+                .First(u => u.Id == register.ContributorId).ToString();
+            }
+            <a>
+                <span id="result-prod">@Html.DisplayFor(modelItem => register.ProductName)</span>
+                <span id="result-usr">@Html.DisplayFor(modelItem => contributorName)</span>
+                <!-- Place for the stars rating of the register -->
+                <span id="result-stars">Stars Place Holder</span>
+                <span id="result-store">@Html.DisplayFor(modelItem => register.StoreName)</span>
+                <span id="result-loc">
+                    @Html.DisplayFor(modelItem => register.ProvinciaName),
+                    @Html.DisplayFor(modelItem => register.CantonName)
+                </span>
+                <span id="result-price">₡ @Html.DisplayFor(modelItem => register.Price)</span>
+                <span id="result-date">@Html.DisplayFor(modelItem => register.SubmitionDate)</span>
+                <div>
+                    @* <form asp-page="ModeratePage" asp-page-handler="MoreInformation"
+                          asp-route-id="@register.ContributorId"
+                          asp-route-prodName="@register.ProductName"
+                          asp-route-storeName="@register.StoreName"
+                          asp-route-subDate="@register.SubmitionDate"
+                          method="post">
+                        <div>
+                            <button type="submit" class="button-general"> <img src="/img/MoreIcon.svg"></button>
+                        </div>
+
+                    </form> *@
+                    <img src="/img/MoreIcon.svg">
+                    <img src="/img/AcceptReportIcon.svg">
+                    <img src="/img/InfoIcon.svg">
+                </div>
+            </a>
+        </div>
+
+    }
+</div>
+<!-- Pagination section -->
