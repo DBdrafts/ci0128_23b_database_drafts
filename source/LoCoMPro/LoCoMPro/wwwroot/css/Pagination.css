@@ -82,28 +82,7 @@
     border-top-right-radius: 15px;
 }
 
-.sort-button {
-    background-color: #FFFFFF;
-    border: none;
-    text-decoration: none;
-    /*    transition: transform 0.3s;*/
-}
-
-/* Add styles for the "up" and "down" classes of the arrow image */
-.sort-button.active .arrow.up {
-    display: inline;
-    transform: rotate(180deg);
-    /*    transition: transform 0.3s;*/
-}
-
-.sort-button.active .arrow.down {
-    display: inline;
-}
-
-.sort-button.active span.textComment {
-    text-decoration: underline;
-}
-
+/* Style for the total amount of pages */
 #total {
     margin: 10px;
 }

@@ -1,6 +1,6 @@
 ﻿let pageSize = 5;
-let queryResults = Array.from(document.querySelectorAll('.result-block'));
-let resultBlocks = Array.from(document.querySelectorAll('.result-block'));
+let queryResults = Array.from(document.querySelectorAll('.register-block-pagination'));
+let resultBlocks = Array.from(document.querySelectorAll('.register-block-pagination'));
 let filteredResultBlocks = null;
 let pageButtonsContainer = document.getElementById("pageButtonsContainer");
 let previousButton = document.getElementById('pagination-button-left');
@@ -20,9 +20,8 @@ function getOppositeOrder(order) {
 }
 document.addEventListener("DOMContentLoaded", function () {
     // Sort the result blocks based on the selected sorting criteria
-    window.sortResultBlocks = function (order, field = "#result-product-name") {
+    window.sortResultBlocks = function (order, field = "#register-price") {
         // Implement your sorting logic here
-        // Example: Sort by price
         resultBlocks.sort((a, b) => {
             const valueA = parseFloat(a.querySelector(field).getAttribute("value"));
             const valueB = parseFloat(b.querySelector(field).getAttribute("value"));
@@ -47,6 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
         total.textContent = `Página ${currentPage} de ${totalPages}`;
 
     }
+ 
 
     // Hides left and right navigation buttons.
     window.updateNavigationButtons = function () {

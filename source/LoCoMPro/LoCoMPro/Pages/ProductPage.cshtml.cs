@@ -203,7 +203,7 @@ namespace LoCoMPro.Pages
         /// </summary>
         /// <param name="orderName">Type of order to use.</param>
         /// <param name="registers">Registers to order.</param>
-        /// <returns>Reqgisters ordered by <paramref name="orderName"/> price.</returns>
+        /// <returns>Registers ordered by <paramref name="orderName"/> price.</returns>
         public IOrderedEnumerable<Register> OrderRegistersByPrice(string orderName, ref ICollection<Register> registers)
         {
             switch (orderName)
