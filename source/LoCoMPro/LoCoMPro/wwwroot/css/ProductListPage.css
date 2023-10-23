@@ -28,3 +28,37 @@
     box-shadow:  0px 2px 6px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
 }
+
+/* Container que wraps the product specification columns */
+.characteristic-section {
+    display: flex;
+    padding-top: 20px;
+    justify-content: space-between; /* Añade esto para alinear con espacio entre elementos */
+}
+
+/* Style for the format of specifications of product */
+.column {
+    flex: 33.33%; 
+    margin: 5px;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Style for paragraphs within columns */
+.column p {
+    font-size: 25px;
+}
+
+/* Style for the little bit diferrent column */
+.column-for-button {
+    flex: 24%;
+    margin: 5px;
+    text-align: center;
+    font-weight: 500;
+}
+
+ /* Style for hide a element */
+ .column-for-button p {
+    display: none;
+    /*font-size: 25px;    debugging space*/  
+ }
