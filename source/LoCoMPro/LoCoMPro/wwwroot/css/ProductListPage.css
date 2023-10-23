@@ -1,0 +1,30 @@
+﻿/* Styles for the product list visualization page*/
+
+/* Style for the title of the page */
+.titlePage {
+    width: 1152px;
+    text-align: center;
+    color: black;
+    font-size: 30px;
+    font-weight: 700;
+    word-wrap: break-word;
+    margin: 0 auto;  
+}
+
+/* Style for the subheading of the page */
+.subHeading {
+    width: 1152px;
+    text-align: left;
+    color: black;
+    font-size: 25px;
+    font-weight: 400;
+    word-wrap: break-word;
+    padding: 5px;
+}
+
+/* Horizontal line of separation with the list of records */
+.product-page hr.style-four {
+    background: #9F9F9F;
+    box-shadow:  0px 2px 6px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
