@@ -146,17 +146,7 @@
     width: 100%;
 }
 
-
-/* Style for the result section paragraph */
-/*.register-section p {
-    font-size: medium;
-    text-align: left;
-    align-items: center;
-    padding-left: 30px;
-}*/
-
-
-/* Style for the result block */
+/* Style for the register block */
 .register-block {
     text-decoration: none;
     background-color: #E2E3E3;
@@ -165,6 +155,7 @@
     max-height: 4em;
 }
 
+/* Style for the register block text*/
 .register-block a {
     display: flex;
     height: 4em;
@@ -180,7 +171,7 @@
     color: #000000;
 }
 
-
+/* Style for the register block text*/
 .register-block a span {
     flex: 0 0 28%;
     text-align: left;

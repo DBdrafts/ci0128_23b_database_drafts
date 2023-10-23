@@ -44,7 +44,7 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// List of the registers that exist in the database.
         /// </summary>
-        public PaginatedList<Register> Register { get; set; } = default!;
+        public IEnumerable<Register>? Registers { get; set; } = new List<Register>();
 
         /// <summary>
         /// Requested product name.
@@ -96,7 +96,7 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// GET HTTP request, initializes page values.
         /// </summary>
-        /// <param name="searchProductName">Product to desplay data of.</param>
+        /// <param name="searchProductName">Product to display data of.</param>
         /// <param name="searchStoreName">Store where the product is sold.</param>
         /// <param name="searchProvinceName">Province where the store is located.</param>
         /// <param name="searchCantonName">Canton where the store is located.</param>
@@ -106,11 +106,6 @@ namespace LoCoMPro.Pages
         public async Task OnGetAsync(string searchProductName, string searchStoreName, string searchProvinceName, 
             string searchCantonName, int? pageIndex, string sortOrder)
         {
-            CurrentSort = sortOrder;
-            PriceSort = sortOrder == "price" ? "price_desc" : "price";
-            
-            // if sortOrder is Date, match date else date_desc
-            DateSort = sortOrder == "date" ? "date_desc" : "date";
 
             // Attr of the product from the params of method
             SearchProductName = searchProductName;
@@ -159,43 +154,16 @@ namespace LoCoMPro.Pages
                 registers = registers.Where(x => x.CantonName != null && x.CantonName.Contains(SearchCantonName));
                 registers = registers.Where(x => x.ProvinciaName != null && x.ProvinciaName.Contains(SearchProvinceName));
 
-            }
-
-            
+            }      
 
             // Get the average of the registers within last month.
             AvgPrice = GetAveragePrice(registers, DateTime.Now.AddYears(-1).Date, DateTime.Now) ;
-
-            // Code to order
-            switch (sortOrder)
-            {
-                // Order in case of price_descending
-                case "price_desc":   
-                    registers = registers.OrderByDescending(r => r.Price);
-                    break;
-                //  Order in case of price
-                case "price":     
-                    registers = registers.OrderBy(r => r.Price);
-                    break;
-                // Oldest order for Submition Date
-                case "date_desc":
-                    registers = registers.OrderBy(r => r.SubmitionDate);
-                    break;
-                // Normal order for the price
-                default:
-                    registers = registers.OrderByDescending(r => r.SubmitionDate);
-                    break;
-            }
-
-            // Get th amount of pages that will be needed for all the registers
-            var pageSize = Configuration.GetValue("PageSize", 5);
 
             List<string> userIds = registers.Select(r => r.ContributorId).Distinct().ToList()!;
             Users = await _context.Users.Where(u => userIds.Contains(u.Id)).ToListAsync();
 
             // Gets the Data From data base 
-            Register = await PaginatedList<Register>.CreateAsync(
-                registers.AsNoTracking(), pageIndex ?? 1, pageSize);
+            Registers = await registers.ToListAsync();
         }
 
         /// <summary>

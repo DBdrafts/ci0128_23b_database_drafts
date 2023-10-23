@@ -105,6 +105,7 @@
     color: #000000;
 }
 
+/* Style for the result register block */
 .result-block {
     height: auto;
     width: 100%;
@@ -112,18 +113,7 @@
     color: #000000;
 }
 
-/* Style for the result section paragraph */
-/*.result-block div {
-    font-size: medium;
-    flex: 0 0 16%;
-    text-align: center;
-    margin: 10px 0px;
-    align-items: center;
-    overflow: clip;
-    text-overflow: ellipsis;
-    padding: 0px 5px;
-}*/
-
+/* Style for the result register block text */
 .result-block a {
     /*flex: 0 0 calc(16.67% - 20px);*/
     display: flex;
@@ -141,12 +131,14 @@
     color: #000000;
 }
 
+/* Style for the result register block text*/
 .result-block a span {
     flex: 0 0 16%;
     text-align: left;
     margin: 10px 0px;
 }
 
+/* Style for the result register block price */
 #result-price {
     text-align: right;
 }
