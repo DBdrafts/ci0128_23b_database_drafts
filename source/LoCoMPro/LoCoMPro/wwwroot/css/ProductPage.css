@@ -203,6 +203,7 @@
     z-index: 1;
 }
 
+/* Style for the interaction Pop Up content */
 .interactions-popup-content {
     background-color: #fff;
     margin: 11% auto;
@@ -215,12 +216,14 @@
     position: relative;
 }
 
+/* Style for the button that open the Interaction Pop Up */
 .open-interactions-button {
     cursor: pointer;
     background-color: transparent;
     border:none;
 }
 
+/* Style for the save button of the pop up */
 #saveButton {
     background-color: #74C2F8;
     color: #000000;
@@ -235,10 +238,12 @@
     width: auto;
 }
 
+/* Style for the save button of the pop up when hover*/
 #saveButton:hover {
     background-color: #5AABE2;
 }
 
+/* Style for the button that close the Interaction Pop Up */
 .interactions-close-button {
     background-color: #F87474;
     color: #000000;
@@ -253,14 +258,17 @@
     float:left;
 }
 
+/* Style for the button that close the Interaction Pop Up when hover */
 .interactions-close-button:hover {
     background-color: #E25A5A;
 }
 
+/* Style for the button that open the Interaction Pop Up */
 .open-interactions-button {
     margin: 10px;
 }
 
+/* Style for the feedback message of the Pop Up */
 .feedback-message {
     background-color: #F5AA38;
     margin: 26% auto;
@@ -280,7 +288,7 @@
     font-weight: 500;
 }
 
-
+/* Style for the feedback message of the Pop Up when active */
 .feedback-message.active {
     display: block; /* Mostrar el mensaje */
     opacity: 1; /* Hacerlo visible */

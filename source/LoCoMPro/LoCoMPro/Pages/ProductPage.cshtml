@@ -102,10 +102,12 @@
    <nav>
         <ul class="containerListRegistercolumns">
             <li>
+                <!-- Button to sort by the date -->
                 @{ViewBag.SortTipe = "#register-date";}
                 @await Html.PartialAsync("_OrderButton", "Fecha")
             </li>
             <li>
+                <!-- Button to sort by the price -->
                 @{ViewBag.SortTipe = "#register-price";}
                 @await Html.PartialAsync("_OrderButton", "Precio")
             </li>
