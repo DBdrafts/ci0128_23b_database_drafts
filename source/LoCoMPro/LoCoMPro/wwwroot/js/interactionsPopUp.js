@@ -13,6 +13,9 @@
     document.getElementById('reportIcon').src = '/img/DesactiveReportIcon.svg';
     reportActivated = false;
 
+    highlight_star(0);
+    registerReviewed = false;
+    reviewedValue = 0;
 }
 
 function closeInteractionsPopup() {
@@ -31,7 +34,7 @@ function toggleReport() {
 }
 
 function saveInteractions() {
-    if (reportActivated) {
+    if (reportActivated || registerReviewed) {
         $.ajax({
             type: 'POST',
             url: '/ProductPage/1?handler=HandleInteraction', // Specify the handler
@@ -39,7 +42,7 @@ function saveInteractions() {
                 xhr.setRequestHeader("XSRF-TOKEN",
                     $('input:hidden[name="__RequestVerificationToken"]').val());
             },
-            data: { registerKeys: registerKeys },
+            data: { registerKeys: registerKeys, reportActivated: reportActivated, reviewedValue: reviewedValue },
             success: function (data) {
                 console.log('Report saved successfully' + data);
                 showFeedbackMessage('Su reporte se ha realizado correctamente!');
@@ -62,4 +65,48 @@ function showFeedbackMessage(message) {
     setTimeout(function () {
         feedbackMessage.classList.remove('active');
     }, 2500); // shows the message for 2.5 sg
+}
+
+//Note: This code was adapted from the page "codepen.io" to satisfies the needs of the project. All the credit go to this page.
+//    The specific link of the page where the code was take from is: https://codepen.io/ashdurham/pen/AVVGvP
+
+jQuery(document).ready(function ($) {
+    $('.rating_stars span.r').hover(function () {
+        // get hovered value
+        var rating = $(this).data('rating');
+        var value = $(this).data('value');
+        $(this).parent().attr('class', '').addClass('rating_stars').addClass('rating_' + rating);
+        highlight_star(value);
+    }, function () {
+        // get hidden field value
+        var rating = $("#rating").val();
+        var value = $("#rating_val").val();
+        $(this).parent().attr('class', '').addClass('rating_stars').addClass('rating_' + rating);
+        highlight_star(value);
+    }).click(function () {
+        // Set hidden field value
+        var value = $(this).data('value');
+        $("#rating_val").val(value);
+
+        var rating = $(this).data('rating');
+        $("#rating").val(rating);
+
+        save_reviewed_state(value)
+    });
+});
+
+function highlight_star(rating) {
+    $('.rating_stars span.s').each(function () {
+        var low = $(this).data('low');
+        var high = $(this).data('high');
+        $(this).removeClass('active-high').removeClass('active-low');
+        if (rating >= high) $(this).addClass('active-high');
+        else if (rating == low) $(this).addClass('active-low');
+    });
+}
+
+function save_reviewed_state(value) {
+    highlight_star(value);
+    registerReviewed = true;
+    reviewedValue = value;
 }
