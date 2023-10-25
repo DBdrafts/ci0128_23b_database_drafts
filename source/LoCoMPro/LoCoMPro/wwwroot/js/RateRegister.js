@@ -1,4 +1,4 @@
-//Note: This code was adapted from the page "codepen.io" to satisfies the needs of the project.All the credt go to this page.
+//Note: This code was adapted from the page "codepen.io" to satisfies the needs of the project. All the credit go to this page.
 //    The specific link of the page where the code was take from is: https://codepen.io/ashdurham/pen/AVVGvP
 
 jQuery(document).ready(function ($) {
