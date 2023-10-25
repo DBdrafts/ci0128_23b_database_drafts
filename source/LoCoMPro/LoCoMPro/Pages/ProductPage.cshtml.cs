@@ -95,6 +95,11 @@ namespace LoCoMPro.Pages
         public decimal AvgPrice { get; set; }
 
         /// <summary>
+        /// Number of results.
+        /// </summary>
+        public int ResultsNumber;
+
+        /// <summary>
         /// GET HTTP request, initializes page values.
         /// </summary>
         /// <param name="searchProductName">Product to display data of.</param>
@@ -162,6 +167,8 @@ namespace LoCoMPro.Pages
 
             List<string> userIds = registers.Select(r => r.ContributorId).Distinct().ToList()!;
             Users = await _context.Users.Where(u => userIds.Contains(u.Id)).ToListAsync();
+
+            ResultsNumber = registers.Count();
 
             // Gets the Data From data base 
             Registers = await registers.ToListAsync();

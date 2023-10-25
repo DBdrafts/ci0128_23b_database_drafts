@@ -25,7 +25,6 @@
         @{ // select the first matches
             var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
             var firstNonNullStore = Model.Store.FirstOrDefault(r => r.Name != null);
-            System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("es-CR"); // Costa Rica datetime format
         }
         <!-- brand column -->
         <div class="column">
@@ -126,7 +125,7 @@
             char s = (char)31; // ASCII Control Unit Separator
             var user = Model.Users.FirstOrDefault(u => u.Id == register.ContributorId)?.UserName;
             var registerKeys = $"{register.SubmitionDate}{s}{register.ContributorId}{s}{register.ProductName}" +
-            $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToString("d", culture)}" +
+            $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToShortDateString()}" +
             $"{s}{user}{s}{register.Comment}";
 
             <li class="register-block align register-block-pagination">
@@ -135,7 +134,7 @@
                         @register.SubmitionDate.ToShortDateString()
                     </span>
                     <span id="register-price" value="@register.Price">
-                        ₡ @Html.DisplayFor(modelItem => register.Price)
+                        ₡ @register.Price.ToString("N0")
                     </span>
                     <span id="register-comment" value="@register.Comment">
                         @Html.DisplayFor(modelItem => register.Comment)
