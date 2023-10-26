@@ -7,6 +7,10 @@
     ViewBag.ShowLogoLink = true;
     @Html.AntiForgeryToken();
 }
+@using Microsoft.AspNetCore.Identity
+@using LoCoMPro.Data;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 
 <head>
     <link rel="stylesheet" href="~/css/ProductPage.css" />
@@ -205,7 +209,9 @@
 
                     <img id="reportIcon" src="~/img/DesactiveReportIcon.svg" alt="Reportar" onclick="toggleReport()" />
                     <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>
-                    <button id="saveButton" onclick="saveInteractions()">Guardar</button>
+                    @if (SignInManager.IsSignedIn(User)) {
+                        <button id="saveButton" onclick="saveInteractions()">Guardar</button>
+                    }
                 </div>
             </div>
         </div>

@@ -1,6 +1,7 @@
 using LoCoMPro.Data;
 using LoCoMPro.Models;
 using LoCoMPro.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,18 +18,23 @@ namespace LoCoMPro.Pages
     /// </summary>
     public class ProductPageModel : LoCoMProPageModel
     {
-        
+        private readonly UserManager<User> _userManager;
+
         /// <summary>
         /// Creates a new ProductPageModel.
         /// </summary>
         /// <param name="context">DB Context to pull data from.</param>
         /// <param name="configuration">Configuration for page.</param>
+        /// <param name="userManager">User manager to handle user permissions.</param>
         // Product Page constructor 
-        public ProductPageModel(LoCoMProContext context, IConfiguration configuration)
-            : base(context, configuration) { }
+        public ProductPageModel(LoCoMProContext context, IConfiguration configuration, UserManager<User> userManager)
+            : base(context, configuration)
+        {
+            _userManager = userManager;
+        }
 
         /// <summary>
-        /// List of the product that exist in the databas.
+        /// List of the product that exist in the database.
         /// </summary>
         public IList<Product> Product { get; set; } = default!;
 
@@ -192,7 +198,7 @@ namespace LoCoMPro.Pages
         /// </summary>
         /// <param name="orderName">Type of order to use.</param>
         /// <param name="registers">Registers to order.</param>
-        /// <returns>Reqgisters ordered by <paramref name="orderName"/> date.</returns>
+        /// <returns>Reqisters ordered by <paramref name="orderName"/> date.</returns>
         public IOrderedEnumerable<Register> OrderRegistersByDate(string orderName, ref ICollection<Register> registers)
         {
             switch (orderName)
@@ -257,8 +263,8 @@ namespace LoCoMPro.Pages
 
                 registerToUpdate.NumCorrections = reportValue;
             }
-            // TODO: Database value here
-            //registerToUpdate.
+
+            registerToUpdate.ReviewerUsers!.Add(_context.Users.First(u => u.Id == _userManager.GetUserId(User)));
 
             _context.SaveChanges();
             return new JsonResult("OK");
