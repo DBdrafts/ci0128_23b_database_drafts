@@ -96,11 +96,6 @@ namespace LoCoMPro.Pages
         public Dictionary<string, string> CategoryMap { get; set; } = default!;
 
         /// <summary>
-        /// Number of results.
-        /// </summary>
-        public int ResultsNumber;
-
-        /// <summary>
         /// Result of the query.
         /// </summary>
         public IEnumerable<Register>? Registers { get; set; } = new List<Register>();
@@ -171,7 +166,6 @@ namespace LoCoMPro.Pages
 
                 Registers = match;
             }
-            ResultsNumber = (match != null) ? match.Count() : 0;
         }
 
         /// <summary>

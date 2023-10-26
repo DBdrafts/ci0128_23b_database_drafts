@@ -19,7 +19,7 @@
     </div>
 
     <!-- Search filter section -->
-    <div class="filter-section">
+    <div class="filter-section" id="filter-section">
         <!-- Search filter title -->
         <h4> Filtros </h4>
 
@@ -67,13 +67,14 @@
     </div>
     <!-- No product found message -->
     <div class="text-center" id="product-not-found" hidden>
-        <h2> No se encontrado resultados de "@Model.SearchString" al buscar por "@Model.SearchType" </h2>
+        <h2> No se han encontrado resultados de "@Model.SearchString" al buscar por "@Model.SearchType" </h2>
         <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
     </div>
     <!-- Search result section -->
     <div class="search-section" id="search-results">
         <!-- Search section title -->
-        <h1> Resultados "@Model.SearchString" @Model.ResultsNumber - Búsqueda por "@Model.SearchType" </h1>
+        <h1> Resultados "@Model.SearchString" - Búsqueda por "@Model.SearchType" </h1>
+        <div class="results-cont-msg" span id="results-count"></div>
 
 
         <!-- Search section header -->
