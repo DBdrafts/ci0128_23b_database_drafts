@@ -19,7 +19,7 @@
 
 <body>
     <div class="register-section">
-        <form id="addProductForm" method="post" asp-page="AddProductPage">
+        <form id="addProductForm" method="post" asp-page="AddProductPage" enctype="multipart/form-data">
             <h2>Nuevo registro de producto</h2>
             <hr class="title-separator">
 
@@ -86,6 +86,8 @@
                     <button type="button" id="saveLocation-button">Guardar</button>
                 </div>
             </div>
+            <input type="file" id="productImages" name="productImages" accept="image/*" multiple>
+
             <button type="submit" class="submit-button" form="addProductForm">
                 <div class="button-content">
                     <span class="button-text">Agregar Registro</span>

@@ -83,5 +83,7 @@ namespace LoCoMPro.Models
         /// Name of the province where the store is.
         /// </summary>
         public string? ProvinciaName { get; set; }
+
+        public ICollection<Image> Images { get; set; }
     }
 }

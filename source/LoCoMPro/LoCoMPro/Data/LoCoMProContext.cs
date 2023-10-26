@@ -54,7 +54,7 @@ namespace LoCoMPro.Data
         /// </summary>
         public DbSet<Store> Stores { get; set; }
 
-
+        public DbSet<Image> Images { get; set; }
 
         // TODO: May want to create a builder for each class
         /// <summary>
@@ -71,6 +71,7 @@ namespace LoCoMPro.Data
             modelBuilder.Entity<Register>().ToTable("Register");
             modelBuilder.Entity<Canton>().ToTable("Canton");
             modelBuilder.Entity<Provincia>().ToTable("Provincia");
+            modelBuilder.Entity<Image>().ToTable("Image");
 
             // Building relationships for Store
             modelBuilder.Entity<Store>()
@@ -95,6 +96,16 @@ namespace LoCoMPro.Data
                 .HasOne(p => p.Location)
                 .WithMany(e => e.Users)
                 .HasForeignKey(c => new { c.CantonName, c.ProvinciaName });
+
+
+            modelBuilder.Entity<Image>()
+                .HasKey(i => new { i.ImageId, i.ContributorId, i.ProductName, i.StoreName, i.SubmitionDate });
+
+            modelBuilder.Entity<Image>()
+                .HasOne(i => i.Register)
+                .WithMany(r => r.Images)
+                .HasForeignKey(i => new { i.ContributorId, i.ProductName, i.StoreName, i.SubmitionDate })
+                .OnDelete(DeleteBehavior.NoAction);
 
             // Ignoring columns from default IdentityUser
             modelBuilder.Entity<User>().Ignore(u => u.PhoneNumber);
@@ -159,7 +170,5 @@ namespace LoCoMPro.Data
                 .Navigation(p => p.Cantones)
                 .UsePropertyAccessMode(PropertyAccessMode.Property);
         }
-
     }
-
 }
