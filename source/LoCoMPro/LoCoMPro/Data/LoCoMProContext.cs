@@ -96,6 +96,12 @@ namespace LoCoMPro.Data
                 .WithMany(e => e.Users)
                 .HasForeignKey(c => new { c.CantonName, c.ProvinciaName });
 
+            // Building relationships for Register
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Registers)
+                .WithOne(r => r.Contributor)
+                .HasForeignKey(r => r.ContributorId);
+
             // Ignoring columns from default IdentityUser
             modelBuilder.Entity<User>().Ignore(u => u.PhoneNumber);
             modelBuilder.Entity<User>().Ignore(u => u.PhoneNumberConfirmed);
@@ -122,6 +128,19 @@ namespace LoCoMPro.Data
                     "Sells"
                     , l => l.HasOne(typeof(Product)).WithMany().HasForeignKey("ProductName")
                     , r => r.HasOne(typeof(Store)).WithMany().HasForeignKey("StoreName", "CantonName", "ProvinceName"));
+
+            modelBuilder.Entity<User>()
+                .HasMany(r => r.ReviewedRegisters)
+                .WithMany(r => r.ReviewerUsers)
+                .UsingEntity(
+                    "Review"
+                    , l => l.HasOne(typeof(Register)).WithMany().HasForeignKey("ContributorId", "ProductName", "StoreName", "SubmitionDate")
+                    , p => p.HasOne(typeof(User)).WithMany().HasForeignKey("Id")
+                    , j =>
+                    {
+                        j.Property<float>("ReviewValue").HasDefaultValue(0);
+                    }
+                );
 
             modelBuilder.Entity<Store>()
                 .Navigation(s => s.Products)
@@ -157,6 +176,10 @@ namespace LoCoMPro.Data
 
             modelBuilder.Entity<Provincia>()
                 .Navigation(p => p.Cantones)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<User>()
+                .Navigation(u => u.ReviewedRegisters)
                 .UsePropertyAccessMode(PropertyAccessMode.Property);
         }
 
