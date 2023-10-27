@@ -52,6 +52,8 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// List of product images.
         /// </summary>
+
+        [BindProperty]
         public List<IFormFile>? ProductImages { get; set; }
 
 
@@ -298,5 +300,12 @@ namespace LoCoMPro.Pages
 
             return new JsonResult(data);
         }
+
+        public IActionResult OnPostUploadImage([FromForm] List<IFormFile> ProductImages)
+        {
+            this.ProductImages = ProductImages;
+            return new JsonResult("OK");
+        }
     }
+
 }

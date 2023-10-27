@@ -8,6 +8,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/dropzone.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/min/dropzone.min.js"></script>
+
 }
 
 <!DOCTYPE html>
@@ -20,6 +23,7 @@
 <body>
     <div class="register-section">
         <form id="addProductForm" method="post" asp-page="AddProductPage" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
             <h2>Nuevo registro de producto</h2>
             <hr class="title-separator">
 
@@ -86,8 +90,8 @@
                     <button type="button" id="saveLocation-button">Guardar</button>
                 </div>
             </div>
-            <input type="file" id="productImages" name="productImages" accept="image/*" multiple>
-
+            @Html.AntiForgeryToken()
+            <div id="dragDropZone" class="dropzone"></div>
             <button type="submit" class="submit-button" form="addProductForm">
                 <div class="button-content">
                     <span class="button-text">Agregar Registro</span>
@@ -101,5 +105,6 @@
     <script src="~/js/AddProductPage/sequentialForm.js"></script>
     <script src="~/js/AddProductPage/autocompleteAddProduct.js"></script>
     <script src="~/js/feedbackMessage.js"></script>
+    <script src="~/js/AddProductPage/uploadImages.js"></script>
 </body>
 </html>
