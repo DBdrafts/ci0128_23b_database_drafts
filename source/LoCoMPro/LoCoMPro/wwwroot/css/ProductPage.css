@@ -214,8 +214,8 @@
     background-color: #fff;
     margin: 11% auto;
     padding: 20px;
-    width: 80%;
     height: auto;
+    min-width: 400px;
     max-width: 400px;
     border-radius: 15px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);

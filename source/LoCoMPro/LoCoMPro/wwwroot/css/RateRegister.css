@@ -4,95 +4,81 @@
 The specific link of the page where the code was take from is: https://codepen.io/ashdurham/pen/AVVGvP */
 
 .rating_stars {
-    margin-top: 15px;
-    display: inline-block;
-    font-size: 20px;
+    margin: 10px;
+    display: block;
+    font-size: 40px;
     font-weight: 200;
-    color: #918f8f;
+    color: #F5AA38;
     position: relative;
+    text-align: center;
 }
 
 .rating_stars span .fa, .rating_stars span.active-low .fa-star-o, .rating_stars span.active-high .fa-star-o {
     display: none;
+    text-align: center;
 }
 
 .rating_stars span .fa-star-o {
     display: inline-block;
+    color: #F5AA38;
 }
 
 .rating_stars span.s.active-high .fa-star {
     display: inline-block;
-    color: #feb645;
+    color: #F5AA38;
 }
 
 .rating_stars span.s.active-low .fa-star-half-o {
     display: inline-block;
-    color: #feb645;
+    color: #F5AA38;
 }
 
 .rating_stars span.r {
     position: absolute;
-    top: 0;
-    height: 20px;
-    width: 10px;
+    top: 10px;
+    height: 40px;
+    width: 24px;
     left: 0;
 }
 
 .rating_stars span.r.r0_5 {
-    left: 0px;
+    left: 50px;
 }
 
 .rating_stars span.r.r1 {
-    left: 10px;
-    width: 11px;
+    left: 74px;
 }
 
 .rating_stars span.r.r1_5 {
-    left: 21px;
-    width: 13px;
+    left: 98px;
 }
 
 .rating_stars span.r.r2 {
-    left: 34px;
-    width: 12px;
+    left: 122px;
 }
 
 .rating_stars span.r.r2_5 {
-    left: 46px;
-    width: 12px;
+    left: 146px;
 }
 
 .rating_stars span.r.r3 {
-    left: 58px;
-    width: 11px;
+    left: 170px;
 }
 
 .rating_stars span.r.r3_5 {
-    left: 69px;
-    width: 12px;
+    left: 194px;
 }
 
 .rating_stars span.r.r4 {
-    left: 81px;
-    width: 12px;
+    left: 218px;
 }
 
 .rating_stars span.r.r4_5 {
-    left: 93px;
-    width: 12px;
+    left: 242px;
 }
 
 .rating_stars span.r.r5 {
-    left: 105px;
-    width: 12px;
+    left: 266px;
 }
 
-.values {
-    margin-top: 20px;
-}
-
-.info {
-    max-width: 500px;
-    margin: 20px auto;
-}
 
