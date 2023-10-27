@@ -1,24 +1,17 @@
-﻿<!-- Partial view of the location button -->
-
-<head>
-    <!-- Shared style for several pages-->
+﻿<head>
     <link rel="stylesheet" href="~/css/LocationButton.css" />
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBMFkBOkHqUiPh9GoSqq8F6h1RZDNRSJ8&libraries=places&region=CR"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="~/js/selectLocation.js" defer></script>
+    <script src="~/js/location.js" defer></script>
+   @*  <script src="~/js/selectLocation.js" defer></script> *@
 </head>
 
-<!-- Location button -->
-<button type="button" class="button-general location-selector" id="locationButton">
+<button type="button" class="button-general location-selector" id="showPopupButton">
     <img src="~/img/LocationIcon.svg"/>
     <span id="buttonSpan"> Ubicación </span>
-    <div id="chosenLocationInfo" style="display: none;">
-        <span id="chosenProvince" name="selectedProvince"></span>
-        <span id="chosenCanton" name="selectedCanton"></span>
-    </div>
 </button>
 
-<!-- Location Popup -->
-<div id="locationPopup" class="popup">
+@* <div id="locationPopup" class="popup">
     <div class="popup-content">
         <h2 class="selectHeader">Seleccionar ubicación</h2>
         <label for="province">Provincia:</label>
@@ -32,4 +25,8 @@
         <button type="button" id="closePopup-button">Cerrar</button>
         <button type="button" id="saveLocation-button">Guardar</button>
     </div>
+</div> *@
+
+<div id="mapPopup" style="display: none; position: absolute; top: 50px; left: 50px; width: 400px; height: 400px; background-color: black; border: 1px solid #ccc;">
+    <div id="map" style="width: 100%; height: 100%;"></div>
 </div>
