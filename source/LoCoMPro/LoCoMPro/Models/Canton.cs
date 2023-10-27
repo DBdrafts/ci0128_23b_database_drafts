@@ -25,6 +25,16 @@ namespace LoCoMPro.Models
         public string? ProvinciaName { get; set; }
 
         /// <summary>
+        /// Latitude of Canton
+        /// </summary>
+        public float? Latitude { get; set; }
+
+        /// <summary>
+        /// Longitude of Canton
+        /// </summary>
+        public float? Longitude { get; set; }
+
+        /// <summary>
         /// Stores that reside inside the canton.
         /// </summary>
         public ICollection<Store>? Stores { get; set; } = new List<Store>();

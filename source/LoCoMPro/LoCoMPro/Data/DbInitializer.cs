@@ -50,17 +50,19 @@ namespace LoCoMPro.Data
         /// <param name="cantons">List of cantons that will be filled.</param>
         public static void InitializeLocation(LoCoMProContext context, ref List<Provincia> provinces, ref List<Canton> cantons)
         {
-            var csvPath = "~/../../../../data/DTA-TABLA POR PROVINCIA-CANTÓN-DISTRITO 2022V3.csv";
-            var data = File.ReadAllLines(csvPath, System.Text.Encoding.Latin1)
+            var csvPath = "~/../../../../data/PROVINCIA-CANTÓN-UBICACIÓN.csv";
+            var data = File.ReadAllLines(csvPath, System.Text.Encoding.UTF8)
                 .Skip(1)
                 .Select(line => line.Split(','))
                 .Select(columns => new
                 {
-                    ProvinceName = columns[2],
-                    CantonName = columns[4],
+                    ProvinceName = columns[0],
+                    CantonName = columns[1],
+                    Latitude = columns[2],  // Assuming column index 2 is for 'LATITUD'
+                    Longitude = columns[3], // Assuming column index 3 is for 'LONGITUD'
                 })
                 .Where(pair => !pair.ProvinceName.IsNullOrEmpty() && !pair.ProvinceName.Equals("PROVINCIA"));
-                provinces = data.GroupBy(j => j.ProvinceName)
+            provinces = data.GroupBy(j => j.ProvinceName)
                 .Select(group => new Provincia
                 {
                     Name = group.Key.ToString(),
@@ -68,18 +70,23 @@ namespace LoCoMPro.Data
                 .ToList();
 
 
-            var grouppedData = data.GroupBy(pair => new { pair.ProvinceName, pair.CantonName });
+            var grouppedData = data.GroupBy(pair => new { pair.ProvinceName, pair.CantonName, pair.Latitude, pair.Longitude });
 
-            foreach ( var group in grouppedData)
+            foreach (var group in grouppedData)
             {
                 var province = provinces.Find(s => s.Name == group.Key.ProvinceName);
-              
-                var canton = new Canton
+
+                if (float.TryParse(group.Key.Latitude, out float latitude) && float.TryParse(group.Key.Longitude, out float longitude))
                 {
-                    CantonName = group.Key.CantonName,
-                    Provincia = province!,
-                };
-                cantons.Add(canton);
+                    var canton = new Canton
+                    {
+                        CantonName = group.Key.CantonName,
+                        Provincia = province!,
+                        Latitude = latitude,
+                        Longitude = longitude,
+                    };
+                    cantons.Add(canton);
+                }
             }
             context.Provincias.AddRange(provinces);
             context.Cantones.AddRange(cantons);
