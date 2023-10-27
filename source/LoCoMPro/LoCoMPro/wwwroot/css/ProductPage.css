@@ -67,14 +67,14 @@
 
 /*Style for images section*/
 .product-information {
-    display: inline-block;
+    display: flex;
     height: 100%;
     width: 100%;
 }
 
 /*Style for images section*/
 .images-section {
-    display: inline-block;
+    display: flex;
     height: 50%;
     width: 50%;
     align-items: center;

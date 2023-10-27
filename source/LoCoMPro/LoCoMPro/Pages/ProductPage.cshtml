@@ -90,6 +90,13 @@
     </div>
 
     <div class="product-information">
+        @{
+            // select the first matches
+            var firstNonNullProductSecond = Model.Product.FirstOrDefault(r => r.Name != null);
+            var firstNonNullStoreSecond = Model.Store.FirstOrDefault(r => r.Name != null);
+            System.Globalization.CultureInfo cultureSecond = new System.Globalization.CultureInfo("es-CR"); // Costa Rica datetime format
+        }
+
         <div class="images-section">
             <div class="carousel-section">
                 <div class="img-carousel">
@@ -110,11 +117,14 @@
                     @Model.SearchProductName
                 </div>
             </div>
-
             <div class="caracterists-section">
-                <div class="titleProduct">
-                    @Model.SearchProductName
-                </div>
+                @{
+                    // Get the name of the product brand
+                    if (firstNonNullProductSecond != null)
+                    {
+                        <p>Marca: @firstNonNullProductSecond.Brand</p>
+                    }
+                }
             </div>
 
         
