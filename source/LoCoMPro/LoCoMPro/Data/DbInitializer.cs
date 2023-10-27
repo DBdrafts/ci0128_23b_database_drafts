@@ -1,10 +1,6 @@
-﻿using System.Diagnostics;
-using System.Security.Cryptography;
-using System.Security.Policy;
+﻿using NetTopologySuite.Geometries;
 using LoCoMPro.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Win32;
 
 namespace LoCoMPro.Data
 {
@@ -78,12 +74,12 @@ namespace LoCoMPro.Data
 
                 if (float.TryParse(group.Key.Latitude, out float latitude) && float.TryParse(group.Key.Longitude, out float longitude))
                 {
+                    var location = new Coordinate { X = latitude, Y = longitude };
                     var canton = new Canton
                     {
                         CantonName = group.Key.CantonName,
                         Provincia = province!,
-                        Latitude = latitude,
-                        Longitude = longitude,
+                        Location = new Point (location.X, location.Y),
                     };
                     cantons.Add(canton);
                 }
