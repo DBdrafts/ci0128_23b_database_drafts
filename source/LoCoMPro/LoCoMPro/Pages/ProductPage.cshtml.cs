@@ -264,7 +264,7 @@ namespace LoCoMPro.Pages
                 registerToUpdate.NumCorrections = reportValue;
             }
 
-            registerToUpdate.ReviewerUsers!.Add(_context.Users.First(u => u.Id == _userManager.GetUserId(User)));
+            // registerToUpdate.ReviewerUsers!.Add(_context.Users.First(u => u.Id == _userManager.GetUserId(User)));
 
             _context.SaveChanges();
             return new JsonResult("OK");

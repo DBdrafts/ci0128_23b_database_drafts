@@ -87,8 +87,8 @@ namespace LoCoMPro.Models
         public string? ProvinciaName { get; set; }
 
         /// <summary>
-        /// Users that reviewed the register.
+        /// Reviews made of this register
         /// </summary>
-        public ICollection<User>? ReviewerUsers { get; set; } = new List<User>();
+        public ICollection<Review>? Reviews { get; set; } = new List<Review>();
     }
 }

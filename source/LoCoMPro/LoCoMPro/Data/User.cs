@@ -35,8 +35,8 @@ namespace LoCoMPro.Data
         public required Canton Location { get; set; }
 
         /// <summary>
-        /// Registers that the user has reviewed.
+        /// Reviews made by this user
         /// </summary>
-        public ICollection<Register>? ReviewedRegisters { get; set; } = new List<Register>();
+        public ICollection<Review>? Reviews { get; set; } = new List<Review>();
     };
 }
