@@ -135,9 +135,10 @@
             <!-- Individual registers -->
             char s = (char)31; // ASCII Control Unit Separator
             var user = Model.Users.FirstOrDefault(u => u.Id == register.ContributorId)?.UserName;
+            var reviewValue = Model.UserReviews.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReviewValue;
             var registerKeys = $"{register.SubmitionDate}{s}{register.ContributorId}{s}{register.ProductName}" +
             $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToString("d", culture)}" +
-            $"{s}{user}{s}{register.Comment}";
+            $"{s}{user}{s}{register.Comment}{s}{reviewValue}";
 
             <li class="register-block align register-block-pagination">
                 <a>
@@ -197,15 +198,6 @@
                         <span class='r r4_5' data-rating='45' data-value='4.5'></span>
                         <span class='r r5' data-rating='50' data-value='5'></span>
                     </span>
-
-                    <div class="values">
-                        <div>
-                            <label>Rating</label><input type="text" id="rating" value="0" />
-                        </div>
-                        <div>
-                            <label>Rating Value</label><input type="text" name="rating" id="rating_val" value="0" />
-                        </div>
-                    </div>
 
                     <img id="reportIcon" src="~/img/DesactiveReportIcon.svg" alt="Reportar" onclick="toggleReport()" />
                     <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>

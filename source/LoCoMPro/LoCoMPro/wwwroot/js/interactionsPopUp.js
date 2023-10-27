@@ -3,7 +3,7 @@
     interactionsPopup.style.display = 'block';
     registerKeys = openButton.getAttribute('data-register-id');
 
-    var [submitionDate, userID, productName, storeName, price, date, userName, comment] = registerKeys.split(String.fromCharCode(31));
+    var [submitionDate, userID, productName, storeName, price, date, userName, comment, lastReviewValue] = registerKeys.split(String.fromCharCode(31));
 
     document.getElementById('popup-submitionDate').textContent = date;
     document.getElementById('popup-price').textContent = '₡' + price;
@@ -13,10 +13,9 @@
     document.getElementById('reportIcon').src = '/img/DesactiveReportIcon.svg';
     reportActivated = false;
 
-    highlight_star(0);
-    registerReviewed = false;
-    reviewedValue = 0;
+    setReviewedValue(lastReviewValue);   
 }
+
 
 function closeInteractionsPopup() {
     var popup = document.querySelector('.interactions-popup');
@@ -97,6 +96,9 @@ jQuery(document).ready(function ($) {
 
 function highlight_star(rating) {
     $('.rating_stars span.s').each(function () {
+        if (rating == 0 && reviewedValue != 0) {
+            rating = reviewedValue;
+        }
         var low = $(this).data('low');
         var high = $(this).data('high');
         $(this).removeClass('active-high').removeClass('active-low');
@@ -109,4 +111,11 @@ function save_reviewed_state(value) {
     highlight_star(value);
     registerReviewed = true;
     reviewedValue = value;
+}
+
+
+function setReviewedValue(lastReviewValue) {
+    reviewedValue = lastReviewValue == null ? 0 : lastReviewValue;
+    highlight_star(reviewedValue);
+    registerReviewed = false;
 }

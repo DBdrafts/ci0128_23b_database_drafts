@@ -1,3 +1,4 @@
+using LoCoMPro.Areas.Identity.Pages.Account.Manage;
 using LoCoMPro.Data;
 using LoCoMPro.Models;
 using LoCoMPro.Utils;
@@ -19,6 +20,7 @@ namespace LoCoMPro.Pages
     public class ProductPageModel : LoCoMProPageModel
     {
         private readonly UserManager<User> _userManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
         /// Creates a new ProductPageModel.
@@ -27,10 +29,12 @@ namespace LoCoMPro.Pages
         /// <param name="configuration">Configuration for page.</param>
         /// <param name="userManager">User manager to handle user permissions.</param>
         // Product Page constructor 
-        public ProductPageModel(LoCoMProContext context, IConfiguration configuration, UserManager<User> userManager)
+        public ProductPageModel(LoCoMProContext context, IConfiguration configuration
+            , UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
             : base(context, configuration)
         {
             _userManager = userManager;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -99,6 +103,11 @@ namespace LoCoMPro.Pages
         /// Avg calculated price for product.
         /// </summary>
         public decimal AvgPrice { get; set; }
+
+        /// <summary>
+        /// List of the review made by the user that exist in the database.
+        /// </summary>
+        public IList<Review> UserReviews = new List<Review>(); 
 
         /// <summary>
         /// GET HTTP request, initializes page values.
@@ -171,6 +180,21 @@ namespace LoCoMPro.Pages
 
             // Gets the Data From data base 
             Registers = await registers.ToListAsync();
+
+
+            var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
+
+            if (user != null)
+            {
+                var reviews = from p in _context.Reviews select p;
+
+                reviews = reviews.Where(x => x.ReviewerId == user.Id);
+                reviews = reviews.Where(x => x.ProductName != null && x.ProductName.Contains(SearchProductName));
+                reviews = reviews.Where(x => x.StoreName != null && x.StoreName.Contains(SearchStoreName));
+
+                UserReviews = await reviews.ToListAsync();
+            }
+
         }
 
         /// <summary>
@@ -240,33 +264,51 @@ namespace LoCoMPro.Pages
         /// 
         public IActionResult OnPostHandleInteraction(string registerKeys, bool reportActivated, float reviewedValue)
         {
-            string[] values = SplitString(registerKeys, '\x1F'); // Splits the string with the char31 as a delimitator
-            string submitionDate = values[0], contributorId = values[1], productName = values[2], storeName = values[3];
-            DateTime dateTime = DateTime.Parse(submitionDate);
-
-            var registerToUpdate = _context.Registers.Include(r => r.Contributor).First(r => r.ContributorId == contributorId
-                && r.ProductName == productName && r.StoreName == storeName && r.SubmitionDate == dateTime);
-
-            if (reportActivated)
+            if (reportActivated || reviewedValue > 0)
             {
-                uint reportValue = 1;
-            
-                // TODO: Get Rol
+                string[] values = SplitString(registerKeys, '\x1F'); // Splits the string with the char31 as a delimitator
+                string submitionDate = values[0], contributorId = values[1], productName = values[2], storeName = values[3];
+                DateTime dateTime = DateTime.Parse(submitionDate);
 
-                /* This is just an example!
-                userRol = getUserRol(); 
-                if (userRol == mod)
+                var registerToUpdate = _context.Registers.Include(r => r.Contributor).First(r => r.ContributorId == contributorId
+                    && r.ProductName == productName && r.StoreName == storeName && r.SubmitionDate == dateTime);
+
+                if (reportActivated)
                 {
-                    reportValue = 2;
+                    uint reportValue = 1;
+            
+                    // TODO: Get Rol
+
+                    /* This is just an example!
+                    userRol = getUserRol(); 
+                    if (userRol == mod)
+                    {
+                        reportValue = 2;
+                    }
+                    */
+
+                    registerToUpdate.NumCorrections = reportValue;
                 }
-                */
 
-                registerToUpdate.NumCorrections = reportValue;
+                if (reviewedValue > 0)
+                {
+                    var user = _context.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
+                    var lastReview = _context.Reviews.FirstOrDefault(r => r.ReviewerId == user.Id
+                        && r.ProductName == productName
+                        && r.StoreName == storeName
+                        && r.SubmitionDate == dateTime
+                        && r.ContributorId == contributorId);
+                    if (lastReview == null)
+                    {
+                        _context.Reviews.Add(new Review() { ReviewedRegister = registerToUpdate, Reviewer = user, ReviewValue = reviewedValue});
+                    } else
+                    {
+                        lastReview.ReviewValue = reviewedValue;
+                    }
+                }
+
+                _context.SaveChanges();
             }
-
-            // registerToUpdate.ReviewerUsers!.Add(_context.Users.First(u => u.Id == _userManager.GetUserId(User)));
-
-            _context.SaveChanges();
             return new JsonResult("OK");
         }
 
