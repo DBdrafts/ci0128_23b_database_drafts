@@ -14,12 +14,9 @@ namespace LoCoMPro.Models
         [ForeignKey(nameof(ContributorId))]
         public required User Contributor { get; set; }
 
-        [ForeignKey(nameof(ProductName))]
-        public required Product Product { get; set; }
-
+       
         public Register Register { get; set; }
 
-        public required Store Store { get; set; }
 
         public required int ImageId { get; set; }
         public required DateTime SubmitionDate { get; set; }
@@ -28,10 +25,13 @@ namespace LoCoMPro.Models
 
         public string? ImageType { get; set; }
 
-        public string? ContributorId { get; set; }
-        public string? ProductName { get; set; }
+        public required string ContributorId { get; set; }
+        public required string ProductName { get; set; }
 
-        public string? StoreName { get; set; }
+        public required string StoreName { get; set; }
+        public required string CantonName { get; set; }
+        public required string ProvinceName { get; set; }
+
     }
 }
 

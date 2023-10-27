@@ -95,16 +95,17 @@ namespace LoCoMPro.Data
             modelBuilder.Entity<User>()
                 .HasOne(p => p.Location)
                 .WithMany(e => e.Users)
-                .HasForeignKey(c => new { c.CantonName, c.ProvinciaName });
+                .HasForeignKey(c => new { c.CantonName, c.ProvinciaName })
+                .OnDelete(DeleteBehavior.NoAction);
 
 
             modelBuilder.Entity<Image>()
-                .HasKey(i => new { i.ImageId, i.ContributorId, i.ProductName, i.StoreName, i.SubmitionDate });
+                .HasKey(i => new { i.ImageId, i.ContributorId, i.ProductName, i.StoreName, i.CantonName, i.ProvinceName, i.SubmitionDate });
 
             modelBuilder.Entity<Image>()
                 .HasOne(i => i.Register)
                 .WithMany(r => r.Images)
-                .HasForeignKey(i => new { i.ContributorId, i.ProductName, i.StoreName, i.SubmitionDate })
+                .HasForeignKey(i => new { i.ContributorId, i.ProductName, i.StoreName, i.CantonName, i.ProvinceName, i.SubmitionDate })
                 .OnDelete(DeleteBehavior.NoAction);
 
             // Ignoring columns from default IdentityUser
