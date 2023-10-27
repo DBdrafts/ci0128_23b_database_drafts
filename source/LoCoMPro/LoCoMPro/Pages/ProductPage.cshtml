@@ -117,12 +117,18 @@
                     @Model.SearchProductName
                 </div>
             </div>
-            <div class="caracterists-section">
+            <div class="caracteristcs-section">
                 @{
-                    // Get the name of the product brand
+                    // Get the information of producto and store
                     if (firstNonNullProductSecond != null)
                     {
                         <p>Marca: @firstNonNullProductSecond.Brand</p>
+                        <p>Modelo: @firstNonNullProductSecond.Model</p>
+                    }
+                    if (firstNonNullStoreSecond != null)
+                    {
+                        <p>Tienda: @firstNonNullStoreSecond.Name</p>
+                        <p>Ubicación: @firstNonNullStoreSecond.ProvinciaName, @firstNonNullStoreSecond.CantonName </p>
                     }
                 }
             </div>
