@@ -7,6 +7,8 @@ using LoCoMPro.Areas.Identity.Pages.Account.Manage;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using LoCoMPro.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +25,18 @@ builder.Services.AddDefaultIdentity<User>(options => {
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 !*-._@+";
 }).AddSignInManager<MySignInManager>().AddEntityFrameworkStores<LoCoMProContext>();
 
+builder.Services.AddTransient<IEmailSender, EmailSender>(i => 
+    new EmailSender(
+        builder.Configuration["EmailSender:Host"],
+        builder.Configuration.GetValue<int>("EmailSender:Port"),
+        builder.Configuration.GetValue<bool>("EmailSender:EnableSSL"),
+        builder.Configuration["EmailSender:UserName"],
+        builder.Configuration["EmailSender:Password"]
+    )
+);
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
 var app = builder.Build();
 
@@ -48,6 +61,8 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
     DbInitializer.Initialize(context);
 }
+
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

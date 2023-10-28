@@ -1,0 +1,84 @@
+﻿/* Style for the register rate component */
+
+/* Note: This code was adapted from the page "codepen.io" to satisfies the needs of the project. All the credit go to this page.
+The specific link of the page where the code was take from is: https://codepen.io/ashdurham/pen/AVVGvP */
+
+.rating_stars {
+    margin: 10px;
+    display: block;
+    font-size: 40px;
+    font-weight: 200;
+    color: #F5AA38;
+    position: relative;
+    text-align: center;
+}
+
+.rating_stars span .fa, .rating_stars span.active-low .fa-star-o, .rating_stars span.active-high .fa-star-o {
+    display: none;
+    text-align: center;
+}
+
+.rating_stars span .fa-star-o {
+    display: inline-block;
+    color: #F5AA38;
+}
+
+.rating_stars span.s.active-high .fa-star {
+    display: inline-block;
+    color: #F5AA38;
+}
+
+.rating_stars span.s.active-low .fa-star-half-o {
+    display: inline-block;
+    color: #F5AA38;
+}
+
+.rating_stars span.r {
+    position: absolute;
+    top: 10px;
+    height: 40px;
+    width: 24px;
+    left: 0;
+}
+
+.rating_stars span.r.r0_5 {
+    left: 50px;
+}
+
+.rating_stars span.r.r1 {
+    left: 74px;
+}
+
+.rating_stars span.r.r1_5 {
+    left: 98px;
+}
+
+.rating_stars span.r.r2 {
+    left: 122px;
+}
+
+.rating_stars span.r.r2_5 {
+    left: 146px;
+}
+
+.rating_stars span.r.r3 {
+    left: 170px;
+}
+
+.rating_stars span.r.r3_5 {
+    left: 194px;
+}
+
+.rating_stars span.r.r4 {
+    left: 218px;
+}
+
+.rating_stars span.r.r4_5 {
+    left: 242px;
+}
+
+.rating_stars span.r.r5 {
+    left: 266px;
+}
+
+

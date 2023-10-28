@@ -5,13 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LoCoMPro.Models
 {
     /// <summary>
-    /// Moedl class that represents a store, has a name and a location asociated with it.
+    /// Moedl class that represents a store, has a name and a location associated with it.
     /// </summary>
     [PrimaryKey(nameof(Name), nameof(CantonName), nameof(ProvinciaName))]
     public class Store
     {
         /// <summary>
-        /// Store name, it's thie primary key.
+        /// Store name, it's the primary key.
         /// </summary>
         public required string Name { get; set; }
         

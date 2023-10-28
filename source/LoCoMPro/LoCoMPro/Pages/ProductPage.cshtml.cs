@@ -1,11 +1,16 @@
+using LoCoMPro.Areas.Identity.Pages.Account.Manage;
 using LoCoMPro.Data;
 using LoCoMPro.Models;
 using LoCoMPro.Utils;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography.X509Certificates;
 
 namespace LoCoMPro.Pages
 {
@@ -14,18 +19,26 @@ namespace LoCoMPro.Pages
     /// </summary>
     public class ProductPageModel : LoCoMProPageModel
     {
-        
+        private readonly UserManager<User> _userManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
         /// <summary>
         /// Creates a new ProductPageModel.
         /// </summary>
         /// <param name="context">DB Context to pull data from.</param>
         /// <param name="configuration">Configuration for page.</param>
+        /// <param name="userManager">User manager to handle user permissions.</param>
         // Product Page constructor 
-        public ProductPageModel(LoCoMProContext context, IConfiguration configuration)
-            : base(context, configuration) { }
+        public ProductPageModel(LoCoMProContext context, IConfiguration configuration
+            , UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
+            : base(context, configuration)
+        {
+            _userManager = userManager;
+            _httpContextAccessor = httpContextAccessor;
+        }
 
         /// <summary>
-        /// List of the product that exist in the databas.
+        /// List of the product that exist in the database.
         /// </summary>
         public IList<Product> Product { get; set; } = default!;
 
@@ -35,9 +48,19 @@ namespace LoCoMPro.Pages
         public IList<Store> Store { get; set; } = default!;
 
         /// <summary>
+        /// List of the users that exist in the database.
+        /// </summary>
+        public IList<User> Users { get; set; } = default!;
+
+        /// <summary>
+        /// List of the review made by the user that exist in the database.
+        /// </summary>
+        public IList<Review> UserReviews = new List<Review>();
+
+        /// <summary>
         /// List of the registers that exist in the database.
         /// </summary>
-        public PaginatedList<Register> Register { get; set; } = default!;
+        public IEnumerable<Register>? Registers { get; set; } = new List<Register>();
 
         /// <summary>
         /// Requested product name.
@@ -64,24 +87,6 @@ namespace LoCoMPro.Pages
         public string? SearchCantonName { get; set; }
 
         /// <summary>
-        /// Current sort being used by sort.
-        /// </summary>
-        [BindProperty(SupportsGet = true)]
-        public string? CurrentSort { get; set; }
-
-        /// <summary>
-        /// Price sort.
-        /// </summary>
-        [BindProperty(SupportsGet = true)]
-        public string? PriceSort { get; set; }
-
-        /// <summary>
-        /// Attr for sort the date register.
-        /// </summary>
-        [BindProperty(SupportsGet = true)]
-        public string? DateSort { get; set; }
-
-        /// <summary>
         /// Avg calculated price for product.
         /// </summary>
         public decimal AvgPrice { get; set; }
@@ -89,7 +94,7 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// GET HTTP request, initializes page values.
         /// </summary>
-        /// <param name="searchProductName">Product to desplay data of.</param>
+        /// <param name="searchProductName">Product to display data of.</param>
         /// <param name="searchStoreName">Store where the product is sold.</param>
         /// <param name="searchProvinceName">Province where the store is located.</param>
         /// <param name="searchCantonName">Canton where the store is located.</param>
@@ -97,13 +102,8 @@ namespace LoCoMPro.Pages
         /// <param name="sortOrder">Order to use when showing values.</param>
         /// <returns></returns>
         public async Task OnGetAsync(string searchProductName, string searchStoreName, string searchProvinceName, 
-            string searchCantonName, int? pageIndex, string sortOrder)
+            string searchCantonName)
         {
-            CurrentSort = sortOrder;
-            PriceSort = sortOrder == "price" ? "price_desc" : "price";
-            
-            // if sortOrder is Date, match date else date_desc
-            DateSort = sortOrder == "date" ? "date_desc" : "date";
 
             // Attr of the product from the params of method
             SearchProductName = searchProductName;
@@ -152,40 +152,19 @@ namespace LoCoMPro.Pages
                 registers = registers.Where(x => x.CantonName != null && x.CantonName.Contains(SearchCantonName));
                 registers = registers.Where(x => x.ProvinciaName != null && x.ProvinciaName.Contains(SearchProvinceName));
 
-            }
-
-          
+            }      
 
             // Get the average of the registers within last month.
             AvgPrice = GetAveragePrice(registers, DateTime.Now.AddYears(-1).Date, DateTime.Now) ;
 
-            // Code to order
-            switch (sortOrder)
-            {
-                // Order in case of price_descending
-                case "price_desc":   
-                    registers = registers.OrderByDescending(r => r.Price);
-                    break;
-                //  Order in case of price
-                case "price":     
-                    registers = registers.OrderBy(r => r.Price);
-                    break;
-                // Oldest order for Submition Date
-                case "date_desc":
-                    registers = registers.OrderBy(r => r.SubmitionDate);
-                    break;
-                // Normal order for the price
-                default:
-                    registers = registers.OrderByDescending(r => r.SubmitionDate);
-                    break;
-            }
-
-            // Get th amount of pages that will be needed for all the registers
-            var pageSize = Configuration.GetValue("PageSize", 5);
+            List<string> userIds = registers.Select(r => r.ContributorId).Distinct().ToList()!;
+            Users = await _context.Users.Where(u => userIds.Contains(u.Id)).ToListAsync();
 
             // Gets the Data From data base 
-            Register = await PaginatedList<Register>.CreateAsync(
-                registers.AsNoTracking(), pageIndex ?? 1, pageSize);
+            Registers = await registers.ToListAsync();
+
+            // Obtains the review made by the user
+            ObtainUserReviews();
         }
 
         /// <summary>
@@ -193,7 +172,7 @@ namespace LoCoMPro.Pages
         /// </summary>
         /// <param name="orderName">Type of order to use.</param>
         /// <param name="registers">Registers to order.</param>
-        /// <returns>Reqgisters ordered by <paramref name="orderName"/> price.</returns>
+        /// <returns>Registers ordered by <paramref name="orderName"/> price.</returns>
         public IOrderedEnumerable<Register> OrderRegistersByPrice(string orderName, ref ICollection<Register> registers)
         {
             switch (orderName)
@@ -213,7 +192,7 @@ namespace LoCoMPro.Pages
         /// </summary>
         /// <param name="orderName">Type of order to use.</param>
         /// <param name="registers">Registers to order.</param>
-        /// <returns>Reqgisters ordered by <paramref name="orderName"/> date.</returns>
+        /// <returns>Registers ordered by <paramref name="orderName"/> date.</returns>
         public IOrderedEnumerable<Register> OrderRegistersByDate(string orderName, ref ICollection<Register> registers)
         {
             switch (orderName)
@@ -247,5 +226,109 @@ namespace LoCoMPro.Pages
             double avgPrice = (registers is not null && registers.Count() > 1) ? registers.Average(r => r.Price) : 0.0;
             return Convert.ToDecimal(avgPrice);
         }
-    } 
+
+        /// <summary>
+        /// Gets and sets the review made by the User
+        /// </summary>
+        public async void ObtainUserReviews()
+        {
+            // Gets the user that is registered
+            var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
+
+            // If there´s is a registered user
+            if (user != null)
+            {
+                // Gets all the reviews
+                var reviews = from p in _context.Reviews select p;
+
+                // Filter the reviews to gets the made by the user in this product and store
+                reviews = reviews.Where(x => x.ReviewerId == user.Id);
+                reviews = reviews.Where(x => x.ProductName != null && x.ProductName.Contains(SearchProductName));
+                reviews = reviews.Where(x => x.StoreName != null && x.StoreName.Contains(SearchStoreName));
+
+                // Make a list with the review
+                UserReviews = reviews.ToList();
+            }
+        }
+
+        /// <summary>
+        /// Handle report interactions
+        /// </summary>
+        /// <param registerKeys="from"> foreign keys for identification the specific register.</param>
+        /// 
+        public IActionResult OnPostHandleInteraction(string registerKeys, bool reportActivated, float reviewedValue)
+        {
+            // Gets sure a change have to be changes
+            if (reportActivated || reviewedValue > 0)
+            {
+                // Splits the string with the char31 as a delimitator
+                string[] values = SplitString(registerKeys, '\x1F');
+                string submitionDate = values[0], contributorId = values[1], productName = values[2], storeName = values[3];
+                DateTime dateTime = DateTime.Parse(submitionDate);
+
+                // Gets the register that have to be updated
+                var registerToUpdate = _context.Registers.Include(r => r.Contributor).First(r => r.ContributorId == contributorId
+                    && r.ProductName == productName && r.StoreName == storeName && r.SubmitionDate == dateTime);
+
+                // Make the report
+                if (reportActivated)
+                {
+                    uint reportValue = 1;
+            
+                    // TODO: Get Rol
+
+                    /* This is just an example!
+                    userRol = getUserRol(); 
+                    if (userRol == mod)
+                    {
+                        reportValue = 2;
+                    }
+                    */
+
+                    registerToUpdate.NumCorrections = reportValue;
+                }
+
+                // Set the review value
+                if (reviewedValue > 0)
+                {
+                    // Gets the actual user
+                    var user = _context.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
+
+                    // Gets the last review of the user on this register
+                    var lastReview = _context.Reviews.FirstOrDefault(r => r.ReviewerId == user.Id
+                        && r.ProductName == productName
+                        && r.StoreName == storeName
+                        && r.SubmitionDate == dateTime
+                        && r.ContributorId == contributorId);
+
+                    // Gets the actual date and time
+                    DateTime reviewDate = DateTime.Now;
+                    reviewDate = new DateTime(reviewDate.Year, reviewDate.Month, reviewDate.Day
+                        , reviewDate.Hour, reviewDate.Minute, reviewDate.Second, 0);
+
+                    // If the user have not made a review
+                    if (lastReview == null)
+                    {
+                        // Adds the review
+                        _context.Reviews.Add(new Review() { ReviewedRegister = registerToUpdate
+                            , Reviewer = user!, ReviewValue = reviewedValue, ReviewDate = reviewDate});
+                    } else
+                    {
+                        // Update the review
+                        lastReview.ReviewValue = reviewedValue;
+                        lastReview.ReviewDate = reviewDate;
+                    }
+                }
+
+                _context.SaveChanges();
+            }
+            return new JsonResult("OK");
+        }
+
+        static string[] SplitString(string input, char delimiter)
+        {
+            return input.Split(delimiter);
+        }
+
+    }
 }

@@ -30,12 +30,6 @@ namespace LoCoMPro.Pages
             : base(context, configuration) { }
 
         /// <summary>
-        /// Wether or not the Page is Checked.
-        /// </summary>
-        [BindProperty]
-        public bool IsChecked { get; set; }
-
-        /// <summary>
         /// Categories that the user wants to filter by.
         /// <p>Its string with category names separated by a comma.</p>
         /// </summary>
@@ -72,11 +66,6 @@ namespace LoCoMPro.Pages
         public IList<Canton> Cantons { get; set; } = default!;
 
         /// <summary>
-        /// List of registers that match the Search string.
-        /// </summary>
-        public PaginatedList<Register> Register { get; set; } = default!;
-
-        /// <summary>
         /// Search String introduced by the user.
         /// </summary>
         [BindProperty(SupportsGet = true)]
@@ -101,18 +90,6 @@ namespace LoCoMPro.Pages
         public string? Canton { get; set; }
 
         /// <summary>
-        /// Current type of sort.
-        /// </summary>
-        [BindProperty(SupportsGet = true)]
-        public string? CurrentSort { get; set; }
-
-        /// <summary>
-        /// Type of sort by price.
-        /// </summary>
-        [BindProperty(SupportsGet = true)]
-        public string? PriceSort { get; set; }
-
-        /// <summary>
         /// Maps product name to list of categories.
         /// </summary>
         [BindProperty(SupportsGet = true)]
@@ -130,8 +107,6 @@ namespace LoCoMPro.Pages
         public async Task OnGetAsync(int? pageIndex, string sortOrder)
         {
 
-            CurrentSort = GetSortOrder(sortOrder);
-
             // Prepare the query to retrieve data from the database
             var categories = from c in _context.Categories
                              select c;
@@ -147,33 +122,8 @@ namespace LoCoMPro.Pages
                     registers = registers.Where(r => r.CantonName == Canton);
                 }
             }
-            /* Get the number of pages required for all records */
-            var pageSize = Configuration.GetValue("PageSize", 5);
-
-            /* Check if SelectedCategories is null, if not, creates a list of the categories separated by ',' in the string */
-            List<string> SelectedCategoriesList = !String.IsNullOrEmpty(SelectedCategories) ? SelectedCategories.Split(',').ToList() : null!;
-            /* Check if SelectedProvinces is null, if not, creates a list of the provinces separated by ',' in the string */
-            List<string> selectedProvincesList = !String.IsNullOrEmpty(SelectedProvinces) ? SelectedProvinces.Split(',').ToList() : null!;
-            /* Check if SelectedCantons is null, if not, creates a list of the categories separated by ',' in the string */
-            List<string> selectedCantonsList = !String.IsNullOrEmpty(SelectedCantons) ? SelectedCantons.Split(',').ToList() : null!;
 
             var match = GetRegistersByType(registers);
-
-            //if (SelectedCategoriesList != null && SelectedCategoriesList.Count > 0 && SelectedCategoriesList[0] != null)
-            //{
-            //    /* A list is obtained with the names of all the products associated with any category on the SelectedCategoriesList.*/
-            //    var filteredProducts = _context.Products
-            //        .Where(p => p.Categories!.Any(c => SelectedCategoriesList.Contains(c.CategoryName)))
-            //        .Select(p => p.Name)
-            //        .ToList();
-
-            //    /* The registers associated with the selected categories are obtained */
-            //    registers = registers.Where(r => filteredProducts.Contains(r.ProductName!));
-            //}
-            //registers = FilterByLocation(ref registers, selectedProvincesList, selectedCantonsList);
-
-            /* Get registers based on the selected search type */
-            IQueryable<Register> registersQuery = GetRegistersByType(registers);
 
             /* Retrieve data from the database */
             // Query to get all categories associated with at least one product in the register list
@@ -183,24 +133,24 @@ namespace LoCoMPro.Pages
                             .ToListAsync();
 
             // Query to get all provinces associated with at least one register in the register list
-            var provincias = _context.Provincias
+            Provinces = _context.Provincias
                             .Where(province => match.Any(register => register.ProvinciaName == province.Name))
                             .ToList();
-            Provinces = provincias;
 
             // Query to get all cantons associated with at least one register in the register list
-            var cantons = _context.Cantones
+            Cantons = _context.Cantones
                             .Where(canton => match.Any(register => register.CantonName == canton.CantonName))
                             .ToList();
-            Cantons = cantons;
 
             if (match != null)
             {
+                // Fetch data from the database
                 var productsInRegisters = _context.Products
                     .Where(product => match.Any(register => register.ProductName == product.Name))
                     .Include(product => product.Categories)
-                    .ToList(); // Fetch data from the database
+                    .ToList();
 
+                //  Gets the registers that match with the categories
                 if (productsInRegisters != null)
                 {
                     var groupedProductsInRegisters = productsInRegisters
@@ -215,21 +165,7 @@ namespace LoCoMPro.Pages
 
                 Registers = match;
             }
-
-                /* Get an unordered list of registers */
-                List<Register> unorderedList = OrderRegisters(registersQuery.ToList(), sortOrder);
-
-            /* Create the paginated list of registers from the list */
-            Register = (await PaginatedList<Register>.CreateAsync(unorderedList,
-                pageIndex ?? 1, pageSize));
         }
-
-        private static IEnumerable<IGrouping<string, Product>> NewMethod(List<Product> productsInRegisters)
-        {
-            return productsInRegisters
-                                    .GroupBy(product => product.Name);
-        }
-
 
         /// <summary>
         /// Filters the <paramref name="registers"/> by the <paramref name="selectedProvinces"/> and the <paramref name="selectedCantons"/>.
@@ -345,7 +281,7 @@ namespace LoCoMPro.Pages
         public JsonResult OnGetRegisters()
         {
             Assert.IsNotNull(Registers);
-            return new JsonResult(Register.ToArray());
+            return new JsonResult(Registers.ToArray());
 
         }
     }

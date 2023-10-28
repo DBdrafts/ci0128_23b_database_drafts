@@ -13,14 +13,14 @@ document.addEventListener("DOMContentLoaded", function () {
         const selectedCategories = getSelectedCheckboxes('SelectedCategories');
         const selectedProvinces = getSelectedCheckboxes('SelectedProvinces');
         const selectedCantons = getSelectedCheckboxes('SelectedCantons');
-        const notfound = document.getElementById("product-not-found-result");
+        notfound = document.getElementById("product-not-found");
 
         // Filter the resultBlocks based on the selected criteria
         resultBlocks = queryResults.filter(block => {
-            const productName = block.querySelector('#result-product-name').getAttribute("value");
-            const province = block.querySelector('#result-province-name').getAttribute("value");
-            const canton = block.querySelector('#result-canton-name').getAttribute("value");
-            const categories = block.querySelector('#result-categories').getAttribute("value");
+            const productName = block.querySelector('#register-product-name').getAttribute("value");
+            const province = block.querySelector('#register-province-name').getAttribute("value");
+            const canton = block.querySelector('#register-canton-name').getAttribute("value");
+            const categories = block.querySelector('#register-categories').getAttribute("value");
 
             const meetsCategoryFilter = selectedCategories.length === 0 || stringContainsSubstringIgnoreCase(categories, selectedCategories);
             const meetsProvinceFilter = selectedProvinces.length === 0 || selectedProvinces.includes(province);
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
 
             // Sort the filtered resultBlocks
-            sortResultBlocks("desc");
+             sortResultBlocks("desc");
 
             // Update the totalPages based on the filtered resultBlocks
             totalPages = Math.ceil(resultBlocks.length / pageSize);

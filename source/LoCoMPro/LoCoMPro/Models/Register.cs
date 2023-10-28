@@ -28,11 +28,13 @@ namespace LoCoMPro.Models
         /// <summary>
         /// Navigation atribute for the store that the register refers to.
         /// </summary>
+        [ForeignKey(nameof(StoreName))]
         public required Store Store { get; set; }
 
         /// <summary>
         /// Date when the register was submitted.
         /// </summary>
+        [ForeignKey(nameof(SubmitionDate))]
         public required DateTime SubmitionDate { get; set; }
 
         /// <summary>
@@ -51,8 +53,8 @@ namespace LoCoMPro.Models
         /// Number of negative votes that the register has.
         /// Currently not implemented.
         /// </summary>
-        [NotMapped]
-        public uint? NumCorrections { get; set; }
+
+        public uint NumCorrections { get; set; }
 
         /// <summary>
         /// Comment that the user made about the current register.
@@ -83,5 +85,10 @@ namespace LoCoMPro.Models
         /// Name of the province where the store is.
         /// </summary>
         public string? ProvinciaName { get; set; }
+
+        /// <summary>
+        /// Reviews made of this register
+        /// </summary>
+        public ICollection<Review>? Reviews { get; set; } = new List<Review>();
     }
 }
