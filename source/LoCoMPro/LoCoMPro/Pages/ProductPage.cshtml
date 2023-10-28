@@ -93,6 +93,7 @@
             var firstNonNullProductSecond = Model.Product.FirstOrDefault(r => r.Name != null);
             var firstNonNullStoreSecond = Model.Store.FirstOrDefault(r => r.Name != null);
             System.Globalization.CultureInfo cultureSecond = new System.Globalization.CultureInfo("es-CR"); // Costa Rica datetime format
+            int imagesAmount = 0;
         }
 
         <div class="images-section">
@@ -101,7 +102,7 @@
                     
                     @foreach (var register in Model.Registers)
                     { // in each register done
-                        int imagesAmount = 0;
+                        
                         @if (register.Images != null)
                         {
                             @foreach (var image in register.Images)
@@ -132,7 +133,18 @@
                 </div>
             </div>
             <div class="main-imagen-section">
-                <div class="main-img-space"></div>
+                @if (Model.Registers.Any() && Model.Registers.First().Images != null && Model.Registers.First().Images.Any())
+                {
+                    <div class="main-img-space">
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Registers.First().Images.First().ImageData)" alt="Imagen Principal" class="img-responsive" style="width:348.5px;height:323.5px;border-radius: 30px; object-fit: fill;">
+                    </div>
+                }
+                else
+                {
+                    <div class="main-img-space">
+                        <img src="~/img/No_image_found.svg" alt="No se encontraron imagenes" style="width:348.5px;height:323.5px;border-radius: 30px; object-fit: fill;">
+                    </div>
+                }
             </div>
         </div>
         <div class="info-section">
