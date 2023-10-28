@@ -1,64 +1,78 @@
 ﻿/* Styles for the product list visualization page*/
 
-/* Style for the title of the page */
-.titlePage {
-    width: 1152px;
-    text-align: center;
+
+.information-section {
+    display: inline-block;
+    width: 100%;
+    height: auto;
     color: black;
-    font-size: 30px;
-    font-weight: 700;
-    word-wrap: break-word;
-    margin: 0 auto;  
 }
 
-/* Style for the subheading of the page */
-.subHeading {
-    width: 1152px;
+.list-page-title {
+    text-align: center;
+}
+
+.list-page-subtitle {
     text-align: left;
-    color: black;
-    font-size: 25px;
-    font-weight: 400;
-    word-wrap: break-word;
-    padding: 5px;
 }
 
-/* Horizontal line of separation with the list of records */
-.product-page hr.style-four {
-    background: #9F9F9F;
-    box-shadow:  0px 2px 6px rgba(0, 0, 0, 0.2);
-    margin-bottom: 20px;
+.list-page-column-title {
+    display: inline-flex;
+    height: auto;
+    width: 100%;
+    justify-content: space-between;
+    list-style: none;
+    margin: 10px 0px;
 }
 
-/* Container que wraps the product specification columns */
-.characteristic-section {
+/* Style for list title columns */
+.list-page-column-title li {
+    font-size: x-large;
+    flex: 0 0 0%;
+    text-align: center;
+    margin: 0px 10px;
+}
+
+/* Style for columns */
+.list-page-column-title ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+.register-list-section {
+    height: auto;
+    width: 100%;
+    text-decoration: none;
+    color: #000000;
+}
+
+.register-list-block {
+    height: auto;
+    width: 100%;
+    text-decoration: none;
+    color: #000000;
+}
+
+/* Style for the register block text */
+.register-list-block a {
     display: flex;
-    padding-top: 20px;
-    justify-content: space-between; /* Añade esto para alinear con espacio entre elementos */
+    height: 4em;
+    width: 100%;
+    background-color: #E2E3E3;
+    justify-content: space-around;
+    border-radius: 15px;
+    margin: 10px 0px;
+    padding: 0px 10px;
+    max-height: 4em;
+    text-decoration: none;
+    overflow: clip;
+    text-overflow: ellipsis;
+    color: #000000;
 }
 
-/* Style for the format of specifications of product */
-.column {
-    flex: 33.33%; 
-    margin: 5px;
-    text-align: center;
-    font-weight: 500;
+/* Style for the register block text*/
+.register-list-block a span {
+    text-align: left;
+    margin: 10px 10px;
+    flex: 0 0 0%;
 }
-
-/* Style for paragraphs within columns */
-.column p {
-    font-size: 25px;
-}
-
-/* Style for the little bit diferrent column */
-.column-for-button {
-    flex: 24%;
-    margin: 5px;
-    text-align: center;
-    font-weight: 500;
-}
-
- /* Style for hide a element */
- .column-for-button p {
-    display: none;
-    /*font-size: 25px;    debugging space*/  
- }
