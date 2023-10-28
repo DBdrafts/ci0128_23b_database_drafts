@@ -34,5 +34,9 @@ namespace LoCoMPro.Data
         /// </summary>
         public required Canton Location { get; set; }
 
+        /// <summary>
+        /// Reviews made by this user
+        /// </summary>
+        public ICollection<Review>? Reviews { get; set; } = new List<Review>();
     };
 }
