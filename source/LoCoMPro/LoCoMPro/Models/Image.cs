@@ -17,7 +17,6 @@ namespace LoCoMPro.Models
        
         public Register Register { get; set; }
 
-
         public required int ImageId { get; set; }
         public required DateTime SubmitionDate { get; set; }
 

@@ -43,6 +43,7 @@ namespace LoCoMPro.Pages
         {
             _userManager = userManager;
         }
+        private static int imageIdCounter = 1;
 
         /// <summary>
         /// Available categories for products.
@@ -230,9 +231,47 @@ namespace LoCoMPro.Pages
                 Product = productToAdd,
                 Store = store,
                 Price = price,
-                Comment = comment
+                Comment = comment,
+                Images = new List<Image>() { }
+                
             };
 
+            if (ProductImages != null &&  ProductImages.Count > 0)
+            {
+                foreach(var image in ProductImages)
+                {
+
+                    if (image != null && image.Length > 0)
+                    {
+                        using (var stream = image.OpenReadStream())
+                        {
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                stream.CopyTo(memoryStream);
+                                byte[] imageBytes = memoryStream.ToArray();
+
+                                string imageType = image.ContentType;
+                                Image newImage = new()
+                                {
+                                    ImageId = imageIdCounter,
+                                    SubmitionDate = dateTime,
+                                    Contributor = user,
+                                    ContributorId = user.Id,
+                                    ProductName = productToAdd.Name,
+                                    StoreName = store.Name,
+                                    CantonName = store.CantonName!,
+                                    ProvinceName = store.ProvinciaName!,
+                                    ImageData = imageBytes,
+                                    ImageType = imageType
+                                };
+                                newRegister.Images!.Add(newImage);
+                                ++imageIdCounter;
+                            }
+                        }
+                    }
+                }
+            }
+            
             return newRegister;
         }
 
