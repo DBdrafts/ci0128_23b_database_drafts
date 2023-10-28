@@ -18,44 +18,35 @@
 }
 
 
-/* Style for text input fields, select, and textarea */
-input[type="text"], input[type="number"],
-select,
-textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #E2E3E3;
-}
-
-
 .register-section textarea {
     /* Comment box height */
     height: 100px;
 }
 
 
-/* Specific style for text input */
+/* Style for text input fields, and textarea */
 input[type="text"], input[type="number"],
 textarea {
-    background-color: #E2E3E3;
+    background-color: #FFFFFF;
     width: 100%;
     padding: 10px;
     margin-bottom: 25px;
-    border: 1px solid #E2E3E3;
+    border: 1px solid #0A1923AD;
     border-radius: 15px;
 }
 
 
 /* Style for disabled fields */
 .required-field:disabled {
-    background-color: #D0D0D0;
+    background-color: #E2E3E3;
+    border: 1px solid #00000047;
 }
 
-/* Disabled placeholder fields style*/
-.required-field:disabled::placeholder {
-    color: #9F9F9F;
-}
+    /* Disabled placeholder fields style*/
+    .required-field:disabled::placeholder {
+        color: #00000030;
+    }
+
 /* Enabled placeholder fields style*/
 .required-field:enabled::placeholder {
     color: #6b6b6b;
@@ -76,54 +67,54 @@ textarea {
 }
 
 
-/* Style for the input fields */
-.brand-model-field-group input[type="text"] {
-    width: 100%; /* Make both input fields the same width */
-    padding: 10px;
-    border: 1px solid #E2E3E3;
-}
+    /* Style for the input fields */
+    .brand-model-field-group input[type="text"] {
+        width: 100%; /* Make both input fields the same width */
+        padding: 10px;
+        border: 1px solid #0A1923AD;
+    }
 
-/* White space between fields*/
-.brand-model-field-group:first-child {
-    margin-right: 30px;
-}
+    /* White space between fields*/
+    .brand-model-field-group:first-child {
+        margin-right: 30px;
+    }
 
 
 /* Style for the container of price and category */
 .price-category-container {
-display: flex;
-justify-content: space-between; /* Add space between the fields */
+    display: flex;
+    justify-content: space-between; /* Add space between the fields */
 }
 
 /* Style for each field and label of price and category */
 .price-category-field-group {
-flex: 1; /* Distribute available space evenly between fields */
-display: flex;
-flex-direction: column; /* Place the label above the input field */
-align-items: flex-start; /* Align elements to the left */
+    flex: 1; /* Distribute available space evenly between fields */
+    display: flex;
+    flex-direction: column; /* Place the label above the input field */
+    align-items: flex-start; /* Align elements to the left */
 }
 
 
-/* Style for the input fields */
-.price-category-field-group input[type="text"] {
-    width: 100%; /* Make both input fields the same width */
-    padding: 10px;
-    border: 1px solid #E2E3E3;
-}
+    /* Style for the input fields */
+    .price-category-field-group input[type="text"] {
+        width: 100%; /* Make both input fields the same width */
+        padding: 10px;
+        border: 1px solid #0A1923AD;
+    }
 
-/* White space between fields*/
-.price-category-field-group:first-child {
-    margin-right: 30px;
-}
+    /* White space between fields*/
+    .price-category-field-group:first-child {
+        margin-right: 30px;
+    }
 
 
 /* Style for select field */
 .register-section select {
-    background-color: #E2E3E3;
+    background-color: #FFFFFF;
     width: 100%;
     padding: 10px;
     margin-bottom: 25px;
-    border: 1px solid #E2E3E3;
+    border: 1px solid #0A1923AD;
     border-radius: 15px;
 }
 
@@ -139,7 +130,7 @@ align-items: flex-start; /* Align elements to the left */
     height: 50px;
     background-color: #9F9F9F;
     margin-bottom: 20px;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25)!important;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) !important;
 }
 
 /* Specific style for input button */
@@ -155,14 +146,14 @@ align-items: flex-start; /* Align elements to the left */
     justify-content: space-between;
     align-items: center;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.30);
-    margin-left:auto;
+    margin-left: auto;
 }
 
 
-/* Style for submit-button when hover*/
-.submit-button:hover {
-    background-color: #F59500;
-}
+    /* Style for submit-button when hover*/
+    .submit-button:hover {
+        background-color: #F59500;
+    }
 
 
 /* Text in button*/
@@ -171,7 +162,7 @@ align-items: flex-start; /* Align elements to the left */
     margin-right: 8px;
     order: 1;
 }
-    
+
 /* Style for icon in submit botton*/
 .button-content img {
     height: 25px;
@@ -194,13 +185,13 @@ align-items: flex-start; /* Align elements to the left */
     width: auto;
     white-space: nowrap;
     box-shadow: 0px 4px 4px 0px rgba(80, 158, 224, 0.5);
-    margin-right:40px;
+    margin-right: 40px;
 }
 
-/* Style for location button when hover*/
-.location-button:hover {
-    background-color: #5AABE2;
-}
+    /* Style for location button when hover*/
+    .location-button:hover {
+        background-color: #5AABE2;
+    }
 
 /* Style for location container*/
 .location-container {
@@ -241,30 +232,32 @@ align-items: flex-start; /* Align elements to the left */
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
     z-index: 1;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Style for pop up content*/
 .popup-content {
     background-color: #fff;
-    margin: 10% auto;
+    margin: 11% auto;
     padding: 20px;
-    width: 20%;
+    width: 80%;
+    max-width: 400px;
     border-radius: 15px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     position: relative;
 }
 
-/* Style for location options and location box*/
-#chosenLocationLabel,
-#chosenLocation {
-    display: none;
-    width: 50%;
-    padding: 6px;
-    margin-bottom: 15px;
-    border: 1px solid #FFFFFF;
-    border-radius: 15px;
-    background-color: #FFFFFF;
-    margin-bottom: 0px;
+/* Style for canton field when is enabled */
+#canton:enabled {
+    background-color: #FFF;
+    border: 1px solid #0A1923AD;
+}
+
+/* Style for canton field when is disabled */
+#canton:disabled {
+    background-color: #E2E3E3;
+    border: 1px solid #00000047;
 }
 
 /* Style for saveLocation botton*/
@@ -279,13 +272,13 @@ align-items: flex-start; /* Align elements to the left */
     font-weight: 500;
     box-shadow: 0px 4px 4px 0px rgba(80, 158, 224, 0.5);
     float: right;
-    width:auto;
+    width: auto;
 }
 
-/* SaveLocation-button when hover*/
-#saveLocation-button:hover {
-    background-color: #5AABE2;
-}
+    /* SaveLocation-button when hover*/
+    #saveLocation-button:hover {
+        background-color: #5AABE2;
+    }
 
 
 /* Style for save closePopup botton*/
@@ -302,10 +295,10 @@ align-items: flex-start; /* Align elements to the left */
     width: auto;
 }
 
-/* SaveLocation-button when hover*/
-#closePopup-button:hover {
-    background-color: #E25A5A;
-}
+    /* SaveLocation-button when hover*/
+    #closePopup-button:hover {
+        background-color: #E25A5A;
+    }
 
 
 
@@ -325,5 +318,4 @@ align-items: flex-start; /* Align elements to the left */
 /* Show message when hovering over asterisk*/
 .required-marker:hover + .required-tooltip {
     display: inline-block;
- }
-
+}

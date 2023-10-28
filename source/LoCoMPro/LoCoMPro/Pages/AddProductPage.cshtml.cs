@@ -43,11 +43,20 @@ namespace LoCoMPro.Pages
         {
             _userManager = userManager;
         }
+        private static int imageIdCounter = 1;
 
         /// <summary>
         /// Available categories for products.
         /// </summary>
         public List<SelectListItem>? CategoryList { get; set; }
+
+        /// <summary>
+        /// List of product images.
+        /// </summary>
+
+        [BindProperty]
+        public List<IFormFile>? ProductImages { get; set; }
+
 
         // Method for loading the list of categories from the database
         private void LoadCategories()
@@ -71,7 +80,6 @@ namespace LoCoMPro.Pages
         public void OnGet()
         {
             LoadCategories();
-            
         }
 
         /// <summary>
@@ -95,6 +103,9 @@ namespace LoCoMPro.Pages
             string? brandName = CheckNull(Request.Form["brand"]);
             string? modelName = CheckNull(Request.Form["model"]);
             string? comment = CheckNull(Request.Form["comment"]);
+
+            var count = ProductImages.Count();
+
 
             // Get the product if exists in the context
             var productToAdd = _context.Products
@@ -220,9 +231,47 @@ namespace LoCoMPro.Pages
                 Product = productToAdd,
                 Store = store,
                 Price = price,
-                Comment = comment
+                Comment = comment,
+                Images = new List<Image>() { }
+                
             };
 
+            if (ProductImages != null &&  ProductImages.Count > 0)
+            {
+                foreach(var image in ProductImages)
+                {
+
+                    if (image != null && image.Length > 0)
+                    {
+                        using (var stream = image.OpenReadStream())
+                        {
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                stream.CopyTo(memoryStream);
+                                byte[] imageBytes = memoryStream.ToArray();
+
+                                string imageType = image.ContentType;
+                                Image newImage = new()
+                                {
+                                    ImageId = imageIdCounter,
+                                    SubmitionDate = dateTime,
+                                    Contributor = user,
+                                    ContributorId = user.Id,
+                                    ProductName = productToAdd.Name,
+                                    StoreName = store.Name,
+                                    CantonName = store.CantonName!,
+                                    ProvinceName = store.ProvinciaName!,
+                                    ImageData = imageBytes,
+                                    ImageType = imageType
+                                };
+                                newRegister.Images!.Add(newImage);
+                                ++imageIdCounter;
+                            }
+                        }
+                    }
+                }
+            }
+            
             return newRegister;
         }
 
@@ -290,5 +339,12 @@ namespace LoCoMPro.Pages
 
             return new JsonResult(data);
         }
+
+        public IActionResult OnPostUploadImage([FromForm] List<IFormFile> ProductImages)
+        {
+            this.ProductImages = ProductImages;
+            return new JsonResult("OK");
+        }
     }
+
 }

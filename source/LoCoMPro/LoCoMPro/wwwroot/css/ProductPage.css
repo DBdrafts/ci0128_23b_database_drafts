@@ -406,6 +406,6 @@
 
 /* Style for the feedback message of the Pop Up when active */
 .feedback-message.active {
-    display: block; /* Mostrar el mensaje */
-    opacity: 1; /* Hacerlo visible */
+    display: block;
+    opacity: 1;
 }

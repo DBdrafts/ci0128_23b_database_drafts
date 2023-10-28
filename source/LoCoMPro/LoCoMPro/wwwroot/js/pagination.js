@@ -43,8 +43,19 @@ document.addEventListener("DOMContentLoaded", function () {
             block.style.display = index >= startIndex && index < endIndex ? 'block' : 'none';
         });
 
-        total.textContent = `Página ${currentPage} de ${totalPages}`;
+        // Range of results of the current page
+        const firstResultCurrentPage = (currentPage - 1) * pageSize + 1;
+        const lastResultCurrentPage = Math.min(currentPage * pageSize, resultBlocks.length);
 
+
+        let resultsRangeMsg = `${firstResultCurrentPage}-${lastResultCurrentPage} de ${resultBlocks.length} resultados encontrados`;
+
+        if (firstResultCurrentPage === resultBlocks.length) {
+            resultsRangeMsg = `Resultado ${lastResultCurrentPage} de ${resultBlocks.length} encontrados`
+        }
+
+        document.getElementById("results-count").textContent = resultsRangeMsg;
+        total.textContent = `Página ${currentPage} de ${totalPages}`;
     }
  
 
