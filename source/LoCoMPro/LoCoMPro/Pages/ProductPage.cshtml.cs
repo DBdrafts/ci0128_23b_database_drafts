@@ -57,6 +57,8 @@ namespace LoCoMPro.Pages
         /// </summary>
         public IList<Review> UserReviews = new List<Review>();
 
+        public IList<Report> UserReports = new List<Report>();
+
         /// <summary>
         /// List of the registers that exist in the database.
         /// </summary>

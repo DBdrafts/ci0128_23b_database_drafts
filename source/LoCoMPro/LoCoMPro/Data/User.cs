@@ -38,5 +38,6 @@ namespace LoCoMPro.Data
         /// Reviews made by this user
         /// </summary>
         public ICollection<Review>? Reviews { get; set; } = new List<Review>();
+        public ICollection<Report>? Reports { get; set; } = new List<Report>();
     };
 }
