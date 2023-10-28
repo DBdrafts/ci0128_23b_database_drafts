@@ -110,7 +110,7 @@
                                 if (imagesAmount < 5)
                                 {
                                     <div class="small-img-space">
-                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(image.ImageData)" alt="Imagen" class="img-responsive" style="width:48.5px;height:48.5px;border-radius:5px;object-fit:fill;">
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(image.ImageData)" alt="Imagen" class="img-responsive small-image" style="width:48.5px;height:48.5px;border-radius:5px;object-fit:fill;">
                                     </div>
                                     imagesAmount++;
                                 }
@@ -128,15 +128,14 @@
                         }
 
                     }
-                    
-                  
+    
                 </div>
             </div>
             <div class="main-imagen-section">
                 @if (Model.Registers.Any() && Model.Registers.First().Images != null && Model.Registers.First().Images.Any())
                 {
                     <div class="main-img-space">
-                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Registers.First().Images.First().ImageData)" alt="Imagen Principal" class="img-responsive" style="width:348.5px;height:323.5px;border-radius: 30px; object-fit: fill;">
+                        <img id ="mainImage" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Registers.First().Images.First().ImageData)" alt="Imagen Principal" class="img-responsive" style="width:348.5px;height:323.5px;border-radius: 30px; object-fit: fill;">
                     </div>
                 }
                 else
@@ -165,6 +164,7 @@
                     {
                         <p>Tienda: @firstNonNullStoreSecond.Name</p>
                         <p>Ubicación: @firstNonNullStoreSecond.ProvinciaName, @firstNonNullStoreSecond.CantonName </p>
+                        <p>Precio Aproximado: ₡ @Model.AvgPrice.ToString("N0")</p>
                     }
                 }
             </div>
@@ -257,6 +257,7 @@
             </div>
         </div>
     </div>
+    <script src="~/js/ProductPage/imageChanger.js"></script>
     <script src="~/js/interactionsPopUp.js"></script>
     <script src="~/js/feedbackMessage.js"></script>
     <script src="~/js/pagination.js"></script>
