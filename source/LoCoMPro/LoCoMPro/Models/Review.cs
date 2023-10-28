@@ -57,6 +57,11 @@ namespace LoCoMPro.Models
         public DateTime SubmitionDate { get; set; }
 
         /// <summary>
+        /// Date when the register was reviewed.
+        /// </summary>
+        public required DateTime ReviewDate { get; set; }
+
+        /// <summary>
         /// Value of the review given by the user.
         /// </summary>
         [DefaultValue(0)]

@@ -153,7 +153,7 @@ function save_reviewed_state(value) {
 /// <summary>
 /// Establish the initial state of the values
 /// </summary>
-function setReviewedValue(lastReviewValue) { }
+function setReviewedValue(lastReviewValue) {
     // If the user has already made a review
     reviewedValue = lastReviewValue == null ? 0 : lastReviewValue;
     highlight_star(reviewedValue);

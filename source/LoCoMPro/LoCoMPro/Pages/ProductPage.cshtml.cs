@@ -53,6 +53,11 @@ namespace LoCoMPro.Pages
         public IList<User> Users { get; set; } = default!;
 
         /// <summary>
+        /// List of the review made by the user that exist in the database.
+        /// </summary>
+        public IList<Review> UserReviews = new List<Review>();
+
+        /// <summary>
         /// List of the registers that exist in the database.
         /// </summary>
         public IEnumerable<Register>? Registers { get; set; } = new List<Register>();
@@ -82,32 +87,9 @@ namespace LoCoMPro.Pages
         public string? SearchCantonName { get; set; }
 
         /// <summary>
-        /// Current sort being used by sort.
-        /// </summary>
-        [BindProperty(SupportsGet = true)]
-        public string? CurrentSort { get; set; }
-
-        /// <summary>
-        /// Price sort.
-        /// </summary>
-        [BindProperty(SupportsGet = true)]
-        public string? PriceSort { get; set; }
-
-        /// <summary>
-        /// Attr for sort the date register.
-        /// </summary>
-        [BindProperty(SupportsGet = true)]
-        public string? DateSort { get; set; }
-
-        /// <summary>
         /// Avg calculated price for product.
         /// </summary>
         public decimal AvgPrice { get; set; }
-
-        /// <summary>
-        /// List of the review made by the user that exist in the database.
-        /// </summary>
-        public IList<Review> UserReviews = new List<Review>(); 
 
         /// <summary>
         /// GET HTTP request, initializes page values.
@@ -210,7 +192,7 @@ namespace LoCoMPro.Pages
         /// </summary>
         /// <param name="orderName">Type of order to use.</param>
         /// <param name="registers">Registers to order.</param>
-        /// <returns>Reqisters ordered by <paramref name="orderName"/> date.</returns>
+        /// <returns>Registers ordered by <paramref name="orderName"/> date.</returns>
         public IOrderedEnumerable<Register> OrderRegistersByDate(string orderName, ref ICollection<Register> registers)
         {
             switch (orderName)
@@ -319,15 +301,22 @@ namespace LoCoMPro.Pages
                         && r.SubmitionDate == dateTime
                         && r.ContributorId == contributorId);
 
+                    // Gets the actual date and time
+                    DateTime reviewDate = DateTime.Now;
+                    reviewDate = new DateTime(reviewDate.Year, reviewDate.Month, reviewDate.Day
+                        , reviewDate.Hour, reviewDate.Minute, reviewDate.Second, 0);
+
                     // If the user have not made a review
                     if (lastReview == null)
                     {
                         // Adds the review
-                        _context.Reviews.Add(new Review() { ReviewedRegister = registerToUpdate, Reviewer = user, ReviewValue = reviewedValue});
+                        _context.Reviews.Add(new Review() { ReviewedRegister = registerToUpdate
+                            , Reviewer = user!, ReviewValue = reviewedValue, ReviewDate = reviewDate});
                     } else
                     {
                         // Update the review
                         lastReview.ReviewValue = reviewedValue;
+                        lastReview.ReviewDate = reviewDate;
                     }
                 }
 
