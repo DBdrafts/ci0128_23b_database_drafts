@@ -98,11 +98,37 @@
         <div class="images-section">
             <div class="carousel-section">
                 <div class="img-carousel">
-                    <div class="small-img-space"></div>
-                    <div class="small-img-space"></div>
-                    <div class="small-img-space"></div>
-                    <div class="small-img-space"></div>
-                    <div class="small-img-space"></div>
+                    
+                    @foreach (var register in Model.Registers)
+                    { // in each register done
+                        int imagesAmount = 0;
+                        @if (register.Images != null)
+                        {
+                            @foreach (var image in register.Images)
+                            {
+                                if (imagesAmount < 5)
+                                {
+                                    <div class="small-img-space">
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(image.ImageData)" alt="Imagen" class="img-responsive" style="width:48.5px;height:48.5px;border-radius:5px;object-fit:fill;">
+                                    </div>
+                                    imagesAmount++;
+                                }
+                                
+                            }
+                        }
+                        else
+                        { 
+                            
+                        }
+
+                        if(imagesAmount == 0)
+                        {
+                            
+                        }
+
+                    }
+                    
+                  
                 </div>
             </div>
             <div class="main-imagen-section">

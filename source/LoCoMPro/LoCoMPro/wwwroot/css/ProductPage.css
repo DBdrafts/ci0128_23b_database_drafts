@@ -153,7 +153,15 @@
     height: 50px;
     border: 1px solid;
     border-radius: 5px;
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
+
+
+/* Important */
 
 /*Styel for main image*/
 .main-img-space {

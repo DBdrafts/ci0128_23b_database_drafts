@@ -148,6 +148,9 @@ namespace LoCoMPro.Pages
             // Initial request for all the registers in the database
             var registers = from r in _context.Registers select r;
 
+            // add the images from every register
+            registers = registers.Include(r => r.Images);
+
             // If the name of the propertiesSearch is not null 
             if (!string.IsNullOrEmpty(SearchProductName) &&
                 !string.IsNullOrEmpty(SearchStoreName) && 
@@ -159,6 +162,7 @@ namespace LoCoMPro.Pages
                 registers = registers.Where(x => x.StoreName != null && x.StoreName.Contains(SearchStoreName));
                 registers = registers.Where(x => x.CantonName != null && x.CantonName.Contains(SearchCantonName));
                 registers = registers.Where(x => x.ProvinciaName != null && x.ProvinciaName.Contains(SearchProvinceName));
+                registers = registers.Include(r => r.Images);
 
             }      
 
