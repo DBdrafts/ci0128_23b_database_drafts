@@ -25,10 +25,11 @@
 /* Style for the layout buttons */
 .layout-button {
     background: none;
-    margin: 0px 10px -15px 0px;
+    margin: 0px 10px -15px 5px;
     display: inline-block;
     text-align: center;
     text-decoration: none;
+    min-width: 55px;
 }
 
 /* Style for the paragraph in the layout button */

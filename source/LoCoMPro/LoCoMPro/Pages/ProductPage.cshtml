@@ -102,19 +102,24 @@
     </div>
 
     @{
-        
+
         var productData = $"{firstNonNullProduct.Name}{s}{firstNonNullProduct.Brand}" +
             $"{s}{firstNonNullProduct.Model}{s}{Model.SearchStoreName}" +
             $"{s}{firstNonNullStore.ProvinciaName}{s}{firstNonNullStore.CantonName}" +
             $"{s}{Model.AvgPrice.ToString("N0")}";
 
-        <button type="button" class="button-general product-list-button" id="add-to-list"
-            data-product-data="@productData" onclick="callAddProductToList(this)">
-            Añadir a lista de interés
-            <i class="fa fa-plus-circle" aria-hidden="true"></i>
-        </button>
+        if (SignInManager.IsSignedIn(User))
+        {
+            <button type="button" class="button-general product-list-button" id="add-to-list"
+                data-product-data="@productData" onclick="callAddProductToList(this)">
+                Añadir a lista de interés
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </button>
+        }
+    
+        
+        @* <button type="button" class="button-general product-list-button" id="delete-from-list"></button> *@
     }
-    @* <button type="button" class="button-general product-list-button" id="delete-from-list"></button> *@
     
     <!-- Horizontal separating line -->
     <hr class="style-four">
