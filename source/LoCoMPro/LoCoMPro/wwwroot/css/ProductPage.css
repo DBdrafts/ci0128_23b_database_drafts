@@ -299,3 +299,30 @@
     display: block; /* Mostrar el mensaje */
     opacity: 1; /* Hacerlo visible */
 }
+
+/* Style for the button that manage the user list */
+.producto-list-button {
+    display: inline-block;
+    height: auto;
+    width: 75%;
+    text-align: center;
+    margin: 10px;
+    padding: 10px;
+    font-size: larger;
+}
+
+/* Style for the button that manage the user list when add the product */
+#add-to-list {
+    background-color: #39A4F4;
+}
+
+/* Style for the button that manage the user list when add the product when hover */
+#add-to-list:hover {
+    background-color: #74C2F8;
+}
+
+.fa-plus-circle {
+    font-size: 22px !important;
+    text-align: center;
+    margin: 0px 10px;
+}

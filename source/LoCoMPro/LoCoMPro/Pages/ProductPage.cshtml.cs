@@ -9,8 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using NUnit.Framework;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
 
 namespace LoCoMPro.Pages
 {
@@ -56,6 +59,11 @@ namespace LoCoMPro.Pages
         /// List of the review made by the user that exist in the database.
         /// </summary>
         public IList<Review> UserReviews = new List<Review>();
+
+        /// <summary>
+        /// List of the product that are in the list of the user
+        /// </summary>
+        public IList<Register> UserProductList = new List<Register>();
 
         /// <summary>
         /// List of the registers that exist in the database.
@@ -165,6 +173,9 @@ namespace LoCoMPro.Pages
 
             // Obtains the review made by the user
             ObtainUserReviews();
+
+            // Obtains the user list of products
+            ObtainUserProductList();
         }
 
         /// <summary>
@@ -248,6 +259,52 @@ namespace LoCoMPro.Pages
 
                 // Make a list with the review
                 UserReviews = reviews.ToList();
+            }
+        }
+
+        /// <summary>
+        /// Gets and sets the list of product of the user
+        /// </summary>
+        public void ObtainUserProductList()
+        {
+            // Get the serialized form of the list
+            var serializedList = _httpContextAccessor.HttpContext!.Session.GetString("UserProductList");
+
+            // Gets the list if exist, or create it if not
+            if (serializedList != null)
+            {
+                UserProductList = JsonSerializer.Deserialize<List<Register>>(serializedList)!;
+            }
+            else
+            {
+                UserProductList = new List<Register>();
+            }
+
+        }
+
+        /// <summary>
+        /// Add the product to the user list
+        /// </summary>
+        public IActionResult OnPostAddToProductList()
+        {
+            // Add the first register of this product and store to the list
+            if (Registers != null && UserProductList != null && Registers.FirstOrDefault() != null)
+            {
+                UserProductList.Add(Registers.FirstOrDefault()!);
+            }
+
+            return new JsonResult("OK");
+        }
+
+        /// <summary>
+        /// Delete the product from the user list
+        /// </summary>
+        public void RemoveFromProductList()
+        {
+            // Add the first register of this product and store to the list
+            if (Registers != null && UserProductList != null && Registers.FirstOrDefault() != null)
+            {
+                UserProductList.Remove(Registers.FirstOrDefault()!);
             }
         }
 

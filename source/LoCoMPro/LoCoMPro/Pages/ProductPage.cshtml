@@ -17,7 +17,8 @@
     <script src="~/js/interactionsPopUp.js"></script>
 
     <link rel="stylesheet" href="~/css/RateRegister.css" />
-    <script src="~/js/RateRegister.js"></script>
+
+    <script src="~/js/productListButton.js"></script>
 
     <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
 </head>
@@ -96,7 +97,14 @@
             <h2>Precio Prom.</h2>
             <p>₡ @Model.AvgPrice.ToString("N0")</p>
         </div>
+
     </div>
+
+    <button type="button" class="button-general producto-list-button" onclick="callAddProductToList(this)">
+            Añadir a lista de interés
+            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+    </button>
+    @* <button type="button" class="button-general producto-list-button" id="delete-from-list"></button> *@
     
     <!-- Horizontal separating line -->
     <hr class="style-four">
