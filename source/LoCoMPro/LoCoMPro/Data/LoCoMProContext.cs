@@ -54,6 +54,10 @@ namespace LoCoMPro.Data
         /// </summary>
         public DbSet<Store> Stores { get; set; }
 
+        /// <summary>
+        /// Reviews saved in the database.
+        /// </summary>
+        public DbSet<Review> Reviews { get; set; }
         public DbSet<Image> Images { get; set; }
 
         // TODO: May want to create a builder for each class
@@ -72,6 +76,7 @@ namespace LoCoMPro.Data
             modelBuilder.Entity<Canton>().ToTable("Canton");
             modelBuilder.Entity<Provincia>().ToTable("Provincia");
             modelBuilder.Entity<Image>().ToTable("Image");
+            modelBuilder.Entity<Review>().ToTable("Review");
 
             // Building relationships for Store
             modelBuilder.Entity<Store>()
@@ -107,6 +112,25 @@ namespace LoCoMPro.Data
                 .WithMany(r => r.Images)
                 .HasForeignKey(i => new { i.ContributorId, i.ProductName, i.StoreName, i.CantonName, i.ProvinceName, i.SubmitionDate })
                 .OnDelete(DeleteBehavior.NoAction);
+
+            // Building relationships for Register
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Registers)
+                .WithOne(r => r.Contributor)
+                .HasForeignKey(r => r.ContributorId);
+
+            // Building relationships for Review
+            modelBuilder.Entity<Review>(entity =>
+            {
+                entity.HasOne(l => l.Reviewer)
+                    .WithMany(p => p.Reviews)
+                    .HasForeignKey(e => e.ReviewerId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(l => l.ReviewedRegister)
+                    .WithMany(p => p.Reviews)
+                    .HasForeignKey(e => new {e.ContributorId, e.ProductName, e.StoreName, e.CantonName, e.ProvinceName, e.SubmitionDate});
+            });
 
             // Ignoring columns from default IdentityUser
             modelBuilder.Entity<User>().Ignore(u => u.PhoneNumber);
@@ -169,6 +193,14 @@ namespace LoCoMPro.Data
 
             modelBuilder.Entity<Provincia>()
                 .Navigation(p => p.Cantones)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<User>()
+                .Navigation(u => u.Reviews)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Register>()
+                .Navigation(u => u.Reviews)
                 .UsePropertyAccessMode(PropertyAccessMode.Property);
         }
     }

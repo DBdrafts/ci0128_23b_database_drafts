@@ -7,9 +7,19 @@
     ViewBag.ShowLogoLink = true;
     @Html.AntiForgeryToken();
 }
+@using Microsoft.AspNetCore.Identity
+@using LoCoMPro.Data;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 
 <head>
     <link rel="stylesheet" href="~/css/ProductPage.css" />
+    <script src="~/js/interactionsPopUp.js"></script>
+
+    <link rel="stylesheet" href="~/css/RateRegister.css" />
+    <script src="~/js/RateRegister.js"></script>
+
+    <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
 </head>
 
 <div class="product-page">
@@ -215,9 +225,10 @@
             <!-- Individual registers -->
             char s = (char)31; // ASCII Control Unit Separator
             var user = Model.Users.FirstOrDefault(u => u.Id == register.ContributorId)?.UserName;
+            var reviewValue = Model.UserReviews.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReviewValue;
             var registerKeys = $"{register.SubmitionDate}{s}{register.ContributorId}{s}{register.ProductName}" +
-            $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToShortDateString()}" +
-            $"{s}{user}{s}{register.Comment}";
+            $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToString("d", cultureSecond)}" +
+            $"{s}{user}{s}{register.Comment}{s}{reviewValue}";
 
             <li class="register-block align register-block-pagination">
                 <a>
@@ -240,25 +251,67 @@
         }
     </ul>
 
-    <div class="product-pagination">
-        <!-- Pagination section -->
-        @await Html.PartialAsync("_Pagination")
+    <!-- Code for interactive pop up -->
+    <div class="interactive-popup-section">
 
-        <!-- Code for orders registers--> </div>
         <div class="interactions-popup">
             <div class="interactions-popup-content">
                 <p><b>Fecha:</b> <span id="popup-submitionDate"> </span></p>
                 <p><b>Precio:</b> <span id="popup-price"></span></p>
                 <p><b>Aporde de:</b> <span id="popup-userName"></span></p>
                 <p><b>Comentario:</b> <span id="popup-comment"></span></p>
+
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <!-- Interactive rating code-->
+                    <h5><strong>Valora el registro</strong></h5>
+                    @*
+                    Note: This code was adapted from the page "codepen.io" to satisfies the needs of the project. All the credit go to this page.
+                    The specific link of the page where the code was take from is: https://codepen.io/ashdurham/pen/AVVGvP
+                    *@
+                    <span class="rating_stars rating_0">
+                        <span class='s' data-low='0.5' data-high='1'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+                        <span class='s' data-low='1.5' data-high='2'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+                        <span class='s' data-low='2.5' data-high='3'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+                        <span class='s' data-low='3.5' data-high='4'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+                        <span class='s' data-low='4.5' data-high='5'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+
+                        <span class='r r0_5' data-rating='5' data-value='0.5'></span>
+                        <span class='r r1' data-rating='10' data-value='1'></span>
+                        <span class='r r1_5' data-rating='15' data-value='1.5'></span>
+                        <span class='r r2' data-rating='20' data-value='2'></span>
+                        <span class='r r2_5' data-rating='25' data-value='2.5'></span>
+                        <span class='r r3' data-rating='30' data-value='3'></span>
+                        <span class='r r3_5' data-rating='35' data-value='3.5'></span>
+                        <span class='r r4' data-rating='40' data-value='4'></span>
+                        <span class='r r4_5' data-rating='45' data-value='4.5'></span>
+                        <span class='r r5' data-rating='50' data-value='5'></span>
+                    </span>
+
+                    <div class="values" hidden>
+                        <div>
+                            <input type="text" id="rating" value="0" />
+                        </div>
+                        <div>
+                            <input type="text" name="rating" id="rating_val" value="0" />
+                        </div>
+                    </div>
+                }
                 <img id="reportIcon" src="~/img/DesactiveReportIcon.svg" alt="Reportar" onclick="toggleReport()" />
                 <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>
-                <button id="saveButton" onclick="saveInteractions()">Guardar</button>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <button id="saveButton" onclick="saveInteractions()">Guardar</button>
+                }
             </div>
         </div>
     </div>
+
+    <div class="product-pagination">
+        <!-- Pagination section -->
+        @await Html.PartialAsync("_Pagination")
+    </div>
     <script src="~/js/ProductPage/imageChanger.js"></script>
-    <script src="~/js/interactionsPopUp.js"></script>
     <script src="~/js/feedbackMessage.js"></script>
     <script src="~/js/pagination.js"></script>
 </div>

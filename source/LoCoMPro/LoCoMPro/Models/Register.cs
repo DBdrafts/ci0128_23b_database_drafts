@@ -28,11 +28,13 @@ namespace LoCoMPro.Models
         /// <summary>
         /// Navigation atribute for the store that the register refers to.
         /// </summary>
+        [ForeignKey(nameof(StoreName))]
         public required Store Store { get; set; }
 
         /// <summary>
         /// Date when the register was submitted.
         /// </summary>
+        [ForeignKey(nameof(SubmitionDate))]
         public required DateTime SubmitionDate { get; set; }
 
         /// <summary>
@@ -85,5 +87,10 @@ namespace LoCoMPro.Models
         public string? ProvinciaName { get; set; }
 
         public ICollection<Image>? Images { get; set; }
+
+        /// <summary>
+        /// Reviews made of this register
+        /// </summary>
+        public ICollection<Review>? Reviews { get; set; } = new List<Review>();
     }
 }
