@@ -15,12 +15,56 @@ function openInteractionsPopup(openButton) {
     document.getElementById('popup-userName').textContent = userName;
     document.getElementById('popup-comment').textContent = comment;
 
+    // Set the images data
+    var imagesData = openButton.getAttribute('images-register-id').split(String.fromCharCode(31));
+
+    // Load the images in the pop up
+    loadRegisterImages(imagesData)
+
     // Set the information of the report button
     document.getElementById('reportIcon').src = '/img/DesactiveReportIcon.svg';
     reportActivated = false;
 
     // Sets the information for the review function
-    setReviewedValue(lastReviewValue);   
+    setReviewedValue(lastReviewValue);
+}
+
+/// <summary>
+/// Add the images to the Pop Up
+/// </summary>
+function loadRegisterImages(imagesData) {
+    // container for pop up images
+    var imageContainer = document.querySelector('.img-carousel-pop-up');
+
+    // Clear previous images in the carousel
+    imageContainer.innerHTML = '';
+
+    // Create and display image elements in the carousel
+    for (var i = 1; i < imagesData.length; i++) { // Start from 1 to skip the first empty string
+        // Split every imagen
+        var imageData = imagesData[i].split(":");
+        // Use the js Image element
+        var imageElement = new Image();
+        // Set the sourse and the Data of image
+        imageElement.src = 'data:image/jpeg;base64,' + imageData[1];
+        // Alternative text
+        imageElement.alt = 'Imagen ' + i;
+
+        // Add the styles of the image
+        imageElement.style.width = '48.5px';
+        imageElement.style.height = '48.5px';
+        imageElement.style.borderRadius = '5px';
+        imageElement.style.objectFit = 'fill';
+        imageElement.className = 'small-image'
+
+        // add the html div for every image
+        var smallImageSpace = document.createElement('div');
+        // Set the space to add the image
+        smallImageSpace.classList.add('small-img-space-pop-up');
+        // Add the space and the element
+        smallImageSpace.appendChild(imageElement);
+        imageContainer.appendChild(smallImageSpace);
+    }
 }
 
 /// <summary>

@@ -24,126 +24,45 @@
 
 <div class="product-page">
     <!-- Name of product Search -->
-    <div class="titleProduct" style="display: none;">
-        @Model.SearchProductName
-    </div>
-
-
     <div id="feedbackMessage" class="feedback-message"></div>
-    <!-- Section for columns of specifications from Search product -->
-    <div class="product-page-section" style="display: none;">
-        @{ // select the first matches
-            var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
-            var firstNonNullStore = Model.Store.FirstOrDefault(r => r.Name != null);
-        }
-        <!-- brand column -->
-        <div class="column">
-            <h2>Marca</h2>
-            @{ // Get the name of the product brand
-                if (firstNonNullProduct != null)
-                {
-                    <p>@firstNonNullProduct.Brand</p>
-                }
-            }
-        </div>
-
-        <!-- model column -->
-        <div class="column">
-            <h2>Modelo</h2>
-            @{ // Get the name of the product model
-                if (firstNonNullProduct != null)
-                {
-                    <p>@firstNonNullProduct.Model</p>
-                }
-            }
-            </div>
-
-        <!-- establishment column -->
-        <div class="column">
-            <h2>Establecimiento</h2>
-            @{ // Get the name of the store
-                if (firstNonNullStore != null)
-                {
-                    <p>@firstNonNullStore.Name</p>
-                }
-            }
-        </div>
-
-        <!-- cantón column -->
-        <div class="column">
-            <h2>Cantón</h2>
-            @{ // Get the name of the Canton Location
-                if (firstNonNullStore != null)
-                {
-                    <p>@firstNonNullStore.CantonName</p>
-                }
-            }
-        </div>
-
-        <!-- province column -->
-        <div class="column">
-            <h2>Provincia</h2>
-            @{ // Get the name of the Province Location
-                if (firstNonNullStore != null)
-                {
-                    <p>@firstNonNullStore.ProvinciaName</p>
-                }
-            }
-        </div>
-        <!-- price column -->
-        <div class="column">
-            <h2>Precio Prom.</h2>
-            <p>₡ @Model.AvgPrice.ToString("N0")</p>
-        </div>
-    </div>
-
     <div class="product-information">
         @{
             // select the first matches
-            var firstNonNullProductSecond = Model.Product.FirstOrDefault(r => r.Name != null);
-            var firstNonNullStoreSecond = Model.Store.FirstOrDefault(r => r.Name != null);
+            var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
+            var firstNonNullStore = Model.Store.FirstOrDefault(r => r.Name != null);
             System.Globalization.CultureInfo cultureSecond = new System.Globalization.CultureInfo("es-CR"); // Costa Rica datetime format
+            // create a var for amount of images
             int imagesAmount = 0;
         }
-
+        <!-- Upper section of images -->
         <div class="images-section">
             <div class="carousel-section">
                 <div class="img-carousel">
                     
                     @foreach (var register in Model.Registers)
                     { // in each register done
-                        
                         @if (register.Images != null)
-                        {
+                        { // if images is not null
                             @foreach (var image in register.Images)
-                            {
+                            { // for each image in register
                                 if (imagesAmount < 5)
-                                {
+                                { // limit the amount of images to show
+                                    // add the image
                                     <div class="small-img-space">
-                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(image.ImageData)" alt="Imagen" class="img-responsive small-image" style="width:48.5px;height:48.5px;border-radius:5px;object-fit:fill;">
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(image.ImageData)" alt="Imagen" class="small-image" style="width:48.5px;height:48.5px;border-radius:5px;object-fit:fill;">
                                     </div>
                                     imagesAmount++;
                                 }
                                 
                             }
                         }
-                        else
-                        { 
-                            
-                        }
-
-                        if(imagesAmount == 0)
-                        {
-                            
-                        }
-
                     }
-    
                 </div>
             </div>
             <div class="main-imagen-section">
+                
                 @if (Model.Registers.Any() && Model.Registers.First().Images != null && Model.Registers.First().Images.Any())
-                {
+                { // check 
                     <div class="main-img-space">
                         <img id ="mainImage" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Registers.First().Images.First().ImageData)" alt="Imagen Principal" class="img-responsive" style="width:348.5px;height:323.5px;border-radius: 30px; object-fit: fill;">
                     </div>
@@ -165,31 +84,24 @@
             <div class="caracteristcs-section">
                 @{
                     // Get the information of producto and store
-                    if (firstNonNullProductSecond != null)
+                    if (firstNonNullProduct != null)
                     {
-                        <p>Marca: @firstNonNullProductSecond.Brand</p>
-                        <p>Modelo: @firstNonNullProductSecond.Model</p>
+                        <p>Marca: @firstNonNullProduct.Brand</p>
+                        <p>Modelo: @firstNonNullProduct.Model</p>
                     }
-                    if (firstNonNullStoreSecond != null)
+                    if (firstNonNullStore != null)
                     {
-                        <p>Tienda: @firstNonNullStoreSecond.Name</p>
-                        <p>Ubicación: @firstNonNullStoreSecond.ProvinciaName, @firstNonNullStoreSecond.CantonName </p>
+                        <p>Tienda: @firstNonNullStore.Name</p>
+                        <p>Ubicación: @firstNonNullStore.ProvinciaName, @firstNonNullStore.CantonName </p>
                         <p>Precio Aproximado: ₡ @Model.AvgPrice.ToString("N0")</p>
                     }
                 }
             </div>
-
-        
         </div>
-       
     </div>
-
-
 
     <!-- Horizontal separating line -->
     <hr class="style-four">
-
-
 
     <!-- Code for register list in the page -->
     <!-- Name of product Search -->
@@ -230,6 +142,21 @@
             $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToString("d", cultureSecond)}" +
             $"{s}{user}{s}{register.Comment}{s}{reviewValue}";
 
+            int imagecount = 0;
+            var registerImages = "";
+            if (register.Images != null && register.Images.Any())
+            {
+                foreach (var image in register.Images)
+                {
+                    if (image.ImageData != null)
+                    {   
+                        // Cover the bytes of images to string
+                        registerImages += $"{s}ImageData{imagecount}: {Convert.ToBase64String(image.ImageData)}";
+                        imagecount++;
+                    }
+                }
+            }
+
             <li class="register-block align register-block-pagination">
                 <a>
                     <span id="register-date" value="@register.SubmitionDate.Date">
@@ -242,7 +169,7 @@
                         @Html.DisplayFor(modelItem => register.Comment)
                     </span>
                     <div class="text-center align">
-                        <button class="open-interactions-button" data-register-id="@registerKeys" onclick="openInteractionsPopup(this)">
+                        <button class="open-interactions-button" data-register-id="@registerKeys" images-register-id="@registerImages" onclick="openInteractionsPopup(this)">
                             <img src="~/img/MoreIcon.svg" alt="Más opciones">
                         </button>
                     </div>
@@ -260,6 +187,11 @@
                 <p><b>Precio:</b> <span id="popup-price"></span></p>
                 <p><b>Aporde de:</b> <span id="popup-userName"></span></p>
                 <p><b>Comentario:</b> <span id="popup-comment"></span></p>
+
+                <div class="carousel-section-pop-up">
+                    <div class="img-carousel-pop-up">
+                    </div>
+                </div>
 
                 @if (SignInManager.IsSignedIn(User))
                 {
