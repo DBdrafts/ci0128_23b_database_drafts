@@ -10,14 +10,14 @@ namespace LoCoMPro.Models
 {
     /// <summary>
     /// Model for the Report Entity that represents the relation
-    /// when a user reviews a register
+    /// when a user reports a register
     /// </summary>
 
     [PrimaryKey(nameof(ReporterId), nameof(ContributorId), nameof(ProductName), nameof(StoreName), nameof(SubmitionDate))]
     public class Report
     {
         /// <summary>
-        /// Navigation attribute for user that review the register.
+        /// Navigation attribute for user that report the register.
         /// </summary>
         public required User Reporter { get; set; }
 
@@ -30,25 +30,25 @@ namespace LoCoMPro.Models
         /// Navigation attribute for user that submitted the register.
         /// </summary>
         [ForeignKey(nameof(ReporterId))]
-        public string ReporterId { get; set; }
+        public string? ReporterId { get; set; }
 
         /// <summary>
         /// Navigation attribute for user that submitted the register.
         /// </summary>
         [ForeignKey(nameof(ContributorId))]
-        public string ContributorId { get; set; }
+        public string? ContributorId { get; set; }
 
         /// <summary>
         /// Navigation attribute for product that the register refers to.
         /// </summary>
         [ForeignKey(nameof(ProductName))]
-        public string ProductName { get; set; }
+        public string? ProductName { get; set; }
 
         /// <summary>
         /// Navigation attribute for the store that the register refers to.
         /// </summary>
         [ForeignKey(nameof(StoreName))]
-        public string StoreName { get; set; }
+        public string? StoreName { get; set; }
 
         /// <summary>
         /// Date when the register was submitted.
@@ -57,12 +57,12 @@ namespace LoCoMPro.Models
         public DateTime SubmitionDate { get; set; }
 
         /// <summary>
-        /// Date when the register was reviewed.
+        /// Date when the register was reported.
         /// </summary>
         public required DateTime ReportDate { get; set; }
 
         /// <summary>
-        /// Value of the review given by the user.
+        /// Value of the report given by the user.
         /// </summary>
         [DefaultValue(0)]
         public int ReportState { get; set; }

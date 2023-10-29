@@ -136,10 +136,11 @@
             char s = (char)31; // ASCII Control Unit Separator
             var user = Model.Users.FirstOrDefault(u => u.Id == register.ContributorId)?.UserName;
             var reviewValue = Model.UserReviews.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReviewValue;
-            var reportState = 
+            var reportState = Model.UserReports.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReportState;
+            if (reportState == null) reportState = -1;
             var registerKeys = $"{register.SubmitionDate}{s}{register.ContributorId}{s}{register.ProductName}" +
             $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToString("d", culture)}" +
-            $"{s}{user}{s}{register.Comment}{s}{reviewValue}";
+            $"{s}{user}{s}{register.Comment}{s}{reviewValue}{s}{reportState}";
 
             <li class="register-block align register-block-pagination">
                 <a>

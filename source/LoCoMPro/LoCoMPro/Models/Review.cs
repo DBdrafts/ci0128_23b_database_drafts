@@ -30,25 +30,25 @@ namespace LoCoMPro.Models
         /// Navigation attribute for user that submitted the register.
         /// </summary>
         [ForeignKey(nameof(ReviewerId))]
-        public string ReviewerId { get; set; }
+        public string? ReviewerId { get; set; }
 
         /// <summary>
         /// Navigation attribute for user that submitted the register.
         /// </summary>
         [ForeignKey(nameof(ContributorId))]
-        public string ContributorId { get; set; }
+        public string? ContributorId { get; set; }
 
         /// <summary>
         /// Navigation attribute for product that the register refers to.
         /// </summary>
         [ForeignKey(nameof(ProductName))]
-        public string ProductName { get; set; }
+        public string? ProductName { get; set; }
 
         /// <summary>
         /// Navigation attribute for the store that the register refers to.
         /// </summary>
         [ForeignKey(nameof(StoreName))]
-        public string StoreName { get; set; }
+        public string? StoreName { get; set; }
 
         /// <summary>
         /// Date when the register was submitted.

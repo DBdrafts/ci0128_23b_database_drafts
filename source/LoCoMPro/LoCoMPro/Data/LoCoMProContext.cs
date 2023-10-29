@@ -58,7 +58,11 @@ namespace LoCoMPro.Data
         /// Reviews saved in the database.
         /// </summary>
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<Report> Report { get; set; }
+
+        /// <summary>
+        /// Reports saved in the database.
+        /// </summary>
+        public DbSet<Report> Reports { get; set; }
 
 
         // TODO: May want to create a builder for each class
@@ -91,12 +95,6 @@ namespace LoCoMPro.Data
                 .WithMany(e => e.Registers)
                 .HasForeignKey(c => new { c.StoreName, c.CantonName, c.ProvinciaName});
 
-            // Sets 0 to NumCorrecions by default for Register
-            modelBuilder.Entity<Register>()
-                .Property(r => r.NumCorrections)
-                .HasDefaultValue(0);
-
-
             // Building relationships for Register
             modelBuilder.Entity<User>()
                 .HasOne(p => p.Location)
@@ -121,7 +119,8 @@ namespace LoCoMPro.Data
                     .WithMany(p => p.Reviews)
                     .HasForeignKey(e => new {e.ContributorId, e.ProductName, e.StoreName, e.SubmitionDate});
             });
-            
+
+            // Building relationships for Report
             modelBuilder.Entity<Report>(entity =>
             {
                 entity.HasOne(l => l.Reporter)
