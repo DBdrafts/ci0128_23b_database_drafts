@@ -42,10 +42,10 @@ textarea {
     border: 1px solid #00000047;
 }
 
-    /* Disabled placeholder fields style*/
-    .required-field:disabled::placeholder {
-        color: #00000030;
-    }
+/* Disabled placeholder fields style*/
+.required-field:disabled::placeholder {
+    color: #00000030;
+}
 
 /* Enabled placeholder fields style*/
 .required-field:enabled::placeholder {
@@ -67,17 +67,17 @@ textarea {
 }
 
 
-    /* Style for the input fields */
-    .brand-model-field-group input[type="text"] {
-        width: 100%; /* Make both input fields the same width */
-        padding: 10px;
-        border: 1px solid #0A1923AD;
-    }
+/* Style for the input fields */
+.brand-model-field-group input[type="text"] {
+    width: 100%; /* Make both input fields the same width */
+    padding: 10px;
+    border: 1px solid #0A1923AD;
+}
 
-    /* White space between fields*/
-    .brand-model-field-group:first-child {
-        margin-right: 30px;
-    }
+/* White space between fields*/
+.brand-model-field-group:first-child {
+    margin-right: 30px;
+}
 
 
 /* Style for the container of price and category */
@@ -95,17 +95,17 @@ textarea {
 }
 
 
-    /* Style for the input fields */
-    .price-category-field-group input[type="text"] {
-        width: 100%; /* Make both input fields the same width */
-        padding: 10px;
-        border: 1px solid #0A1923AD;
-    }
+/* Style for the input fields */
+.price-category-field-group input[type="text"] {
+    width: 100%; /* Make both input fields the same width */
+    padding: 10px;
+    border: 1px solid #0A1923AD;
+}
 
-    /* White space between fields*/
-    .price-category-field-group:first-child {
-        margin-right: 30px;
-    }
+/* White space between fields*/
+.price-category-field-group:first-child {
+    margin-right: 30px;
+}
 
 
 /* Style for select field */
@@ -150,10 +150,10 @@ textarea {
 }
 
 
-    /* Style for submit-button when hover*/
-    .submit-button:hover {
-        background-color: #F59500;
-    }
+/* Style for submit-button when hover*/
+.submit-button:hover {
+    background-color: #F59500;
+}
 
 
 /* Text in button*/
@@ -188,10 +188,10 @@ textarea {
     margin-right: 40px;
 }
 
-    /* Style for location button when hover*/
-    .location-button:hover {
-        background-color: #5AABE2;
-    }
+/* Style for location button when hover*/
+.location-button:hover {
+    background-color: #5AABE2;
+}
 
 /* Style for location container*/
 .location-container {
@@ -275,10 +275,10 @@ textarea {
     width: auto;
 }
 
-    /* SaveLocation-button when hover*/
-    #saveLocation-button:hover {
-        background-color: #5AABE2;
-    }
+/* SaveLocation-button when hover*/
+#saveLocation-button:hover {
+    background-color: #5AABE2;
+}
 
 
 /* Style for save closePopup botton*/
@@ -295,10 +295,10 @@ textarea {
     width: auto;
 }
 
-    /* SaveLocation-button when hover*/
-    #closePopup-button:hover {
-        background-color: #E25A5A;
-    }
+/* SaveLocation-button when hover*/
+#closePopup-button:hover {
+    background-color: #E25A5A;
+}
 
 
 

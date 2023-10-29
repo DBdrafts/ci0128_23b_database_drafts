@@ -54,6 +54,9 @@ namespace LoCoMPro.Data
         /// </summary>
         public DbSet<Store> Stores { get; set; }
 
+        /// <summary>
+        /// Images saved in the database.
+        /// </summary>
         public DbSet<Image> Images { get; set; }
 
         // TODO: May want to create a builder for each class

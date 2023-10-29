@@ -104,8 +104,6 @@ namespace LoCoMPro.Pages
             string? modelName = CheckNull(Request.Form["model"]);
             string? comment = CheckNull(Request.Form["comment"]);
 
-            var count = ProductImages.Count();
-
 
             // Get the product if exists in the context
             var productToAdd = _context.Products
@@ -232,15 +230,26 @@ namespace LoCoMPro.Pages
                 Store = store,
                 Price = price,
                 Comment = comment,
-                Images = new List<Image>() { }
-                
-            };
+                Images = CreateFormatedImagesList(user, dateTime, productToAdd, store)
+            };          
+            return newRegister;
+        }
 
-            if (ProductImages != null &&  ProductImages.Count > 0)
+        /// <summary>
+        /// Creates a list of images with the data converted in bytes.
+        /// </summary>
+        /// <param name="user">User that submitted the register.</param>
+        /// <param name="dateTime">Time when the images were submitted.</param>
+        /// <param name="productToAdd">Product that the register refers to.</param>
+        /// <param name="store">Store where the product is sold.</param>
+        /// <returns>New list of images with the data converted in bytes.</returns>
+        private List<Image> CreateFormatedImagesList(User user, DateTime dateTime, Product productToAdd, Store store)
+        {
+            List<Image> newImagesList = new List<Image>();
+            if (ProductImages != null && ProductImages.Any())
             {
-                foreach(var image in ProductImages)
+                foreach (var image in ProductImages)
                 {
-
                     if (image != null && image.Length > 0)
                     {
                         using (var stream = image.OpenReadStream())
@@ -264,15 +273,14 @@ namespace LoCoMPro.Pages
                                     ImageData = imageBytes,
                                     ImageType = imageType
                                 };
-                                newRegister.Images!.Add(newImage);
+                                newImagesList.Add(newImage);
                                 ++imageIdCounter;
                             }
                         }
                     }
                 }
             }
-            
-            return newRegister;
+            return newImagesList;
         }
 
         /// <summary>
@@ -339,12 +347,5 @@ namespace LoCoMPro.Pages
 
             return new JsonResult(data);
         }
-
-        public IActionResult OnPostUploadImage([FromForm] List<IFormFile> ProductImages)
-        {
-            this.ProductImages = ProductImages;
-            return new JsonResult("OK");
-        }
     }
-
 }
