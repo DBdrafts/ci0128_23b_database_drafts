@@ -15,6 +15,8 @@ namespace LoCoMPro.Pages
 
         public IList<UserProductListElement> UserProductList { get; set; }
 
+        public int TotalPrice { get; set; }
+
         public ProductListPageModel(LoCoMProContext context, IConfiguration configuration
             , IHttpContextAccessor httpContextAccessor)
             : base(context, configuration)
@@ -26,6 +28,15 @@ namespace LoCoMPro.Pages
         public async Task OnGetAsync()
         {
             UserProductList = _userProductList.GetUserProductList();
+            calculateTotalPrice();
+        }
+
+        public void calculateTotalPrice()
+        {
+            foreach (var product in UserProductList) {
+                string avgPriceString = product.AvgPrice;
+                TotalPrice += int.Parse(avgPriceString.Replace(",", ""));
+            }
         }
     }
 }

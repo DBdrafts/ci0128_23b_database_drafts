@@ -19,10 +19,11 @@
 .list-page-column-title {
     display: inline-flex;
     height: auto;
-    width: 100%;
+    width: 92%;
     justify-content: space-between;
     list-style: none;
     margin: 10px 0px;
+    min-width: 950px;
 }
 
 /* Style for list title columns */
@@ -47,32 +48,38 @@
 }
 
 .product-list-block {
+    display: inline-block;
     height: auto;
-    width: 100%;
     text-decoration: none;
     color: #000000;
+    background-color: #E2E3E3;
+    margin: 10px 0px;
+    padding: 0px 10px;
+    min-height: 4em;
+    border-radius: 15px;
+    text-align: left;
+    justify-content: space-around;
+    min-width: 950px;
 }
 
 /* Style for the register block text */
-.product-list-block a {
-    display: flex;
-    height: 4em;
-    width: 100%;
-    background-color: #E2E3E3;
-    justify-content: space-around;
-    border-radius: 15px;
-    margin: 10px 0px;
-    padding: 0px 10px;
-    max-height: 4em;
+.product-list-block span {
+    display: inline-flex;
+    width: 14.7%;
     text-decoration: none;
     overflow: clip;
     text-overflow: ellipsis;
-    color: #000000;
+    margin: 10px 2px;
+    justify-content: flex-start;
+    max-height: 3.3em;
+}
+
+.product-list-block button {
+    width: 4%;
+    margin: 0px 0px 0px 15px;
 }
 
 /* Style for the register block text*/
-.product-list-block a span {
-    text-align: left;
-    margin: 10px 10px;
-    flex: 0 0 0%;
+.align-right {
+    justify-content: flex-end !important;
 }

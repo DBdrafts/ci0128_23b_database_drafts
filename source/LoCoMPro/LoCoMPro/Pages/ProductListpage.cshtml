@@ -23,7 +23,7 @@
             <h4>Cantidad de productos: @Model.UserProductList.Count</h4>
             <!-- Something here -->
 
-            <h4>Precio aproximado: ₡</h4>
+            <h4>Precio aproximado: ₡ @Model.TotalPrice.ToString("N0")</h4>
             <!-- Something here -->
         </div>
     </div>
@@ -53,8 +53,6 @@
                 <li>
                     <div class="textComment">Precio Promedio</div>
                 </li>
-                <li>
-                </li>
             </ul>
         </nav>
 
@@ -66,8 +64,7 @@
                 <!-- A result block -->
                 <li class="product-list-block register-block-pagination">
                     <!-- Route and data for each result -->
-                    <a>
-                    <span id="register-product-name" value="@product.ProductName">
+                        <span id="register-product-name" value="@product.ProductName">
                             @Html.DisplayFor(modelItem => product.ProductName)
                         </span>
                         <span id="register-province-name" value="@product.ProductBrand">
@@ -82,12 +79,10 @@
                         <span id="register-province-name" value="@product.Province + , + @product.Canton">
                             @product.Province, @product.Canton
                         </span>
-                        <span id="register-price" value="@product.AvgPrice">
+                        <span class="align-right" id="register-price" value="@product.AvgPrice">
                             ₡ @Html.DisplayFor(modelItem => product.AvgPrice)
                         </span>
-                        <span>
-                        </span>
-                    </a>
+                        <button type="button" class="button-general">D</button>
                 </li>
             }
         </ul>
