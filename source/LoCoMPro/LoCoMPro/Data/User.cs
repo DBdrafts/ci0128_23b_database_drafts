@@ -15,6 +15,11 @@ namespace LoCoMPro.Data
     {
 
         /// <summary>
+        /// The name of the role the user belongs to.
+        /// </summary>
+        public string? Role { get; set; }
+
+        /// <summary>
         /// Name of the canton that the user has saved as default location.
         /// </summary>
         public string? CantonName { get; set; }
