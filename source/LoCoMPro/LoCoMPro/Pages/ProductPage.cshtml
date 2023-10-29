@@ -175,6 +175,10 @@
 
                 @if (SignInManager.IsSignedIn(User))
                 {
+                    <div class="report-icon-container">
+                        <img id="reportIcon" src="~/img/DesactiveReportIcon.svg" alt="Reportar" onclick="toggleReport()" title="Reportar registro" />
+                    </div>
+
                     <!-- Interactive rating code-->
                     <h5><strong>Valora el registro</strong></h5>
                     @*
@@ -209,12 +213,18 @@
                         </div>
                     </div>
                 }
-                <img id="reportIcon" src="~/img/DesactiveReportIcon.svg" alt="Reportar" onclick="toggleReport()" />
-                <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    <button id="saveButton" onclick="saveInteractions()">Guardar</button>
-                }
+                
+                <div class="buttons-container">
+                    <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>
+                    <button id="saveButton" onclick="saveInteractions()" style="visibility: hidden;">Guardar</button>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <script>
+                            document.getElementById("saveButton").style.visibility = "visible";
+                        </script>
+                    }
+                    
+                </div>
             </div>
         </div>
     </div>

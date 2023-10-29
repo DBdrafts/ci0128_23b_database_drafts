@@ -69,7 +69,15 @@ function saveInteractions() {
             data: { registerKeys: registerKeys, reportChanged: reportChanged, reviewedValue: reviewedValue },
             success: function (data) {
                 console.log('Report saved successfully' + data);
-                showFeedbackMessage('Su reporte se ha realizado correctamente!');
+                if (reportChanged && registerReviewed) {
+                    showFeedbackMessage('Su reporte y valoración se han realizado correctamente!');
+                } else {
+                    if (reportChanged) {
+                        showFeedbackMessage('Su reporte se ha realizado correctamente!');
+                    } else {
+                        showFeedbackMessage('Su valoración se ha realizado correctamente!');
+                    }
+                }
             },
             error: function (error) {
                 console.error('Error saving report: ' + error);
