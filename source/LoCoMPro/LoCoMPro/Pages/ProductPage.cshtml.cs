@@ -274,16 +274,11 @@ namespace LoCoMPro.Pages
                 if (reportActivated)
                 {
                     uint reportValue = 1;
-            
-                    // TODO: Get Rol
-
-                    /* This is just an example!
-                    userRol = getUserRol(); 
-                    if (userRol == mod)
+             
+                    if (User.IsInRole("Moderator"))
                     {
                         reportValue = 2;
                     }
-                    */
 
                     registerToUpdate.NumCorrections = reportValue;
                 }
