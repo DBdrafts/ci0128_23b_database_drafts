@@ -59,6 +59,11 @@ namespace LoCoMPro.Data
         /// </summary>
         public DbSet<Review> Reviews { get; set; }
 
+        /// <summary>
+        /// Reports saved in the database.
+        /// </summary>
+        public DbSet<Report> Reports { get; set; }
+
 
         // TODO: May want to create a builder for each class
         /// <summary>
@@ -76,6 +81,7 @@ namespace LoCoMPro.Data
             modelBuilder.Entity<Canton>().ToTable("Canton");
             modelBuilder.Entity<Provincia>().ToTable("Provincia");
             modelBuilder.Entity<Review>().ToTable("Review");
+            modelBuilder.Entity<Report>().ToTable("Report");
 
             // Building relationships for Store
             modelBuilder.Entity<Store>()
@@ -88,12 +94,6 @@ namespace LoCoMPro.Data
                 .HasOne(p => p.Store)
                 .WithMany(e => e.Registers)
                 .HasForeignKey(c => new { c.StoreName, c.CantonName, c.ProvinciaName});
-
-            // Sets 0 to NumCorrecions by default for Register
-            modelBuilder.Entity<Register>()
-                .Property(r => r.NumCorrections)
-                .HasDefaultValue(0);
-
 
             // Building relationships for Register
             modelBuilder.Entity<User>()
@@ -119,6 +119,23 @@ namespace LoCoMPro.Data
                     .WithMany(p => p.Reviews)
                     .HasForeignKey(e => new {e.ContributorId, e.ProductName, e.StoreName, e.SubmitionDate});
             });
+
+            // Building relationships for Report
+            modelBuilder.Entity<Report>(entity =>
+            {
+                entity.HasOne(l => l.Reporter)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(e => e.ReporterId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(l => l.ReportedRegister)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(e => new {e.ContributorId, e.ProductName, e.StoreName, e.SubmitionDate});
+            });
+
+
+
+
 
             // Ignoring columns from default IdentityUser
             modelBuilder.Entity<User>().Ignore(u => u.PhoneNumber);
@@ -189,6 +206,15 @@ namespace LoCoMPro.Data
 
             modelBuilder.Entity<Register>()
                 .Navigation(u => u.Reviews)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+            
+            
+            modelBuilder.Entity<User>()
+                .Navigation(u => u.Reports)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Register>()
+                .Navigation(u => u.Reports)
                 .UsePropertyAccessMode(PropertyAccessMode.Property);
         }
 

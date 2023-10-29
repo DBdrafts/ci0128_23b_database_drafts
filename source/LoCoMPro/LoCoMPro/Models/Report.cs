@@ -9,28 +9,28 @@ using System.Security.Cryptography.X509Certificates;
 namespace LoCoMPro.Models
 {
     /// <summary>
-    /// Model for the Review Entity that represents the relation
-    /// when a user reviews a register
+    /// Model for the Report Entity that represents the relation
+    /// when a user reports a register
     /// </summary>
-    
-    [PrimaryKey(nameof(ReviewerId), nameof(ContributorId), nameof(ProductName), nameof(StoreName), nameof(SubmitionDate))]
-    public class Review
+
+    [PrimaryKey(nameof(ReporterId), nameof(ContributorId), nameof(ProductName), nameof(StoreName), nameof(SubmitionDate))]
+    public class Report
     {
         /// <summary>
-        /// Navigation attribute for user that review the register.
+        /// Navigation attribute for user that report the register.
         /// </summary>
-        public required User Reviewer { get; set; }
+        public required User Reporter { get; set; }
 
         /// <summary>
         /// Navigation attribute for user that submitted the register.
         /// </summary>
-        public required Register ReviewedRegister { get; set; }
+        public required Register ReportedRegister { get; set; }
 
         /// <summary>
         /// Navigation attribute for user that submitted the register.
         /// </summary>
-        [ForeignKey(nameof(ReviewerId))]
-        public string? ReviewerId { get; set; }
+        [ForeignKey(nameof(ReporterId))]
+        public string? ReporterId { get; set; }
 
         /// <summary>
         /// Navigation attribute for user that submitted the register.
@@ -57,15 +57,15 @@ namespace LoCoMPro.Models
         public DateTime SubmitionDate { get; set; }
 
         /// <summary>
-        /// Date when the register was reviewed.
+        /// Date when the register was reported.
         /// </summary>
-        public required DateTime ReviewDate { get; set; }
+        public required DateTime ReportDate { get; set; }
 
         /// <summary>
-        /// Value of the review given by the user.
+        /// Value of the report given by the user.
         /// </summary>
         [DefaultValue(0)]
-        public float ReviewValue { get; set; }
+        public int ReportState { get; set; }
 
     }
 }
