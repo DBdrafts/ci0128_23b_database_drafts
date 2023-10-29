@@ -67,6 +67,10 @@
                         </button>
                         <!-- Popup displayed through the script -->
                         <div class="popup-user text-center" id="popup-logged">
+                            @if(User.IsInRole("Moderator"))
+                            {
+                                <h7 id="moderador">Moderador</h7>
+                            }
                             <h6>@email</h6>
                             <img src="~/img/UserIconSignedIn.svg" alt="Imagen de Usuario">
                             <h5>@user</h5>
