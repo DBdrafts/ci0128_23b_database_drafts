@@ -186,6 +186,13 @@ namespace LoCoMPro.Data
                 NormalizedUserName = "ALONSO111", Email = "alonso111@gmail.com", NormalizedEmail = "ALONSO111@GMAIL.COM"
                 , PasswordHash = "AQAAAAIAAYagAAAAEDcvQfXxtswPnX0ixY3T5EipIoGSk85MVeGdNAVs0tGrkfgseQnfRidNltc5BFSFvw==", 
                 Location = cantones[0]});
+            users.Add(new User
+            { Id = "498fc1e4-db15-4411-94e3-6511dff4a758", Role = "Moderator", UserName = "Moderador",
+                NormalizedUserName = "MODERADOR", Email = "locoModerador@gmail.com",
+                NormalizedEmail = "LOCOMODERADOR@GMAIL.COM",
+                PasswordHash = "AQAAAAIAAYagAAAAEPeUgIjsKiJnOABson+8/zMh8gnzGVre5xjEtLO9GgV2jPSigVwKrDZ89fWRQYDbgQ==",
+                Location = cantones[0]
+            });
             context.Users.AddRange(users);
             context.SaveChanges();
         }

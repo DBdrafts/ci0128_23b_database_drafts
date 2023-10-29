@@ -77,6 +77,10 @@ button.accept-policy {
     background-color: #39A4F4;
 }
 
+#moderador {
+    color: #39A4F4;
+}
+
 /* Style for the user option PopUp */
 .popup-user {
     display: none;

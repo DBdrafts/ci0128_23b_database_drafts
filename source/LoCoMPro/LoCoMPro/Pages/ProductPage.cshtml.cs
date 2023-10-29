@@ -377,21 +377,12 @@ namespace LoCoMPro.Pages
             if (lastReport == null)
             {
                 _context.Reports.Add(new Report { ReportedRegister = registerToUpdate,
-                    Reporter = user!, ReportDate = interactionDate, ReportState = 1 });
+                    Reporter = user!, ReportDate = interactionDate, ReportState = User.IsInRole("Moderator") ? 2 : 1 });
             }
             else
             {
                 _context.Reports.Remove(lastReport);
-            }
-
-            // TODO: Get Rol
-            /* This is just an example!
-            userRol = getUserRol(); 
-            if (userRol == mod)
-            {
-                Call Geanca
-            }
-            */
+            }   
         }
 
         /// <summary>
