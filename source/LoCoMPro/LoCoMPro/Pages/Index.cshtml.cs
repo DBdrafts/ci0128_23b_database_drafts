@@ -42,8 +42,6 @@ namespace LoCoMPro.Pages
                     if (dbUser.Role == "Moderator")
                     {
                         var result = await _userManager.AddToRoleAsync(dbUser, "Moderator");
-                        if (await _userManager.IsInRoleAsync(dbUser, "Moderator")) {
-                        }
                     }
                 }
             }
