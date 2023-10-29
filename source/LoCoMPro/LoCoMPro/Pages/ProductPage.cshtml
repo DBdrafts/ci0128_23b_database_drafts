@@ -158,9 +158,11 @@
             <!-- Individual registers -->
             var user = Model.Users.FirstOrDefault(u => u.Id == register.ContributorId)?.UserName;
             var reviewValue = Model.UserReviews.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReviewValue;
+            var reportState = Model.UserReports.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReportState;
+            if (reportState == null) reportState = -1;
             var registerKeys = $"{register.SubmitionDate}{s}{register.ContributorId}{s}{register.ProductName}" +
             $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToString("d", culture)}" +
-            $"{s}{user}{s}{register.Comment}{s}{reviewValue}";
+            $"{s}{user}{s}{register.Comment}{s}{reviewValue}{s}{reportState}";
 
             <li class="register-block align register-block-pagination">
                 <a>
@@ -195,6 +197,10 @@
 
                 @if (SignInManager.IsSignedIn(User))
                 {
+                    <div class="report-icon-container">
+                        <img id="reportIcon" src="~/img/DesactiveReportIcon.svg" alt="Reportar" onclick="toggleReport()" title="Reportar registro" />
+                    </div>
+
                     <!-- Interactive rating code-->
                     <h5><strong>Valora el registro</strong></h5>
                     @*
@@ -229,12 +235,18 @@
                         </div>
                     </div>
                 }
-                <img id="reportIcon" src="~/img/DesactiveReportIcon.svg" alt="Reportar" onclick="toggleReport()" />
-                <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    <button id="saveButton" onclick="saveInteractions()">Guardar</button>
-                }
+                
+                <div class="buttons-container">
+                    <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>
+                    <button id="saveButton" onclick="saveInteractions()" style="visibility: hidden;">Guardar</button>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <script>
+                            document.getElementById("saveButton").style.visibility = "visible";
+                        </script>
+                    }
+                    
+                </div>
             </div>
         </div>
     </div>
