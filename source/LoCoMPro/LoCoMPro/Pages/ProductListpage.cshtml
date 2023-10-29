@@ -12,7 +12,6 @@
 </head>
 
 <div>
-
     <div class="information-section">
         <!-- Title of the list-->
         <div class="list-page-title">
@@ -21,10 +20,10 @@
 
         <!-- Amount of products in the list-->
         <div class="list-page-subtitle">
-            <h4>Cantidad de productos:</h4>
+            <h4>Cantidad de productos: @Model.UserProductList.Count</h4>
             <!-- Something here -->
 
-            <h4>Precio aproximado:</h4>
+            <h4>Precio aproximado: ₡</h4>
             <!-- Something here -->
         </div>
     </div>
@@ -32,7 +31,7 @@
     <!-- Horizontal separating line -->
     <hr class="style-four">
 
-    <div class ="register-list-section">
+    <div class ="product-list-section">
         <!-- Container for column -->
         <nav>
             <ul class="list-page-column-title">
@@ -60,39 +59,42 @@
         </nav>
 
         <!-- Search results section -->
-        <ul class="register-list-section">
+        <ul class="product-list-section">
             <!-- Put in all results -->
-            @* @foreach (var register in Model.RegisterList)
+            @foreach (var product in Model.UserProductList)
             {
                 <!-- A result block -->
-                <li class="register-list-block register-block-pagination">
+                <li class="product-list-block register-block-pagination">
                     <!-- Route and data for each result -->
                     <a>
-                        <span id="register-product-name" value="@register.ProductName">
-                            @Html.DisplayFor(modelItem => register.ProductName)
+                    <span id="register-product-name" value="@product.ProductName">
+                            @Html.DisplayFor(modelItem => product.ProductName)
                         </span>
-                        <span id="register-store-name" value="@register.StoreName">
-                            @Html.DisplayFor(modelItem => register.StoreName)
+                        <span id="register-province-name" value="@product.ProductBrand">
+                            @Html.DisplayFor(modelItem => product.ProductBrand)
                         </span>
-                        <span id="register-province-name" value="@register.ProvinciaName">
-                            @Html.DisplayFor(modelItem => register.ProvinciaName)
+                        <span id="register-canton-name" value="@product.ProductModel">
+                            @Html.DisplayFor(modelItem => product.ProductModel)
                         </span>
-                        <span id="register-canton-name" value="@register.CantonName">
-                            @Html.DisplayFor(modelItem => register.CantonName)
+                        <span id="register-store-name" value="@product.StoreName">
+                            @Html.DisplayFor(modelItem => product.StoreName)
                         </span>
-                        <span id="register-price" value="@register.Price">
-                            ₡ @Html.DisplayFor(modelItem => register.Price)
+                        <span id="register-province-name" value="@product.Province + , + @product.Canton">
+                            @product.Province, @product.Canton
                         </span>
-                        <span id="register-date" value="@register.SubmitionDate.Date">
-                            @register.SubmitionDate.ToShortDateString()
+                        <span id="register-price" value="@product.AvgPrice">
+                            ₡ @Html.DisplayFor(modelItem => product.AvgPrice)
                         </span>
-                        <span id="register-categories" value="@Model.CategoryMap[register.Product.Name]" hidden></span>
+                        <span>
+                        </span>
                     </a>
                 </li>
-            } *@
+            }
         </ul>
-        <!-- Pagination section -->
-        @await Html.PartialAsync("_Pagination")
+        <div class="product-pagination">
+            <!-- Pagination section -->
+            @await Html.PartialAsync("_Pagination")
+        </div>
     </div>
     <script src="~/js/pagination.js"></script>
 </div>

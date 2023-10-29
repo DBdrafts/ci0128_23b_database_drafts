@@ -13,6 +13,8 @@ namespace LoCoMPro.Pages
 
         public UserProductList _userProductList { get; set; }
 
+        public IList<UserProductListElement> UserProductList { get; set; }
+
         public ProductListPageModel(LoCoMProContext context, IConfiguration configuration
             , IHttpContextAccessor httpContextAccessor)
             : base(context, configuration)
@@ -21,9 +23,9 @@ namespace LoCoMPro.Pages
             _userProductList = new UserProductList(_httpContextAccessor);
         }
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
-           
+            UserProductList = _userProductList.GetUserProductList();
         }
     }
 }

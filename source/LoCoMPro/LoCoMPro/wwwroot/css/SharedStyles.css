@@ -57,3 +57,10 @@
     height: 40px;
     width: 120px;
 }
+
+/* Style for the search section */
+.product-pagination {
+    height: 100%;
+    text-align: center;
+    align-items: center;
+}
