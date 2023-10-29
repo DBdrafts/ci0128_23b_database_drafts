@@ -6,6 +6,7 @@
     ViewBag.ShowSearchBar = true;
     ViewBag.ShowLogoLink = true;
     @Html.AntiForgeryToken();
+    char s = (char)31; // ASCII Control Unit Separator
 }
 @using Microsoft.AspNetCore.Identity
 @using LoCoMPro.Data;
@@ -100,11 +101,20 @@
 
     </div>
 
-    <button type="button" class="button-general producto-list-button" onclick="callAddProductToList(this)">
+    @{
+        
+        var productData = $"{firstNonNullProduct.Name}{s}{firstNonNullProduct.Brand}" +
+            $"{s}{firstNonNullProduct.Model}{s}{Model.SearchStoreName}" +
+            $"{s}{firstNonNullStore.ProvinciaName}{s}{firstNonNullStore.CantonName}" +
+            $"{s}{Model.AvgPrice.ToString("N0")}";
+
+        <button type="button" class="button-general product-list-button" id="add-to-list"
+            data-product-data="@productData" onclick="callAddProductToList(this)">
             Añadir a lista de interés
             <i class="fa fa-plus-circle" aria-hidden="true"></i>
-    </button>
-    @* <button type="button" class="button-general producto-list-button" id="delete-from-list"></button> *@
+        </button>
+    }
+    @* <button type="button" class="button-general product-list-button" id="delete-from-list"></button> *@
     
     <!-- Horizontal separating line -->
     <hr class="style-four">
@@ -141,7 +151,6 @@
         {
             <!-- Search result section -->
             <!-- Individual registers -->
-            char s = (char)31; // ASCII Control Unit Separator
             var user = Model.Users.FirstOrDefault(u => u.Id == register.ContributorId)?.UserName;
             var reviewValue = Model.UserReviews.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReviewValue;
             var registerKeys = $"{register.SubmitionDate}{s}{register.ContributorId}{s}{register.ProductName}" +

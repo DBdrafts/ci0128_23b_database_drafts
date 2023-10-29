@@ -1,7 +1,9 @@
 
 
 
-function callAddProductToList() {
+function callAddProductToList(addProductButton) {
+    productData = addProductButton.getAttribute('data-product-data');
+
     $.ajax({
         type: "POST",
         url: "/ProductPage/1?handler=AddToProductList",
@@ -9,6 +11,7 @@ function callAddProductToList() {
             xhr.setRequestHeader("XSRF-TOKEN",
                 $('input:hidden[name="__RequestVerificationToken"]').val());
         },
+        data: { productData: productData },
         success: function (data) {
             console.log('Report saved successfully' + data);
             showFeedbackMessage('Su reporte se ha realizado correctamente!');

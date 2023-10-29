@@ -1,4 +1,4 @@
-﻿/* Styles for the producto visualization page*/
+﻿/* Styles for the product visualization page*/
 
 /* Style for the title of product requested */
 .titleProduct {
@@ -301,7 +301,7 @@
 }
 
 /* Style for the button that manage the user list */
-.producto-list-button {
+.product-list-button {
     display: inline-block;
     height: auto;
     width: 75%;

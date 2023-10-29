@@ -13,7 +13,8 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography.X509Certificates;
-using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace LoCoMPro.Pages
 {
@@ -24,6 +25,8 @@ namespace LoCoMPro.Pages
     {
         private readonly UserManager<User> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public UserProductList _userProductList { get; set; }
 
         /// <summary>
         /// Creates a new ProductPageModel.
@@ -38,6 +41,7 @@ namespace LoCoMPro.Pages
         {
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
+            _userProductList = new UserProductList(_httpContextAccessor);
         }
 
         /// <summary>
@@ -98,6 +102,10 @@ namespace LoCoMPro.Pages
         /// Avg calculated price for product.
         /// </summary>
         public decimal AvgPrice { get; set; }
+
+
+
+        
 
         /// <summary>
         /// GET HTTP request, initializes page values.
@@ -174,8 +182,6 @@ namespace LoCoMPro.Pages
             // Obtains the review made by the user
             ObtainUserReviews();
 
-            // Obtains the user list of products
-            ObtainUserProductList();
         }
 
         /// <summary>
@@ -262,35 +268,20 @@ namespace LoCoMPro.Pages
             }
         }
 
-        /// <summary>
-        /// Gets and sets the list of product of the user
-        /// </summary>
-        public void ObtainUserProductList()
-        {
-            // Get the serialized form of the list
-            var serializedList = _httpContextAccessor.HttpContext!.Session.GetString("UserProductList");
-
-            // Gets the list if exist, or create it if not
-            if (serializedList != null)
-            {
-                UserProductList = JsonSerializer.Deserialize<List<Register>>(serializedList)!;
-            }
-            else
-            {
-                UserProductList = new List<Register>();
-            }
-
-        }
 
         /// <summary>
         /// Add the product to the user list
         /// </summary>
-        public IActionResult OnPostAddToProductList()
+        public IActionResult OnPostAddToProductList(string productData)
         {
-            // Add the first register of this product and store to the list
-            if (Registers != null && UserProductList != null && Registers.FirstOrDefault() != null)
+            string[] values = SplitString(productData, '\x1F');
+
+            var newElement = new UserProductListElement(values[0], values[1], values[2]
+                , values[3], values[4], values[5], values[6]);
+
+            if (!_userProductList.ExistElementInList(newElement))
             {
-                UserProductList.Add(Registers.FirstOrDefault()!);
+                _userProductList.AddProductToList(newElement);
             }
 
             return new JsonResult("OK");
@@ -299,14 +290,14 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Delete the product from the user list
         /// </summary>
-        public void RemoveFromProductList()
-        {
-            // Add the first register of this product and store to the list
-            if (Registers != null && UserProductList != null && Registers.FirstOrDefault() != null)
-            {
-                UserProductList.Remove(Registers.FirstOrDefault()!);
-            }
-        }
+        //public void RemoveFromProductList()
+        //{
+        //    // Add the first register of this product and store to the list
+        //    if (Registers != null && UserProductList != null && Registers.FirstOrDefault() != null)
+        //    {
+        //        UserProductList.Remove(Registers.FirstOrDefault()!);
+        //    }
+        //}
 
         /// <summary>
         /// Handle report interactions
