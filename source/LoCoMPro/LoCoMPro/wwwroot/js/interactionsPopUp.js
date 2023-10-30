@@ -136,18 +136,6 @@ function saveInteractions() {
     closeInteractionsPopup();
 }
 
-/// <summary>
-/// Show the feedback message that confirms the action
-/// </summary>
-function showFeedbackMessage(message) {
-    var feedbackMessage = document.getElementById('feedbackMessage');
-    feedbackMessage.textContent = message;
-    feedbackMessage.classList.add('active');
-
-    setTimeout(function () {
-        feedbackMessage.classList.remove('active');
-    }, 2500); // shows the message for 2.5 sg
-}
 
 //Note: This code was adapted from the page "codepen.io" to satisfies the needs of the project. All the credit go to this page.
 //    The specific link of the page where the code was take from is: https://codepen.io/ashdurham/pen/AVVGvP
