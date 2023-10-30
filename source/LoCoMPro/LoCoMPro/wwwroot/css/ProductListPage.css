@@ -1,6 +1,6 @@
 ﻿/* Styles for the product list visualization page*/
 
-
+/* Style for the information section */
 .information-section {
     display: inline-block;
     width: 100%;
@@ -8,14 +8,17 @@
     color: black;
 }
 
+/* Style for the title of the page */
 .list-page-title {
     text-align: center;
 }
 
+/* Style for the subtitle of the page */
 .list-page-subtitle {
     text-align: left;
 }
 
+/* Style for the title of the columns */
 .list-page-column-title {
     display: inline-flex;
     height: auto;
@@ -40,6 +43,7 @@
     padding: 0px;
 }
 
+/* Style for the product list section */
 .product-list-section {
     height: auto;
     width: 100%;
@@ -47,6 +51,7 @@
     color: #000000;
 }
 
+/* Style for the product list block */
 .product-list-block {
     display: inline-block;
     height: auto;
@@ -74,12 +79,13 @@
     max-height: 3.3em;
 }
 
+/* Style for the register block button */
 .product-list-block button {
     width: 4%;
     margin: 0px 0px 0px 15px;
 }
 
-/* Style for the register block text*/
+/* Style for the register block text of the price */
 .align-right {
     justify-content: flex-end !important;
 }

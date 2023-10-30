@@ -26,6 +26,9 @@ namespace LoCoMPro.Pages
         private readonly UserManager<User> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
+        /// <summary>
+        /// Reference to the user product list
+        /// </summary>
         public UserProductList _userProductList { get; set; }
 
         /// <summary>
@@ -34,6 +37,7 @@ namespace LoCoMPro.Pages
         /// <param name="context">DB Context to pull data from.</param>
         /// <param name="configuration">Configuration for page.</param>
         /// <param name="userManager">User manager to handle user permissions.</param>
+        /// <param name="httpContextAccessor">Allow access to the http context
         // Product Page constructor 
         public ProductPageModel(LoCoMProContext context, IConfiguration configuration
             , UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
@@ -107,10 +111,6 @@ namespace LoCoMPro.Pages
         /// Avg calculated price for product.
         /// </summary>
         public decimal AvgPrice { get; set; }
-
-
-
-        
 
         /// <summary>
         /// GET HTTP request, initializes page values.
@@ -276,16 +276,20 @@ namespace LoCoMPro.Pages
 
         /// <summary>
         /// Add the product to the user list
+        /// <param name="productData">The data of the product</param>
         /// </summary>
         public IActionResult OnPostAddToProductList(string productData)
         {
+            // Gets and split the data
             string[] values = SplitString(productData, '\x1F');
 
             var newElement = new UserProductListElement(values[0], values[1], values[2]
                 , values[3], values[4], values[5], values[6]);
 
+            // If the element is not in the list
             if (!_userProductList.ExistElementInList(newElement))
             {
+                // Adds the element to the list
                 _userProductList.AddProductToList(newElement);
             }
 

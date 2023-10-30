@@ -288,15 +288,16 @@
     font-weight: 500;
 }
 
+/* Style for the report icon */
 .report-icon-container {
     position: absolute;
     top: 10px;
     right: 10px;
 }
 
+/* Style for the button container */
 .buttons-container {
     margin-top:20px;
-
 }
 
 /* Style for the feedback message of the Pop Up when active */
@@ -326,6 +327,7 @@
     background-color: #74C2F8;
 }
 
+/* Style for the plus circle icon */
 .fa-plus-circle {
     font-size: 22px !important;
     text-align: center;

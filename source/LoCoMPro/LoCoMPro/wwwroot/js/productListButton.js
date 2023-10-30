@@ -1,8 +1,9 @@
-
-
-
+/// <summary>
+/// Call the function that add the producto to the lsit
+/// </summary>
 function callAddProductToList(addProductButton) {
-    productData = addProductButton.getAttribute('data-product-data');
+    // Gets the data associated with the button
+    var productData = addProductButton.getAttribute('data-product-data');
 
     $.ajax({
         type: "POST",
@@ -13,12 +14,12 @@ function callAddProductToList(addProductButton) {
         },
         data: { productData: productData },
         success: function (data) {
-            console.log('Report saved successfully' + data);
-            showFeedbackMessage('Su reporte se ha realizado correctamente!');
+            console.log('Product added successfully' + data);
+            showFeedbackMessage('El producto ha sido agregado a su lista!');
         },
         error: function (error) {
             console.error('Error saving report: ' + error);
-            showFeedbackMessage('Error al realizar el reporte!');
+            showFeedbackMessage('Error al agregar el producto a la lista!');
 
         }
     });
