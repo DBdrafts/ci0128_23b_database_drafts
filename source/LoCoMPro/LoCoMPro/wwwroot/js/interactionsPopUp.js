@@ -57,7 +57,7 @@ function loadRegisterImages(imagesData) {
         imageElement.style.objectFit = 'fill';
         imageElement.className = 'small-image'
 
-        // add the html div for every image
+        // Add the html div for every image
         var smallImageSpace = document.createElement('div');
         // Set the space to add the image
         smallImageSpace.classList.add('small-img-space-pop-up');
