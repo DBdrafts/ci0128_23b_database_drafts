@@ -174,5 +174,13 @@ namespace LoCoMPro.Data
                     .UsePropertyAccessMode(PropertyAccessMode.Property);
             });
         }
+
+        public void ExecuteSqlScriptFile(string scriptFilePath)
+        {
+            string script = File.ReadAllText(scriptFilePath);
+            Database.ExecuteSqlRaw(script);
+        }
+
+
     }
 }

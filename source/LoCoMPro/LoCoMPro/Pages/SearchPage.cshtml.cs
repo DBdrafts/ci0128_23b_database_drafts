@@ -1,18 +1,11 @@
-using Elfie.Serialization;
 using LoCoMPro.Data;
 using LoCoMPro.Models;
-using LoCoMPro.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Data.SqlClient;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Win32;
-using NUnit.Framework;
-using System.Collections.Generic;
+using NetTopologySuite.Geometries;
 using System.Drawing.Printing;
-using System.Linq;
 
 namespace LoCoMPro.Pages
 {
@@ -98,13 +91,17 @@ namespace LoCoMPro.Pages
         /// Resulr of the query.
         /// </summary>
         public IEnumerable<Register>? Registers { get; set; } = new List<Register>();
+
+        public IEnumerable<SearchResult>? SearchResults { get; set; } = new List<SearchResult>();
+
         /// <summary>
         /// OnGet method that handles the GET request.
         /// </summary>
-        /// <param name="pageIndex">Paginated page index to see results of.</param>
-        /// <param name="sortOrder">Order to use when showing search results.</param>
+        /// <param name="latitude">Latitude of location to use as base of search.</param>
+        /// <param name="longitude">Longitude of location to use as base of search.</param>
         /// <returns></returns>
-        public async Task OnGetAsync(int? pageIndex, string sortOrder)
+        /// 
+        public async Task OnGetAsync(double latitude = 0.0, double longitude = 0.0)
         {
 
             // Prepare the query to retrieve data from the database
@@ -114,14 +111,18 @@ namespace LoCoMPro.Pages
             var registers = from r in _context.Registers
                             select r;
 
-           if (Province is not null and not "")
-            {
-                registers = registers.Where(r => r.ProvinciaName == Province);
-                if (Canton is not null and not "")
-                {
-                    registers = registers.Where(r => r.CantonName == Canton);
-                }
-            }
+            //Point? geolocation = null;
+            //if (latitude != 0.0 && longitude != 0.0)
+            //{
+            //    var coordinates = new Coordinate(latitude, longitude);
+            //    geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
+            //}
+            //SearchResults = _context.GetSearchResults(SearchString!, geolocation, SearchType ?? "Name");
+
+            //foreach (var result in SearchResults)
+            //{
+            //    var distance = result.Distance;
+            //}
 
             var match = GetRegistersByType(registers);
 
@@ -272,17 +273,6 @@ namespace LoCoMPro.Pages
         {
             // If null, the order by price as default 
              return String.IsNullOrEmpty(sortOrder) ? "price_asc" : sortOrder;
-        }
-
-        /// <summary>
-        /// Gets search results.
-        /// </summary>
-        /// <returns>Search Results.</returns>
-        public JsonResult OnGetRegisters()
-        {
-            Assert.IsNotNull(Registers);
-            return new JsonResult(Registers.ToArray());
-
         }
     }
 }

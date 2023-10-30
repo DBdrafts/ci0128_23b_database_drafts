@@ -14,15 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const closePopupButton = document.getElementById("closePopup-button"); // Button to close the popup
     var span = document.getElementById("buttonSpan");
     const currentPageUrl = window.location.href;
-    // Add a click event to the button to open the popup
-    locationButton.addEventListener("click", function () {
-        locationPopup.style.display = "block"; // Display the popup when clicking the button
-    });
-
-    // Add a click event to the button to close the popup
-    closePopupButton.addEventListener("click", function () {
-        locationPopup.style.display = "none"; // Hide the popup when clicking the close button
-    });
 
     // Function to populate the provinceSelect
     function populateProvinceSelect() {

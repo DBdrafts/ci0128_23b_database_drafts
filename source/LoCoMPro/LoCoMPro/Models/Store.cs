@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using NetTopologySuite.Geometries;
 
 namespace LoCoMPro.Models
 {
@@ -24,6 +25,12 @@ namespace LoCoMPro.Models
         /// Name of province asociated withe the store.
         /// </summary>
         public string? ProvinciaName { get; set; }
+
+        /// <summary>
+        /// WGS 84 coordinates for geolocation.
+        /// </summary>
+        [NotMapped]
+        public Point? Geolocation { get; set; }
 
         /// <summary>
         /// Registers asociated with the store.

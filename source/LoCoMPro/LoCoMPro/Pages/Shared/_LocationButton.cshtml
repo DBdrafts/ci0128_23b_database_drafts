@@ -27,6 +27,19 @@
     </div>
 </div> *@
 
-<div id="mapPopup" style="display: none; position: absolute; top: 50px; left: 50px; width: 400px; height: 400px; background-color: black; border: 1px solid #ccc;">
-    <div id="map" style="width: 100%; height: 100%;"></div>
+<div id="mapPopup" style="display: none; position: absolute; top: 50px; left: 50px; width: 600px; height: 500px; background-color: white; border: 1px solid #ccc;">
+    <h2 class="selectHeader">Seleccionar ubicación</h2>
+    <div id="map" style="width: 50%; height: 50%;"></div>
+    <label for="province">Provincia:</label>
+    <select id="province" name="province">
+        <option value="" disabled selected hidden>Seleccionar provincia</option>
+    </select>
+    <label for="canton">Cantón:</label>
+    <select id="canton" name="canton" disabled>
+        <option value="" disabled selected hidden>Seleccione una provincia primero</option>
+    </select>
+    <input type="hidden" name="latitude" value="" id="latitude">
+    <input type="hidden" name="longitude" value="" id="longitude">
+    <button type="button" id="closePopup-button">Cerrar</button>
+    <button type="button" id="saveLocation-button">Guardar</button>
 </div>

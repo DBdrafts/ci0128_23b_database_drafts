@@ -19,6 +19,10 @@ namespace LoCoMPro.Data
             {
                 return;   // DB has been seeded
             }
+            var currentDir = Directory.GetCurrentDirectory();
+            context.ExecuteSqlScriptFile(currentDir + "/Data/SearchRegister.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/CalculateDistance.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/GetSearchResults.sql");
 
             List<Provincia> provincias = new();
             List<Canton> cantones = new();
@@ -74,12 +78,12 @@ namespace LoCoMPro.Data
 
                 if (float.TryParse(group.Key.Latitude, out float latitude) && float.TryParse(group.Key.Longitude, out float longitude))
                 {
-                    var location = new Coordinate { X = latitude, Y = longitude };
+                    var coordinates = new Coordinate (latitude, longitude);
                     var canton = new Canton
                     {
                         CantonName = group.Key.CantonName,
                         Provincia = province!,
-                        Location = new Point (location.X, location.Y),
+                        Geolocation = new Point (coordinates.X, coordinates.Y) { SRID = 4326 },
                     };
                     cantons.Add(canton);
                 }
@@ -208,7 +212,7 @@ namespace LoCoMPro.Data
             string comment = "Lorem ipsum dolor sit amet, consectetur adipiscing elit" +
                 ", sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum pulvinar etiam non quam. ";
 
-            List<int> basePrice = new List<int>{ 2500, 2000, 20000, 300000, 1100000 };
+            List<int> basePrice = new() { 2500, 2000, 20000, 300000, 1100000 };
 
             /* Generates the registers by using the index of the products, users, stores and the dates */
             for (int productIndex = 0; productIndex < products.Count; productIndex++)

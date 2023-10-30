@@ -103,7 +103,7 @@
         <!-- Search results section -->
         <ul class="result-section">
             <!-- Put in all results -->
-            @foreach (var register in Model.Registers)
+            @foreach (var register in Model.Registers!)
             {
                 <!-- A result block -->
                 <li class="result-block register-block-pagination">
@@ -133,6 +133,7 @@
                             @register.SubmitionDate.ToShortDateString()
                         </span>
                         <span id="register-categories" value="@Model.CategoryMap[register.Product.Name]" hidden></span>
+                        @* <span id="register-distance" value="@register.Distance" hidden></span> *@
                     </a>
                 </li>
             }

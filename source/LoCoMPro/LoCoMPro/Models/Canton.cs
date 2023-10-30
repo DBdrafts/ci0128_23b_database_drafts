@@ -26,9 +26,9 @@ namespace LoCoMPro.Models
         public string? ProvinciaName { get; set; }
 
         /// <summary>
-        /// WB 84 coordinates for geolocation.
+        /// WGS 84 coordinates for geolocation.
         /// </summary>
-        public Point? Location { get; set; }
+        public Point? Geolocation { get; set; }
 
         /// <summary>
         /// Stores that reside inside the canton.
