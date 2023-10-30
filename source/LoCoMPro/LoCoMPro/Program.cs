@@ -19,11 +19,12 @@ builder.Services.AddDbContext<LoCoMProContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("LoCoMProContext") ?? throw new InvalidOperationException("Connection string 'LoCoMProContext' not found.")));
 
 // Added default IdentityUser and configured it to not require a confirmed account, also added custom signInManager that overrides PasswordSignInAsync()
-builder.Services.AddDefaultIdentity<User>(options => {
+builder.Services.AddDefaultIdentity<User>(options =>
+{
     options.SignIn.RequireConfirmedAccount = false;
     options.User.RequireUniqueEmail = true;
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 !*-._@+";
-}).AddSignInManager<MySignInManager>().AddEntityFrameworkStores<LoCoMProContext>();
+}).AddSignInManager<MySignInManager>().AddRoles<IdentityRole>().AddEntityFrameworkStores<LoCoMProContext>();
 
 builder.Services.AddTransient<IEmailSender, EmailSender>(i => 
     new EmailSender(
@@ -60,6 +61,12 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<LoCoMProContext>();
     context.Database.EnsureCreated();
     DbInitializer.Initialize(context);
+
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    if (!await roleManager.RoleExistsAsync("Moderator"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Moderator"));
+    }
 }
 
 

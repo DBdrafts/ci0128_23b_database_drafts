@@ -7,7 +7,8 @@ function openInteractionsPopup(openButton) {
     registerKeys = openButton.getAttribute('data-register-id');
 
     // Gets the register data
-    var [submitionDate, userID, productName, storeName, price, date, userName, comment, lastReviewValue] = registerKeys.split(String.fromCharCode(31));
+    var [submitionDate, userID, productName, storeName, price, date,
+        userName, comment, lastReviewValue, lastReportState] = registerKeys.split(String.fromCharCode(31));
 
     // Sets the register data
     document.getElementById('popup-submitionDate').textContent = date;
@@ -23,10 +24,10 @@ function openInteractionsPopup(openButton) {
 
     // Set the information of the report button
     document.getElementById('reportIcon').src = '/img/DesactiveReportIcon.svg';
-    reportActivated = false;
 
-    // Sets the information for the review function
-    setReviewedValue(lastReviewValue);
+    // Sets the information for the review function and report
+    setReviewedValue(lastReviewValue);   
+    setReportedValue(lastReportState);   
 }
 
 /// <summary>
@@ -90,14 +91,17 @@ function toggleReport() {
         reportIcon.src = '/img/DesactiveReportIcon.svg';
         reportActivated = false;
     }
+    reportChanged = !reportChanged;
+
 }
+
 
 /// <summary>
 /// Save the interaction made by the user
 /// </summary>
 function saveInteractions() {
     // If the user made a change
-    if (reportActivated || registerReviewed) {
+    if (reportChanged || registerReviewed) {
         $.ajax({
             type: 'POST',
             url: '/ProductPage/1?handler=HandleInteraction', // Specify the handler
@@ -105,10 +109,22 @@ function saveInteractions() {
                 xhr.setRequestHeader("XSRF-TOKEN",
                     $('input:hidden[name="__RequestVerificationToken"]').val());
             },
-            data: { registerKeys: registerKeys, reportActivated: reportActivated, reviewedValue: reviewedValue },
+            data: { registerKeys: registerKeys, reportChanged: reportChanged, reviewedValue: reviewedValue },
             success: function (data) {
                 console.log('Report saved successfully' + data);
-                showFeedbackMessage('Su reporte se ha realizado correctamente!', 'feedbackMessage');
+                if (reportChanged && registerReviewed) {
+                    showFeedbackMessage('Su reporte y valoración se han realizado correctamente!', 'feedbackMessage');
+                } else {
+                    if (reportChanged) {
+                        if (reportActivated) {
+                            showFeedbackMessage('Su reporte se ha realizado correctamente!', 'feedbackMessage');
+                        } else {
+                            showFeedbackMessage('Su reporte ha sido revertido correctamente!', 'feedbackMessage');
+                        }
+                    } else {
+                        showFeedbackMessage('Su valoración se ha realizado correctamente!', 'feedbackMessage');
+                    }
+                }
             },
             error: function (error) {
                 console.error('Error saving report: ' + error);
@@ -195,11 +211,24 @@ function save_reviewed_state(value) {
 }
 
 /// <summary>
-/// Establish the initial state of the values
+/// Establish the initial state of the values for review
 /// </summary>
 function setReviewedValue(lastReviewValue) {
     // If the user has already made a review
     reviewedValue = lastReviewValue == null ? 0 : lastReviewValue;
     highlight_star(reviewedValue);
     registerReviewed = false;
+}
+
+/// <summary>
+/// Establish the initial state of the values for report
+/// </summary>
+function setReportedValue(lastReportedValue) {
+    // If the user has already made a report
+    reportActivated = false;
+    if (lastReportedValue != -1) {
+        reportActivated = true;
+        reportIcon.src = '/img/ActiveReportIcon.svg';
+    }
+    reportChanged = false;
 }

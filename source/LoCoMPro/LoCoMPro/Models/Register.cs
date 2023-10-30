@@ -54,6 +54,7 @@ namespace LoCoMPro.Models
         /// Currently not implemented.
         /// </summary>
 
+        [NotMapped]
         public uint NumCorrections { get; set; }
 
         /// <summary>
@@ -92,5 +93,16 @@ namespace LoCoMPro.Models
         /// Reviews made of this register
         /// </summary>
         public ICollection<Review>? Reviews { get; set; } = new List<Review>();
+
+        /// <summary>
+        /// Reports made of this register
+        /// </summary>
+        public ICollection<Report>? Reports { get; set; } = new List<Report>();
+
+        /// <summary>
+        /// Images associated with the register
+        /// </summary>
+        public ICollection<Image>? Images { get; set; }
+
     }
 }
