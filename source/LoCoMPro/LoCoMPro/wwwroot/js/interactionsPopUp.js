@@ -16,12 +16,56 @@ function openInteractionsPopup(openButton) {
     document.getElementById('popup-userName').textContent = userName;
     document.getElementById('popup-comment').textContent = comment;
 
-    // Set the report button off as default
+    // Set the images data
+    var imagesData = openButton.getAttribute('images-register-id').split(String.fromCharCode(31));
+
+    // Load the images in the pop up
+    loadRegisterImages(imagesData)
+
+    // Set the information of the report button
     document.getElementById('reportIcon').src = '/img/DesactiveReportIcon.svg';
 
     // Sets the information for the review function and report
     setReviewedValue(lastReviewValue);   
     setReportedValue(lastReportState);   
+}
+
+/// <summary>
+/// Add the images to the Pop Up
+/// </summary>
+function loadRegisterImages(imagesData) {
+    // container for pop up images
+    var imageContainer = document.querySelector('.img-carousel-pop-up');
+
+    // Clear previous images in the carousel
+    imageContainer.innerHTML = '';
+
+    // Create and display image elements in the carousel
+    for (var i = 1; i < imagesData.length; i++) { // Start from 1 to skip the first empty string
+        // Split every imagen
+        var imageData = imagesData[i].split(":");
+        // Use the js Image element
+        var imageElement = new Image();
+        // Set the sourse and the Data of image
+        imageElement.src = 'data:image/jpeg;base64,' + imageData[1];
+        // Alternative text
+        imageElement.alt = 'Imagen ' + i;
+
+        // Add the styles of the image
+        imageElement.style.width = '48.5px';
+        imageElement.style.height = '48.5px';
+        imageElement.style.borderRadius = '5px';
+        imageElement.style.objectFit = 'fill';
+        imageElement.className = 'small-image'
+
+        // Add the html div for every image
+        var smallImageSpace = document.createElement('div');
+        // Set the space to add the image
+        smallImageSpace.classList.add('small-img-space-pop-up');
+        // Add the space and the element
+        smallImageSpace.appendChild(imageElement);
+        imageContainer.appendChild(smallImageSpace);
+    }
 }
 
 /// <summary>
@@ -52,7 +96,6 @@ function toggleReport() {
 }
 
 
-
 /// <summary>
 /// Save the interaction made by the user
 /// </summary>
@@ -70,18 +113,22 @@ function saveInteractions() {
             success: function (data) {
                 console.log('Report saved successfully' + data);
                 if (reportChanged && registerReviewed) {
-                    showFeedbackMessage('Su reporte y valoración se han realizado correctamente!');
+                    showFeedbackMessage('Su reporte y valoración se han realizado correctamente!', 'feedbackMessage');
                 } else {
                     if (reportChanged) {
-                        showFeedbackMessage('Su reporte se ha realizado correctamente!');
+                        if (reportActivated) {
+                            showFeedbackMessage('Su reporte se ha realizado correctamente!', 'feedbackMessage');
+                        } else {
+                            showFeedbackMessage('Su reporte ha sido revertido correctamente!', 'feedbackMessage');
+                        }
                     } else {
-                        showFeedbackMessage('Su valoración se ha realizado correctamente!');
+                        showFeedbackMessage('Su valoración se ha realizado correctamente!', 'feedbackMessage');
                     }
                 }
             },
             error: function (error) {
                 console.error('Error saving report: ' + error);
-                showFeedbackMessage('Error al realizar el reporte!');
+                showFeedbackMessage('Error al realizar el reporte!', 'feedbackMessage');
 
             }
         });
@@ -89,18 +136,6 @@ function saveInteractions() {
     closeInteractionsPopup();
 }
 
-/// <summary>
-/// Show the feedback message that confirms the action
-/// </summary>
-function showFeedbackMessage(message) {
-    var feedbackMessage = document.getElementById('feedbackMessage');
-    feedbackMessage.textContent = message;
-    feedbackMessage.classList.add('active');
-
-    setTimeout(function () {
-        feedbackMessage.classList.remove('active');
-    }, 2500); // shows the message for 2.5 sg
-}
 
 //Note: This code was adapted from the page "codepen.io" to satisfies the needs of the project. All the credit go to this page.
 //    The specific link of the page where the code was take from is: https://codepen.io/ashdurham/pen/AVVGvP

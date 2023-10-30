@@ -15,12 +15,11 @@ function callAddProductToList(addProductButton) {
         data: { productData: productData },
         success: function (data) {
             console.log('Product added successfully' + data);
-            showFeedbackMessage('El producto ha sido agregado a su lista!');
+            showFeedbackMessage('El producto ha sido agregado a su lista!', 'feedbackMessage');
         },
         error: function (error) {
             console.error('Error saving report: ' + error);
-            showFeedbackMessage('Error al agregar el producto a la lista!');
-
+            showFeedbackMessage('Error al agregar el producto a la lista!', 'feedbackMessage');
         }
     });
 }

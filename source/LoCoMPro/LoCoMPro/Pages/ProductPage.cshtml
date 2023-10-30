@@ -26,100 +26,126 @@
 
 <div class="product-page">
     <!-- Name of product Search -->
-    <div class="titleProduct">
-        @Model.SearchProductName
-    </div>
-
-
     <div id="feedbackMessage" class="feedback-message"></div>
-    <!-- Section for columns of specifications from Search product -->
-    <div class="product-page-section">
-        @{ // select the first matches
+    <div class="product-information">
+        @{
+            // select the first matches
             var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
             var firstNonNullStore = Model.Store.FirstOrDefault(r => r.Name != null);
-            System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("es-CR"); // Costa Rica datetime format
+            // create a var for amount of images
+            int imagesAmount = 0;
         }
-        <!-- brand column -->
-        <div class="column">
-            <h2>Marca</h2>
-            @{ // Get the name of the product brand
-                if (firstNonNullProduct != null)
-                {
-                    <p>@firstNonNullProduct.Brand</p>
-                }
-            }
-        </div>
-
-        <!-- model column -->
-        <div class="column">
-            <h2>Modelo</h2>
-            @{ // Get the name of the product model
-                if (firstNonNullProduct != null)
-                {
-                    <p>@firstNonNullProduct.Model</p>
-                }
-            }
+        <!-- Upper section of images -->
+        <div class="images-section">
+            <div class="carousel-section">
+                <div class="img-carousel">
+                    
+                    @foreach (var register in Model.Registers)
+                    { // in each register done
+                        @if (register.Images != null)
+                        { // if images is not null
+                            @foreach (var image in register.Images)
+                            { // for each image in register
+                                if (imagesAmount < 5)
+                                { // limit the amount of images to show
+                                    // add the image
+                                    <div class="small-img-space">
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(image.ImageData)" alt="Imagen" class="small-image" style="width:48.5px;height:48.5px;border-radius:5px;object-fit:fill;">
+                                    </div>
+                                    imagesAmount++;
+                                }
+                                
+                            }
+                        }
+                    }
+                </div>
             </div>
-
-        <!-- establishment column -->
-        <div class="column">
-            <h2>Establecimiento</h2>
-            @{ // Get the name of the store
-                if (firstNonNullStore != null)
+            <div class="main-imagen-section">
+                
+                @if (Model.Registers.Any())
                 {
-                    <p>@firstNonNullStore.Name</p>
+                    var firstRegisterWithImages = Model.Registers.FirstOrDefault(r => r.Images != null && r.Images.Any());
+                    if (firstRegisterWithImages != null)
+                    {
+                        // Show the first image of first register with image
+                        <div class="main-img-space">
+                            <img id="mainImage" src="data:image/jpeg;base64,@Convert.ToBase64String(firstRegisterWithImages.Images.First().ImageData)" alt="Imagen Principal" class="img-responsive" style="width:348.5px;height:323.5px;border-radius: 30px; object-fit: fill;">
+                        </div>
+                    }
+                    else
+                    {
+                        // If no register with images, show no images found
+                        <div class="main-img-space">
+                            <img src="~/img/No_image_found.svg" alt="No se encontraron imágenes" style="width:348.5px;height:323.5px;border-radius: 30px; object-fit: fill;">
+                        </div>
+                    }
                 }
-            }
-        </div>
-
-        <!-- cantón column -->
-        <div class="column">
-            <h2>Cantón</h2>
-            @{ // Get the name of the Canton Location
-                if (firstNonNullStore != null)
+                else
                 {
-                    <p>@firstNonNullStore.CantonName</p>
+                    // Weird case there is no register for the product 
+                    <div class="main-img-space">
+                        <img src="~/img/No_image_found.svg" alt="No se encontraron imágenes" style="width:348.5px;height:323.5px;border-radius: 30px; object-fit: fill;">
+                    </div>
                 }
-            }
+            </div>
         </div>
+        <div class="info-section">
+            <div class="title-section">
+                <div class="titleProduct">
+                    @Model.SearchProductName
+                </div>
+            </div>
+            <div class="caracteristcs-section">
+                @{
+                    // Get the information of producto and store
+                    if (firstNonNullProduct != null)
+                    {
+                        if (firstNonNullProduct.Brand != null)
+                        {
+                            <p>Marca: @firstNonNullProduct.Brand</p>
+                        }
+                        else
+                        {
+                            <p>Marca: N/A</p>
+                        }
+                        if (firstNonNullProduct.Model != null)
+                        {
+                            <p>Modelo: @firstNonNullProduct.Model</p>
+                        }
+                        else
+                        {
+                            <p>Modelo: N/A</p>
+                        }
 
-        <!-- province column -->
-        <div class="column">
-            <h2>Provincia</h2>
-            @{ // Get the name of the Province Location
-                if (firstNonNullStore != null)
-                {
-                    <p>@firstNonNullStore.ProvinciaName</p>
+                    }
+                    if (firstNonNullStore != null)
+                    {
+                        <p>Tienda: @firstNonNullStore.Name</p>
+                        <p>Ubicación: @firstNonNullStore.ProvinciaName, @firstNonNullStore.CantonName </p>
+                        <p>Precio Aproximado: ₡ @Model.AvgPrice.ToString("N0")</p>
+                    }
                 }
-            }
-        </div>
-        <!-- price column -->
-        <div class="column">
-            <h2>Precio Prom.</h2>
-            <p>₡ @Model.AvgPrice.ToString("N0")</p>
+
+                @{
+                    var productData = $"{firstNonNullProduct.Name}{s}{firstNonNullProduct.Brand}" +
+                    $"{s}{firstNonNullProduct.Model}{s}{Model.SearchStoreName}" +
+                    $"{s}{firstNonNullStore.ProvinciaName}{s}{firstNonNullStore.CantonName}" +
+                    $"{s}{Model.AvgPrice.ToString("N0")}";
+
+                    if (SignInManager.IsSignedIn(User))
+                    {
+                        <button type="button" class="button-general product-list-button" id="add-to-list"
+                                data-product-data="@productData" onclick="callAddProductToList(this)">
+                            Añadir a lista de interés
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                        </button>
+                    }
+                    @* <button type="button" class="button-general product-list-button" id="delete-from-list"></button> *@
+                }
+            </div>
         </div>
 
     </div>
-
-    @{
-
-        var productData = $"{firstNonNullProduct.Name}{s}{firstNonNullProduct.Brand}" +
-            $"{s}{firstNonNullProduct.Model}{s}{Model.SearchStoreName}" +
-            $"{s}{firstNonNullStore.ProvinciaName}{s}{firstNonNullStore.CantonName}" +
-            $"{s}{Model.AvgPrice.ToString("N0")}";
-
-        if (SignInManager.IsSignedIn(User))
-        {
-            <button type="button" class="button-general product-list-button" id="add-to-list"
-                data-product-data="@productData" onclick="callAddProductToList(this)">
-                Añadir a lista de interés
-                <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </button>
-        }
-    
-        
-        @* <button type="button" class="button-general product-list-button" id="delete-from-list"></button> *@
-    }
     
     <!-- Horizontal separating line -->
     <hr class="style-four">
@@ -161,8 +187,24 @@
             var reportState = Model.UserReports.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReportState;
             if (reportState == null) reportState = -1;
             var registerKeys = $"{register.SubmitionDate}{s}{register.ContributorId}{s}{register.ProductName}" +
-            $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToString("d", culture)}" +
+            $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToShortDateString()}" +
             $"{s}{user}{s}{register.Comment}{s}{reviewValue}{s}{reportState}";
+
+            // images in registers
+            int imagecount = 0;
+            var registerImages = "";
+            if (register.Images != null && register.Images.Any())
+            { // In case registers has images
+                foreach (var image in register.Images)
+                { // Fo each image in register
+                    if (image.ImageData != null)
+                    {   
+                        // Cover the bytes of images to string
+                        registerImages += $"{s}ImageData{imagecount}: {Convert.ToBase64String(image.ImageData)}";
+                        imagecount++;
+                    }
+                }
+            }
 
             <li class="register-block align register-block-pagination">
                 <a>
@@ -170,13 +212,13 @@
                         @register.SubmitionDate.ToShortDateString()
                     </span>
                     <span id="register-price" value="@register.Price">
-                        ₡ @Html.DisplayFor(modelItem => register.Price)
+                        ₡ @register.Price.ToString("N0")
                     </span>
                     <span id="register-comment" value="@register.Comment">
                         @Html.DisplayFor(modelItem => register.Comment)
                     </span>
                     <div class="text-center align">
-                        <button class="open-interactions-button" data-register-id="@registerKeys" onclick="openInteractionsPopup(this)">
+                        <button class="open-interactions-button" data-register-id="@registerKeys" images-register-id="@registerImages" onclick="openInteractionsPopup(this)">
                             <img src="~/img/MoreIcon.svg" alt="Más opciones">
                         </button>
                     </div>
@@ -187,13 +229,17 @@
 
     <!-- Code for interactive pop up -->
     <div class="interactive-popup-section">
-
         <div class="interactions-popup">
             <div class="interactions-popup-content">
                 <p><b>Fecha:</b> <span id="popup-submitionDate"> </span></p>
                 <p><b>Precio:</b> <span id="popup-price"></span></p>
                 <p><b>Aporde de:</b> <span id="popup-userName"></span></p>
                 <p><b>Comentario:</b> <span id="popup-comment"></span></p>
+
+                <div class="carousel-section-pop-up">
+                    <div class="img-carousel-pop-up">
+                    </div>
+                </div>
 
                 @if (SignInManager.IsSignedIn(User))
                 {
@@ -255,5 +301,7 @@
         <!-- Pagination section -->
         @await Html.PartialAsync("_Pagination")
     </div>
+    <script src="~/js/ProductPage/imageChanger.js"></script>
+    <script src="~/js/feedbackMessage.js"></script>
     <script src="~/js/pagination.js"></script>
 </div>

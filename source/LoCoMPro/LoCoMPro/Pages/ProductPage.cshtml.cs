@@ -113,6 +113,11 @@ namespace LoCoMPro.Pages
         public decimal AvgPrice { get; set; }
 
         /// <summary>
+        /// Number of results.
+        /// </summary>
+        public int ResultsNumber;
+
+        /// <summary>
         /// GET HTTP request, initializes page values.
         /// </summary>
         /// <param name="searchProductName">Product to display data of.</param>
@@ -159,6 +164,9 @@ namespace LoCoMPro.Pages
             // Initial request for all the registers in the database
             var registers = from r in _context.Registers select r;
 
+            // add the images from every register
+            registers = registers.Include(r => r.Images);
+
             // If the name of the propertiesSearch is not null 
             if (!string.IsNullOrEmpty(SearchProductName) &&
                 !string.IsNullOrEmpty(SearchStoreName) && 
@@ -170,6 +178,7 @@ namespace LoCoMPro.Pages
                 registers = registers.Where(x => x.StoreName != null && x.StoreName.Contains(SearchStoreName));
                 registers = registers.Where(x => x.CantonName != null && x.CantonName.Contains(SearchCantonName));
                 registers = registers.Where(x => x.ProvinciaName != null && x.ProvinciaName.Contains(SearchProvinceName));
+                registers = registers.Include(r => r.Images);
 
             }      
 
@@ -178,6 +187,8 @@ namespace LoCoMPro.Pages
 
             List<string> userIds = registers.Select(r => r.ContributorId).Distinct().ToList()!;
             Users = await _context.Users.Where(u => userIds.Contains(u.Id)).ToListAsync();
+
+            ResultsNumber = registers.Count();
 
             // Gets the Data From data base 
             Registers = await registers.ToListAsync();
@@ -417,7 +428,7 @@ namespace LoCoMPro.Pages
         /// <param name="productName"><See cref="GetRegisterToUpdate"/>).</param>
         /// <param name="storeName"><See cref="GetRegisterToUpdate"/>).</param>
         private void HandleReport(User user, Register registerToUpdate, DateTime interactionDate,
-            string contributorId, string productName, string storeName, DateTime registSubmitDate)
+           string contributorId, string productName, string storeName, DateTime registSubmitDate)
         {
             var lastReport = _context.Reports.FirstOrDefault(r => r.ReporterId == user!.Id
                 && r.ProductName == productName
@@ -427,13 +438,20 @@ namespace LoCoMPro.Pages
 
             if (lastReport == null)
             {
-                _context.Reports.Add(new Report { ReportedRegister = registerToUpdate,
-                    Reporter = user!, ReportDate = interactionDate, ReportState = User.IsInRole("Moderator") ? 2 : 1 });
+                _context.Reports.Add(new Report
+                {
+                    ReportedRegister = registerToUpdate,
+                    Reporter = user!,
+                    ReportDate = interactionDate,
+                    CantonName = registerToUpdate.CantonName!,
+                    ProvinceName = registerToUpdate.ProvinciaName!,
+                    ReportState = User.IsInRole("Moderator") ? 2 : 1
+                });
             }
             else
             {
                 _context.Reports.Remove(lastReport);
-            }   
+            }
         }
 
         /// <summary>
@@ -459,7 +477,8 @@ namespace LoCoMPro.Pages
             if (lastReview == null)
             {
                 _context.Reviews.Add(new Review() { ReviewedRegister = registerToUpdate,
-                    Reviewer = user!, ReviewValue = reviewedValue, ReviewDate = interactionDate
+                    Reviewer = user!, ReviewValue = reviewedValue, ReviewDate = interactionDate,
+                    CantonName = registerToUpdate.CantonName!, ProvinceName = registerToUpdate.ProvinciaName!
                 });
             }
             else

@@ -57,6 +57,16 @@ namespace LoCoMPro.Models
         public DateTime SubmitionDate { get; set; }
 
         /// <summary>
+        /// Name of the canton where the store is.
+        /// </summary>
+        public required string CantonName { get; set; }
+
+        /// <summary>
+        /// Name of the province where the store is.
+        /// </summary>
+        public required string ProvinceName { get; set; }
+
+        /// <summary>
         /// Date when the register was reviewed.
         /// </summary>
         public required DateTime ReviewDate { get; set; }

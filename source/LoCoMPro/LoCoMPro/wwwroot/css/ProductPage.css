@@ -3,13 +3,11 @@
 /* Style for the title of product requested */
 .titleProduct {
     width: 1152px;
-    text-align: center;
+    text-align: left;
     color: black;
     font-size: 30px;
     font-weight: 700;
     word-wrap: break-word;
-    margin: 0 auto;
-    padding: 30px;
 }
 
 /* Style for the format of specifications of product */
@@ -66,6 +64,136 @@
     background-position: 200px 22px;
 }
 
+/*Style for images section*/
+.product-information {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+/*Style for images section*/
+.images-section {
+    display: flex;
+    height: 50%;
+    width: 50%;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
+
+/*Style for information section*/
+.info-section {
+    display: inline-block;
+    height: 50%;
+    width: 50%;
+    justify-content: center;
+}
+
+/*Style for title seccion*/
+.title-section {
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    height: 20%;
+    width: 100%;
+    margin: 10px;
+}
+
+/*Styles for product caracteristictics*/
+.caracteristcs-section {
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    width: 100%;
+    margin: 10px;
+}
+
+/*Styles for product caracteristictics*/
+.caracteristcs-section p {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+/*Style for carousel seccion*/
+.carousel-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40%;
+    width: 15%;
+    margin: 10px;
+}
+
+/*Styel for image carousel*/
+.img-carousel {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    height: 20%;
+    max-width: 50px;
+}
+
+/*Style for main imagen */
+.main-imagen-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40%;
+    width: 80%;
+    margin: 10px;
+}
+
+/*Styel for small image*/
+.small-img-space {
+    flex: 0 0 auto;
+    margin: 10px 0;
+    /*background-color: gray;*/
+    width: 50px;
+    height: 50px;
+    border: 1px solid;
+    border-radius: 5px;
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.small-img-space:hover {
+    cursor: pointer;
+    border: 2px solid #007bff;
+}
+
+/*Styel for main image*/
+.main-img-space {
+    flex: 0 0 auto;
+    margin: 10px 0;
+    /*background-color: gray;*/
+    width: 350px;
+    height: 325px;
+    border: 1px solid;
+    border-radius: 30px;
+}
+
+/* Style for content section */
+.content-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+}
+
+/* Style for content inside content-section*/
+.content-section p {
+    margin: 2px 0;
+}
+
 /*Style for the text in the columns*/
 .product-page nav {
     background-color: #FFF;
@@ -73,7 +201,7 @@
     text-align: center
 }
 
-/*Style for list registers columns */
+/*Style for list registers columns*/
 .containerListRegistercolumns {
     list-style: none;
     display: grid;
@@ -81,7 +209,7 @@
     padding-left: 0;
 }
 
-/*Style for text in the html list */
+/*Style for text in the html list*/
 .containerListRegistercolumns > li > a {
     display: block;
     padding: 15px 20px;
@@ -131,7 +259,6 @@
     text-align: center;
 }
 
-
 /*Style for comment */
 .textComment {
     text-align: center;
@@ -178,12 +305,76 @@
     margin: 10px 0px;
 }
 
-
 /* Style for the result block when hover */
 .register-block:hover {
     background-color: #9F9F9F;
 }
 
+/* Style for the search section */
+.product-pagination {
+    height: 100%;
+    text-align: center;
+    align-items: center;
+}
+
+/* style for po pop up carousel*/
+.carousel-section-pop-up {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20%;
+    width: 100%;
+    margin: 5px;
+    overflow: auto;
+}
+
+/* styles for pop up images collection section */
+.img-carousel-pop-up {
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+    max-width: 100%;
+}
+
+/* styles for pop up imagen section */
+.small-img-space-pop-up {
+    flex: 0 0 auto;
+    margin: 5px;
+    width: 50px;
+    height: 50px;
+    border: 1px solid;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Styles to hide scroll bar*/
+.img-carousel-pop-up::-webkit-scrollbar {
+    display: none;
+}
+
+/* Styles to hide scroll bar*/
+.img-carousel-pop-up {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+/* styles for individual pop up imagen*/
+.small-img-space-pop-up img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+/* styles for individual pop up imagen hover*/
+.small-img-space-pop-up:hover {
+    cursor: pointer;
+    border: 2px solid #007bff;
+}
+
+/* Style for the seccion of pop up*/
 .interactive-popup-section {
     height: 100%;
     text-align: center;
@@ -310,7 +501,7 @@
 .product-list-button {
     display: inline-block;
     height: auto;
-    width: 75%;
+    width: 50%;
     text-align: center;
     margin: 10px;
     padding: 10px;

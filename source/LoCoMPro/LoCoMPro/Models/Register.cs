@@ -10,7 +10,7 @@ namespace LoCoMPro.Models
     /// Model for the Register entity, has a user, store, and a product asociated with it.
     /// It is intended to keep track of a product's price over time.
     /// </summary>
-    [PrimaryKey(nameof(ContributorId), nameof(ProductName), nameof(StoreName), nameof(SubmitionDate))]
+    [PrimaryKey(nameof(ContributorId), nameof(ProductName), nameof(StoreName), nameof(CantonName), nameof(ProvinciaName), nameof(SubmitionDate))]
     public class Register
     {
         /// <summary>
@@ -87,6 +87,7 @@ namespace LoCoMPro.Models
         /// </summary>
         public string? ProvinciaName { get; set; }
 
+
         /// <summary>
         /// Reviews made of this register
         /// </summary>
@@ -96,6 +97,11 @@ namespace LoCoMPro.Models
         /// Reports made of this register
         /// </summary>
         public ICollection<Report>? Reports { get; set; } = new List<Report>();
+
+        /// <summary>
+        /// Images associated with the register
+        /// </summary>
+        public ICollection<Image>? Images { get; set; }
 
     }
 }
