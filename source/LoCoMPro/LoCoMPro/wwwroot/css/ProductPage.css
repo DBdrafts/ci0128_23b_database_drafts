@@ -1,4 +1,4 @@
-﻿/* Styles for the producto visualization page*/
+﻿/* Styles for the product visualization page*/
 
 /* Style for the title of product requested */
 .titleProduct {
@@ -479,19 +479,48 @@
     font-weight: 500;
 }
 
+/* Style for the report icon */
 .report-icon-container {
     position: absolute;
     top: 10px;
     right: 10px;
 }
 
+/* Style for the button container */
 .buttons-container {
     margin-top:20px;
-
 }
 
 /* Style for the feedback message of the Pop Up when active */
 .feedback-message.active {
-    display: block;
-    opacity: 1;
+    display: block; /* Mostrar el mensaje */
+    opacity: 1; /* Hacerlo visible */
+}
+
+/* Style for the button that manage the user list */
+.product-list-button {
+    display: inline-block;
+    height: auto;
+    width: 50%;
+    text-align: center;
+    margin: 10px;
+    padding: 10px;
+    font-size: larger;
+}
+
+/* Style for the button that manage the user list when add the product */
+#add-to-list {
+    background-color: #39A4F4;
+}
+
+/* Style for the button that manage the user list when add the product when hover */
+#add-to-list:hover {
+    background-color: #74C2F8;
+}
+
+/* Style for the plus circle icon */
+.fa-plus-circle {
+    font-size: 22px !important;
+    text-align: center;
+    margin: 0px 10px;
 }

@@ -9,8 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using NUnit.Framework;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography.X509Certificates;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace LoCoMPro.Pages
 {
@@ -23,11 +27,17 @@ namespace LoCoMPro.Pages
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
+        /// Reference to the user product list
+        /// </summary>
+        public UserProductList _userProductList { get; set; }
+
+        /// <summary>
         /// Creates a new ProductPageModel.
         /// </summary>
         /// <param name="context">DB Context to pull data from.</param>
         /// <param name="configuration">Configuration for page.</param>
         /// <param name="userManager">User manager to handle user permissions.</param>
+        /// <param name="httpContextAccessor">Allow access to the http context
         // Product Page constructor 
         public ProductPageModel(LoCoMProContext context, IConfiguration configuration
             , UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
@@ -35,6 +45,7 @@ namespace LoCoMPro.Pages
         {
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
+            _userProductList = new UserProductList(_httpContextAccessor);
         }
 
         /// <summary>
@@ -56,6 +67,11 @@ namespace LoCoMPro.Pages
         /// List of the review made by the user that exist in the database.
         /// </summary>
         public IList<Review> UserReviews = new List<Review>();
+
+        /// <summary>
+        /// List of the product that are in the list of the user
+        /// </summary>
+        public IList<Register> UserProductList = new List<Register>();
 
         /// <summary>
         /// List of the reports made by the user that exist in the database.
@@ -268,8 +284,43 @@ namespace LoCoMPro.Pages
             }
         }
 
+
         /// <summary>
-        /// Gets and sets the reports made by the User
+        /// Add the product to the user list
+        /// <param name="productData">The data of the product</param>
+        /// </summary>
+        public IActionResult OnPostAddToProductList(string productData)
+        {
+            // Gets and split the data
+            string[] values = SplitString(productData, '\x1F');
+
+            var newElement = new UserProductListElement(values[0], values[1], values[2]
+                , values[3], values[4], values[5], values[6]);
+
+            // If the element is not in the list
+            if (!_userProductList.ExistElementInList(newElement))
+            {
+                // Adds the element to the list
+                _userProductList.AddProductToList(newElement);
+            }
+
+            return new JsonResult("OK");
+        }
+
+        /// <summary>
+        /// Delete the product from the user list
+        /// </summary>
+        //public void RemoveFromProductList()
+        //{
+        //    // Add the first register of this product and store to the list
+        //    if (Registers != null && UserProductList != null && Registers.FirstOrDefault() != null)
+        //    {
+        //        UserProductList.Remove(Registers.FirstOrDefault()!);
+        //    }
+        //}
+
+        /// <summary>
+        /// Handle report interactions
         /// </summary>
         public async void ObtainUserReports()
         {

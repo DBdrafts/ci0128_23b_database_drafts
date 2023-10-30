@@ -6,6 +6,7 @@
     ViewBag.ShowSearchBar = true;
     ViewBag.ShowLogoLink = true;
     @Html.AntiForgeryToken();
+    char s = (char)31; // ASCII Control Unit Separator
 }
 @using Microsoft.AspNetCore.Identity
 @using LoCoMPro.Data;
@@ -17,7 +18,8 @@
     <script src="~/js/interactionsPopUp.js"></script>
 
     <link rel="stylesheet" href="~/css/RateRegister.css" />
-    <script src="~/js/RateRegister.js"></script>
+
+    <script src="~/js/productListButton.js"></script>
 
     <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
 </head>
@@ -123,10 +125,28 @@
                         <p>Precio Aproximado: ₡ @Model.AvgPrice.ToString("N0")</p>
                     }
                 }
+
+                @{
+                    var productData = $"{firstNonNullProduct.Name}{s}{firstNonNullProduct.Brand}" +
+                    $"{s}{firstNonNullProduct.Model}{s}{Model.SearchStoreName}" +
+                    $"{s}{firstNonNullStore.ProvinciaName}{s}{firstNonNullStore.CantonName}" +
+                    $"{s}{Model.AvgPrice.ToString("N0")}";
+
+                    if (SignInManager.IsSignedIn(User))
+                    {
+                        <button type="button" class="button-general product-list-button" id="add-to-list"
+                                data-product-data="@productData" onclick="callAddProductToList(this)">
+                            Añadir a lista de interés
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                        </button>
+                    }
+                    @* <button type="button" class="button-general product-list-button" id="delete-from-list"></button> *@
+                }
             </div>
         </div>
-    </div>
 
+    </div>
+    
     <!-- Horizontal separating line -->
     <hr class="style-four">
 
@@ -137,7 +157,7 @@
     </div>
 
     <!-- Container for column options -->
-   <nav>
+   <nav>  
         <ul class="containerListRegistercolumns">
             <li>
                 <!-- Button to sort by the date -->
@@ -162,7 +182,6 @@
         {
             <!-- Search result section -->
             <!-- Individual registers -->
-            char s = (char)31; // ASCII Control Unit Separator
             var user = Model.Users.FirstOrDefault(u => u.Id == register.ContributorId)?.UserName;
             var reviewValue = Model.UserReviews.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReviewValue;
             var reportState = Model.UserReports.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReportState;

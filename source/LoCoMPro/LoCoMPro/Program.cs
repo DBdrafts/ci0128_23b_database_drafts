@@ -39,6 +39,11 @@ builder.Services.AddTransient<IEmailSender, EmailSender>(i =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -69,7 +74,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-
+app.UseSession();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
