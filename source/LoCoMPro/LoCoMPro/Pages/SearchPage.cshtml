@@ -19,18 +19,19 @@
     </div>
 
     <!-- Search filter section -->
-    <div class="filter-section">
+    <div class="filter-section" id="filter-section">
         <!-- Search filter title -->
         <h4> Filtros </h4>
 
         @if (Model.Category.Count() > 1)
         {
             <!-- Filter by category -->
-            <h5> Categorías </h5>
+            <h5> Categoría </h5>
                 @foreach (var category in Model.Category)
                 {
                     <div class="filter-line">
-                        <input type="checkbox" name="SelectedCategories" value="@category.CategoryName" @(Model.SelectedCategories != null && Model.SelectedCategories.Contains(category.CategoryName) ? "checked" : "") />
+                        <input type="checkbox" name="SelectedCategories" value="@category.CategoryName" @(Model.SelectedCategories != null 
+                            && Model.SelectedCategories.Contains(category.CategoryName) ? "checked" : "") />
                         <label>@Html.DisplayFor(modelItem => category.CategoryName)</label>
                     </div>
                 }
@@ -39,11 +40,12 @@
         <!-- Filter by Province -->
         @if (Model.Provinces.Count() > 1)
         {
-            <h5> Provincias </h5>
+            <h5> Provincia </h5>
                 @foreach (var province in Model.Provinces)
                 {
                     <div class="filter-line">
-                        <input type="checkbox" name="SelectedProvinces" value="@province.Name" @(Model.SelectedProvinces != null && Model.SelectedProvinces.Contains(province.Name) ? "checked" : "") />
+                        <input type="checkbox" name="SelectedProvinces" value="@province.Name" @(Model.SelectedProvinces != null 
+                            && Model.SelectedProvinces.Contains(province.Name) ? "checked" : "") />
                         <label>@Html.DisplayFor(modelItem => province.Name)</label>
                     </div>
                 }
@@ -52,11 +54,12 @@
         <!-- Filter by Canton -->
         @if (Model.Cantons.Count() > 1)
         {
-            <h5> Cantones </h5>
+            <h5> Cantón </h5>
                 @foreach (var canton in Model.Cantons)
                 {
                     <div class="filter-line">
-                        <input type="checkbox" name="SelectedCantons" value="@canton.CantonName" @(Model.SelectedCantons != null && Model.SelectedCantons.Contains(canton.CantonName) ? "checked" : "") />
+                        <input type="checkbox" name="SelectedCantons" value="@canton.CantonName" @(Model.SelectedCantons != null 
+                            && Model.SelectedCantons.Contains(canton.CantonName) ? "checked" : "") />
                         <label>@Html.DisplayFor(modelItem => canton.CantonName)</label>
                     </div>
                 }
@@ -64,13 +67,14 @@
     </div>
     <!-- No product found message -->
     <div class="text-center" id="product-not-found" hidden>
-        <h2> No se encontrado resultados de "@Model.SearchString" al buscar por "@Model.SearchType" </h2>
+        <h2> No se han encontrado resultados de "@Model.SearchString" al buscar por "@Model.SearchType" </h2>
         <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
     </div>
     <!-- Search result section -->
     <div class="search-section" id="search-results">
         <!-- Search section title -->
         <h1> Resultados "@Model.SearchString" - Búsqueda por "@Model.SearchType" </h1>
+        <div class="results-cont-msg" span id="results-count"></div>
 
 
         <!-- Search section header -->
@@ -127,7 +131,7 @@
                             @Html.DisplayFor(modelItem => register.CantonName)
                         </span>
                         <span id="register-price" value="@register.Price">
-                            ₡ @Html.DisplayFor(modelItem => register.Price)
+                            ₡ @register.Price.ToString("N0")
                         </span>
                         <span id="register-date" value="@register.SubmitionDate.Date">
                             @register.SubmitionDate.ToShortDateString()
