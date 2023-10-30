@@ -1,10 +1,12 @@
-﻿@page
+﻿@page "~/ProductListPage"
 @model LoCoMPro.Pages.ProductListPageModel
 @{
-    ViewData["Title"] = "Lista de Productos";
+    ViewData["Title"] = "Lista de Producto";
     Layout = "_Layout";
     ViewBag.ShowSearchBar = true;
     ViewBag.ShowLogoLink = true;
+    @Html.AntiForgeryToken();
+    char s = (char)31; // ASCII Control Unit Separator
 }
 
 <head>
@@ -14,6 +16,8 @@
 </head>
 
 <div>
+    <div id="feedbackMessage" class="feedback-message"></div>
+
     <div class="information-section">
         <!-- Title of the list-->
         <div class="list-page-title">
@@ -22,7 +26,7 @@
 
         <!-- Amount of products in the list-->
         <div class="list-page-subtitle">
-            <h5>Cantidad de productos: @Model.UserProductList.Count</h5>
+            <h5>Cantidad de productos: <span id="product-count">@Model.UserProductList.Count</span></h5>
             <!-- Something here -->
 
             <h5>Precio aproximado: ₡ @Model.TotalPrice.ToString("N0")</h5>
@@ -36,6 +40,8 @@
     <div class ="product-list-section">
         <!-- Container for column -->
         <nav>
+            <div class="results-cont-msg" span id="results-count" hidden></div>
+
             <ul class="list-page-column-title">
                 <li>
                     <div class="textComment">Producto</div>
@@ -64,39 +70,39 @@
             @for (int i = 0; i < Model.UserProductList.Count; i++)
             {
                 var product = Model.UserProductList[i];
+
+                var productData = $"{product.ProductName}{s}{product.ProductBrand}" +
+                        $"{s}{product.ProductModel}{s}{product.StoreName}" +
+                        $"{s}{product.Province}{s}{product.Canton}" +
+                        $"{s}{product.AvgPrice}";
+
                 <!-- A result block -->
-                <li class="product-list-block register-block-pagination" id="product-item-@i">
+                <li class="product-list-block" id="product-item-@i">
                     <!-- Route and data for each result -->
                         <span id="register-product-name" value="@product.ProductName">
                             @Html.DisplayFor(modelItem => product.ProductName)
                         </span>
-                        <span id="register-province-name" value="@product.ProductBrand">
+                        <span id="register-product-brand" value="@product.ProductBrand">
                             @Html.DisplayFor(modelItem => product.ProductBrand)
                         </span>
-                        <span id="register-canton-name" value="@product.ProductModel">
+                        <span id="register-product-model" value="@product.ProductModel">
                             @Html.DisplayFor(modelItem => product.ProductModel)
                         </span>
                         <span id="register-store-name" value="@product.StoreName">
                             @Html.DisplayFor(modelItem => product.StoreName)
                         </span>
-                        <span id="register-province-name" value="@product.Province + , + @product.Canton">
+                        <span id="register-location-name" value="@product.Province + , + @product.Canton">
                             @product.Province, @product.Canton
                         </span>
                         <span class="align-right" id="register-price" value="@product.AvgPrice">
                             ₡ @Html.DisplayFor(modelItem => product.AvgPrice)
                         </span>
-                        <div>
-                            <i class="fa fa-minus-circle" aria-hidden="true" onclick="hideProductItem(@i)"></i>
-                        </div>
-                        @* <button type="button" class="button-general remove-button" >
-                        </button> *@
+                        <button type="button" data-product-data="@productData" onclick="removeProductFromList(this, @i)">
+                            <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                        </button>
                 </li>
             }
         </ul>
-        <div class="product-pagination">
-            <!-- Pagination section -->
-            @await Html.PartialAsync("_Pagination")
-        </div>
     </div>
-    <script src="~/js/pagination.js"></script>
+    <script src="~/js/feedbackMessage.js"></script>
 </div>

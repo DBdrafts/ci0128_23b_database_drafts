@@ -42,12 +42,12 @@ function callRemoveProductFromList(removeProductButton) {
         data: { productData: productData },
         success: function (data) {
             console.log('Product added successfully' + data);
-            showFeedbackMessage('El producto ha sido eliminado de su lista!');
+            showFeedbackMessage('El producto ha sido eliminado de su lista!', 'feedbackMessage');
             toggleButtonToAdd()
         },
         error: function (error) {
             console.error('Error saving report: ' + error);
-            showFeedbackMessage('Error al eliminar el producto a la lista!');
+            showFeedbackMessage('Error al eliminar el producto a la lista!', 'feedbackMessage');
 
         }
     });

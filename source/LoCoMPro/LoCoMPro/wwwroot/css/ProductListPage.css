@@ -65,6 +65,7 @@
     text-align: left;
     justify-content: space-around;
     min-width: 950px;
+    width: 100%;
 }
 
 /* Style for the register block text */
@@ -114,4 +115,30 @@
 /* Style for the minus circle icon */
 .fa-minus-circle:hover {
     background-color: #E25A5A;
+}
+
+/* Style for the feedback message of the Pop Up */
+.feedback-message {
+    background-color: #F5AA38;
+    margin: 26% auto;
+    color: black;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: 14px;
+    right: 5%;
+    transform: translateX(-50%);
+    display: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    font-weight: 500;
+}
+
+/* Style for the feedback message of the Pop Up when active */
+.feedback-message.active {
+    display: block; /* Mostrar el mensaje */
+    opacity: 1; /* Hacerlo visible */
 }

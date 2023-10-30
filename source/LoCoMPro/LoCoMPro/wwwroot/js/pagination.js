@@ -48,10 +48,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const lastResultCurrentPage = Math.min(currentPage * pageSize, resultBlocks.length);
 
 
-        let resultsRangeMsg = `${firstResultCurrentPage}-${lastResultCurrentPage} de ${resultBlocks.length} resultados encontrados`;
+        let resultsRangeMsg = `${firstResultCurrentPage}-${lastResultCurrentPage} de ${resultBlocks.length} elementos`;
 
         if (firstResultCurrentPage === resultBlocks.length) {
-            resultsRangeMsg = `Resultado ${lastResultCurrentPage} de ${resultBlocks.length} encontrados`
+            resultsRangeMsg = `Elemento ${lastResultCurrentPage} de ${resultBlocks.length}`
         }
 
         document.getElementById("results-count").textContent = resultsRangeMsg;
