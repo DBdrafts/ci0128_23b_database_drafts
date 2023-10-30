@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const selectedProvinces = getSelectedCheckboxes('SelectedProvinces');
         const selectedCantons = getSelectedCheckboxes('SelectedCantons');
         notfound = document.getElementById("product-not-found");
+        filterSection = document.getElementById("filter-section");
 
         // Filter the resultBlocks based on the selected criteria
         resultBlocks = queryResults.filter(block => {
@@ -32,6 +33,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (resultBlocks.length <= 0) {
             notfound.hidden = false;
             resultSection.hidden = true;
+            filterSection.hidden = true;
+            document.getElementById("results-count").textContent = "0";
         } else {
 
             // Sort the filtered resultBlocks
@@ -54,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             notfound.hidden = true;
             resultSection.hidden = false;
+            filterSection.hidden = false;
         }
     }
 

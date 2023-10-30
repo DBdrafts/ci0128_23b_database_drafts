@@ -94,8 +94,9 @@ namespace LoCoMPro.Pages
         /// </summary>
         [BindProperty(SupportsGet = true)]
         public Dictionary<string, string> CategoryMap { get; set; } = default!;
+
         /// <summary>
-        /// Resulr of the query.
+        /// Result of the query.
         /// </summary>
         public IEnumerable<Register>? Registers { get; set; } = new List<Register>();
         /// <summary>

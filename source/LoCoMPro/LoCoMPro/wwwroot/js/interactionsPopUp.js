@@ -52,7 +52,6 @@ function toggleReport() {
 }
 
 
-
 /// <summary>
 /// Save the interaction made by the user
 /// </summary>
@@ -70,36 +69,27 @@ function saveInteractions() {
             success: function (data) {
                 console.log('Report saved successfully' + data);
                 if (reportChanged && registerReviewed) {
-                    showFeedbackMessage('Su reporte y valoración se han realizado correctamente!');
+                    showFeedbackMessage('Su reporte y valoración se han realizado correctamente!', 'feedbackMessage');
                 } else {
                     if (reportChanged) {
-                        showFeedbackMessage('Su reporte se ha realizado correctamente!');
+                        if (reportActivated) {
+                            showFeedbackMessage('Su reporte se ha realizado correctamente!', 'feedbackMessage');
+                        } else {
+                            showFeedbackMessage('Su reporte ha sido revertido correctamente!', 'feedbackMessage');
+                        }
                     } else {
-                        showFeedbackMessage('Su valoración se ha realizado correctamente!');
+                        showFeedbackMessage('Su valoración se ha realizado correctamente!', 'feedbackMessage');
                     }
                 }
             },
             error: function (error) {
                 console.error('Error saving report: ' + error);
-                showFeedbackMessage('Error al realizar el reporte!');
+                showFeedbackMessage('Error al realizar el reporte!', 'feedbackMessage');
 
             }
         });
     }
     closeInteractionsPopup();
-}
-
-/// <summary>
-/// Show the feedback message that confirms the action
-/// </summary>
-function showFeedbackMessage(message) {
-    var feedbackMessage = document.getElementById('feedbackMessage');
-    feedbackMessage.textContent = message;
-    feedbackMessage.classList.add('active');
-
-    setTimeout(function () {
-        feedbackMessage.classList.remove('active');
-    }, 2500); // shows the message for 2.5 sg
 }
 
 //Note: This code was adapted from the page "codepen.io" to satisfies the needs of the project. All the credit go to this page.

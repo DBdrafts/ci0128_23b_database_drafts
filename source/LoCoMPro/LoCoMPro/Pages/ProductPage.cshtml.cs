@@ -97,6 +97,11 @@ namespace LoCoMPro.Pages
         public decimal AvgPrice { get; set; }
 
         /// <summary>
+        /// Number of results.
+        /// </summary>
+        public int ResultsNumber;
+
+        /// <summary>
         /// GET HTTP request, initializes page values.
         /// </summary>
         /// <param name="searchProductName">Product to display data of.</param>
@@ -162,6 +167,8 @@ namespace LoCoMPro.Pages
 
             List<string> userIds = registers.Select(r => r.ContributorId).Distinct().ToList()!;
             Users = await _context.Users.Where(u => userIds.Contains(u.Id)).ToListAsync();
+
+            ResultsNumber = registers.Count();
 
             // Gets the Data From data base 
             Registers = await registers.ToListAsync();
@@ -377,7 +384,8 @@ namespace LoCoMPro.Pages
             if (lastReport == null)
             {
                 _context.Reports.Add(new Report { ReportedRegister = registerToUpdate,
-                    Reporter = user!, ReportDate = interactionDate, ReportState = User.IsInRole("Moderator") ? 2 : 1 });
+                    Reporter = user!, ReportDate = interactionDate, CantonName = registerToUpdate.CantonName!,
+                    ProvinceName = registerToUpdate.ProvinciaName!, ReportState = User.IsInRole("Moderator") ? 2 : 1 });
             }
             else
             {
@@ -408,7 +416,8 @@ namespace LoCoMPro.Pages
             if (lastReview == null)
             {
                 _context.Reviews.Add(new Review() { ReviewedRegister = registerToUpdate,
-                    Reviewer = user!, ReviewValue = reviewedValue, ReviewDate = interactionDate
+                    Reviewer = user!, ReviewValue = reviewedValue, ReviewDate = interactionDate,
+                    CantonName = registerToUpdate.CantonName!, ProvinceName = registerToUpdate.ProvinciaName!
                 });
             }
             else

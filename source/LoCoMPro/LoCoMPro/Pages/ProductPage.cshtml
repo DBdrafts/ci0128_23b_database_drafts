@@ -35,7 +35,6 @@
         @{ // select the first matches
             var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
             var firstNonNullStore = Model.Store.FirstOrDefault(r => r.Name != null);
-            System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("es-CR"); // Costa Rica datetime format
         }
         <!-- brand column -->
         <div class="column">
@@ -139,7 +138,7 @@
             var reportState = Model.UserReports.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReportState;
             if (reportState == null) reportState = -1;
             var registerKeys = $"{register.SubmitionDate}{s}{register.ContributorId}{s}{register.ProductName}" +
-            $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToString("d", culture)}" +
+            $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToShortDateString()}" +
             $"{s}{user}{s}{register.Comment}{s}{reviewValue}{s}{reportState}";
 
             <li class="register-block align register-block-pagination">
@@ -148,7 +147,7 @@
                         @register.SubmitionDate.ToShortDateString()
                     </span>
                     <span id="register-price" value="@register.Price">
-                        ₡ @Html.DisplayFor(modelItem => register.Price)
+                        ₡ @register.Price.ToString("N0")
                     </span>
                     <span id="register-comment" value="@register.Comment">
                         @Html.DisplayFor(modelItem => register.Comment)
@@ -233,5 +232,6 @@
         <!-- Pagination section -->
         @await Html.PartialAsync("_Pagination")
     </div>
+    <script src="~/js/feedbackMessage.js"></script>
     <script src="~/js/pagination.js"></script>
 </div>

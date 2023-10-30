@@ -58,6 +58,10 @@ namespace LoCoMPro.Data
         /// Reviews saved in the database.
         /// </summary>
         public DbSet<Review> Reviews { get; set; }
+        /// <summary>
+        /// Images saved in the database.
+        /// </summary>
+        public DbSet<Image> Images { get; set; }
 
         /// <summary>
         /// Reports saved in the database.
@@ -82,6 +86,7 @@ namespace LoCoMPro.Data
             modelBuilder.Entity<Provincia>().ToTable("Provincia");
             modelBuilder.Entity<Review>().ToTable("Review");
             modelBuilder.Entity<Report>().ToTable("Report");
+            modelBuilder.Entity<Image>().ToTable("Image");
 
             // Building relationships for Store
             modelBuilder.Entity<Store>()
@@ -99,7 +104,18 @@ namespace LoCoMPro.Data
             modelBuilder.Entity<User>()
                 .HasOne(p => p.Location)
                 .WithMany(e => e.Users)
-                .HasForeignKey(c => new { c.CantonName, c.ProvinciaName });
+                .HasForeignKey(c => new { c.CantonName, c.ProvinciaName })
+                .OnDelete(DeleteBehavior.NoAction);
+
+
+            modelBuilder.Entity<Image>()
+                .HasKey(i => new { i.ImageId, i.ContributorId, i.ProductName, i.StoreName, i.CantonName, i.ProvinceName, i.SubmitionDate });
+
+            modelBuilder.Entity<Image>()
+                .HasOne(i => i.Register)
+                .WithMany(r => r.Images)
+                .HasForeignKey(i => new { i.ContributorId, i.ProductName, i.StoreName, i.CantonName, i.ProvinceName, i.SubmitionDate })
+                .OnDelete(DeleteBehavior.NoAction);
 
             // Building relationships for Register
             modelBuilder.Entity<User>()
@@ -117,7 +133,7 @@ namespace LoCoMPro.Data
 
                 entity.HasOne(l => l.ReviewedRegister)
                     .WithMany(p => p.Reviews)
-                    .HasForeignKey(e => new {e.ContributorId, e.ProductName, e.StoreName, e.SubmitionDate});
+                    .HasForeignKey(e => new { e.ContributorId, e.ProductName, e.StoreName, e.CantonName, e.ProvinceName, e.SubmitionDate });
             });
 
             // Building relationships for Report
@@ -130,11 +146,8 @@ namespace LoCoMPro.Data
 
                 entity.HasOne(l => l.ReportedRegister)
                     .WithMany(p => p.Reports)
-                    .HasForeignKey(e => new {e.ContributorId, e.ProductName, e.StoreName, e.SubmitionDate});
+                    .HasForeignKey(e => new { e.ContributorId, e.ProductName, e.StoreName, e.CantonName, e.ProvinceName, e.SubmitionDate });
             });
-
-
-
 
 
             // Ignoring columns from default IdentityUser
@@ -216,8 +229,10 @@ namespace LoCoMPro.Data
             modelBuilder.Entity<Register>()
                 .Navigation(u => u.Reports)
                 .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Register>()
+                .Navigation(u => u.Images)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
         }
-
     }
-
 }
