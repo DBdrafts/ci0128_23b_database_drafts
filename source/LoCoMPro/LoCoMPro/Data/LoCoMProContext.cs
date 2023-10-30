@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using LoCoMPro.Models;
+using NetTopologySuite.Geometries;
+using Microsoft.Data.SqlClient;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
+using System.Collections;
 
 namespace LoCoMPro.Data
 {
@@ -48,7 +52,7 @@ namespace LoCoMPro.Data
         /// </summary>
         public DbSet<Store> Stores { get; set; }
 
-
+        public DbSet<SearchResult> SearchResults { get; set; }
 
         // TODO: May want to create a builder for each class
         /// <summary>
@@ -173,14 +177,24 @@ namespace LoCoMPro.Data
                 entity.Navigation(c => c.Products)
                     .UsePropertyAccessMode(PropertyAccessMode.Property);
             });
+
+            modelBuilder.Entity<SearchResult>().ToView("SearchResult");
         }
 
         public void ExecuteSqlScriptFile(string scriptFilePath)
         {
             string script = File.ReadAllText(scriptFilePath);
-            Database.ExecuteSqlRaw(script);
+            this.Database.ExecuteSqlRaw(script);
         }
 
+        public IEnumerable<SearchResult> GetSearchResults(string searchType, string searchString, Point basePoint)
+        {
+            // Use FromSqlRaw to call the stored procedure
+            return SearchResults.FromSqlRaw("EXEC GetSearchResults @searchType, @searchString",//, @basePoint",
+                    new SqlParameter("@searchType", searchType),
+                    new SqlParameter("@searchString", searchString)/*,
+                    new SqlParameter("@basePoint", basePoint)*/);
+        }
 
     }
 }
