@@ -20,7 +20,7 @@ function getOppositeOrder(order) {
 }
 document.addEventListener("DOMContentLoaded", function () {
     // Sort the result blocks based on the selected sorting criteria
-    window.sortResultBlocks = function (order, field = "#register-price") {
+    window.sortResultBlocks = function (order, field = "#register-distance") {
         // Implement your sorting logic here
         resultBlocks.sort((a, b) => {
             const valueA = parseFloat(a.querySelector(field).getAttribute("value"));

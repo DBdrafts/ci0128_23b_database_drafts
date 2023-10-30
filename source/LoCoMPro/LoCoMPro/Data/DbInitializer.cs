@@ -78,7 +78,7 @@ namespace LoCoMPro.Data
 
                 if (float.TryParse(group.Key.Latitude, out float latitude) && float.TryParse(group.Key.Longitude, out float longitude))
                 {
-                    var coordinates = new Coordinate (latitude, longitude);
+                    var coordinates = new Coordinate (longitude, latitude);
                     var canton = new Canton
                     {
                         CantonName = group.Key.CantonName,

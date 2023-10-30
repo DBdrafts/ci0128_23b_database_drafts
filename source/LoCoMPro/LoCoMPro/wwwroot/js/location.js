@@ -1,4 +1,5 @@
 let hasPopulatedProvinceSelect = false;
+let changeFromMap = false;
 let map = null;
 // Variables to save between pages
 var savedProvince = "";
@@ -15,7 +16,7 @@ $(document).ready(function () {
     // Show the popup when the button is clicked
     $("#showPopupButton").on("click", function () {
         $("#mapPopup").show();
-       /* $("mapPopUp").style.display = "block";*/
+        /* $("mapPopUp").style.display = "block";*/
         initializeMap();
     });
 
@@ -38,6 +39,10 @@ $(document).ready(function () {
 
     // Call the function to populate provinceSelect only once
     populateProvinceSelect();
+
+    $("#province").on("click", function () {
+        changeFromMap = false;
+    });
 
     $("#province").on("change", function () {
         selectedProvince = $("#province").val();
@@ -73,7 +78,7 @@ $(document).ready(function () {
         if (selectedCanton) {
             if (!currentPageUrl.includes("/AddProductPage")) {
                 $("#chosenCanton").text(selectedCanton);
-                getCoordinatesFromName();
+                if (changeFromMap == false) { getCoordinatesFromName(); }
             }
         }
     });
@@ -115,6 +120,7 @@ function initializeMap() {
 
 // Function to handle the user's click on the map
 function handleMapClick(location) {
+    changeFromMap = true;
     // You can do something with the selected location here
     console.log('User clicked at latitude: ' + location.lat() + ', longitude: ' + location.lng());
     console.log(location);
@@ -156,7 +162,7 @@ function reverseGeocodeLocation(location) {
                     if (types[0] == 'administrative_area_level_1') {
                         /*console.log('Marker is in the province of ' + shortName);*/
                         provinceName = shortName.replace(/\s*Provinc\w*\s*(?:de)?\s*/g, '');
-                    } else if (types[0] == 'administrative_area_level_2' && types[1] == 'political') {
+                    } else if ((types[0] == 'administrative_area_level_2' || types[0] == 'locality') && types[1] == 'political') {
                         cantonName = shortName;
                     }
                     //console.log('Address Component Types:', types);
@@ -255,9 +261,11 @@ function getCoordinatesFromName() {
 
             const latitude = geoJson["coordinates"][0];
             const longitude = geoJson["coordinates"][1]
+
             const latlng = new google.maps.LatLng(latitude, longitude);
-            updateMarkerPosition(latlng);
+            
             map.setCenter(latlng);
+            updateMarkerPosition(latlng);
         },
         error: function (error) {
             console.error('Error: ', error);

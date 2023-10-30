@@ -122,14 +122,9 @@ namespace LoCoMPro.Pages
                 geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
             }
             SearchResults = _context.GetSearchResults(SearchType ?? "Nombre", SearchString!, geolocation);
-            if (SearchResults != null) {
-                foreach (var result in SearchResults)
-                {
-                    var distance = result.Distance;
-                }
-            }
 
-
+            SearchResults = SearchResults.GroupBy(r => new { r.ProductName, r.StoreName })
+                        .Select(grouped => grouped.OrderByDescending(r => r.SubmitionDate).First());
             //foreach (var result in SearchResults)
             //{
             //    var distance = result.Distance;
