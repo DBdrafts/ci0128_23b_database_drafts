@@ -88,6 +88,7 @@ namespace LoCoMPro.Data
             modelBuilder.Entity<Report>().ToTable("Report");
             modelBuilder.Entity<Image>().ToTable("Image");
 
+
             // Building relationships for Store
             modelBuilder.Entity<Store>()
                 .HasOne(p => p.Location)

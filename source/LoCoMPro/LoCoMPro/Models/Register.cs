@@ -87,6 +87,7 @@ namespace LoCoMPro.Models
         /// </summary>
         public string? ProvinciaName { get; set; }
 
+
         /// <summary>
         /// Reviews made of this register
         /// </summary>

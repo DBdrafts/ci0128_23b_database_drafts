@@ -148,6 +148,9 @@ namespace LoCoMPro.Pages
             // Initial request for all the registers in the database
             var registers = from r in _context.Registers select r;
 
+            // add the images from every register
+            registers = registers.Include(r => r.Images);
+
             // If the name of the propertiesSearch is not null 
             if (!string.IsNullOrEmpty(SearchProductName) &&
                 !string.IsNullOrEmpty(SearchStoreName) && 
@@ -159,6 +162,7 @@ namespace LoCoMPro.Pages
                 registers = registers.Where(x => x.StoreName != null && x.StoreName.Contains(SearchStoreName));
                 registers = registers.Where(x => x.CantonName != null && x.CantonName.Contains(SearchCantonName));
                 registers = registers.Where(x => x.ProvinciaName != null && x.ProvinciaName.Contains(SearchProvinceName));
+                registers = registers.Include(r => r.Images);
 
             }      
 
@@ -373,7 +377,7 @@ namespace LoCoMPro.Pages
         /// <param name="productName"><See cref="GetRegisterToUpdate"/>).</param>
         /// <param name="storeName"><See cref="GetRegisterToUpdate"/>).</param>
         private void HandleReport(User user, Register registerToUpdate, DateTime interactionDate,
-            string contributorId, string productName, string storeName, DateTime registSubmitDate)
+           string contributorId, string productName, string storeName, DateTime registSubmitDate)
         {
             var lastReport = _context.Reports.FirstOrDefault(r => r.ReporterId == user!.Id
                 && r.ProductName == productName
@@ -383,14 +387,20 @@ namespace LoCoMPro.Pages
 
             if (lastReport == null)
             {
-                _context.Reports.Add(new Report { ReportedRegister = registerToUpdate,
-                    Reporter = user!, ReportDate = interactionDate, CantonName = registerToUpdate.CantonName!,
-                    ProvinceName = registerToUpdate.ProvinciaName!, ReportState = User.IsInRole("Moderator") ? 2 : 1 });
+                _context.Reports.Add(new Report
+                {
+                    ReportedRegister = registerToUpdate,
+                    Reporter = user!,
+                    ReportDate = interactionDate,
+                    CantonName = registerToUpdate.CantonName!,
+                    ProvinceName = registerToUpdate.ProvinciaName!,
+                    ReportState = User.IsInRole("Moderator") ? 2 : 1
+                });
             }
             else
             {
                 _context.Reports.Remove(lastReport);
-            }   
+            }
         }
 
         /// <summary>
