@@ -84,15 +84,10 @@ namespace LoCoMPro.Data
             modelBuilder.Entity<Register>().ToTable("Register");
             modelBuilder.Entity<Canton>().ToTable("Canton");
             modelBuilder.Entity<Provincia>().ToTable("Provincia");
-            modelBuilder.Entity<Image>().ToTable("Image");
+            modelBuilder.Entity<Review>().ToTable("Review");
             modelBuilder.Entity<Report>().ToTable("Report");
             modelBuilder.Entity<Image>().ToTable("Image");
-=========
-            modelBuilder.Entity<Image>().ToTable("Image");
-            modelBuilder.Entity<Report>().ToTable("Report");
-            modelBuilder.Entity<Image>().ToTable("Image");
-            modelBuilder.Entity<Report>().ToTable("Report");
-            modelBuilder.Entity<Image>().ToTable("Image");
+
 
             // Building relationships for Store
             modelBuilder.Entity<Store>()
@@ -133,6 +128,12 @@ namespace LoCoMPro.Data
             modelBuilder.Entity<Review>(entity =>
             {
                 entity.HasOne(l => l.Reviewer)
+                    .WithMany(p => p.Reviews)
+                    .HasForeignKey(e => e.ReviewerId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(l => l.ReviewedRegister)
+                    .WithMany(p => p.Reviews)
                     .HasForeignKey(e => new { e.ContributorId, e.ProductName, e.StoreName, e.CantonName, e.ProvinceName, e.SubmitionDate });
             });
 
@@ -147,12 +148,6 @@ namespace LoCoMPro.Data
                 entity.HasOne(l => l.ReportedRegister)
                     .WithMany(p => p.Reports)
                     .HasForeignKey(e => new { e.ContributorId, e.ProductName, e.StoreName, e.CantonName, e.ProvinceName, e.SubmitionDate });
-                    .HasForeignKey(e => e.ReviewerId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne(l => l.ReviewedRegister)
-                    .WithMany(p => p.Reviews)
-                    .HasForeignKey(e => new {e.ContributorId, e.ProductName, e.StoreName, e.SubmitionDate});
             });
 
 

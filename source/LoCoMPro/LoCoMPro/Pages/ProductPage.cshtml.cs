@@ -377,7 +377,7 @@ namespace LoCoMPro.Pages
         /// <param name="productName"><See cref="GetRegisterToUpdate"/>).</param>
         /// <param name="storeName"><See cref="GetRegisterToUpdate"/>).</param>
         private void HandleReport(User user, Register registerToUpdate, DateTime interactionDate,
-            string contributorId, string productName, string storeName, DateTime registSubmitDate)
+           string contributorId, string productName, string storeName, DateTime registSubmitDate)
         {
             var lastReport = _context.Reports.FirstOrDefault(r => r.ReporterId == user!.Id
                 && r.ProductName == productName
@@ -385,25 +385,23 @@ namespace LoCoMPro.Pages
                 && r.SubmitionDate == registSubmitDate
                 && r.ContributorId == contributorId);
 
-                    // Gets the actual date and time
-                    DateTime reviewDate = DateTime.Now;
-                    reviewDate = new DateTime(reviewDate.Year, reviewDate.Month, reviewDate.Day
-                        , reviewDate.Hour, reviewDate.Minute, reviewDate.Second, 0);
-
-                    // If the user have not made a review
-                    if (lastReview == null)
-                    {
-                        // Adds the review
-                        _context.Reviews.Add(new Review() { ReviewedRegister = registerToUpdate
-                            , Reviewer = user!, ReviewValue = reviewedValue, ReviewDate = reviewDate
-                            , CantonName = registerToUpdate.CantonName!, ProvinceName = registerToUpdate.ProvinciaName!});
-                    } else
-                    {
-                        // Update the review
-                        lastReview.ReviewValue = reviewedValue;
-                        lastReview.ReviewDate = reviewDate;
-                    }
-                }
+            if (lastReport == null)
+            {
+                _context.Reports.Add(new Report
+                {
+                    ReportedRegister = registerToUpdate,
+                    Reporter = user!,
+                    ReportDate = interactionDate,
+                    CantonName = registerToUpdate.CantonName!,
+                    ProvinceName = registerToUpdate.ProvinciaName!,
+                    ReportState = User.IsInRole("Moderator") ? 2 : 1
+                });
+            }
+            else
+            {
+                _context.Reports.Remove(lastReport);
+            }
+        }
 
         /// <summary>
         /// Handle a review made by a user about a register.

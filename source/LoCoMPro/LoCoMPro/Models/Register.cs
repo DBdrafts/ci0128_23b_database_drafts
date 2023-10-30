@@ -87,7 +87,6 @@ namespace LoCoMPro.Models
         /// </summary>
         public string? ProvinciaName { get; set; }
 
-        public ICollection<Image>? Images { get; set; }
 
         /// <summary>
         /// Reviews made of this register

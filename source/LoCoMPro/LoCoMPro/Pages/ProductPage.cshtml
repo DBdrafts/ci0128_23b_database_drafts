@@ -30,7 +30,7 @@
             // select the first matches
             var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
             var firstNonNullStore = Model.Store.FirstOrDefault(r => r.Name != null);
-            System.Globalization.CultureInfo cultureSecond = new System.Globalization.CultureInfo("es-CR"); // Costa Rica datetime format
+            System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("es-CR"); // Costa Rica datetime format
             // create a var for amount of images
             int imagesAmount = 0;
         }
@@ -169,7 +169,7 @@
             var reportState = Model.UserReports.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReportState;
             if (reportState == null) reportState = -1;
             var registerKeys = $"{register.SubmitionDate}{s}{register.ContributorId}{s}{register.ProductName}" +
-            $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToString("d", cultureSecond)}" +
+            $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToString("d", culture)}" +
             $"{s}{user}{s}{register.Comment}{s}{reviewValue}";
 
             // images in registers
@@ -187,8 +187,6 @@
                     }
                 }
             }
-            $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToShortDateString()}" +
-            $"{s}{user}{s}{register.Comment}{s}{reviewValue}{s}{reportState}";
 
             <li class="register-block align register-block-pagination">
                 <a>
