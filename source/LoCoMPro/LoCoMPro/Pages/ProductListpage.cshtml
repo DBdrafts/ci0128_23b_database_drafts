@@ -9,6 +9,8 @@
 
 <head>
     <link rel="stylesheet" href="~/css/ProductListPage.css" />
+
+    <script src="~/js/deleteProductList.js"></script>
 </head>
 
 <div>
@@ -59,10 +61,11 @@
         <!-- Search results section -->
         <ul class="product-list-section">
             <!-- Put in all results -->
-            @foreach (var product in Model.UserProductList)
+            @for (int i = 0; i < Model.UserProductList.Count; i++)
             {
+                var product = Model.UserProductList[i];
                 <!-- A result block -->
-                <li class="product-list-block register-block-pagination">
+                <li class="product-list-block register-block-pagination" id="product-item-@i">
                     <!-- Route and data for each result -->
                         <span id="register-product-name" value="@product.ProductName">
                             @Html.DisplayFor(modelItem => product.ProductName)
@@ -82,7 +85,11 @@
                         <span class="align-right" id="register-price" value="@product.AvgPrice">
                             ₡ @Html.DisplayFor(modelItem => product.AvgPrice)
                         </span>
-                        <button type="button" class="button-general">D</button>
+                        <div>
+                            <i class="fa fa-minus-circle" aria-hidden="true" onclick="hideProductItem(@i)"></i>
+                        </div>
+                        @* <button type="button" class="button-general remove-button" >
+                        </button> *@
                 </li>
             }
         </ul>

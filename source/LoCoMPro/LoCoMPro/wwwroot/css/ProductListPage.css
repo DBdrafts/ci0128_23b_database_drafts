@@ -89,3 +89,29 @@
 .align-right {
     justify-content: flex-end !important;
 }
+
+
+/* Style for the button that remove the button from the list*/
+.remove-button {
+    display: inline-block;
+    height: auto;
+    width: auto;
+    text-align: center;
+    font-size: larger;
+    background-color: none;
+    background-color: #F87474;
+}
+
+/* Style for the minus circle icon */
+.fa-minus-circle {
+    display:inline-block;
+    font-size: 22px !important;
+    text-align: center;
+    margin: 0px 10px;
+    
+}
+
+/* Style for the minus circle icon */
+.fa-minus-circle:hover {
+    background-color: #E25A5A;
+}
