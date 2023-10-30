@@ -101,24 +101,28 @@
 
     </div>
 
-    @{
+    @if (SignInManager.IsSignedIn(User)){
 
         var productData = $"{firstNonNullProduct.Name}{s}{firstNonNullProduct.Brand}" +
             $"{s}{firstNonNullProduct.Model}{s}{Model.SearchStoreName}" +
             $"{s}{firstNonNullStore.ProvinciaName}{s}{firstNonNullStore.CantonName}" +
             $"{s}{Model.AvgPrice.ToString("N0")}";
 
-        if (SignInManager.IsSignedIn(User))
-        {
-            <button type="button" class="button-general product-list-button" id="add-to-list"
-                data-product-data="@productData" onclick="callAddProductToList(this)">
+        <div class="text-center">
+            <button type="button" class="button-general product-list-button" data-product-data="@productData"
+                    onclick="callAddProductToList(this)" id="add-to-list"
+                    style='display: @(Model.AlreadyInProductList ? "none" : "inline-block")'>
                 Añadir a lista de interés
                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
             </button>
-        }
-    
-        
-        @* <button type="button" class="button-general product-list-button" id="delete-from-list"></button> *@
+
+            <button type="button" class="button-general product-list-button" data-product-data="@productData"
+                    onclick="callRemoveProductFromList(this)" id="remove-from-list"
+                    style='display: @(Model.AlreadyInProductList ? "inline-block" : "none")'>
+                Eliminar de la lista de interés
+                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+            </button>
+        </div>
     }
     
     <!-- Horizontal separating line -->

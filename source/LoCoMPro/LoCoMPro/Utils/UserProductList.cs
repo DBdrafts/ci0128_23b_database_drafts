@@ -40,6 +40,21 @@ namespace LoCoMPro.Utils
         }
 
         /// <summary>
+        /// Remove a element from the user list
+        /// </summary>
+        /// <param name="removeElement">Element of the list to be removed
+        public void RemoveProductFromList(UserProductListElement removeElement)
+        {
+            IList<UserProductListElement> UserProductList = GetUserProductList();
+
+            // Remove the element of the list
+            UserProductList.Remove(GetListElement(UserProductList, removeElement)!);
+
+            // Saves the actual state of the list
+            saveListState(UserProductList);
+        }
+
+        /// <summary>
         /// Checks if the product exist in the actual user list
         /// </summary>
         /// <param name="newElement">Element that is going to be search
@@ -48,17 +63,30 @@ namespace LoCoMPro.Utils
             IList<UserProductListElement> UserProductList = GetUserProductList();
 
             // Get the first element that coincide
-            var existingElement = UserProductList.FirstOrDefault(item =>
-                item.ProductName == newElement.ProductName &&
-                item.ProductBrand == newElement.ProductBrand &&
-                item.ProductModel == newElement.ProductModel &&
-                item.StoreName == newElement.StoreName &&
-                item.Province == newElement.Province &&
-                item.Canton == newElement.Canton &&
-                item.AvgPrice == newElement.AvgPrice);
+            var existingElement = GetListElement(UserProductList, newElement);
 
             // Returns if the element already exist
             return existingElement != null;
+        }
+
+        /// <summary>
+        /// Gets the first element that coincide with the element sent
+        /// </summary>
+        /// <param name="UserProductList">User list of product
+        /// <param name="compareElement">Element that is going to be search
+        public UserProductListElement? GetListElement(IList<UserProductListElement> UserProductList
+            , UserProductListElement compareElement)
+        {
+            // Get the first element that coincide
+            var existingElement = UserProductList.FirstOrDefault(item =>
+                item.ProductName == compareElement.ProductName &&
+                item.ProductBrand == compareElement.ProductBrand &&
+                item.ProductModel == compareElement.ProductModel &&
+                item.StoreName == compareElement.StoreName &&
+                item.Province == compareElement.Province &&
+                item.Canton == compareElement.Canton);
+
+            return existingElement;
         }
 
         /// <summary>
