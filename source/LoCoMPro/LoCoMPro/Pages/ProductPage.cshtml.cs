@@ -1,6 +1,8 @@
+using LoCoMPro.Areas.Identity.Pages.Account.Manage;
 using LoCoMPro.Data;
 using LoCoMPro.Models;
 using LoCoMPro.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,18 +19,26 @@ namespace LoCoMPro.Pages
     /// </summary>
     public class ProductPageModel : LoCoMProPageModel
     {
-        
+        private readonly UserManager<User> _userManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
         /// <summary>
         /// Creates a new ProductPageModel.
         /// </summary>
         /// <param name="context">DB Context to pull data from.</param>
         /// <param name="configuration">Configuration for page.</param>
+        /// <param name="userManager">User manager to handle user permissions.</param>
         // Product Page constructor 
-        public ProductPageModel(LoCoMProContext context, IConfiguration configuration)
-            : base(context, configuration) { }
+        public ProductPageModel(LoCoMProContext context, IConfiguration configuration
+            , UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
+            : base(context, configuration)
+        {
+            _userManager = userManager;
+            _httpContextAccessor = httpContextAccessor;
+        }
 
         /// <summary>
-        /// List of the product that exist in the databas.
+        /// List of the product that exist in the database.
         /// </summary>
         public IList<Product> Product { get; set; } = default!;
 
@@ -41,6 +51,16 @@ namespace LoCoMPro.Pages
         /// List of the users that exist in the database.
         /// </summary>
         public IList<User> Users { get; set; } = default!;
+
+        /// <summary>
+        /// List of the review made by the user that exist in the database.
+        /// </summary>
+        public IList<Review> UserReviews = new List<Review>();
+
+        /// <summary>
+        /// List of the reports made by the user that exist in the database.
+        /// </summary>
+        public IList<Report> UserReports = new List<Report>();
 
         /// <summary>
         /// List of the registers that exist in the database.
@@ -72,24 +92,6 @@ namespace LoCoMPro.Pages
         public string? SearchCantonName { get; set; }
 
         /// <summary>
-        /// Current sort being used by sort.
-        /// </summary>
-        [BindProperty(SupportsGet = true)]
-        public string? CurrentSort { get; set; }
-
-        /// <summary>
-        /// Price sort.
-        /// </summary>
-        [BindProperty(SupportsGet = true)]
-        public string? PriceSort { get; set; }
-
-        /// <summary>
-        /// Attr for sort the date register.
-        /// </summary>
-        [BindProperty(SupportsGet = true)]
-        public string? DateSort { get; set; }
-
-        /// <summary>
         /// Avg calculated price for product.
         /// </summary>
         public decimal AvgPrice { get; set; }
@@ -106,11 +108,9 @@ namespace LoCoMPro.Pages
         /// <param name="searchStoreName">Store where the product is sold.</param>
         /// <param name="searchProvinceName">Province where the store is located.</param>
         /// <param name="searchCantonName">Canton where the store is located.</param>
-        /// <param name="pageIndex">Page index of registers to visualize.</param>
-        /// <param name="sortOrder">Order to use when showing values.</param>
         /// <returns></returns>
         public async Task OnGetAsync(string searchProductName, string searchStoreName, string searchProvinceName, 
-            string searchCantonName, int? pageIndex, string sortOrder)
+            string searchCantonName)
         {
 
             // Attr of the product from the params of method
@@ -172,6 +172,12 @@ namespace LoCoMPro.Pages
 
             // Gets the Data From data base 
             Registers = await registers.ToListAsync();
+
+            // Obtains the review made by the user
+            ObtainUserReviews();
+
+            // Obtains the reports made by the user
+            ObtainUserReports();
         }
 
         /// <summary>
@@ -199,7 +205,7 @@ namespace LoCoMPro.Pages
         /// </summary>
         /// <param name="orderName">Type of order to use.</param>
         /// <param name="registers">Registers to order.</param>
-        /// <returns>Reqgisters ordered by <paramref name="orderName"/> date.</returns>
+        /// <returns>Registers ordered by <paramref name="orderName"/> date.</returns>
         public IOrderedEnumerable<Register> OrderRegistersByDate(string orderName, ref ICollection<Register> registers)
         {
             switch (orderName)
@@ -235,40 +241,190 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
-        /// Hanldle report interactions
+        /// Gets and sets the review made by the User
         /// </summary>
-        /// <param registerKeys="from"> foreign keys for identification the specific register.</param>
-        /// 
-        public IActionResult OnPostHandleInteraction(string registerKeys)
+        public async void ObtainUserReviews()
         {
-            string[] values = SplitString(registerKeys, '\x1F'); // Splits the string with the char31 as a delimitator
-            string submitionDate = values[0], contributorId = values[1], productName = values[2], storeName = values[3];
-            DateTime dateTime = DateTime.Parse(submitionDate);
+            // Gets the user that is registered
+            var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
 
-            var registerToUpdate = _context.Registers.Include(r => r.Contributor).First(r => r.ContributorId == contributorId
-                && r.ProductName == productName && r.StoreName == storeName && r.SubmitionDate == dateTime);
-
-            uint reportValue = 1;
-            
-            // TODO: Get Rol
-
-            /* This is just an example!
-            userRol = getUserRol(); 
-            if (userRol == mod)
+            // If there´s is a registered user
+            if (user != null)
             {
-                reportValue = 2;
-            }
-            */
+                // Gets all the reviews
+                var reviews = from p in _context.Reviews select p;
 
-            registerToUpdate.NumCorrections = reportValue;
+                // Filter the reviews to gets the made by the user in this product and store
+                reviews = reviews.Where(x => x.ReviewerId == user.Id);
+                reviews = reviews.Where(x => x.ProductName != null && x.ProductName.Contains(SearchProductName));
+                reviews = reviews.Where(x => x.StoreName != null && x.StoreName.Contains(SearchStoreName));
+
+                // Make a list with the review
+                UserReviews = reviews.ToList();
+            }
+        }
+
+        /// <summary>
+        /// Gets and sets the reports made by the User
+        /// </summary>
+        public async void ObtainUserReports()
+        {
+            // Gets the user that is registered
+            var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
+
+            // If there´s is a registered user
+            if (user != null)
+            {
+                // Gets all the reviews
+                var reports = from p in _context.Reports select p;
+
+                // Filter the reviews to gets the made by the user in this product and store
+                reports = reports.Where(x => x.ReporterId == user.Id);
+                reports = reports.Where(x => x.ProductName != null && x.ProductName.Contains(SearchProductName));
+                reports = reports.Where(x => x.StoreName != null && x.StoreName.Contains(SearchStoreName));
+
+                // Make a list with the review
+                UserReports = reports.ToList();
+            }
+        }
+
+        /// <summary>
+        /// Handle report interactions (review, report or both).
+        /// </summary>
+        /// <param name="registerKeys">Foreign keys for identification the specific register.</param>
+        /// <param name="reportChanged">Bool to check if a report changed.</param>
+        /// <param name="reviewedValue">Float with register review.</param>
+        /// <returns>Success message to clients side.</returns>
+        public IActionResult OnPostHandleInteraction(string registerKeys, bool reportChanged, float reviewedValue)
+        {
+            string[] values = SplitString(registerKeys, '\x1F');
+            string submitionDate = values[0], contributorId = values[1], productName = values[2], storeName = values[3];
+            
+            DateTime registSubmitDate = DateTime.Parse(submitionDate);
+            var user = _context.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
+            DateTime interactionDate = FormatDateTimeNow();
+
+            var registerToUpdate = GetRegisterToUpdate(contributorId, productName, storeName, registSubmitDate);
+
+            if (reportChanged)
+            {
+                HandleReport(user!, registerToUpdate, interactionDate, contributorId,
+                    productName, storeName, registSubmitDate);
+            }
+
+            if (reviewedValue > 0)
+            {
+                HandleReview(user!, registerToUpdate, interactionDate, contributorId,
+                    productName, storeName, registSubmitDate, reviewedValue);
+            }
+
             _context.SaveChanges();
+
             return new JsonResult("OK");
         }
 
+
+        /// <summary>
+        /// Gets the register on which an interaction was performed.
+        /// </summary>
+        /// <param name="contributorId">ID of the user associated with the register.</param>
+        /// <param name="productName">Product associated with the register.</param>
+        /// <param name="storeName">Store associated with the register.</param>
+        /// <param name="registSubmitDate">Date and time the registration was made.</param>
+        /// <returns>Register to update.</returns>
+        private Register GetRegisterToUpdate(string contributorId, string productName,
+            string storeName, DateTime registSubmitDate)
+        {
+            return _context.Registers.Include(r => r.Contributor).First(r => r.ContributorId == contributorId
+                && r.ProductName == productName && r.StoreName == storeName && r.SubmitionDate == registSubmitDate);
+        }
+
+        /// <summary>
+        /// Returns current dateTime without mili, micro and nanoseconds.
+        /// </summary>
+        /// <returns>Current dateTime formatted.</returns>
+        static private DateTime FormatDateTimeNow()
+        {
+            DateTime dateTimeNow = DateTime.Now;
+            dateTimeNow = new DateTime(dateTimeNow.Year, dateTimeNow.Month, dateTimeNow.Day,
+                dateTimeNow.Hour, dateTimeNow.Minute, dateTimeNow.Second, 0);
+            return dateTimeNow;
+        }
+
+        /// <summary>
+        /// Splits a string into an array of substrings based on the specified delimiter character.
+        /// </summary>
+        /// <param name="input">The input string to split.</param>
+        /// <param name="delimiter">The character used as the delimiter.</param>
+        /// <returns>An array of substrings created by splitting the input string.</returns>
         static string[] SplitString(string input, char delimiter)
         {
             return input.Split(delimiter);
         }
 
-    }
+        /// <summary>
+        /// Handle a report made by a user about a register.
+        /// </summary>
+        /// <param name="user">User that made the report.</param>
+        /// <param name="registerToUpdate">Register to which the report was made.</param>
+        /// <param name="registSubmitDate"><See cref="GetRegisterToUpdate"/>).</param>
+        /// <param name="interactionDate">Date and time the report is made.</param>
+        /// <param name="contributorId"><See cref="GetRegisterToUpdate"/>).</param>
+        /// <param name="productName"><See cref="GetRegisterToUpdate"/>).</param>
+        /// <param name="storeName"><See cref="GetRegisterToUpdate"/>).</param>
+        private void HandleReport(User user, Register registerToUpdate, DateTime interactionDate,
+            string contributorId, string productName, string storeName, DateTime registSubmitDate)
+        {
+            var lastReport = _context.Reports.FirstOrDefault(r => r.ReporterId == user!.Id
+                && r.ProductName == productName
+                && r.StoreName == storeName
+                && r.SubmitionDate == registSubmitDate
+                && r.ContributorId == contributorId);
+
+            if (lastReport == null)
+            {
+                _context.Reports.Add(new Report { ReportedRegister = registerToUpdate,
+                    Reporter = user!, ReportDate = interactionDate, CantonName = registerToUpdate.CantonName!,
+                    ProvinceName = registerToUpdate.ProvinciaName!, ReportState = User.IsInRole("Moderator") ? 2 : 1 });
+            }
+            else
+            {
+                _context.Reports.Remove(lastReport);
+            }   
+        }
+
+        /// <summary>
+        /// Handle a review made by a user about a register.
+        /// </summary>
+        /// <param name="user">User that made the review.</param>
+        /// <param name="registerToUpdate">Register to which the review was made.</param>
+        /// <param name="registSubmitDate"><See cref="GetRegisterToUpdate"/>).</param>
+        /// <param name="interactionDate">Date and time the review is made.</param>
+        /// <param name="contributorId"><See cref="GetRegisterToUpdate"/>).</param>
+        /// <param name="productName"><See cref="GetRegisterToUpdate"/>).</param>
+        /// <param name="storeName"><See cref="GetRegisterToUpdate"/>).</param>
+        /// <param name="reviewedValue"><See cref="OnPostHandleInteraction"/>).</param>
+        private void HandleReview(User user, Register registerToUpdate, DateTime interactionDate, 
+            string contributorId, string productName, string storeName, DateTime registSubmitDate, float reviewedValue)
+        {
+            var lastReview = _context.Reviews.FirstOrDefault(r => r.ReviewerId == user.Id
+                && r.ProductName == productName
+                && r.StoreName == storeName
+                && r.SubmitionDate == registSubmitDate
+                && r.ContributorId == contributorId);
+
+            if (lastReview == null)
+            {
+                _context.Reviews.Add(new Review() { ReviewedRegister = registerToUpdate,
+                    Reviewer = user!, ReviewValue = reviewedValue, ReviewDate = interactionDate,
+                    CantonName = registerToUpdate.CantonName!, ProvinceName = registerToUpdate.ProvinciaName!
+                });
+            }
+            else
+            {
+                lastReview.ReviewValue = reviewedValue;
+                lastReview.ReviewDate = interactionDate;
+            }
+        }
+    }   
 }

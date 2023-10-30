@@ -55,9 +55,19 @@ namespace LoCoMPro.Data
         public DbSet<Store> Stores { get; set; }
 
         /// <summary>
+        /// Reviews saved in the database.
+        /// </summary>
+        public DbSet<Review> Reviews { get; set; }
+        /// <summary>
         /// Images saved in the database.
         /// </summary>
         public DbSet<Image> Images { get; set; }
+
+        /// <summary>
+        /// Reports saved in the database.
+        /// </summary>
+        public DbSet<Report> Reports { get; set; }
+
 
         // TODO: May want to create a builder for each class
         /// <summary>
@@ -74,6 +84,8 @@ namespace LoCoMPro.Data
             modelBuilder.Entity<Register>().ToTable("Register");
             modelBuilder.Entity<Canton>().ToTable("Canton");
             modelBuilder.Entity<Provincia>().ToTable("Provincia");
+            modelBuilder.Entity<Review>().ToTable("Review");
+            modelBuilder.Entity<Report>().ToTable("Report");
             modelBuilder.Entity<Image>().ToTable("Image");
 
             // Building relationships for Store
@@ -87,12 +99,6 @@ namespace LoCoMPro.Data
                 .HasOne(p => p.Store)
                 .WithMany(e => e.Registers)
                 .HasForeignKey(c => new { c.StoreName, c.CantonName, c.ProvinciaName});
-
-            // Sets 0 to NumCorrecions by default for Register
-            modelBuilder.Entity<Register>()
-                .Property(r => r.NumCorrections)
-                .HasDefaultValue(0);
-
 
             // Building relationships for Register
             modelBuilder.Entity<User>()
@@ -110,6 +116,39 @@ namespace LoCoMPro.Data
                 .WithMany(r => r.Images)
                 .HasForeignKey(i => new { i.ContributorId, i.ProductName, i.StoreName, i.CantonName, i.ProvinceName, i.SubmitionDate })
                 .OnDelete(DeleteBehavior.NoAction);
+
+            // Building relationships for Register
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Registers)
+                .WithOne(r => r.Contributor)
+                .HasForeignKey(r => r.ContributorId);
+
+            // Building relationships for Review
+            modelBuilder.Entity<Review>(entity =>
+            {
+                entity.HasOne(l => l.Reviewer)
+                    .WithMany(p => p.Reviews)
+                    .HasForeignKey(e => e.ReviewerId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(l => l.ReviewedRegister)
+                    .WithMany(p => p.Reviews)
+                    .HasForeignKey(e => new { e.ContributorId, e.ProductName, e.StoreName, e.CantonName, e.ProvinceName, e.SubmitionDate });
+            });
+
+            // Building relationships for Report
+            modelBuilder.Entity<Report>(entity =>
+            {
+                entity.HasOne(l => l.Reporter)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(e => e.ReporterId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(l => l.ReportedRegister)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(e => new { e.ContributorId, e.ProductName, e.StoreName, e.CantonName, e.ProvinceName, e.SubmitionDate });
+            });
+
 
             // Ignoring columns from default IdentityUser
             modelBuilder.Entity<User>().Ignore(u => u.PhoneNumber);
@@ -172,6 +211,27 @@ namespace LoCoMPro.Data
 
             modelBuilder.Entity<Provincia>()
                 .Navigation(p => p.Cantones)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<User>()
+                .Navigation(u => u.Reviews)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Register>()
+                .Navigation(u => u.Reviews)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+            
+            
+            modelBuilder.Entity<User>()
+                .Navigation(u => u.Reports)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Register>()
+                .Navigation(u => u.Reports)
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+            modelBuilder.Entity<Register>()
+                .Navigation(u => u.Images)
                 .UsePropertyAccessMode(PropertyAccessMode.Property);
         }
     }
