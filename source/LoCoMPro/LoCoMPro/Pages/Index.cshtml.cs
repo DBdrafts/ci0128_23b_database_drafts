@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.IO;
+using Newtonsoft.Json;
+using System.Drawing;
 
 namespace LoCoMPro.Pages
 {
@@ -66,5 +69,35 @@ namespace LoCoMPro.Pages
             return new JsonResult(result);
 
         }
+
+        /// <summary>
+        /// Gets the geolocation of a given canton.
+        /// </summary>
+        /// <param name="provinceName"></param>
+        /// <param name="cantonName"></param>
+        /// <returns></returns>
+        public JsonResult OnGetLocationFromCanton(string provinceName, string cantonName)
+        {
+            var result = _context.Cantones
+                .Where(c => c.ProvinciaName == provinceName && c.CantonName == cantonName)
+                .Select(c => c.Geolocation)
+                .FirstOrDefault();
+            
+            if (result != null)
+            {
+                // Serialize the Point to GeoJSON
+                var writer = new GeoJsonWriter();
+                var geoJson = writer.Write(result);
+                // Return it as a JsonResult
+                return new JsonResult(new { point = geoJson });
+            }
+            return new JsonResult($"LocationFromCanton: {provinceName}', '{cantonName}' not found.")
+            {
+                StatusCode = 500 // Set the status code to indicate an internal server error
+            };
+        }
+
     }
+
+    
 }
