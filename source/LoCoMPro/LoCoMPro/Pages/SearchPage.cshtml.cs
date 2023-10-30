@@ -5,7 +5,6 @@ using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NetTopologySuite.Geometries;
-using System.Drawing.Printing;
 
 namespace LoCoMPro.Pages
 {
@@ -85,13 +84,16 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Maps product name to list of categories.
         /// </summary>
-        [BindProperty(SupportsGet = true)]
         public Dictionary<string, string> CategoryMap { get; set; } = default!;
+
         /// <summary>
         /// Resulr of the query.
         /// </summary>
         public IEnumerable<Register>? Registers { get; set; } = new List<Register>();
 
+        /// <summary>
+        /// Search results with extended Data Types.
+        /// </summary>
         public IEnumerable<SearchResult>? SearchResults { get; set; } = new List<SearchResult>();
 
         /// <summary>
@@ -112,12 +114,21 @@ namespace LoCoMPro.Pages
                             select r;
 
             //Point? geolocation = null;
-            //if (latitude != 0.0 && longitude != 0.0)
-            //{
-            //    var coordinates = new Coordinate(latitude, longitude);
-            //    geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
-            //}
-            //SearchResults = _context.GetSearchResults(SearchString!, geolocation, SearchType ?? "Name");
+            var coordinates = new Coordinate(0.0, 0.0);
+            var geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
+            if (latitude != 0.0 && longitude != 0.0)
+            {
+                coordinates = new Coordinate(latitude, longitude);
+                geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
+            }
+            SearchResults = _context.GetSearchResults(SearchType ?? "Nombre", SearchString!, geolocation);
+            if (SearchResults != null) {
+                foreach (var result in SearchResults)
+                {
+                    var distance = result.Distance;
+                }
+            }
+
 
             //foreach (var result in SearchResults)
             //{
