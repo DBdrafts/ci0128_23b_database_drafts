@@ -5,6 +5,8 @@ using NetTopologySuite.Geometries;
 using Microsoft.Data.SqlClient;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using System.Collections;
+using System.Data.Entity.Spatial;
+using System.Xml;
 
 namespace LoCoMPro.Data
 {
@@ -149,7 +151,10 @@ namespace LoCoMPro.Data
                 entity.ToTable("Canton");
 
                 entity.Navigation(c => c.Stores)
-                .UsePropertyAccessMode(PropertyAccessMode.Property);
+                    .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+                entity.Property(e => e.Geolocation)
+                    .HasColumnType("geography");
             });
 
             // Building relationships for Province
@@ -178,7 +183,13 @@ namespace LoCoMPro.Data
                     .UsePropertyAccessMode(PropertyAccessMode.Property);
             });
 
-            modelBuilder.Entity<SearchResult>().ToView("SearchResult");
+            modelBuilder.Entity<SearchResult>(entity => {
+                entity.Property(e => e.Geolocation)
+                    .HasColumnType("geography");
+
+                entity.ToView("SearchResult");
+            });
+            
         }
 
         public void ExecuteSqlScriptFile(string scriptFilePath)
@@ -189,11 +200,15 @@ namespace LoCoMPro.Data
 
         public IEnumerable<SearchResult> GetSearchResults(string searchType, string searchString, Point basePoint)
         {
+            double latitude = basePoint.Y;
+            double longitude = basePoint.X;
+            var results = SearchResults.FromSqlRaw("EXEC GetSearchResults @searchType, @searchString, @latitude, @longitude",
+                new SqlParameter("@searchType", searchType),
+                new SqlParameter("@searchString", searchString),
+                new SqlParameter("@latitude", latitude),
+                new SqlParameter("@longitude", longitude));
             // Use FromSqlRaw to call the stored procedure
-            return SearchResults.FromSqlRaw("EXEC GetSearchResults @searchType, @searchString",//, @basePoint",
-                    new SqlParameter("@searchType", searchType),
-                    new SqlParameter("@searchString", searchString)/*,
-                    new SqlParameter("@basePoint", basePoint)*/);
+            return results;
         }
 
     }

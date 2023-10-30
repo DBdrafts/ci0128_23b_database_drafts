@@ -1,8 +1,6 @@
 ﻿using LoCoMPro.Data;
-using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LoCoMPro.Models

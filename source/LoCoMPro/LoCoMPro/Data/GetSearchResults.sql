@@ -1,11 +1,16 @@
 ﻿CREATE PROCEDURE GetSearchResults
     @searchType NVARCHAR(255),
     @searchString NVARCHAR(255),
-    @basePoint geography = NULL
+    @latitude DOUBLE PRECISION  = 0.0,
+	@longitude DOUBLE PRECISION  = 0.0
 AS
 BEGIN
     SET NOCOUNT ON;
 
+	DECLARE @basePoint geography;
+	PRINT 'DECLARED';
+	SET @basePoint = geography::STPointFromText('POINT(' + CONVERT(VARCHAR(50), @longitude) + ' ' + CONVERT(VARCHAR(50), @latitude) + ')', 4326);
+	PRINT 'SETTED';
     DECLARE @sql NVARCHAR(MAX);
 	--DECLARE @distance FLOAT;
 
@@ -32,8 +37,7 @@ BEGIN
     BEGIN
         SET @sql = @sql + 'LOWER(Model) LIKE LOWER(''%'' + @searchString + ''%'')';
     END
-
-
+	SET @sql = @sql + 'ORDER BY DISTANCE ASC';
     -- Execute the dynamic SQL query
     EXEC sp_executesql @sql, N'@searchString NVARCHAR(255), @basePoint geography', @searchString, @basePoint;
 END;

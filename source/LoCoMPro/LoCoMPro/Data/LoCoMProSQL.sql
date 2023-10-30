@@ -1,5 +1,64 @@
 ﻿use [LoCoMProContext-ec360c0e-cf78-4962-821f-b52a2cc4d7a7];
+-- Funciones y Triggers para el manejo de usuarios
+GO
+CREATE FUNCTION dbo.CountUserRegisters
+(
+    @UserId NVARCHAR(450)
+)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @RegisterCount INT
 
+    SELECT @RegisterCount = COUNT(*) 
+    FROM Register
+    WHERE ContributorId = @UserId
+
+    RETURN @RegisterCount
+END
+GO;
+
+GO
+CREATE FUNCTION dbo.GetAverageReviewValueOnUserRegisters (
+    @UserId NVARCHAR(450)
+)
+RETURNS REAL
+AS
+BEGIN
+    DECLARE @AvgReviewOnRegisters REAL
+
+    SELECT @AvgReviewOnRegisters = AVG(ReviewValue)
+    FROM Review
+    WHERE ContributorId = @UserId
+
+    RETURN @AvgReviewOnRegisters
+END
+
+GO;
+-- Funciones y procedimientos para la página de Producto.
+GO
+CREATE FUNCTION dbo.GetAverageReviewValue (
+    @ContributorId NVARCHAR(450),
+    @ProductName NVARCHAR(450),
+    @StoreName NVARCHAR(450),
+    @SubmitionDate DATETIME2
+)
+RETURNS REAL
+AS
+BEGIN
+    DECLARE @AverageReviewValue REAL
+
+    SELECT @AverageReviewValue = AVG(ReviewValue)
+    FROM Review
+    WHERE ContributorId = @ContributorId
+      AND ProductName = @ProductName
+      AND StoreName = @StoreName
+      AND SubmitionDate = @SubmitionDate
+
+    RETURN @AverageReviewValue
+END
+GO;
+-- Funciones y procedimientos para la página de Búsqueda.
 GO
 CREATE VIEW SearchRegister AS
 SELECT r.SubmitionDate, r.ContributorId, r.ProductName, p.Brand, p.Model,
@@ -37,18 +96,17 @@ GO
 CREATE PROCEDURE GetSearchResults
     @searchType NVARCHAR(255),
     @searchString NVARCHAR(255),
-    @basePoint geography = NULL
+    @latitude DOUBLE PRECISION  = 0.0,
+	@longitude DOUBLE PRECISION  = 0.0
 AS
 BEGIN
     SET NOCOUNT ON;
 
-	IF @basePoint IS NULL
-	BEGIN
-		SET @basePoint = geography::STPointFromText('POINT(0.0 0.0)', 4326);
-	END
-
+	DECLARE @basePoint geography;
+	PRINT 'DECLARED';
+	SET @basePoint = geography::STPointFromText('POINT(' + CONVERT(VARCHAR(50), @longitude) + ' ' + CONVERT(VARCHAR(50), @latitude) + ')', 4326);
+	PRINT 'SETTED';
     DECLARE @sql NVARCHAR(MAX);
-	--DECLARE @distance FLOAT;
 
     -- Start building the dynamic SQL query
     SET @sql = 'SELECT *, dbo.CalculateDistance(@basePoint, Geolocation) AS DISTANCE';
@@ -73,14 +131,8 @@ BEGIN
     BEGIN
         SET @sql = @sql + 'LOWER(Model) LIKE LOWER(''%'' + @searchString + ''%'')';
     END
-
+	SET @sql = @sql + 'ORDER BY DISTANCE ASC';
     -- Execute the dynamic SQL query
     EXEC sp_executesql @sql, N'@searchString NVARCHAR(255), @basePoint geography', @searchString, @basePoint;
 END;
 GO;
-
-DROP PROCEDURE GetSearchResults;
-
-EXEC GetSearchResults 'Nombre', 'e';
-
-SELECT* FROM SearchRegister;
