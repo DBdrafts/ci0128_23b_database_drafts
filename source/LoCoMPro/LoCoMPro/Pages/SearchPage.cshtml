@@ -73,7 +73,6 @@
     <!-- Search result section -->
     <div class="search-section" id="search-results">
         <!-- Search section title -->
-        <h1> Resultados "@Model.SearchString" - Búsqueda por "@Model.SearchType" </h1>
         <div class="results-cont-msg" span id="results-count"></div>
 
 
@@ -84,6 +83,12 @@
                     <div class="textComment">Producto</div>
                 </li>
                 <li>
+                    <div class="textComment">Marca</div>
+                </li>
+                <li>
+                    <div class="textComment">Modelo</div>
+                </li>
+                <li>
                     <div class="textComment">Tienda</div>
                 </li>
                 <li>
@@ -92,7 +97,7 @@
                 <li>
                     <div class="textComment">Provincia</div>
                 </li>
-                <li>
+                <li class="price-column">
                     <!-- Button to sort by the price -->
                     @{ViewBag.SortTipe = "#register-price";}
                     @await Html.PartialAsync("_OrderButton", "Precio")
@@ -121,7 +126,13 @@
                         <span id="register-product-name" value="@register.ProductName">
                             @Html.DisplayFor(modelItem => register.ProductName)
                         </span>
-                        <span id="register-store-name" value="@register.StoreName">
+                        <span id="register-model-name" value="@register.Product.Brand">
+                            @(string.IsNullOrEmpty(register.Product.Brand) ? "N/A" : register.Product.Brand)
+                        </span>
+                        <span id="register-brand-name" value="@register.Product.Model">
+                            @(string.IsNullOrEmpty(register.Product.Model) ? "N/A" : register.Product.Model)
+                        </span>
+                        <span id="register-province-name" value="@register.ProvinciaName">
                             @Html.DisplayFor(modelItem => register.StoreName)
                         </span>
                         <span id="register-province-name" value="@register.ProvinciaName">
