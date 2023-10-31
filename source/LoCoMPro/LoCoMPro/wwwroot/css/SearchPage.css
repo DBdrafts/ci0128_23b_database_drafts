@@ -20,7 +20,7 @@
     margin: 20px 0px;
 }
 
-    /* Style for the filter section title h5*/
+ /* Style for the filter section title h5*/
 .filter-section h5 {
     font-size: 23px;
 }
@@ -41,12 +41,37 @@
     align-items: center;
     align-content: center;
     width: 45%;
-    height: 45px;
-   font-size: medium;
+    height: 50px;
+    font-size: medium;
+    border-radius : 7.5px;
 }
 
 /* Style for the filter button when hover*/
 .filter-section button:hover {
+    background-color: #39A4F4;
+}
+
+/* Style for clear filter button container*/
+.clear-button-container {
+    display: block;
+    flex-direction: column;
+    width: 14%;
+    height: 1px;
+    align-items:center;
+}
+
+/* Style for clear filter button*/
+.clear-section-button button {
+    background-color: #88C8F8;
+    width: 81px; 
+    height: 50px;
+    font-size: medium;
+    border-radius: 7.5px;
+    margin-top: 5px; 
+}
+
+/* Style for clear filter button hover*/
+.clear-section-button button:hover {
     background-color: #39A4F4;
 }
 

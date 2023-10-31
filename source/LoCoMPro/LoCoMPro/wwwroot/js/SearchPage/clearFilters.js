@@ -25,6 +25,7 @@ $(document).ready(function () {
         const selectedCantons = getSelectedCheckboxes('SelectedCantons');
         notfound = document.getElementById("product-not-found");
         filterSection = document.getElementById("filter-section");
+        buttonClearSection = document.getElementById("clear-filters");
 
         // Filter the resultBlocks based on the selected criteria
         resultBlocks = queryResults.filter(block => {
@@ -41,12 +42,15 @@ $(document).ready(function () {
         });
 
         if (resultBlocks.length <= 0) {
+            // hidden elements in case 0 match
             notfound.hidden = false;
             resultSection.hidden = true;
             filterSection.hidden = true;
+            buttonClearSection.hidden = true;
             document.getElementById("results-count").textContent = "0";
-        } else {
 
+        } else {
+           
             // Sort the filtered resultBlocks
             sortResultBlocks("desc");
 
