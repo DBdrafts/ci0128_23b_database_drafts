@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="~/css/ProductListPage.css" />
 
     <script src="~/js/deleteProductList.js"></script>
+
+    <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
 </head>
 
 <div>
@@ -102,7 +104,8 @@
                         <span class="align-right" id="register-price" value="@product.AvgPrice">
                             ₡ @Html.DisplayFor(modelItem => product.AvgPrice)
                         </span>
-                        <button type="button" data-product-data="@productData" onclick="removeProductFromList(this, @i)">
+                        <button class="remove-button button-general" type="button"
+                                data-product-data="@productData" onclick="removeProductFromList(this, @i)">
                             <i class="fa fa-minus-circle" aria-hidden="true"></i>
                         </button>
                 </li>

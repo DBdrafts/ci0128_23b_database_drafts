@@ -53,7 +53,7 @@
 
 /* Style for the product list block */
 .product-list-block {
-    display: inline-block;
+    display: flex;
     height: auto;
     text-decoration: none;
     color: #000000;
@@ -66,6 +66,7 @@
     justify-content: space-around;
     min-width: 950px;
     width: 100%;
+    align-items: center !important;
 }
 
 /* Style for the register block text */
@@ -78,11 +79,12 @@
     margin: 10px 2px;
     justify-content: flex-start;
     max-height: 3.3em;
+    padding: 5px;
 }
 
 /* Style for the register block button */
 .product-list-block button {
-    width: 4%;
+    width: auto;
     margin: 0px 0px 0px 15px;
 }
 
@@ -92,7 +94,7 @@
 }
 
 
-/* Style for the button that remove the button from the list*/
+/* Style for the button that remove the button from the list */
 .remove-button {
     display: inline-block;
     height: auto;
@@ -103,18 +105,16 @@
     background-color: #F87474;
 }
 
-/* Style for the minus circle icon */
-.fa-minus-circle {
-    display:inline-block;
-    font-size: 22px !important;
-    text-align: center;
-    margin: 0px 10px;
-    
+/* Style for the button that remove the button from the list when hover*/
+.remove-button:hover {
+    background-color: #E25A5A;
 }
 
 /* Style for the minus circle icon */
-.fa-minus-circle:hover {
-    background-color: #E25A5A;
+.fa-minus-circle {
+    font-size: 25px !important;
+    text-align: center;
+    margin: 5px;
 }
 
 /* Style for the feedback message of the Pop Up */
