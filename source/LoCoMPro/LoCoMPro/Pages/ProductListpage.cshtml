@@ -27,17 +27,22 @@
         <!-- Amount of products in the list-->
         <div class="list-page-subtitle">
             <h5>Cantidad de productos: <span id="product-count">@Model.UserProductList.Count</span></h5>
-            <!-- Something here -->
 
-            <h5>Precio aproximado: ₡ @Model.TotalPrice.ToString("N0")</h5>
-            <!-- Something here -->
+            <h5>Precio aproximado: ₡ <span id="total-price">@Model.TotalPrice.ToString("N0")</span></h5>
         </div>
     </div>
 
     <!-- Horizontal separating line -->
     <hr class="style-four">
 
-    <div class ="product-list-section">
+    <div class="empty-section text-center" id="empty-list"
+            style='display: @(Model.UserProductList.Count == 0 ? "inline-block" : "none")'>
+        <h1>¡No hay elementos en la lista!</h1>
+        <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
+    </div>
+
+    <div class ="product-list-section" id="no-empty-list"
+            style='display: @(Model.UserProductList.Count != 0 ? "inline-block" : "none")'>
         <!-- Container for column -->
         <nav>
             <div class="results-cont-msg" span id="results-count" hidden></div>

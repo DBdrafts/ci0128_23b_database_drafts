@@ -142,3 +142,17 @@
     display: block; /* Mostrar el mensaje */
     opacity: 1; /* Hacerlo visible */
 }
+
+/* Style for the empty list */
+.empty-section {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Style for the empty list image */
+.empty-section img{
+    width: 40%;
+    height: 40%;
+    margin: -70px
+}

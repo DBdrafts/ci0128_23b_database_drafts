@@ -5,12 +5,18 @@ function removeProductFromList(removeProductButton, index) {
     // Gets the data associated with the button
     var productData = removeProductButton.getAttribute('data-product-data');
 
+    // Gets the product data
+    var [productName, productBrand, productModl, storeName, province,
+        canton, avgPrice] = productData.split(String.fromCharCode(31));
+
     // Hide the product selected
     hideProductItem(index);
 
     // Call the function that delete the product from the list
     callRemoveProductFromList(productData);
 
+    // Update the data of the page to be actualized
+    updateListData(avgPrice);
 }
 
 /// <summary>
@@ -37,7 +43,7 @@ function callRemoveProductFromList(productData) {
         },
         data: { productData: productData },
         success: function (data) {
-            console.log('Product added successfully' + data);
+            console.log('Product removed successfully' + data);
             showFeedbackMessage('El producto ha sido eliminado de su lista!', 'feedbackMessage');
         },
         error: function (error) {
@@ -45,4 +51,25 @@ function callRemoveProductFromList(productData) {
             showFeedbackMessage('Error al eliminar el producto a la lista!', 'feedbackMessage');
         }
     });
+}
+
+/// <summary>
+/// Update the visual information of the list
+/// </summary>
+function updateListData(avgPrice) {
+    var productCount = parseInt(document.getElementById("product-count").textContent);
+
+    var totalPriceText = document.getElementById("total-price").textContent;
+    var totalPrice = parseInt(totalPriceText.replace(/,/g, ""));
+
+    --productCount;
+    totalPrice -= parseInt(avgPrice.replace(/,/g, ""));
+
+    document.getElementById("product-count").textContent = productCount;
+    document.getElementById("total-price").textContent = totalPrice.toLocaleString();
+
+    if (productCount == 0) {
+        document.getElementById("empty-list").style.display = 'inline-block';
+        document.getElementById("no-empty-list").style.display = 'none';
+    }
 }
