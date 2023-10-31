@@ -6,6 +6,7 @@
     ViewBag.ShowSearchBar = true;
     ViewBag.ShowLogoLink = true;
     @Html.AntiForgeryToken();
+    char s = (char)31; // ASCII Control Unit Separator
 }
 @using Microsoft.AspNetCore.Identity
 @using LoCoMPro.Data;
@@ -17,7 +18,8 @@
     <script src="~/js/interactionsPopUp.js"></script>
 
     <link rel="stylesheet" href="~/css/RateRegister.css" />
-    <script src="~/js/RateRegister.js"></script>
+
+    <script src="~/js/productListButton.js"></script>
 
     <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
 </head>
@@ -30,6 +32,8 @@
             // select the first matches
             var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
             var firstNonNullStore = Model.Store.FirstOrDefault(r => r.Name != null);
+            if (firstNonNullProduct!.Brand == null) firstNonNullProduct.Brand = "N/A";
+            if (firstNonNullProduct!.Model == null) firstNonNullProduct.Model = "N/A";
             // create a var for amount of images
             int imagesAmount = 0;
         }
@@ -98,23 +102,8 @@
                     // Get the information of producto and store
                     if (firstNonNullProduct != null)
                     {
-                        if (firstNonNullProduct.Brand != null)
-                        {
-                            <p>Marca: @firstNonNullProduct.Brand</p>
-                        }
-                        else
-                        {
-                            <p>Marca: N/A</p>
-                        }
-                        if (firstNonNullProduct.Model != null)
-                        {
-                            <p>Modelo: @firstNonNullProduct.Model</p>
-                        }
-                        else
-                        {
-                            <p>Modelo: N/A</p>
-                        }
-
+                        <p>Marca: @firstNonNullProduct.Brand</p>
+                        <p>Modelo: @firstNonNullProduct.Model</p>
                     }
                     if (firstNonNullStore != null)
                     {
@@ -122,11 +111,34 @@
                         <p>Ubicación: @firstNonNullStore.ProvinciaName, @firstNonNullStore.CantonName </p>
                         <p>Precio Aproximado: ₡ @Model.AvgPrice.ToString("N0")</p>
                     }
-                }
+                    var productData = $"{firstNonNullProduct.Name}{s}{firstNonNullProduct.Brand}" +
+                        $"{s}{firstNonNullProduct.Model}{s}{Model.SearchStoreName}" +
+                        $"{s}{firstNonNullStore.ProvinciaName}{s}{firstNonNullStore.CantonName}" +
+                        $"{s}{Model.AvgPrice.ToString("N0")}";
+
+                    if (SignInManager.IsSignedIn(User))
+                    {
+                        <div class="text-center">
+                            <button type="button" class="button-general product-list-button" data-product-data="@productData"
+                                    onclick="callAddProductToList(this)" id="add-to-list"
+                                    style='display: @(Model.AlreadyInProductList ? "none" : "inline-block")'>
+                                Añadir a lista de interés
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                            </button>
+
+                            <button type="button" class="button-general product-list-button" data-product-data="@productData"
+                                    onclick="callRemoveProductFromList(this)" id="remove-from-list"
+                                    style='display: @(Model.AlreadyInProductList ? "inline-block" : "none")'>
+                                Eliminar de la lista de interés
+                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                            </button>
+                        </div>  
+                    }
+                  }
             </div>
         </div>
     </div>
-
+    
     <!-- Horizontal separating line -->
     <hr class="style-four">
 
@@ -136,8 +148,10 @@
         Lista de registros
     </div>
 
+    <div class="results-cont-msg" span id="results-count" hidden></div>
+
     <!-- Container for column options -->
-   <nav>
+   <nav>  
         <ul class="containerListRegistercolumns">
             <li>
                 <!-- Button to sort by the date -->
@@ -162,7 +176,6 @@
         {
             <!-- Search result section -->
             <!-- Individual registers -->
-            char s = (char)31; // ASCII Control Unit Separator
             var user = Model.Users.FirstOrDefault(u => u.Id == register.ContributorId)?.UserName;
             var reviewValue = Model.UserReviews.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReviewValue;
             var reportState = Model.UserReports.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReportState;

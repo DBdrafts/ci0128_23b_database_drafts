@@ -9,8 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using NUnit.Framework;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography.X509Certificates;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace LoCoMPro.Pages
 {
@@ -23,11 +27,17 @@ namespace LoCoMPro.Pages
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
+        /// Reference to the user product list
+        /// </summary>
+        public UserProductList _userProductList { get; set; }
+
+        /// <summary>
         /// Creates a new ProductPageModel.
         /// </summary>
         /// <param name="context">DB Context to pull data from.</param>
         /// <param name="configuration">Configuration for page.</param>
         /// <param name="userManager">User manager to handle user permissions.</param>
+        /// <param name="httpContextAccessor">Allow access to the http context
         // Product Page constructor 
         public ProductPageModel(LoCoMProContext context, IConfiguration configuration
             , UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
@@ -35,6 +45,7 @@ namespace LoCoMPro.Pages
         {
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
+            _userProductList = new UserProductList(_httpContextAccessor);
         }
 
         /// <summary>
@@ -56,6 +67,11 @@ namespace LoCoMPro.Pages
         /// List of the review made by the user that exist in the database.
         /// </summary>
         public IList<Review> UserReviews = new List<Review>();
+
+        /// <summary>
+        /// List of the product that are in the list of the user
+        /// </summary>
+        public IList<Register> UserProductList = new List<Register>();
 
         /// <summary>
         /// List of the reports made by the user that exist in the database.
@@ -95,6 +111,11 @@ namespace LoCoMPro.Pages
         /// Avg calculated price for product.
         /// </summary>
         public decimal AvgPrice { get; set; }
+
+        /// <summary>
+        /// Flag to know if the product is in the list already
+        /// </summary>
+        public bool AlreadyInProductList { get; set; }
 
         /// <summary>
         /// Number of results.
@@ -182,6 +203,9 @@ namespace LoCoMPro.Pages
 
             // Obtains the reports made by the user
             ObtainUserReports();
+
+            // Prepare the list data needed
+            PrepareProductListData();
         }
 
         /// <summary>
@@ -269,7 +293,76 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
-        /// Gets and sets the reports made by the User
+        /// Prepares the data needed to work with the list
+        /// </summary>
+        public void PrepareProductListData()
+        {
+            // Gets the product and store
+            Product firstNonNullProduct = Product.FirstOrDefault(r => r.Name != null);
+            Store firstNonNullStore = Store.FirstOrDefault(r => r.Name != null);
+
+            // Creates the element of the list 
+            UserProductListElement ProductAsElement = new UserProductListElement(
+                firstNonNullProduct.Name, firstNonNullProduct.Brand
+                , firstNonNullProduct.Model, firstNonNullStore.Name
+                , firstNonNullStore.ProvinciaName, firstNonNullStore.CantonName
+                , AvgPrice.ToString("N0"));
+
+            ProductAsElement.ProductBrand = ProductAsElement.ProductBrand ?? "N/A";
+            ProductAsElement.ProductModel = ProductAsElement.ProductModel ?? "N/A";
+
+            // Checks if the product is already in the user list
+            if (_userProductList.ExistElementInList(ProductAsElement))
+            {
+                AlreadyInProductList = true;
+            }
+        }
+
+        /// <summary>
+        /// Add the product to the user list
+        /// <param name="productData">The data of the product</param>
+        /// </summary>
+        public IActionResult OnPostAddToProductList(string productData)
+        {
+            // Gets and split the data
+            string[] values = SplitString(productData, '\x1F');
+
+            var newElement = new UserProductListElement(values[0], values[1], values[2]
+                , values[3], values[4], values[5], values[6]);
+
+            // If the element is not in the list
+            if (!_userProductList.ExistElementInList(newElement))
+            {
+                // Adds the element to the list
+                _userProductList.AddProductToList(newElement);
+            }
+
+            return new JsonResult("OK");
+        }
+
+        /// <summary>
+        /// Delete the product from the user list
+        /// </summary>
+        public IActionResult OnPostRemoveFromProductList(string productData)
+        {
+            // Gets and split the data
+            string[] values = SplitString(productData, '\x1F');
+
+            var removeElement = new UserProductListElement(values[0], values[1], values[2]
+                , values[3], values[4], values[5], values[6]);
+
+            // If the element is not in the list
+            if (_userProductList.ExistElementInList(removeElement))
+            {
+                // Adds the element to the list
+                _userProductList.RemoveProductFromList(removeElement);
+            }
+
+            return new JsonResult("OK");
+        }
+
+        /// <summary>
+        /// Handle report interactions
         /// </summary>
         public async void ObtainUserReports()
         {
