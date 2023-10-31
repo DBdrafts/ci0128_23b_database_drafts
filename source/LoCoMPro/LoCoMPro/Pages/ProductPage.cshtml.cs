@@ -122,6 +122,8 @@ namespace LoCoMPro.Pages
         /// </summary>
         public int ResultsNumber;
 
+        public User UserInPage;
+
         /// <summary>
         /// GET HTTP request, initializes page values.
         /// </summary>
@@ -133,6 +135,7 @@ namespace LoCoMPro.Pages
         public async Task OnGetAsync(string searchProductName, string searchStoreName, string searchProvinceName, 
             string searchCantonName)
         {
+            UserInPage = await _userManager.GetUserAsync(User);
 
             // Attr of the product from the params of method
             SearchProductName = searchProductName;
@@ -199,10 +202,10 @@ namespace LoCoMPro.Pages
             Registers = await registers.ToListAsync();
 
             // Obtains the review made by the user
-            ObtainUserReviews();
+            ObtainUserReviews(UserInPage);
 
             // Obtains the reports made by the user
-            ObtainUserReports();
+            ObtainUserReports(UserInPage);
 
             // Prepare the list data needed
             PrepareProductListData();
@@ -271,11 +274,8 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Gets and sets the review made by the User
         /// </summary>
-        public async void ObtainUserReviews()
+        public async void ObtainUserReviews(User user)
         {
-            // Gets the user that is registered
-            var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
-
             // If there´s is a registered user
             if (user != null)
             {
@@ -364,11 +364,8 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Handle report interactions
         /// </summary>
-        public async void ObtainUserReports()
+        public async void ObtainUserReports(User user)
         {
-            // Gets the user that is registered
-            var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
-
             // If there´s is a registered user
             if (user != null)
             {
@@ -381,7 +378,7 @@ namespace LoCoMPro.Pages
                 reports = reports.Where(x => x.StoreName != null && x.StoreName.Contains(SearchStoreName));
 
                 // Make a list with the review
-                UserReports = reports.ToList();
+                UserReports = await reports.ToListAsync();
             }
         }
 
