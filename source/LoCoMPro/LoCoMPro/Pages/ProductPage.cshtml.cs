@@ -113,6 +113,11 @@ namespace LoCoMPro.Pages
         public decimal AvgPrice { get; set; }
 
         /// <summary>
+        /// Flag to know if the product is in the list already
+        /// </summary>
+        public bool AlreadyInProductList { get; set; }
+
+        /// <summary>
         /// Number of results.
         /// </summary>
         public int ResultsNumber;
@@ -198,6 +203,9 @@ namespace LoCoMPro.Pages
 
             // Obtains the reports made by the user
             ObtainUserReports();
+
+            // Prepare the list data needed
+            PrepareProductListData();
         }
 
         /// <summary>
@@ -284,6 +292,31 @@ namespace LoCoMPro.Pages
             }
         }
 
+        /// <summary>
+        /// Prepares the data needed to work with the list
+        /// </summary>
+        public void PrepareProductListData()
+        {
+            // Gets the product and store
+            Product firstNonNullProduct = Product.FirstOrDefault(r => r.Name != null);
+            Store firstNonNullStore = Store.FirstOrDefault(r => r.Name != null);
+
+            // Creates the element of the list 
+            UserProductListElement ProductAsElement = new UserProductListElement(
+                firstNonNullProduct.Name, firstNonNullProduct.Brand
+                , firstNonNullProduct.Model, firstNonNullStore.Name
+                , firstNonNullStore.ProvinciaName, firstNonNullStore.CantonName
+                , AvgPrice.ToString("N0"));
+
+            ProductAsElement.ProductBrand = ProductAsElement.ProductBrand ?? "N/A";
+            ProductAsElement.ProductModel = ProductAsElement.ProductModel ?? "N/A";
+
+            // Checks if the product is already in the user list
+            if (_userProductList.ExistElementInList(ProductAsElement))
+            {
+                AlreadyInProductList = true;
+            }
+        }
 
         /// <summary>
         /// Add the product to the user list
@@ -310,14 +343,23 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Delete the product from the user list
         /// </summary>
-        //public void RemoveFromProductList()
-        //{
-        //    // Add the first register of this product and store to the list
-        //    if (Registers != null && UserProductList != null && Registers.FirstOrDefault() != null)
-        //    {
-        //        UserProductList.Remove(Registers.FirstOrDefault()!);
-        //    }
-        //}
+        public IActionResult OnPostRemoveFromProductList(string productData)
+        {
+            // Gets and split the data
+            string[] values = SplitString(productData, '\x1F');
+
+            var removeElement = new UserProductListElement(values[0], values[1], values[2]
+                , values[3], values[4], values[5], values[6]);
+
+            // If the element is not in the list
+            if (_userProductList.ExistElementInList(removeElement))
+            {
+                // Adds the element to the list
+                _userProductList.RemoveProductFromList(removeElement);
+            }
+
+            return new JsonResult("OK");
+        }
 
         /// <summary>
         /// Handle report interactions
