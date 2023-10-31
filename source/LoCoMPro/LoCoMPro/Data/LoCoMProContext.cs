@@ -54,6 +54,9 @@ namespace LoCoMPro.Data
         /// </summary>
         public DbSet<Store> Stores { get; set; }
 
+        /// <summary>
+        /// Search result view for displaying results of a search.
+        /// </summary>
         public DbSet<SearchResult> SearchResults { get; set; }
 
         // TODO: May want to create a builder for each class
@@ -167,7 +170,6 @@ namespace LoCoMPro.Data
             });
 
             // Building relationships for Categoty
-
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.ToTable("Category");
@@ -183,6 +185,7 @@ namespace LoCoMPro.Data
                     .UsePropertyAccessMode(PropertyAccessMode.Property);
             });
 
+            // Building 'entity' SearchResult.
             modelBuilder.Entity<SearchResult>(entity => {
                 entity.Property(e => e.Geolocation)
                     .HasColumnType("geography");
@@ -192,12 +195,23 @@ namespace LoCoMPro.Data
             
         }
 
+        /// <summary>
+        /// Excecutes provided SQL file in the database connected to context.
+        /// </summary>
+        /// <param name="scriptFilePath">Absolute path for file to excecute. Must be a valid one.</param>
         public void ExecuteSqlScriptFile(string scriptFilePath)
         {
             string script = File.ReadAllText(scriptFilePath);
             this.Database.ExecuteSqlRaw(script);
         }
 
+        /// <summary>
+        /// Gets search results as consequence of excecuting stored procedure: 'GetSearchResults'.
+        /// </summary>
+        /// <param name="searchType">Type of search to realize.</param>
+        /// <param name="searchString">String to search for.</param>
+        /// <param name="basePoint">Base location to calculate distance with. Default is coords(0, 0)</param>
+        /// <returns>Search results for given query</returns>
         public IEnumerable<SearchResult> GetSearchResults(string searchType, string searchString, Point basePoint)
         {
             double latitude = basePoint.Y;

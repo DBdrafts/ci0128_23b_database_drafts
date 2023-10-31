@@ -105,9 +105,7 @@
             <!-- Put in all results -->
             @foreach (var register in Model.SearchResults!)
             {
-                <!-- A result block -->
                 <li class="result-block register-block-pagination">
-                    <!-- Route and data for each result -->
                     <a asp-page="./ProductPage"
                         asp-route-pageIndex="1"
                         asp-route-SearchProductName="@register.ProductName"
