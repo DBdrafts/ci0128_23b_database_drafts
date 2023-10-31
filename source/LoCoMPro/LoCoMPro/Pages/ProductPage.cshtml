@@ -32,6 +32,8 @@
             // select the first matches
             var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
             var firstNonNullStore = Model.Store.FirstOrDefault(r => r.Name != null);
+            if (firstNonNullProduct!.Brand == null) firstNonNullProduct.Brand = "N/A";
+            if (firstNonNullProduct!.Model == null) firstNonNullProduct.Model = "N/A";
             // create a var for amount of images
             int imagesAmount = 0;
         }
@@ -100,23 +102,8 @@
                     // Get the information of producto and store
                     if (firstNonNullProduct != null)
                     {
-                        if (firstNonNullProduct.Brand != null)
-                        {
-                            <p>Marca: @firstNonNullProduct.Brand</p>
-                        }
-                        else
-                        {
-                            <p>Marca: N/A</p>
-                        }
-                        if (firstNonNullProduct.Model != null)
-                        {
-                            <p>Modelo: @firstNonNullProduct.Model</p>
-                        }
-                        else
-                        {
-                            <p>Modelo: N/A</p>
-                        }
-
+                        <p>Marca: @firstNonNullProduct.Brand</p>
+                        <p>Modelo: @firstNonNullProduct.Model</p>
                     }
                     if (firstNonNullStore != null)
                     {

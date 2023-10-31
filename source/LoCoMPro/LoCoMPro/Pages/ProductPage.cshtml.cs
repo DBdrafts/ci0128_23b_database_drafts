@@ -308,8 +308,8 @@ namespace LoCoMPro.Pages
                 , firstNonNullStore.ProvinciaName, firstNonNullStore.CantonName
                 , AvgPrice.ToString("N0"));
 
-            ProductAsElement.ProductBrand = ProductAsElement.ProductBrand ?? "";
-            ProductAsElement.ProductModel = ProductAsElement.ProductModel ?? "";
+            ProductAsElement.ProductBrand = ProductAsElement.ProductBrand ?? "N/A";
+            ProductAsElement.ProductModel = ProductAsElement.ProductModel ?? "N/A";
 
             // Checks if the product is already in the user list
             if (_userProductList.ExistElementInList(ProductAsElement))

@@ -57,17 +57,22 @@ function callRemoveProductFromList(productData) {
 /// Update the visual information of the list
 /// </summary>
 function updateListData(avgPrice) {
+    // Gets the amount of products in the actual list
     var productCount = parseInt(document.getElementById("product-count").textContent);
 
+    // Gets the total aprox price of all the product
     var totalPriceText = document.getElementById("total-price").textContent;
     var totalPrice = parseInt(totalPriceText.replace(/,/g, ""));
 
+    // Decrease the product count and the total price
     --productCount;
     totalPrice -= parseInt(avgPrice.replace(/,/g, ""));
 
+    // Actualize the visual data
     document.getElementById("product-count").textContent = productCount;
     document.getElementById("total-price").textContent = totalPrice.toLocaleString();
 
+    // If it was the last product, the show the empty version
     if (productCount == 0) {
         document.getElementById("empty-list").style.display = 'inline-block';
         document.getElementById("no-empty-list").style.display = 'none';
