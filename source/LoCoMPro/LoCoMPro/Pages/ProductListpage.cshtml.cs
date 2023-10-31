@@ -3,6 +3,8 @@ using LoCoMPro.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace LoCoMPro.Pages
 {
@@ -67,10 +69,18 @@ namespace LoCoMPro.Pages
         /// <returns></returns>
         public void calculateTotalPrice()
         {
-            // Gets the average price of the product an added it to the total amount
-            foreach (var product in UserProductList) {
+            CultureInfo culture = CultureInfo.InvariantCulture; // Usar la configuración regional invariable para evitar problemas
+
+            // Gets the average price of the product and add it to the total amount
+            foreach (var product in UserProductList)
+            {
                 string avgPriceString = product.AvgPrice;
-                TotalPrice += int.Parse(avgPriceString.Replace(",", ""));
+                avgPriceString = Regex.Replace(avgPriceString, @"[^\d]", "");
+
+                if (int.TryParse(avgPriceString, NumberStyles.Number, culture, out int avgPrice))
+                {
+                    TotalPrice += avgPrice;
+                }
             }
         }
 

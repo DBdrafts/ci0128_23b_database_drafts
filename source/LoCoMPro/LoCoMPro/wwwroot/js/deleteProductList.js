@@ -56,17 +56,22 @@ function callRemoveProductFromList(productData) {
 /// <summary>
 /// Update the visual information of the list
 /// </summary>
-function updateListData(avgPrice) {
+function updateListData(avgPriceString) {
     // Gets the amount of products in the actual list
     var productCount = parseInt(document.getElementById("product-count").textContent);
 
     // Gets the total aprox price of all the product
     var totalPriceText = document.getElementById("total-price").textContent;
-    var totalPrice = parseInt(totalPriceText.replace(/,/g, ""));
+
+    var totalPrice = parseInt(totalPriceText.replace(/[^\d]/g, ''), 10);
+    totalPrice = isNaN(totalPrice) ? 0 : totalPrice;
+
+    avgPrice = parseInt(avgPriceString.replace(/[^\d]/g, ''), 10);
+    avgPrice = isNaN(avgPrice) ? 0 : avgPrice;
 
     // Decrease the product count and the total price
     --productCount;
-    totalPrice -= parseInt(avgPrice.replace(/,/g, ""));
+    totalPrice -= avgPrice;
 
     // Actualize the visual data
     document.getElementById("product-count").textContent = productCount;
