@@ -273,6 +273,7 @@ function getCoordinatesFromName() {
     });
 }
 
+
 //// Add a beforeunload event listener to check if the user is navigating away
 //let isRefresh = false;
 
