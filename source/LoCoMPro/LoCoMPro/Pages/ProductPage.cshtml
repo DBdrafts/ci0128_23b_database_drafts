@@ -190,7 +190,7 @@
             if (register.Images != null && register.Images.Any())
             { // In case registers has images
                 foreach (var image in register.Images)
-                { // Fo each image in register
+                { // For each image in register
                     if (image.ImageData != null)
                     {   
                         // Cover the bytes of images to string
@@ -199,6 +199,10 @@
                     }
                 }
             }
+
+            // Veracity values
+            float veracityValue = 0.5f;
+
 
             <li class="register-block align register-block-pagination">
                 <a>
@@ -210,6 +214,10 @@
                     </span>
                     <span id="register-comment" value="@register.Comment">
                         @Html.DisplayFor(modelItem => register.Comment)
+                    </span>
+                    <span class="veracity-stars" id="register-veracity" value="veracityValue">
+                        @{ViewBag.VeracityValue = veracityValue;}
+                        @await Html.PartialAsync("_VeracityStars")
                     </span>
                     <div class="text-center align">
                         <button class="open-interactions-button" data-register-id="@registerKeys" images-register-id="@registerImages" onclick="openInteractionsPopup(this)">
