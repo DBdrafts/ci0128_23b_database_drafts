@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -390,8 +391,11 @@ namespace LoCoMPro.Pages
         /// <param name="reportChanged">Bool to check if a report changed.</param>
         /// <param name="reviewedValue">Float with register review.</param>
         /// <returns>Success message to clients side.</returns>
-        public IActionResult OnPostHandleInteraction(string registerKeys, bool reportChanged, float reviewedValue)
+        public IActionResult OnPostHandleInteraction(string registerKeys, bool reportChanged, string reviewedValue)
         {
+            CultureInfo culture = CultureInfo.InvariantCulture;
+            float.TryParse(reviewedValue, NumberStyles.Float, culture, out float reviewedValueF);
+
             string[] values = SplitString(registerKeys, '\x1F');
             string submitionDate = values[0], contributorId = values[1], productName = values[2], storeName = values[3];
             
@@ -407,10 +411,10 @@ namespace LoCoMPro.Pages
                     productName, storeName, registSubmitDate);
             }
 
-            if (reviewedValue > 0)
+            if (reviewedValueF > 0)
             {
                 HandleReview(user!, registerToUpdate, interactionDate, contributorId,
-                    productName, storeName, registSubmitDate, reviewedValue);
+                    productName, storeName, registSubmitDate, reviewedValueF);
             }
 
             _context.SaveChanges();
