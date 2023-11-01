@@ -169,8 +169,10 @@ namespace LoCoMPro.Pages
             Product = await products.ToListAsync();
             Store = await stores.ToListAsync();
 
-            // Initial request for all the registers in the database
-            var registers = from r in _context.Registers select r;
+            // Initial request for all the registers in the database if the reportState is not 2
+            var registers = from r in _context.Registers
+                            where r.Reports.All(report => report.ReportState != 2)
+                            select r;
 
             // add the images from every register
             registers = registers.Include(r => r.Images);
@@ -187,7 +189,6 @@ namespace LoCoMPro.Pages
                 registers = registers.Where(x => x.CantonName != null && x.CantonName.Contains(SearchCantonName));
                 registers = registers.Where(x => x.ProvinciaName != null && x.ProvinciaName.Contains(SearchProvinceName));
                 registers = registers.Include(r => r.Images);
-
             }      
 
             // Get the average of the registers within last month.

@@ -113,9 +113,10 @@ namespace LoCoMPro.Pages
                              select c;
 
             var registers = from r in _context.Registers
+                            where r.Reports.All(report => report.ReportState != 2)
                             select r;
 
-           if (Province is not null and not "")
+            if (Province is not null and not "")
             {
                 registers = registers.Where(r => r.ProvinciaName == Province);
                 if (Canton is not null and not "")
