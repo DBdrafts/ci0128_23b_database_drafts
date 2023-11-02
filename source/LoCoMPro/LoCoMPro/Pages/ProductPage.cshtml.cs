@@ -171,9 +171,10 @@ namespace LoCoMPro.Pages
             Store = await stores.ToListAsync();
 
             // Initial request for all the registers in the database if the reportState is not 2
-            var registers = from r in _context.Registers
-                            where r.Reports.All(report => report.ReportState != 2)
-                            select r;
+            var registers = from r in _context.Registers select r;
+
+            // Filter out registers with HighestReportState equal to 2
+            registers = registers.Where(r => GetHighestReportState(r) != 2);
 
             // add the images from every register
             registers = registers.Include(r => r.Images);
@@ -531,5 +532,69 @@ namespace LoCoMPro.Pages
                 lastReview.ReviewDate = interactionDate;
             }
         }
-    }   
+
+        /// <summary>
+        /// Get the amount of images of one registers
+        /// </summary>
+        /// <param name="registerToCheck">Register to check the images count.</param>
+        public int GetNumberOfImagesForRegister(Register registerToCheck)
+        {
+            // Initialize a var int to store the number of images
+            int imagesAmount = 0;
+
+            // Check if the input register is not null
+            if (registerToCheck != null && registerToCheck.Images != null)
+            {
+                // Set imagesAmount to the count of images in the register
+                imagesAmount = registerToCheck.Images.Count;
+            }
+
+            // Return the number of images
+            return imagesAmount;
+        }
+
+        /// <summary>
+        /// Get the amount of images of one registers
+        /// </summary>
+        /// <param name="registerToCheck">Register to directly check if register has images</param>
+        public bool RegisterHasImages(Register registerToCheck)
+        {
+            // Initialize a bool var to indicate whether the register has images.
+            bool hasImages = false;
+
+            // Check if the input register is not null
+            if (registerToCheck != null && registerToCheck.Images != null &&
+                registerToCheck.Images.Any(image => image.ImageData != null))
+            {
+                // Set hasImages to true 
+                hasImages = true;
+            }
+
+            // Return the boolean indicating whether the register has images.
+            return hasImages;
+        }
+
+
+        /// <summary>
+        /// Get the Max status of report of a register
+        /// </summary>
+        /// <param name="registerToCheck">Register to directly check if register has images</param>
+        public int GetHighestReportState(Register registerToCheck)
+        {
+            // Initialize a variable to store the highest report state
+            int highestReportState = 0;
+
+            // Check if the input register has Reports and there's at least one report
+            if (registerToCheck.Reports != null && registerToCheck.Reports.Any())
+            {
+                // Find the maximum ReportState value among the reports
+                highestReportState = registerToCheck.Reports.Max(report => report.ReportState);
+            }
+
+            // Return the highest report state
+            return highestReportState;
+        }
+
+    }
+
 }
