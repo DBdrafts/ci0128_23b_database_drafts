@@ -172,8 +172,13 @@
 
     <ul class="register-section">
         <!-- Individual registers -->
-        @foreach (var register in Model.Registers)
+        @for (int i = 0; i < Model.Registers.Count(); i++)
         {
+            var register = Model.Registers.ElementAt(i);
+
+            // Veracity values
+            float veracityValue = 2.5f;
+
             <!-- Search result section -->
             <!-- Individual registers -->
             var user = Model.Users.FirstOrDefault(u => u.Id == register.ContributorId)?.UserName;
@@ -182,7 +187,7 @@
             if (reportState == null) reportState = -1;
             var registerKeys = $"{register.SubmitionDate}{s}{register.ContributorId}{s}{register.ProductName}" +
             $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToShortDateString()}" +
-            $"{s}{user}{s}{register.Comment}{s}{reviewValue}{s}{reportState}";
+            $"{s}{user}{s}{register.Comment}{s}{reviewValue}{s}{reportState}{s}{@i}";
 
             // images in registers
             int imagecount = 0;
@@ -200,30 +205,28 @@
                 }
             }
 
-            // Veracity values
-            float veracityValue = 0.5f;
-
-
             <li class="register-block align register-block-pagination">
                 <a>
                     <span id="register-date" value="@register.SubmitionDate.Date">
                         @register.SubmitionDate.ToShortDateString()
-                    </span>
+                    </span> 
                     <span id="register-price" value="@register.Price">
                         ₡ @register.Price.ToString("N0")
                     </span>
                     <span id="register-comment" value="@register.Comment">
                         @Html.DisplayFor(modelItem => register.Comment)
                     </span>
-                    <span class="veracity-stars" id="register-veracity" value="veracityValue">
+                    <span class="veracity-stars" id="register_veracity_@i" value="veracityValue">
                         @{ViewBag.VeracityValue = veracityValue;}
                         @await Html.PartialAsync("_VeracityStars")
                     </span>
                     <div class="text-center align">
-                        <button class="open-interactions-button" data-register-id="@registerKeys" images-register-id="@registerImages" onclick="openInteractionsPopup(this)">
+                        <button class="open-interactions-button" id="open-popup-button-@i" data-register-id="@registerKeys"
+                                data-index="@i" images-register-id="@registerImages" onclick="openInteractionsPopup(this)">
                             <img src="~/img/MoreIcon.svg" alt="Más opciones">
                         </button>
                     </div>
+                    
                 </a>
             </li>
         }
@@ -236,6 +239,7 @@
                 <p><b>Fecha:</b> <span id="popup-submitionDate"> </span></p>
                 <p><b>Precio:</b> <span id="popup-price"></span></p>
                 <p><b>Aporde de:</b> <span id="popup-userName"></span></p>
+                <p><b>Veracidad:</b> <span class="veracity-stars" id="popup-veracity"></span></p>
                 <p><b>Comentario:</b> <span id="popup-comment"></span></p>
 
                 <div class="carousel-section-pop-up">

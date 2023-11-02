@@ -300,7 +300,8 @@
 
 /* Style for the register block text*/
 .register-block a span {
-    flex: 0 0 28%;
+    min-width: 20%;
+    flex: 0 0 10%;
     text-align: left;
     margin: 10px 0px;
 }
@@ -540,4 +541,12 @@
     font-size: 22px !important;
     text-align: center;
     margin: 0px 10px;
+}
+
+/* Style for the veracity stars */
+.veracity-stars {
+    display: inline-block;
+    font-size: 30px;
+    color: #F5AA38;
+    text-align: center;
 }
