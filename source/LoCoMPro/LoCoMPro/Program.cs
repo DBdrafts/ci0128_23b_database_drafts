@@ -21,10 +21,10 @@ builder.Services.AddDbContext<LoCoMProContext>(options =>
 // Added default IdentityUser and configured it to not require a confirmed account, also added custom signInManager that overrides PasswordSignInAsync()
 builder.Services.AddDefaultIdentity<User>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false;
+    options.SignIn.RequireConfirmedAccount = true;
     options.User.RequireUniqueEmail = true;
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 !*-._@+";
-}).AddSignInManager<MySignInManager>().AddRoles<IdentityRole>().AddEntityFrameworkStores<LoCoMProContext>();
+}).AddSignInManager<MySignInManager>().AddRoles<IdentityRole>().AddEntityFrameworkStores<LoCoMProContext>().AddDefaultTokenProviders();
 
 builder.Services.AddTransient<IEmailSender, EmailSender>(i => 
     new EmailSender(

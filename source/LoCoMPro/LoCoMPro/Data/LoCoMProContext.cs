@@ -154,9 +154,6 @@ namespace LoCoMPro.Data
             // Ignoring columns from default IdentityUser
             modelBuilder.Entity<User>().Ignore(u => u.PhoneNumber);
             modelBuilder.Entity<User>().Ignore(u => u.PhoneNumberConfirmed);
-            modelBuilder.Entity<User>().Ignore(u => u.EmailConfirmed);
-            modelBuilder.Entity<User>().Ignore(u => u.SecurityStamp);
-            modelBuilder.Entity<User>().Ignore(u => u.ConcurrencyStamp);
             modelBuilder.Entity<User>().Ignore(u => u.TwoFactorEnabled);
             modelBuilder.Entity<User>().Ignore(u => u.LockoutEnabled);
             modelBuilder.Entity<User>().Ignore(u => u.LockoutEnd);
