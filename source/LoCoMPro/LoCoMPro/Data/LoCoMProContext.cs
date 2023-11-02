@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using LoCoMPro.Models;
 using System.Reflection.Metadata;
+using Microsoft.Data.SqlClient;
 
 namespace LoCoMPro.Data
 {
@@ -234,6 +235,29 @@ namespace LoCoMPro.Data
             modelBuilder.Entity<Register>()
                 .Navigation(u => u.Images)
                 .UsePropertyAccessMode(PropertyAccessMode.Property);
+        }
+
+        /// <summary>
+        /// Gets the average review value of a register
+        /// </summary>
+        /// <param name="contributorId">Id of the user that make the register.</param>
+        /// <param name="productName">Name of the product.</param>
+        /// <param name="storeName">Name of the store.</param>
+        /// <param name="submitionDate">Date the register was made.</param>
+        /// <returns>Average review value of the register.</returns>
+        public float GetAverageReviewValue(string contributorId
+            , string productName, string storeName, DateTime submitionDate)
+        {
+            // The name of the function
+            string averageReviewFunction = "GetAverageReviewValue";
+
+            // Make the query of the function
+            return Database.SqlQueryRaw<float>($"{averageReviewFunction} @ContributorId, @ProductName, @StoreName, @SubmissionDate",
+                new SqlParameter("ContributorId", contributorId),
+                new SqlParameter("ProductName", productName),
+                new SqlParameter("StoreName", storeName),
+                new SqlParameter("SubmissionDate", submitionDate)
+            ).AsEnumerable().SingleOrDefault();
         }
     }
 }

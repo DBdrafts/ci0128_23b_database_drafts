@@ -176,8 +176,6 @@
         {
             var register = Model.Registers.ElementAt(i);
 
-            // Veracity values
-            float veracityValue = 2.5f;
 
             <!-- Search result section -->
             <!-- Individual registers -->
@@ -185,6 +183,10 @@
             var reviewValue = Model.UserReviews.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReviewValue;
             var reportState = Model.UserReports.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReportState;
             if (reportState == null) reportState = -1;
+
+            // Veracity values
+            float veracityValue = Model.registerAverageReview[i];
+
             var registerKeys = $"{register.SubmitionDate}{s}{register.ContributorId}{s}{register.ProductName}" +
             $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToShortDateString()}" +
             $"{s}{user}{s}{register.Comment}{s}{reviewValue}{s}{reportState}{s}{@i}";

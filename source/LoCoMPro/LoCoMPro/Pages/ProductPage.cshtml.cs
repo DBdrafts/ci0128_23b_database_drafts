@@ -118,9 +118,9 @@ namespace LoCoMPro.Pages
         public bool AlreadyInProductList { get; set; }
 
         /// <summary>
-        /// Number of results.
+        /// Average review value of the registers
         /// </summary>
-        public int ResultsNumber;
+        public IList<float> registerAverageReview { get; set; }
 
         /// <summary>
         /// GET HTTP request, initializes page values.
@@ -193,8 +193,6 @@ namespace LoCoMPro.Pages
             List<string> userIds = registers.Select(r => r.ContributorId).Distinct().ToList()!;
             Users = await _context.Users.Where(u => userIds.Contains(u.Id)).ToListAsync();
 
-            ResultsNumber = registers.Count();
-
             // Gets the Data From data base 
             Registers = await registers.ToListAsync();
 
@@ -206,6 +204,9 @@ namespace LoCoMPro.Pages
 
             // Prepare the list data needed
             PrepareProductListData();
+
+            // Gets the average review value of the registers
+            ObtainAverageReviewValues();
         }
 
         /// <summary>
@@ -266,6 +267,19 @@ namespace LoCoMPro.Pages
             }
             double avgPrice = (registers is not null && registers.Count() > 1) ? registers.Average(r => r.Price) : 0.0;
             return Convert.ToDecimal(avgPrice);
+        }
+
+        /// <summary>
+        /// Obtains the averages review values of the registers
+        /// </summary>
+        public void ObtainAverageReviewValues()
+        {
+            registerAverageReview = new List<float>();
+            // Gets the average value for each register
+            foreach (Register register in Registers) {
+                registerAverageReview.Add(_context.GetAverageReviewValue(register.ContributorId
+                    , register.ProductName, register.StoreName, register.SubmitionDate));
+            }
         }
 
         /// <summary>
