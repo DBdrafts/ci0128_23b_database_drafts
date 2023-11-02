@@ -44,7 +44,7 @@
                     
                     @foreach (var register in Model.Registers)
                     { // in each register done
-                        @if (RegisterHasImages())
+                        @if (Model.RegisterHasImages(register))
                         { // if images is not null
                             @foreach (var image in register.Images)
                             { // for each image in register
