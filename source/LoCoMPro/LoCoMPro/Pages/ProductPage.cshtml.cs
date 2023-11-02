@@ -171,10 +171,9 @@ namespace LoCoMPro.Pages
             Store = await stores.ToListAsync();
 
             // Initial request for all the registers in the database if the reportState is not 2
-            var registers = from r in _context.Registers select r;
-
-            // Filter out registers with HighestReportState equal to 2
-            registers = registers.Where(r => GetHighestReportState(r) != 2);
+            var registers = from r in _context.Registers
+                            where r.Reports.All(report => report.ReportState != 2)
+                            select r;
 
             // add the images from every register
             registers = registers.Include(r => r.Images);
