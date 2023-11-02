@@ -166,7 +166,11 @@
             <li>
                 <div class="textComment">Comentarios</div>
             </li>
-
+            <li>
+                <!-- Button to sort by the veracity -->
+                @{ViewBag.SortTipe = "#register-veracity";}
+                @await Html.PartialAsync("_OrderButton", "Veracidad")
+            </li>
 		</ul>
 	</nav>
 
@@ -183,10 +187,6 @@
             var reviewValue = Model.UserReviews.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReviewValue;
             var reportState = Model.UserReports.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReportState;
             if (reportState == null) reportState = -1;
-
-            // Veracity values
-            float veracityValue = Model.registerAverageReview[i];
-
             var registerKeys = $"{register.SubmitionDate}{s}{register.ContributorId}{s}{register.ProductName}" +
             $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToShortDateString()}" +
             $"{s}{user}{s}{register.Comment}{s}{reviewValue}{s}{reportState}{s}{@i}";
@@ -207,6 +207,9 @@
                 }
             }
 
+            // Veracity values
+            float veracityValue = Model.registerAverageReview[i];
+
             <li class="register-block align register-block-pagination">
                 <a>
                     <span id="register-date" value="@register.SubmitionDate.Date">
@@ -218,9 +221,11 @@
                     <span id="register-comment" value="@register.Comment">
                         @Html.DisplayFor(modelItem => register.Comment)
                     </span>
-                    <span class="veracity-stars" id="register_veracity_@i" value="veracityValue">
-                        @{ViewBag.VeracityValue = veracityValue;}
-                        @await Html.PartialAsync("_VeracityStars")
+                    <span class="veracity-stars" id="register-veracity" value="@veracityValue">
+                        <span id="register_veracity_@i">
+                            @{ViewBag.VeracityValue = veracityValue;}
+                            @await Html.PartialAsync("_VeracityStars")
+                        </span>
                     </span>
                     <div class="text-center align">
                         <button class="open-interactions-button" id="open-popup-button-@i" data-register-id="@registerKeys"

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using LoCoMPro.Models;
 using System.Reflection.Metadata;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace LoCoMPro.Data
 {
@@ -248,16 +249,21 @@ namespace LoCoMPro.Data
         public float GetAverageReviewValue(string contributorId
             , string productName, string storeName, DateTime submitionDate)
         {
-            // The name of the function
-            string averageReviewFunction = "GetAverageReviewValue";
+            // Creates the SQL Query use to get the average review values
+            string sqlQuery = "SELECT dbo.GetAverageReviewValue(@ContributorId, @ProductName, @StoreName, @SubmitionDate)";
 
-            // Make the query of the function
-            return Database.SqlQueryRaw<float>($"{averageReviewFunction} @ContributorId, @ProductName, @StoreName, @SubmissionDate",
-                new SqlParameter("ContributorId", contributorId),
-                new SqlParameter("ProductName", productName),
-                new SqlParameter("StoreName", storeName),
-                new SqlParameter("SubmissionDate", submitionDate)
-            ).AsEnumerable().SingleOrDefault();
+            // Link the parameters with the register value
+            var contributorIdParam = new SqlParameter("@ContributorId", contributorId);
+            var productNameParam = new SqlParameter("@ProductName", productName);
+            var storeNameParam = new SqlParameter("@StoreName", storeName);
+            var submitionDateParam = new SqlParameter("@SubmitionDate", submitionDate);
+
+            // Gets the average review value of the register
+            float? result = Database.SqlQueryRaw<float?>(sqlQuery, contributorIdParam, productNameParam, storeNameParam, submitionDateParam)
+                .AsEnumerable().SingleOrDefault();
+
+            // Return the value or 0 if the value was 0
+            return result ?? 0;
         }
     }
 }
