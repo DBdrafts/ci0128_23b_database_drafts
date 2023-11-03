@@ -53,7 +53,7 @@
 .containerListRegisterColumns {
     display: inline-flex;
     height: auto;
-    width: 92%;
+    width: 10%;
     justify-content:space-between;
     list-style: none;
     margin: 10px 0px;
@@ -83,10 +83,9 @@
 /*VER!!!!!*/
 .search-section {
     height: 100%;
-    width: 100%;
+    display:inline-block;
+    width: 83%;
 }
-
-
 
 
 /* Style for the result register block */
@@ -148,7 +147,7 @@
     /*flex: 0 0 calc(16.67% - 20px);*/
     display: flex;
     height: 4em;
-    width: 95%;
+    width: 100%;
     background-color: #E2E3E3;
     justify-content: space-around;
     border-radius: 15px;
@@ -177,12 +176,9 @@ margin-bottom: 20px;
 }
 
 
-
-
-
 #product-col {
     width: 200px;
-    margin-right: 20px;
+    margin-right: 50px;
 }
 
 #register-product-name {
@@ -194,10 +190,9 @@ margin-bottom: 20px;
 }
 
 
-
 #store-col, #register-store-name {
     width: 150px;
-    margin-left:20px
+    margin-left:25px
 }
 
 #province-col {
@@ -210,11 +205,11 @@ margin-bottom: 20px;
 
 #price-col {
     width: auto;
-    justify-content: flex-end !important;
+    justify-content: flex-end;
 }
 
 #date-col {
     width: auto;
-    margin-right:40px
+    margin-right:4px
 }
 
