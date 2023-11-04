@@ -11,35 +11,21 @@
     <span id="buttonSpan"> Ubicación </span>
 </button>
 
-@* <div id="locationPopup" class="popup">
-    <div class="popup-content">
-        <h2 class="selectHeader">Seleccionar ubicación</h2>
-        <label for="province">Provincia:</label>
-        <select id="province" name="province">
-            <option value="" disabled selected hidden>Seleccionar provincia</option>
-        </select>
-        <label for="canton">Cantón:</label>
-        <select id="canton" name="canton" disabled>
-            <option value="" disabled selected hidden>Seleccione una provincia primero</option>
-        </select>
-        <button type="button" id="closePopup-button">Cerrar</button>
-        <button type="button" id="saveLocation-button">Guardar</button>
-    </div>
-</div> *@
+<div id="modalBackground"></div>
 
-<div id="mapPopup" style="display: none; position: absolute; top: 50px; left: 50px; width: 600px; height: 500px; background-color: white; border: 1px solid #ccc;">
+<div id="mapPopup">
     <h2 class="selectHeader">Seleccionar ubicación</h2>
-    <div id="map" style="width: 50%; height: 50%;"></div>
-    <label for="province">Provincia:</label>
+    <div id="map"></div>
+    <label for="province" id="province-label">Provincia:</label>
     <select id="province" name="province">
         <option value="" disabled selected hidden>Seleccionar provincia</option>
     </select>
-    <label for="canton">Cantón:</label>
+    <label for="canton" id="canton-label">Cantón:</label>
     <select id="canton" name="canton" disabled>
         <option value="" disabled selected hidden>Seleccione una provincia primero</option>
     </select>
     <input type="hidden" name="latitude" value="" id="latitude">
     <input type="hidden" name="longitude" value="" id="longitude">
-    <button type="button" id="closePopup-button">Cerrar</button>
-    <button type="button" id="saveLocation-button">Guardar</button>
+    <button type="button" id="closePopupMap-button">Cerrar</button>
+    <button type="button" id="saveLocationMap-button">Guardar</button>
 </div>

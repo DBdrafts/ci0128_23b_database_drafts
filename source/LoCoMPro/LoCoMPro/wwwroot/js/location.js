@@ -1,10 +1,6 @@
 let hasPopulatedProvinceSelect = false;
 let changeFromMap = false;
 let map = null;
-// Variables to save between pages
-var savedProvince = "";
-var savedCanton = "";
-var savedLocation = null;
 // Variables to use for page logic
 var selectedProvince = null;
 var selectedCanton = null;
@@ -26,11 +22,11 @@ $(document).ready(function () {
             $("#mapPopup").hide();
         }
     });
-    $("#closePopup-button").on("click", function () {
+    $("#closePopupMap-button").on("click", function () {
         $("#mapPopup").hide();
     });
 
-    $("#saveLocation-button").on("click", function () {
+    $("#saveLocationMap-button").on("click", function () {
         var text = getLocationButtonText(selectedProvince, selectedCanton);
         $("#buttonSpan").text(text);
         saveLocation();
@@ -86,7 +82,7 @@ $(document).ready(function () {
 
 // Google Maps initialization function
 function initializeMap() {
-    const startingLocation = (savedLocation !== null)? savedLocation : { lat: 9.9280694, lng: -84.0907246 };
+    const startingLocation = { lat: 9.9280694, lng: -84.0907246 };
 
     if (map !== null) return;
 
@@ -259,8 +255,8 @@ function getCoordinatesFromName() {
             const geoJson = JSON.parse(data.point);
             //console.log(geoJson);
 
-            const latitude = geoJson["coordinates"][0];
-            const longitude = geoJson["coordinates"][1]
+            const latitude = geoJson["coordinates"][1];
+            const longitude = geoJson["coordinates"][0]
 
             const latlng = new google.maps.LatLng(latitude, longitude);
             
@@ -272,25 +268,3 @@ function getCoordinatesFromName() {
         }
     });
 }
-
-
-//// Add a beforeunload event listener to check if the user is navigating away
-//let isRefresh = false;
-
-//// Listen for the 'beforeunload' event
-//window.addEventListener('beforeunload', function (e) {
-//    if (!isRefresh) {
-//        // User is navigating away from the page, you can clear data here.
-//        localStorage.clear();
-//    }
-//});
-
-//// Listen for the 'unload' event to detect page refresh
-//window.addEventListener('unload', function () {
-//    isRefresh = true;
-//});
-
-//// Listen for the 'load' event to reset the flag
-//window.addEventListener('load', function () {
-//    isRefresh = false;
-//});

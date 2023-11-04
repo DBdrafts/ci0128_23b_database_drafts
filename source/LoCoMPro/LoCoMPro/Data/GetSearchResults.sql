@@ -7,12 +7,20 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
+    -- Check for possible SQL inyection
+    IF PATINDEX('%''%', @searchString) > 0 OR
+       PATINDEX('%;%', @searchString) > 0
+    BEGIN
+        PRINT 'Invalid search string';
+        RETURN;
+    END;
+
 	DECLARE @basePoint geography;
-	PRINT 'DECLARED';
+
 	SET @basePoint = geography::STPointFromText('POINT(' + CONVERT(VARCHAR(50), @longitude) + ' ' + CONVERT(VARCHAR(50), @latitude) + ')', 4326);
-	PRINT 'SETTED';
+
     DECLARE @sql NVARCHAR(MAX);
-	--DECLARE @distance FLOAT;
+
 
     -- Start building the dynamic SQL query
     SET @sql = 'SELECT *, dbo.CalculateDistance(@basePoint, Geolocation) AS DISTANCE';
@@ -41,6 +49,3 @@ BEGIN
     -- Execute the dynamic SQL query
     EXEC sp_executesql @sql, N'@searchString NVARCHAR(255), @basePoint geography', @searchString, @basePoint;
 END;
-
---use [LoCoMProContext-ec360c0e-cf78-4962-821f-b52a2cc4d7a7]; 
---EXEC GetSearchResults 'Name', 'e';

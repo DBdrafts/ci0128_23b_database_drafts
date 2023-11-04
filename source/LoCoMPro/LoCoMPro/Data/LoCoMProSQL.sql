@@ -1,69 +1,8 @@
-﻿use [LoCoMProContext-ec360c0e-cf78-4962-821f-b52a2cc4d7a7];
--- Funciones y Triggers para el manejo de usuarios
-GO
-CREATE FUNCTION dbo.CountUserRegisters
-(
-    @UserId NVARCHAR(450)
-)
-RETURNS INT
-AS
-BEGIN
-    DECLARE @RegisterCount INT
-
-    SELECT @RegisterCount = COUNT(*) 
-    FROM Register
-    WHERE ContributorId = @UserId
-
-    RETURN @RegisterCount
-END
-GO;
-
-GO
-CREATE FUNCTION dbo.GetAverageReviewValueOnUserRegisters (
-    @UserId NVARCHAR(450)
-)
-RETURNS REAL
-AS
-BEGIN
-    DECLARE @AvgReviewOnRegisters REAL
-
-    SELECT @AvgReviewOnRegisters = AVG(ReviewValue)
-    FROM Review
-    WHERE ContributorId = @UserId
-
-    RETURN @AvgReviewOnRegisters
-END
-
-GO;
--- Funciones y procedimientos para la página de Producto.
-GO
-CREATE FUNCTION dbo.GetAverageReviewValue (
-    @ContributorId NVARCHAR(450),
-    @ProductName NVARCHAR(450),
-    @StoreName NVARCHAR(450),
-    @SubmitionDate DATETIME2
-)
-RETURNS REAL
-AS
-BEGIN
-    DECLARE @AverageReviewValue REAL
-
-    SELECT @AverageReviewValue = AVG(ReviewValue)
-    FROM Review
-    WHERE ContributorId = @ContributorId
-      AND ProductName = @ProductName
-      AND StoreName = @StoreName
-      AND SubmitionDate = @SubmitionDate
-
-    RETURN @AverageReviewValue
-END
-GO;
--- Funciones y procedimientos para la página de Búsqueda.
-GO
+﻿GO
 CREATE VIEW SearchRegister AS
 SELECT r.SubmitionDate, r.ContributorId, r.ProductName, p.Brand, p.Model,
-	r.StoreName, r.Price, r.NumCorrections, r.Comment, c.ProvinciaName,
-	c.CantonName, c.Geolocation
+	r.StoreName, r.Price, c.ProvinciaName, c.CantonName, c.Geolocation
+	
 FROM Product p INNER JOIN Register r ON p.Name = r.ProductName
 			INNER JOIN Canton c ON c.ProvinciaName = r.ProvinciaName AND
 								c.CantonName = r.CantonName;
@@ -102,11 +41,20 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
+    -- Check for possible SQL inyection
+    IF PATINDEX('%''%', @searchString) > 0 OR
+       PATINDEX('%;%', @searchString) > 0
+    BEGIN
+        PRINT 'Invalid search string';
+        RETURN;
+    END;
+
 	DECLARE @basePoint geography;
-	PRINT 'DECLARED';
+
 	SET @basePoint = geography::STPointFromText('POINT(' + CONVERT(VARCHAR(50), @longitude) + ' ' + CONVERT(VARCHAR(50), @latitude) + ')', 4326);
-	PRINT 'SETTED';
+
     DECLARE @sql NVARCHAR(MAX);
+
 
     -- Start building the dynamic SQL query
     SET @sql = 'SELECT *, dbo.CalculateDistance(@basePoint, Geolocation) AS DISTANCE';

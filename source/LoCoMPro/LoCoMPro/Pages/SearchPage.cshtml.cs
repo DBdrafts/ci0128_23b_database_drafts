@@ -114,12 +114,12 @@ namespace LoCoMPro.Pages
                             where r.Reports.All(report => report.ReportState != 2)
                             select r;
 
-            //Point? geolocation = null;
+
             var coordinates = new Coordinate(0.0, 0.0);
             var geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
             if (latitude != 0.0 && longitude != 0.0)
             {
-                coordinates = new Coordinate(latitude, longitude);
+                coordinates = new Coordinate(longitude, latitude);
                 geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
                 AreDistancesCalculated = true;
             }
@@ -127,10 +127,6 @@ namespace LoCoMPro.Pages
 
             SearchResults = SearchResults.GroupBy(r => new { r.ProductName, r.StoreName })
                         .Select(grouped => grouped.OrderByDescending(r => r.SubmitionDate).First());
-            //foreach (var result in SearchResults)
-            //{
-            //    var distance = result.Distance;
-            //}
 
             var match = GetRegistersByType(registers);
 
