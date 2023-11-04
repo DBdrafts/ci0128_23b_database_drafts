@@ -1,0 +1,90 @@
+﻿@page
+@model ChangeEmailModel
+@{
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar Email</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        #changePswButton {
+            background-color: #88C8F8;
+            color: #000000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        #changePswButton:hover {
+            background-color: #39A4F4;
+        }
+    </style>
+</head>
+
+<div class="logo-image">
+    <img src="~/img/LoCoMProLogo.svg" alt="LoCoMPro Logo">
+</div>
+<div class="changePsw-section">
+
+    <!-- change Password Form-->
+    <form class="form-input" method="post">
+        <div id='changePsw'>Cambiar email</div>
+        <partial name="_StatusMessage" for="StatusMessage" />
+
+        <label asp-for="Email">Email Actual</label>
+        <input asp-for="Email" id="psw"class="form-control" placeholder="Please enter your email." style="border-radius: 15px;
+                    border: 2px black solid; margin-bottom: 8px; margin-top: 5px" aria-required="true" disabled >
+        <label asp-for="Input.NewEmail">Nuevo Email</label>
+        <input asp-for="Input.NewEmail" id="psw" class="form-control" autocomplete="email" style="border-radius: 15px;
+                    border: 2px black solid; margin-bottom: 8px; margin-top: 5px" aria-required="true" placeholder="Ingrese su nueva dirección de Email." >
+
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <button id="changePswButton" type="submit" asp-page-handler="ChangeEmail">Cambiar email</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+@* <h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        <form id="email-form" method="post">
+            <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+            @if (Model.IsEmailConfirmed)
+            {
+                <div class="form-floating mb-3 input-group">
+                    <input asp-for="Email" class="form-control" placeholder="Please enter your email." disabled />
+                        <div class="input-group-append">
+                            <span class="h-100 input-group-text text-success font-weight-bold">✓</span>
+                        </div>
+                    <label asp-for="Email" class="form-label"></label>
+                </div>
+            }
+            else
+            {
+                <div class="form-floating mb-3">
+                    <input asp-for="Email" class="form-control" placeholder="Please enter your email." disabled />
+                    <label asp-for="Email" class="form-label"></label>
+                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
+                </div>
+            }
+            <div class="form-floating mb-3">
+                <input asp-for="Input.NewEmail" class="form-control" autocomplete="email" aria-required="true" placeholder="Please enter new email." />
+                <label asp-for="Input.NewEmail" class="form-label"></label>
+                <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
+            </div>
+            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="w-100 btn btn-lg btn-primary">Change email</button>
+        </form>
+    </div>
+</div> *@
+
+
