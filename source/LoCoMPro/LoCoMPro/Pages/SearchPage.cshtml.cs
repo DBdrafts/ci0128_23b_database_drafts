@@ -25,21 +25,18 @@ namespace LoCoMPro.Pages
         /// Categories that the user wants to filter by.
         /// <p>Its string with category names separated by a comma.</p>
         /// </summary>
-        [BindProperty(SupportsGet = true)]
         public string? SelectedCategories{ get; set; }
 
         /// <summary>
         /// Provinces that the user wants to filter by.
         /// <p>Its string with province names separated by a comma.</p>
         /// </summary>
-        [BindProperty(SupportsGet = true)]
         public string? SelectedProvinces { get; set; }
 
         /// <summary>
         /// Cantons that the user wants to filter by.
         /// <p>Its string with canton names separated by a comma.</p>
         /// </summary>
-        [BindProperty(SupportsGet = true)]
         public string? SelectedCantons { get; set; }
 
         /// <summary>
@@ -72,13 +69,11 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Province the user wants to base the search on.
         /// </summary>
-        [BindProperty(SupportsGet = true)]
         public string? Province { get; set; }
 
         /// <summary>
         /// Canton the user wants to base the search on.
         /// </summary>
-        [BindProperty(SupportsGet = true)]
         public string? Canton { get; set; }
 
         /// <summary>
@@ -87,7 +82,7 @@ namespace LoCoMPro.Pages
         public Dictionary<string, string> CategoryMap { get; set; } = default!;
 
         /// <summary>
-        /// Resulr of the query.
+        /// Result of the query.
         /// </summary>
         public IEnumerable<Register>? Registers { get; set; } = new List<Register>();
 
@@ -95,6 +90,11 @@ namespace LoCoMPro.Pages
         /// Search results with extended Data Types.
         /// </summary>
         public IEnumerable<SearchResult>? SearchResults { get; set; } = new List<SearchResult>();
+
+        /// <summary>
+        /// Flag of wether or not non zero distances are calculated for registers.
+        /// </summary>
+        public bool AreDistancesCalculated { get; set; } = false;
 
         /// <summary>
         /// OnGet method that handles the GET request.
@@ -111,6 +111,7 @@ namespace LoCoMPro.Pages
                              select c;
 
             var registers = from r in _context.Registers
+                            where r.Reports.All(report => report.ReportState != 2)
                             select r;
 
             //Point? geolocation = null;
@@ -120,6 +121,7 @@ namespace LoCoMPro.Pages
             {
                 coordinates = new Coordinate(latitude, longitude);
                 geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
+                AreDistancesCalculated = true;
             }
             SearchResults = _context.GetSearchResults(SearchType ?? "Nombre", SearchString!, geolocation);
 
@@ -175,29 +177,6 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
-        /// Filters the <paramref name="registers"/> by the <paramref name="selectedProvinces"/> and the <paramref name="selectedCantons"/>.
-        /// </summary>
-        /// <param name="registers">Registers to filter.</param>
-        /// <param name="selectedProvinces">Provinces to filter the registers by.</param>
-        /// <param name="selectedCantons">Cantons to filter the registers by.</param>
-        /// <returns>Filtered registers with the given selections.</returns>
-        public ref IQueryable<Register> FilterByLocation(ref IQueryable<Register> registers, List<string>? selectedProvinces = null, List<string>? selectedCantons = null)
-        {
-            // Filter by Province
-            if (selectedProvinces != null && selectedProvinces.Count > 0 && selectedProvinces[0] != null)
-            {
-                /* The registers associated with the Province are obtained */
-                registers = registers.Where(r => selectedProvinces.Contains(r.ProvinciaName!));
-            }
-            // Filter by Canton
-            if (selectedCantons != null && selectedCantons.Count > 0 && selectedCantons[0] != null)
-            {
-                registers = registers.Where(r => selectedCantons.Contains(r.CantonName!));
-            }
-            return ref registers;
-        }
-
-        /// <summary>
         /// OnPost method that sent request.
         /// </summary>
         /// <returns>Redirect to search results page.</returns>
@@ -239,46 +218,5 @@ namespace LoCoMPro.Pages
             return resultQuery;
         }
 
-        /// <summary>
-        /// Order the registers by the sort order choose.
-        /// </summary>
-        /// <param name="unorderedList">List of registers to order.</param>
-        /// <param name="sortOrder">Type of order to use.</param>
-        /// <returns>Ordered list of registers.</returns>
-        public List<Register> OrderRegisters(List<Register>? unorderedList, string sortOrder)
-        {
-            List<Register> orderedList = new List<Register>();
-
-            if (!unorderedList.IsNullOrEmpty())
-            {
-                // Sort the list depending of the parameter 
-                switch (sortOrder)
-                {
-                    // Order in case of price_descending
-                    case "price_desc":
-                        orderedList = unorderedList!.OrderByDescending(r => r.Price).ToList();
-                        break;
-
-                    // Normal order for the price 
-                    case "price_asc":
-                    default:
-                        orderedList = unorderedList!.OrderBy(r => r.Price).ToList();
-                        break;
-                }
-            }
-
-            return orderedList;
-        }
-
-        /// <summary>
-        /// Gets the sort order of the registers.
-        /// </summary>
-        /// <param name="sortOrder">Order selected by the user.</param>
-        /// <returns><paramref name="sortOrder"/> value if its is not empty or null, 'price_asc' otherwise.</returns>
-        public string GetSortOrder(string? sortOrder)
-        {
-            // If null, the order by price as default 
-             return String.IsNullOrEmpty(sortOrder) ? "price_asc" : sortOrder;
-        }
     }
 }

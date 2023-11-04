@@ -50,14 +50,29 @@ namespace LoCoMPro.Data
         public DbSet<Register> Registers { get; set; }
 
         /// <summary>
+        /// Search results view for search page
+        /// </summary>
+        private DbSet<SearchResult> SearchResults { get; set; }    
+
+        /// <summary>
         /// Stores saved in the database.
         /// </summary>
         public DbSet<Store> Stores { get; set; }
 
         /// <summary>
-        /// Search result view for displaying results of a search.
+        /// Reviews saved in the database.
         /// </summary>
-        public DbSet<SearchResult> SearchResults { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        /// <summary>
+        /// Images saved in the database.
+        /// </summary>
+        public DbSet<Image> Images { get; set; }
+
+        /// <summary>
+        /// Reports saved in the database.
+        /// </summary>
+        public DbSet<Report> Reports { get; set; }
+
 
         // TODO: May want to create a builder for each class
         /// <summary>
@@ -67,7 +82,7 @@ namespace LoCoMPro.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            
             // Building relationships for Store
             modelBuilder.Entity<Store>(entity =>
             {
@@ -101,37 +116,94 @@ namespace LoCoMPro.Data
                     .WithMany(e => e.Registers)
                     .HasForeignKey(c => new { c.StoreName, c.CantonName, c.ProvinciaName });
 
-                // Sets 0 to NumCorrecions by default for Register
-                entity.Property(r => r.NumCorrections)
-                    .HasDefaultValue(0);
+                entity.Navigation(u => u.Reviews)
+                   .UsePropertyAccessMode(PropertyAccessMode.Property);
 
+                entity.Navigation(u => u.Reports)
+                    .UsePropertyAccessMode(PropertyAccessMode.Property);
 
+                entity.Navigation(u => u.Images)
+                    .UsePropertyAccessMode(PropertyAccessMode.Property);
             });
-                
 
-            // Building relationships for user
-            modelBuilder.Entity<User>(entity => {
+
+            // Building relationships for User
+            modelBuilder.Entity<User>(entity =>
+            {
                 entity.ToTable("User");
 
                 entity.HasOne(p => p.Location)
                     .WithMany(e => e.Users)
-                    .HasForeignKey(c => new { c.CantonName, c.ProvinciaName });
+                    .HasForeignKey(c => new { c.CantonName, c.ProvinciaName })
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasMany(u => u.Registers)
+                .WithOne(r => r.Contributor)
+                .HasForeignKey(r => r.ContributorId);
 
                 // Ignoring columns from default IdentityUser
                 entity.Ignore(u => u.PhoneNumber);
                 entity.Ignore(u => u.PhoneNumberConfirmed);
-                entity.Ignore(u => u.EmailConfirmed);
-                entity.Ignore(u => u.SecurityStamp);
-                entity.Ignore(u => u.ConcurrencyStamp);
                 entity.Ignore(u => u.TwoFactorEnabled);
                 entity.Ignore(u => u.LockoutEnabled);
                 entity.Ignore(u => u.LockoutEnd);
                 entity.Ignore(u => u.AccessFailedCount);
 
+
                 // Navigation
                 entity.Navigation(u => u.Registers)
                     .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+                entity.Navigation(u => u.Reviews)
+                    .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+                entity.Navigation(u => u.Reports)
+                    .UsePropertyAccessMode(PropertyAccessMode.Property);
             });
+
+            // Building image Table
+            modelBuilder.Entity<Image>(entity =>
+            {
+                entity.ToTable("Image");
+
+                entity.HasKey(i => new { i.ImageId, i.ContributorId, i.ProductName, i.StoreName, i.CantonName, i.ProvinceName, i.SubmitionDate });
+
+                entity.HasOne(i => i.Register)
+                    .WithMany(r => r.Images)
+                    .HasForeignKey(i => new { i.ContributorId, i.ProductName, i.StoreName, i.CantonName, i.ProvinceName, i.SubmitionDate })
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
+
+            // Building relationships for Review
+            modelBuilder.Entity<Review>(entity =>
+            {
+                entity.ToTable("Review");
+
+                entity.HasOne(l => l.Reviewer)
+                    .WithMany(p => p.Reviews)
+                    .HasForeignKey(e => e.ReviewerId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(l => l.ReviewedRegister)
+                    .WithMany(p => p.Reviews)
+                    .HasForeignKey(e => new { e.ContributorId, e.ProductName, e.StoreName, e.CantonName, e.ProvinceName, e.SubmitionDate });
+            });
+
+            // Building relationships for Report
+            modelBuilder.Entity<Report>(entity =>
+            {
+                entity.ToTable("Report");
+
+                entity.HasOne(l => l.Reporter)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(e => e.ReporterId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(l => l.ReportedRegister)
+                    .WithMany(p => p.Reports)
+                    .HasForeignKey(e => new { e.ContributorId, e.ProductName, e.StoreName, e.CantonName, e.ProvinceName, e.SubmitionDate });
+            });
+
 
             // Building relationship for Product
             modelBuilder.Entity<Product>(entity =>
@@ -194,7 +266,7 @@ namespace LoCoMPro.Data
             });
             
         }
-
+           
         /// <summary>
         /// Excecutes provided SQL file in the database connected to context.
         /// </summary>

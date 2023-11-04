@@ -14,8 +14,8 @@ namespace LoCoMPro.Models
         public string? Model { get; set; }
         public string StoreName { get; set; }
         public float Price { get; set; }
-        public uint NumCorrections { get; set; }
-        public string Comment { get; set; }
+        //public uint NumCorrections { get; set; }
+        //public string Comment { get; set; }
         public string ProvinciaName { get; set; }
         public string CantonName { get; set; }
         public Point? Geolocation { get; set; }

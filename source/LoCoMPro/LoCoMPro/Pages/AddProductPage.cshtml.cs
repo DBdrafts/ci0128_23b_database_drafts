@@ -43,11 +43,20 @@ namespace LoCoMPro.Pages
         {
             _userManager = userManager;
         }
+        private static int imageIdCounter = 1;
 
         /// <summary>
         /// Available categories for products.
         /// </summary>
         public List<SelectListItem>? CategoryList { get; set; }
+
+        /// <summary>
+        /// List of product images.
+        /// </summary>
+
+        [BindProperty]
+        public List<IFormFile>? ProductImages { get; set; }
+
 
         // Method for loading the list of categories from the database
         private void LoadCategories()
@@ -71,7 +80,6 @@ namespace LoCoMPro.Pages
         public void OnGet()
         {
             LoadCategories();
-            
         }
 
         /// <summary>
@@ -95,6 +103,7 @@ namespace LoCoMPro.Pages
             string? brandName = CheckNull(Request.Form["brand"]);
             string? modelName = CheckNull(Request.Form["model"]);
             string? comment = CheckNull(Request.Form["comment"]);
+
 
             // Get the product if exists in the context
             var productToAdd = _context.Products
@@ -220,10 +229,58 @@ namespace LoCoMPro.Pages
                 Product = productToAdd,
                 Store = store,
                 Price = price,
-                Comment = comment
-            };
-
+                Comment = comment,
+                Images = CreateFormatedImagesList(user, dateTime, productToAdd, store)
+            };          
             return newRegister;
+        }
+
+        /// <summary>
+        /// Creates a list of images with the data converted in bytes.
+        /// </summary>
+        /// <param name="user">User that submitted the register.</param>
+        /// <param name="dateTime">Time when the images were submitted.</param>
+        /// <param name="productToAdd">Product that the register refers to.</param>
+        /// <param name="store">Store where the product is sold.</param>
+        /// <returns>New list of images with the data converted in bytes.</returns>
+        private List<Image> CreateFormatedImagesList(User user, DateTime dateTime, Product productToAdd, Store store)
+        {
+            List<Image> newImagesList = new List<Image>();
+            if (ProductImages != null && ProductImages.Any())
+            {
+                foreach (var image in ProductImages)
+                {
+                    if (image != null && image.Length > 0)
+                    {
+                        using (var stream = image.OpenReadStream())
+                        {
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                stream.CopyTo(memoryStream);
+                                byte[] imageBytes = memoryStream.ToArray();
+
+                                string imageType = image.ContentType;
+                                Image newImage = new()
+                                {
+                                    ImageId = imageIdCounter,
+                                    SubmitionDate = dateTime,
+                                    Contributor = user,
+                                    ContributorId = user.Id,
+                                    ProductName = productToAdd.Name,
+                                    StoreName = store.Name,
+                                    CantonName = store.CantonName!,
+                                    ProvinceName = store.ProvinciaName!,
+                                    ImageData = imageBytes,
+                                    ImageType = imageType
+                                };
+                                newImagesList.Add(newImage);
+                                ++imageIdCounter;
+                            }
+                        }
+                    }
+                }
+            }
+            return newImagesList;
         }
 
         /// <summary>
