@@ -126,40 +126,44 @@ public class BaseTest
         // Create an instance of Canton
         var canton = new Canton { CantonName = "Cartago", Provincia = province };
         // Create an instance of Store
-        var store = new Store() 
+        var store = new Store()
         { Name = "Tienda", CantonName = "Cartago", ProvinciaName = "Cartago", Location = canton };
         // Create an instance of User
         var user = new User
-        { Id = "3af5899a-3957-415a-9675-be20966ba6d7", UserName = "Prueba123", 
-            NormalizedUserName = "PRUEBA123", Email = "prueba123@gmail.com", 
-            NormalizedEmail = "PRUEBA123@GMAIL.COM", 
-            PasswordHash = "AQAAAAIAAYagAAAAEJfi9TUT6VewLFHdzos2qZ29eaoRr4s0YjS60YhkekCR0Mzbe5LMp3sYgj+elkblVA==", 
-            Location = canton };
+        {
+            Id = "3af5899a-3957-415a-9675-be20966ba6d7",
+            UserName = "Prueba123",
+            NormalizedUserName = "PRUEBA123",
+            Email = "prueba123@gmail.com",
+            NormalizedEmail = "PRUEBA123@GMAIL.COM",
+            PasswordHash = "AQAAAAIAAYagAAAAEJfi9TUT6VewLFHdzos2qZ29eaoRr4s0YjS60YhkekCR0Mzbe5LMp3sYgj+elkblVA==",
+            Location = canton
+        };
 
         // Create an instance of class for random values
         Random random = new Random();
         // Create an instance of products
         var product = new Product() { Name = "Laptop" };
 
-        // Initiliaze an empty list of objects registers
+        // Initialize an empty list of objects registers
         var result = new List<Register>();
         // For to create 10 objects 
         for (int i = 0; i < 10; ++i)
-        {   
+        {
             // Seed of values for random datetime
-            int year = random.Next(2022, 2024); 
-            int month = random.Next(1, 13); 
-            int day = random.Next(1, 29); 
-            int hour = random.Next(0, 24); 
-            int minute = random.Next(0, 60); 
+            int year = random.Next(2022, 2024);
+            int month = random.Next(1, 13);
+            int day = random.Next(1, 29);
+            int hour = random.Next(0, 24);
+            int minute = random.Next(0, 60);
             int second = random.Next(0, 60);
 
-            // Create a new Datetime with the tandom values of the seed
+            // Create a new Datetime with the random values of the seed
             DateTime randomDate = new DateTime(year, month, day, hour, minute, second, DateTimeKind.Utc);
 
-            // Add registers to list
-            result.Add(new Register()
-            {   
+            // Create a new Register
+            var newRegister = new Register()
+            {
                 Product = product,
                 Contributor = user,
                 Store = store,
@@ -169,9 +173,32 @@ public class BaseTest
                 Comment = "comment",
                 CantonName = "Cartago",
                 ProvinciaName = "Cartago",
-            });
+            };
+
+            // Create a new Report with a reference to the Register
+            var report = new Report
+            {
+                Reporter = user,
+                ReportedRegister = newRegister, // Assign the corresponding Register
+                ReporterId = user.Id,
+                ContributorId = user.Id,
+                ProductName = product.Name,
+                StoreName = store.Name,
+                SubmitionDate = randomDate,
+                CantonName = "Cartago",
+                ProvinceName = "Cartago",
+                ReportDate = DateTime.Now,
+                ReportState = random.Next(0,3)
+            };
+
+            // Assign the Report to the Register's Reports collection
+            newRegister.Reports = new List<Report> { report };
+
+            // Add the Register to the result list
+            result.Add(newRegister);
         }
-        // returns the list of initialized registers
+        // Return the list of initialized registers
         return result;
     }
+
 }

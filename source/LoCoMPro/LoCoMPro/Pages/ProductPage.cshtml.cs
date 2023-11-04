@@ -190,10 +190,14 @@ namespace LoCoMPro.Pages
                 registers = registers.Where(x => x.CantonName != null && x.CantonName.Contains(SearchCantonName));
                 registers = registers.Where(x => x.ProvinciaName != null && x.ProvinciaName.Contains(SearchProvinceName));
                 registers = registers.Include(r => r.Images);
-            }      
+            }
 
             // Get the average of the registers within last month.
-            AvgPrice = GetAveragePrice(registers, DateTime.Now.AddYears(-1).Date, DateTime.Now) ;
+            // If just one, set the average price as that
+            AvgPrice = GetNumberOfRegisters(registers) > 1
+                ? GetAveragePrice(registers, DateTime.Now.AddYears(-1).Date, DateTime.Now)
+                : Convert.ToDecimal(registers.First().Price);
+
 
             List<string> userIds = registers.Select(r => r.ContributorId).Distinct().ToList()!;
             Users = await _context.Users.Where(u => userIds.Contains(u.Id)).ToListAsync();
@@ -271,6 +275,15 @@ namespace LoCoMPro.Pages
             }
             double avgPrice = (registers is not null && registers.Count() > 1) ? registers.Average(r => r.Price) : 0.0;
             return Convert.ToDecimal(avgPrice);
+        }
+
+        /// <summary>
+        /// Gets the amount of registers of the product.
+        /// </summary>
+        /// <param name="registers">Registers to use for calculation.</param>
+        public int GetNumberOfRegisters(IQueryable<Register> registers)
+        {
+            return registers.Count();
         }
 
         /// <summary>
