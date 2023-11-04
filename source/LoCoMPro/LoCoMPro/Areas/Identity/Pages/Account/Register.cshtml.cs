@@ -154,7 +154,7 @@ namespace LoCoMPro.Areas.Identity.Pages.Account
                         protocol: Request.Scheme);
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirmación de correo LoCoMPro",
-                        $"Estimad@ usuario, {user.ToString()}. Bienvenid@ a LoCoMPro!<br><Porfavor confirme su correo haciendo <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>click aquí</a>.");
+                        $"Estimad@ usuario, {user.ToString()}. Bienvenid@ a LoCoMPro!<br>Porfavor confirme su correo haciendo <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>click aquí</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
