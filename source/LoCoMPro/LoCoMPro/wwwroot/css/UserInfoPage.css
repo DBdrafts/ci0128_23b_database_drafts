@@ -73,13 +73,9 @@
     width: 80%;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.20);
     border: 1px #BABAB8 solid;
+    margin-top: 15px;
 }
 
 .changeInfo-buttons button:hover {
     background-color: #e5e5e5;
 }
-
-#changePsw {
-    margin-top: 15px;
-}
-

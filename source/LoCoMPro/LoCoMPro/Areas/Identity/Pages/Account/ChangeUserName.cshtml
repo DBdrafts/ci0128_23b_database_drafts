@@ -1,0 +1,35 @@
+﻿@page
+@model ChangeUserNameModel
+@{
+}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar nombre de usuario</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<div class="logo-image">
+    <img src="~/img/LoCoMProLogo.svg" alt="LoCoMPro Logo">
+</div>
+<div class="changePsw-section">
+
+    <!-- change Password Form-->
+    <form class="form-input" method="post">
+        <div id='changePsw'>Cambiar nombre de usuario</div>
+        <partial name="_StatusMessage" for="StatusMessage" />
+        <!-- Space to enter password -->
+        <label asp-for="UserName">Nombre de usuario actual</label>
+        <input asp-for="UserName" id="psw" placeholder="Contraseña Actual" class="form-control" style="border-radius: 15px;
+                    border: 2px black solid; margin-bottom: 8px; margin-top: 5px" aria-required="true" disabled>
+
+        <label asp-for="Input.NewUserName">Nombre de usuario nuevo</label>
+        <input asp-for="Input.NewUserName" id="psw" placeholder="Contraseña Nueva" class="form-control" style="border-radius: 15px;
+                    border: 2px black solid; margin-bottom: 8px; margin-top: 5px" aria-required="true">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <button id="changePswButton" type="submit">Cambiar nombre de usuario</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

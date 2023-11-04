@@ -31,8 +31,11 @@
         <div id="email">@email</div>
     </div>
     <div class="changeInfo-buttons">
+        <a asp-area="Identity" asp-page="/Account/ChangeUserName" asp-route-email="@email">
+            <button class="button-general" id="changeUsername">Cambiar nombre de usuario</button>
+        </a>
         <a asp-area="Identity" asp-page="/Account/ChangeEmail" asp-route-email="@email">
-            <button class="button-general" id="changeEmail">Cambiar correo electrónico</button>
+            <button class="button-general" id="changeCorreo">Cambiar correo electrónico</button>
         </a>
         <a asp-area="Identity" asp-page="/Account/ChangePassword" asp-route-email="@email">
             <button class="button-general" id="changePsw">Cambiar contraseña</button>
