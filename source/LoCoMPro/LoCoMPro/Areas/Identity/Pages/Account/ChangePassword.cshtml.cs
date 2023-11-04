@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using LoCoMPro.Data;
 
-namespace LoCoMPro.Areas.Identity.Pages.Account.Manage
+namespace LoCoMPro.Areas.Identity.Pages.Account
 {
     public class ChangePasswordModel : PageModel
     {
@@ -120,7 +120,7 @@ namespace LoCoMPro.Areas.Identity.Pages.Account.Manage
 
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
+            StatusMessage = "Su contraseña ha sido cambiada exitosamente.";
 
             return RedirectToPage();
         }
