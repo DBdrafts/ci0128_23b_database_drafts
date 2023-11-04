@@ -1,0 +1,85 @@
+﻿.logo-image {
+    max-height: 65%;
+    max-width: 65%;
+    margin: 30px auto;
+    text-align: center;
+
+}
+
+    .logo-image img {
+        max-height: 50%;
+    }
+
+/* Style for the form */
+.user-section {
+    margin: auto;
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px #BABAB8 solid;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    width: 75%;
+    max-width: 500px;
+}
+
+.userPage-logo {
+    text-align: center;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.userPage-logo img {
+    max-width: 60%;
+    max-height: 60%;
+}
+
+.user-information {
+    max-width: 80%;
+    text-align:left;
+    margin-top: 20px;
+}
+
+#user-label {
+    font-size:20px;
+    text-indent: 15px;
+}
+
+#username {
+    font-size: 17px;
+    text-indent: 50px;
+}
+
+#email-label {
+    font-size: 20px;
+    text-indent: 15px;
+}
+
+#email {
+    font-size: 17px;
+    text-indent: 50px;
+}
+
+.changeInfo-buttons {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.changeInfo-buttons button {
+    background-color: white;
+    cursor: pointer;
+    border-radius: 15px;
+    padding: 10px;
+    width: 80%;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.20);
+    border: 1px #BABAB8 solid;
+}
+
+.changeInfo-buttons button:hover {
+    background-color: #e5e5e5;
+}
+
+#changePsw {
+    margin-top: 15px;
+}
+
