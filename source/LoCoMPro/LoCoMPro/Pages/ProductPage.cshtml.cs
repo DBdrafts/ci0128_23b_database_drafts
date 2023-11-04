@@ -123,6 +123,9 @@ namespace LoCoMPro.Pages
         /// </summary>
         public int ResultsNumber;
 
+        /// <summary>
+        /// Number of results.
+        /// </summary>
         public User UserInPage;
 
         /// <summary>
@@ -194,9 +197,17 @@ namespace LoCoMPro.Pages
 
             // Get the average of the registers within last month.
             // If just one, set the average price as that
-            AvgPrice = GetNumberOfRegisters(registers) > 1
+            if (registers.Any())
+            {
+                AvgPrice = GetNumberOfRegisters(registers) > 1
                 ? GetAveragePrice(registers, DateTime.Now.AddYears(-1).Date, DateTime.Now)
                 : Convert.ToDecimal(registers.First().Price);
+
+            }
+            else
+            {
+                AvgPrice = 0;
+            }
 
 
             List<string> userIds = registers.Select(r => r.ContributorId).Distinct().ToList()!;
