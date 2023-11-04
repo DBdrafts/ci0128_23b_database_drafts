@@ -144,9 +144,9 @@ public class BaseTest
         Random random = new Random();
         // Create an instance of products
         var product = new Product() { Name = "Laptop" };
-
         // Initialize an empty list of objects registers
         var result = new List<Register>();
+
         // For to create 10 objects 
         for (int i = 0; i < 10; ++i)
         {
@@ -167,8 +167,7 @@ public class BaseTest
                 Product = product,
                 Contributor = user,
                 Store = store,
-                // Add a random number for the price
-                Price = random.Next(743, 1369),
+                Price = random.Next(743, 1369), // Add a random number for the price
                 SubmitionDate = randomDate,
                 Comment = "comment",
                 CantonName = "Cartago",
@@ -191,8 +190,46 @@ public class BaseTest
                 ReportState = random.Next(0,3)
             };
 
+            // Create a new Review with a reference to the Register
+            var review = new Review
+            {
+                Reviewer = user,
+                ReviewedRegister = newRegister,
+                ReviewerId = user.Id,
+                ContributorId = user.Id,
+                ProductName = product.Name,
+                StoreName = store.Name,
+                SubmitionDate = randomDate,
+                CantonName = "Cartago",
+                ProvinceName = "Cartago",
+                ReviewDate = randomDate,
+                ReviewValue = random.Next(1, 6) // Set the review value in 1 to 5
+            };
+
+            // Create a new Image with a reference to the Register
+            var image = new Image
+            {
+                Contributor = user,
+                Register = newRegister,
+                ImageId = random.Next(1, 1000),
+                SubmitionDate = randomDate,
+                ImageData = null,
+                ImageType = "image/jpeg",
+                ContributorId = user.Id,
+                ProductName = product.Name,
+                StoreName = store.Name,
+                CantonName = "Cartago",
+                ProvinceName = "Cartago"
+            };
+
             // Assign the Report to the Register's Reports collection
             newRegister.Reports = new List<Report> { report };
+
+            // Assign the Review to the Register's Reports collection
+            newRegister.Reviews = new List<Review> { review };
+
+            // Add the Images to the Register's Reports collection
+            newRegister.Images = new List<Image> { image };
 
             // Add the Register to the result list
             result.Add(newRegister);
