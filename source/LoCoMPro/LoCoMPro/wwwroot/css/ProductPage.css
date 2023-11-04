@@ -518,8 +518,25 @@
     background-color: #74C2F8;
 }
 
+/* Style for the button that manage the user list when remove the product */
+#remove-from-list {
+    background-color: #F87474;
+}
+
+/* Style for the button that manage the user list when remove the product when hover */
+#remove-from-list:hover {
+    background-color: #E25A5A;
+}
+
 /* Style for the plus circle icon */
 .fa-plus-circle {
+    font-size: 22px !important;
+    text-align: center;
+    margin: 0px 10px;
+}
+
+/* Style for the minus circle icon */
+.fa-minus-circle {
     font-size: 22px !important;
     text-align: center;
     margin: 0px 10px;

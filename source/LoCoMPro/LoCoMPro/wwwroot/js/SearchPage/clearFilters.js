@@ -5,16 +5,27 @@
     // Check if any substring in the array is found in the lowercase input string
     return substringsArray.some(substring => lowerCaseInput.includes(substring.toLowerCase()));
 }
-// .ready means that the function is executed when the document is fully loaded and ready to be manipulated
-document.addEventListener("DOMContentLoaded", function () {
-    const resultSection = document.getElementById("search-results");
+$(document).ready(function () {
     // Function to update the URL and trigger a GET request
+    const resultSection = document.getElementById("search-results");
+
+    function clearFilters() {
+        // Uncheck all boxes in the filter section
+        $("#filter-section input[type=checkbox]").prop("checked", false);
+
+        filterResults();
+    }
+
+    // Event listener for the botton of clean
+    $("#clear-filters").click(clearFilters);
+
     function filterResults() {
         const selectedCategories = getSelectedCheckboxes('SelectedCategories');
         const selectedProvinces = getSelectedCheckboxes('SelectedProvinces');
         const selectedCantons = getSelectedCheckboxes('SelectedCantons');
         notfound = document.getElementById("product-not-found");
         filterSection = document.getElementById("filter-section");
+        buttonClearSection = document.getElementById("clear-filters");
 
         // Filter the resultBlocks based on the selected criteria
         resultBlocks = queryResults.filter(block => {
@@ -31,14 +42,17 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (resultBlocks.length <= 0) {
+            // hidden elements in case 0 match
             notfound.hidden = false;
             resultSection.hidden = true;
             filterSection.hidden = true;
+            buttonClearSection.hidden = true;
             document.getElementById("results-count").textContent = "0";
-        } else {
 
+        } else {
+           
             // Sort the filtered resultBlocks
-             sortResultBlocks("desc");
+            sortResultBlocks("desc");
 
             // Update the totalPages based on the filtered resultBlocks
             totalPages = Math.ceil(resultBlocks.length / pageSize);
@@ -82,3 +96,4 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initialize the filter on page load
     filterResults();
 });
+

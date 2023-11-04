@@ -65,6 +65,17 @@
             }
         }
     </div>
+    
+    <!-- Space for button to clean filters -->
+    <div class="clear-button-container">
+        <!--Secction to add the clear button-->
+        <div class="clear-section-button"> 
+            <!-- General Button to clean filters-->
+            <button class="button-general" id="clear-filters">Limpiar Filtros</button>
+        </div>
+    </div>  
+
+
     <!-- No product found message -->
     <div class="text-center" id="product-not-found" hidden>
         <h2> No se han encontrado resultados de "@Model.SearchString" al buscar por "@Model.SearchType" </h2>
@@ -160,5 +171,6 @@
         @await Html.PartialAsync("_Pagination")
     </div>
     <script src="~/js/pagination.js"></script>
-    <script src="~/js/SearchPage/filters.js"></script>
+    <script src="~/js/SearchPage/clearFilters.js"></script>
+
 </div>

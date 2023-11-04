@@ -32,6 +32,8 @@
             // select the first matches
             var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
             var firstNonNullStore = Model.Store.FirstOrDefault(r => r.Name != null);
+            if (firstNonNullProduct!.Brand == null) firstNonNullProduct.Brand = "N/A";
+            if (firstNonNullProduct!.Model == null) firstNonNullProduct.Model = "N/A";
             // create a var for amount of images
             int imagesAmount = 0;
         }
@@ -42,7 +44,7 @@
                     
                     @foreach (var register in Model.Registers)
                     { // in each register done
-                        @if (register.Images != null)
+                        @if (Model.RegisterHasImages(register))
                         { // if images is not null
                             @foreach (var image in register.Images)
                             { // for each image in register
@@ -69,14 +71,16 @@
                     {
                         // Show the first image of first register with image
                         <div class="main-img-space">
-                            <img id="mainImage" src="data:image/jpeg;base64,@Convert.ToBase64String(firstRegisterWithImages.Images.First().ImageData)" alt="Imagen Principal" class="img-responsive" style="width:348.5px;height:323.5px;border-radius: 30px; object-fit: fill;">
+                            <img id="mainImage" src="data:image/jpeg;base64,@Convert.ToBase64String(firstRegisterWithImages.Images.First().ImageData)" 
+                            alt="Imagen Principal" class="img-responsive" style="width:348.5px;height:323.5px;border-radius: 30px; overflow:hidden; object-fit: fill;">
                         </div>
                     }
                     else
                     {
                         // If no register with images, show no images found
                         <div class="main-img-space">
-                            <img src="~/img/No_image_found.svg" alt="No se encontraron imágenes" style="width:348.5px;height:323.5px;border-radius: 30px; object-fit: fill;">
+                            <img src="~/img/No_image_found.svg" alt="No se encontraron imágenes" 
+                            style="width:348.5px;height:323.5px;border-radius: 30px; object-fit: fill;">
                         </div>
                     }
                 }
@@ -100,23 +104,8 @@
                     // Get the information of producto and store
                     if (firstNonNullProduct != null)
                     {
-                        if (firstNonNullProduct.Brand != null)
-                        {
-                            <p>Marca: @firstNonNullProduct.Brand</p>
-                        }
-                        else
-                        {
-                            <p>Marca: N/A</p>
-                        }
-                        if (firstNonNullProduct.Model != null)
-                        {
-                            <p>Modelo: @firstNonNullProduct.Model</p>
-                        }
-                        else
-                        {
-                            <p>Modelo: N/A</p>
-                        }
-
+                        <p>Marca: @firstNonNullProduct.Brand</p>
+                        <p>Modelo: @firstNonNullProduct.Model</p>
                     }
                     if (firstNonNullStore != null)
                     {
@@ -124,27 +113,32 @@
                         <p>Ubicación: @firstNonNullStore.ProvinciaName, @firstNonNullStore.CantonName </p>
                         <p>Precio Aproximado: ₡ @Model.AvgPrice.ToString("N0")</p>
                     }
-                }
-
-                @{
                     var productData = $"{firstNonNullProduct.Name}{s}{firstNonNullProduct.Brand}" +
-                    $"{s}{firstNonNullProduct.Model}{s}{Model.SearchStoreName}" +
-                    $"{s}{firstNonNullStore.ProvinciaName}{s}{firstNonNullStore.CantonName}" +
-                    $"{s}{Model.AvgPrice.ToString("N0")}";
+                        $"{s}{firstNonNullProduct.Model}{s}{Model.SearchStoreName}" +
+                        $"{s}{firstNonNullStore.ProvinciaName}{s}{firstNonNullStore.CantonName}" +
+                        $"{s}{Model.AvgPrice.ToString("N0")}";
 
                     if (SignInManager.IsSignedIn(User))
                     {
-                        <button type="button" class="button-general product-list-button" id="add-to-list"
-                                data-product-data="@productData" onclick="callAddProductToList(this)">
-                            Añadir a lista de interés
-                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                        </button>
+                        <div class="text-center">
+                            <button type="button" class="button-general product-list-button" data-product-data="@productData"
+                                    onclick="callAddProductToList(this)" id="add-to-list"
+                                    style='display: @(Model.AlreadyInProductList ? "none" : "inline-block")'>
+                                Añadir a lista de interés
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                            </button>
+
+                            <button type="button" class="button-general product-list-button" data-product-data="@productData"
+                                    onclick="callRemoveProductFromList(this)" id="remove-from-list"
+                                    style='display: @(Model.AlreadyInProductList ? "inline-block" : "none")'>
+                                Eliminar de la lista de interés
+                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                            </button>
+                        </div>  
                     }
-                    @* <button type="button" class="button-general product-list-button" id="delete-from-list"></button> *@
-                }
+                  }
             </div>
         </div>
-
     </div>
     
     <!-- Horizontal separating line -->
@@ -155,6 +149,8 @@
     <div class="titleListRegister">
         Lista de registros
     </div>
+
+    <div class="results-cont-msg" span id="results-count" hidden></div>
 
     <!-- Container for column options -->
    <nav>  
@@ -196,7 +192,7 @@
             if (register.Images != null && register.Images.Any())
             { // In case registers has images
                 foreach (var image in register.Images)
-                { // Fo each image in register
+                { // For each image in register
                     if (image.ImageData != null)
                     {   
                         // Cover the bytes of images to string
