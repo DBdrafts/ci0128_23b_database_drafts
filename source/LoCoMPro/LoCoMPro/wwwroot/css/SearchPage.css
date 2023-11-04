@@ -1,15 +1,18 @@
 ﻿
+/* Style for the body of the page */
+.search-page-body {
+    width: 100%;
+    min-width: 1200px;
+    height: auto;
+}
+
 /* Style for the filter section */
 .filter-section {
     display: inline-block;
     height: 100%;
-    width: 14%;
+    width: 13%;
     float: left;
-    margin: 85px 10px 0px 0px;
-    max-height: 450px;
-    overflow-y: auto;
-    overflow-x: auto;
-    max-width: 400px;
+    margin: 85px 0px 0px 0px;
 }
 
 /* Style for the filter section title h4 */
@@ -25,6 +28,15 @@
 }
 
 
+.filter-option-section {
+    display: inline-block;
+    height: 100%;
+    max-height: 300px;
+    max-width: 400px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
 /* Style for the filter section line */
 .filter-line {
     font-size: larger;
@@ -32,20 +44,18 @@
 }
 
 /* Style for the filter button */
-.filter-section button {
+.clear-filter-button {
     background-color: #88C8F8;
-    float: right;
-    margin: 20px 50px;
+    margin: 20px 0px;
     text-align: center;
-    align-items: center;
-    align-content: center;
-    width: 45%;
-    height: 45px;
+    width: 140px;
+    height: auto;
     font-size: medium;
+    padding: 5px 5px;
 }
 
 /* Style for the filter button when hover*/
-.filter-section button:hover {
+.clear-filter-button:hover {
     background-color: #39A4F4;
 }
 
@@ -53,7 +63,7 @@
 .containerListRegisterColumns {
     display: inline-flex;
     height: auto;
-    width: 10%;
+    width: 100%;
     justify-content:space-between;
     list-style: none;
     margin: 10px 0px;
@@ -65,8 +75,8 @@
     font-size: x-large;
     flex: 0 0 0%;
     text-align: center;
-    margin: 0px 10px;
-    margin-right:0px;
+    margin: 0px 25px 0px 0px;
+    padding: 0px 15px;
 }
 
 /* Style for columns */
@@ -76,17 +86,22 @@
 }
 
 
-
-
 /* Style for the search section */
 
 /*VER!!!!!*/
 .search-section {
     height: 100%;
     display:inline-block;
-    width: 83%;
+    width: 86%;
+    min-width: 950px;
 }
 
+.search-section ul {
+    width: 100%;
+    height: auto;
+    margin: 10px 5px;
+    padding: 5px;
+}
 
 /* Style for the result register block */
 .result-block {
@@ -99,19 +114,45 @@
     min-height: 4em;
     border-radius: 15px;
     text-align: left;
-    justify-content: space-around;
     min-width: 950px;
-    font-size:17px;
+    font-size:18px;
 }
 
-
-    /* Style for the result register block text*/
+/* Style for the result register block text*/
 .result-block a span {
     display: inline-flex;
-    width: 14.7%;
+    width: 16%;
     margin: auto auto;
-    margin-right: 10px
+    margin: 0px 10px
 }
+
+/* Style for the result register block text */
+.result-block a {
+    /*flex: 0 0 calc(16.67% - 20px);*/
+    display: flex;
+    height: 4em;
+    width: 100%;
+    background-color: #E2E3E3;
+    justify-content: space-around;
+    border-radius: 15px;
+    padding: 10px 15px;
+    max-height: 3.9em;
+    text-decoration: none;
+    overflow: clip;
+    text-overflow: ellipsis;
+    color: #000000;
+}
+
+.short-column {
+    width: 10% !important;
+}
+
+/* Style for the result block when hover */
+.result-block a:hover {
+    color: #000000;
+    border: 1px solid #BABAB8;
+}
+
 
 /* Style for the register block text of the price */
 .align-right {
@@ -141,75 +182,21 @@
     margin: -50px
 }
 
-
-/* Style for the result register block text */
-.result-block a {
-    /*flex: 0 0 calc(16.67% - 20px);*/
-    display: flex;
-    height: 4em;
-    width: 100%;
-    background-color: #E2E3E3;
-    justify-content: space-around;
-    border-radius: 15px;
-    padding: 10px 10px;
-    max-height: 4em;
-    text-decoration: none;
-    overflow: clip;
-    text-overflow: ellipsis;
-    color: #000000;
-}
-
-
-
-/* Style for the result block when hover */
-.result-block a:hover {
-    color: #000000;
-    border: 1px solid #BABAB8;
-}
-
-
 .results-cont-msg {
-margin-left: 30px;
-text-align: left;
-font-size: 18px;
-margin-bottom: 20px;
+    margin-left: 30px;
+    text-align: left;
+    font-size: 18px;
+    margin-bottom: 10px;
 }
 
+#register-date {
+    text-align: center !important;
+}
 
 #product-col {
-    width: 200px;
-    margin-right: 50px;
+    margin-right: 60px;
 }
 
-#register-product-name {
-    width: 230px;
+#brand-col{
+    margin: 0px -10px 0px 0px;
 }
-
-#brand-col {
-    width: 140px;
-}
-
-
-#store-col, #register-store-name {
-    width: 150px;
-    margin-left:25px
-}
-
-#province-col {
-    width: 100px;
-}
-
-#canton-col, #register-canton-name {
-    width: 150px;
-}
-
-#price-col {
-    width: auto;
-    justify-content: flex-end;
-}
-
-#date-col {
-    width: auto;
-    margin-right:4px
-}
-

@@ -31,6 +31,8 @@ namespace LoCoMPro.Data
             List<Store> stores = new();
             List<User> users = new();
             List<Register> registers = new();
+            List<Review> reviews = new();
+            List<Report> reports = new();
 
             //  Initialize all the database tables
             InitializeLocation(context, ref provincias, ref cantones);
@@ -39,6 +41,8 @@ namespace LoCoMPro.Data
             InitializeStores(context, ref cantones, ref stores, ref products);
             InitializeUsers(context, ref users, ref cantones);
             InitializeRegisters(context, ref registers, ref users, ref products, ref stores);
+            InitializeReviews(context, ref reviews, ref registers, ref users);
+            InitializeReports(context, ref reports, ref registers, ref users);
 
         }
 
@@ -209,8 +213,7 @@ namespace LoCoMPro.Data
             , ref List<Register> registers, ref List<User> users
             , ref List<Product> products, ref List<Store> stores)
         {
-            string comment = "Lorem ipsum dolor sit amet, consectetur adipiscing elit" +
-                ", sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum pulvinar etiam non quam. ";
+            List<string> comments = CreateComments();
 
             List<int> basePrice = new List<int>{ 2500, 2000, 20000, 300000, 1100000 };
 
@@ -224,13 +227,105 @@ namespace LoCoMPro.Data
                         registers.Add(new Register() { Product = products[productIndex], Contributor = users[usersIndex], Store = stores[storeIndex]
                         , Price = (basePrice[productIndex] + ((basePrice[productIndex] / 25) * usersIndex * storeIndex))
                         , SubmitionDate = new DateTime(2023, 1 + usersIndex + storeIndex, 10 + productIndex + usersIndex + storeIndex, 12, 0, 0, DateTimeKind.Utc)
-                        , Comment = comment });
+                        , Comment = comments[GenerateRandom(0, comments.Count)] });
                     }
                 }
             }
 
             context.Registers.AddRange(registers);
             context.SaveChanges();
+        }
+
+        /// <summary>
+        /// Initialize the reviews data in the database.
+        /// </summary>
+        /// <param name="context">Context to initialize.</param>
+        /// <param name="reviews">List of reviews to initialize.</param>
+        /// <param name="registers">List of registers to initialize.</param>
+        /// <param name="users">Users to associate with each register.</param>
+        public static void InitializeReviews(LoCoMProContext context, ref List<Review> reviews
+            , ref List<Register> registers, ref List<User> users)
+        {
+            for(int usersIndex = 0; usersIndex < users.Count; usersIndex += 2)
+            {
+                for(int registerIndex = 0; registerIndex < registers.Count; registerIndex++)
+                {
+                    float reviewValue = GenerateRandom(0, 6);
+                    reviewValue = reviewValue == 0 ? 0.5f: reviewValue;
+
+                    reviews.Add(new Review() { ReviewedRegister = registers[registerIndex]
+                        , Reviewer = users[usersIndex]
+                        , ReviewDate = new DateTime(2024, 2 + usersIndex, 15 + usersIndex, 12, 0, 0, DateTimeKind.Utc)
+                        , CantonName = registers[registerIndex].CantonName!
+                        , ProvinceName = registers[registerIndex].ProvinciaName!
+                        , ReviewValue = reviewValue});
+                }
+            }
+
+            context.Reviews.AddRange(reviews);
+            context.SaveChanges();
+        }
+
+
+        /// <summary>
+        /// Initialize the reports data in the database.
+        /// </summary>
+        /// <param name="context">Context to initialize.</param>
+        /// <param name="reports">List of reports to initialize.</param>
+        /// <param name="registers">List of registers to initialize.</param>
+        /// <param name="users">Users to associate with each register.</param>
+        public static void InitializeReports(LoCoMProContext context, ref List<Report> reports
+            , ref List<Register> registers, ref List<User> users)
+        {
+            for(int registerIndex = 0 ; registerIndex < (registers.Count / users.Count); registerIndex++) {
+                reports.Add(new Report() { ReportedRegister = registers[registerIndex]
+                        , Reporter = users[GenerateRandom(0, users.Count)]
+                        , ReportDate = new DateTime(2024, 2, 15, 12, 0, 0, DateTimeKind.Utc)
+                        , CantonName = registers[registerIndex].CantonName!
+                        , ProvinceName = registers[registerIndex].ProvinciaName!, ReportState = 0});
+            }
+
+            context.Reports.AddRange(reports);
+            context.SaveChanges();
+        }
+
+        /// <summary>
+        /// Creates a list of comments
+        /// </summary>
+        public static List<string> CreateComments()
+        {
+            var comments = new List<string>();
+
+            comments.Add("¡Este producto es increíble! Cumple con todas mis expectativas y más. La calidad es excepcional, y su precio es muy razonable. ¡Lo recomiendo sin dudarlo!");
+            comments.Add("No puedo creer lo útil que ha resultado este producto en mi vida. Ha hecho las tareas diarias mucho más fáciles. ¡Definitivamente vale la pena cada centavo!");
+            comments.Add("Me encanta este producto. Su diseño es elegante y moderno, y su rendimiento es excepcional. ¡Una compra que no me arrepiento de hacer!");
+            comments.Add("Es difícil encontrar productos tan confiables como este. Me ha ahorrado tiempo y energía. ¡Definitivamente lo compraría de nuevo!");
+            comments.Add("Este producto superó mis expectativas. La entrega fue rápida y el artículo llegó en perfectas condiciones. ¡Estoy muy contento con mi compra!");
+
+            comments.Add("El producto es bastante estándar en términos de calidad y rendimiento. No me impresionó, pero tampoco me decepcionó.");
+            comments.Add("Es un producto funcional que hace lo que se espera de él. No es excepcional, pero cumple su propósito.");
+            comments.Add("La relación calidad-precio es justa. No es el mejor producto que he tenido, pero tampoco es el peor.");
+            comments.Add("El producto llegó a tiempo y en buen estado. No tengo quejas importantes, pero tampoco tengo elogios especiales.");
+            comments.Add("En general, el producto es promedio. No es algo de lo que me emocionaría mucho, pero tampoco es un desastre. Cumple con lo que se espera.");
+
+            comments.Add("No estoy satisfecho con este producto en absoluto. La calidad es mala y no cumplió con lo que prometía. Una completa pérdida de dinero.");
+            comments.Add("Me decepcionó profundamente. Parecía prometedor, pero después de usarlo, descubrí que era frágil y poco confiable. No lo recomendaría.");
+            comments.Add("Este producto no duró mucho tiempo antes de empezar a tener problemas. La garantía no cubre estos defectos, lo que lo hace aún más decepcionante.");
+            comments.Add("La relación calidad-precio de este producto es pésima. Pagué mucho por algo que no vale la pena. No lo compraría de nuevo.");
+            comments.Add("El servicio al cliente de la marca es inexistente. Cuando intenté resolver un problema con el producto, no obtuve respuesta. ¡Una experiencia muy frustrante!");
+
+            return comments;
+        }
+
+        /// <summary>
+        /// Returns a random number
+        /// </summary>
+        /// <param name="lower">Lower value</param>
+        /// <param name="higher">Higher value</param>
+        public static int GenerateRandom(int lower, int higher)
+        {
+            var random = new Random();
+            return random.Next(lower, higher);
         }
 
     }
