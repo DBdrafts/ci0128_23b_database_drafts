@@ -1,2 +1,6 @@
 ﻿/* Style for the rating star partial view */
 
+/* Style for the veracity stars section*/
+.veracity-stars-section {
+    width: 100%;
+}

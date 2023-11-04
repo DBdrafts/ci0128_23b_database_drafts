@@ -11,18 +11,18 @@
     var halfStarts = veracityValue % 1 == 0.5;
 }
 
-<div>
+<div class="veracity-stars-section">
     @for (int i = 0; i < fullStarts; ++i)
     {
-        <span class='s'><i class="fa fa-star"></i></span>
+        <i class="fa fa-star"></i>
     }
     @if (halfStarts)
     {
-        <span class='s'><i class="fa fa-star-half-o"></i></span>
+        <i class="fa fa-star-half-o"></i>
         ++fullStarts;
     }
     @for (int i = 0; i < 5 - fullStarts; ++i)
     {
-        <span class='s'><i class="fa fa-star-o"></i></span>
+        <i class="fa fa-star-o"></i>
     }
 </div>

@@ -210,31 +210,30 @@
             // Veracity values
             float veracityValue = Model.registerAverageReview[i];
 
-            <li class="register-block align register-block-pagination">
-                <a>
-                    <span id="register-date" value="@register.SubmitionDate.Date">
-                        @register.SubmitionDate.ToShortDateString()
-                    </span> 
-                    <span id="register-price" value="@register.Price">
-                        ₡ @register.Price.ToString("N0")
-                    </span>
-                    <span id="register-comment" value="@register.Comment">
-                        @Html.DisplayFor(modelItem => register.Comment)
-                    </span>
-                    <span class="veracity-stars" id="register-veracity" value="@veracityValue">
+            <li class="register-block register-block-pagination">
+                <div class="register-column short-column" id="register-date" value="@register.SubmitionDate.Date">
+                    @register.SubmitionDate.ToShortDateString()
+                </div>
+                <div class="register-column short-column align-right" id="register-price" value="@register.Price">
+                    ₡ @register.Price.ToString("N0")
+                </div>
+                <div class="register-column" id="register-comment" value="@register.Comment">
+                    @Html.DisplayFor(modelItem => register.Comment)
+                </div>
+                <div class="register-section-stars">
+                    <div class="veracity-stars register-column" id="register-veracity" value="@veracityValue">
                         <span id="register_veracity_@i">
                             @{ViewBag.VeracityValue = veracityValue;}
                             @await Html.PartialAsync("_VeracityStars")
                         </span>
-                    </span>
-                    <div class="text-center align">
-                        <button class="open-interactions-button" id="open-popup-button-@i" data-register-id="@registerKeys"
-                                data-index="@i" images-register-id="@registerImages" onclick="openInteractionsPopup(this)">
-                            <img src="~/img/MoreIcon.svg" alt="Más opciones">
-                        </button>
                     </div>
-                    
-                </a>
+                </div>
+                <div class="interaction-button">
+                    <button class="open-interactions-button" id="open-popup-button-@i" data-register-id="@registerKeys"
+                            data-index="@i" images-register-id="@registerImages" onclick="openInteractionsPopup(this)">
+                        <img src="~/img/MoreIcon.svg" alt="Más opciones">
+                    </button>
+                </div>
             </li>
         }
     </ul>
