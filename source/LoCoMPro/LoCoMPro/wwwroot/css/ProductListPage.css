@@ -53,7 +53,7 @@
 
 /* Style for the product list block */
 .product-list-block {
-    display: inline-block;
+    display: flex;
     height: auto;
     text-decoration: none;
     color: #000000;
@@ -65,6 +65,8 @@
     text-align: left;
     justify-content: space-around;
     min-width: 950px;
+    width: 100%;
+    align-items: center !important;
 }
 
 /* Style for the register block text */
@@ -77,15 +79,79 @@
     margin: 10px 2px;
     justify-content: flex-start;
     max-height: 3.3em;
+    padding: 5px;
 }
 
 /* Style for the register block button */
 .product-list-block button {
-    width: 4%;
+    width: auto;
     margin: 0px 0px 0px 15px;
 }
 
 /* Style for the register block text of the price */
 .align-right {
     justify-content: flex-end !important;
+}
+
+
+/* Style for the button that remove the button from the list */
+.remove-button {
+    display: inline-block;
+    height: auto;
+    width: auto;
+    text-align: center;
+    font-size: larger;
+    background-color: #F87474;
+}
+
+/* Style for the button that remove the button from the list when hover*/
+.remove-button:hover {
+    background-color: #E25A5A;
+}
+
+/* Style for the minus circle icon */
+.fa-minus-circle {
+    font-size: 25px !important;
+    text-align: center;
+    margin: 5px;
+}
+
+/* Style for the feedback message of the Pop Up */
+.feedback-message {
+    background-color: #F5AA38;
+    margin: 26% auto;
+    color: black;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: 14px;
+    right: 5%;
+    transform: translateX(-50%);
+    display: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    font-weight: 500;
+}
+
+/* Style for the feedback message of the Pop Up when active */
+.feedback-message.active {
+    display: block; /* Mostrar el mensaje */
+    opacity: 1; /* Hacerlo visible */
+}
+
+/* Style for the empty list */
+.empty-section {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Style for the empty list image */
+.empty-section img{
+    width: 40%;
+    height: 40%;
+    margin: -70px
 }

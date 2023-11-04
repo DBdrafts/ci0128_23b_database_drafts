@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -113,9 +114,16 @@ namespace LoCoMPro.Pages
         public decimal AvgPrice { get; set; }
 
         /// <summary>
+        /// Flag to know if the product is in the list already
+        /// </summary>
+        public bool AlreadyInProductList { get; set; }
+
+        /// <summary>
         /// Number of results.
         /// </summary>
         public int ResultsNumber;
+
+        public User UserInPage;
 
         /// <summary>
         /// GET HTTP request, initializes page values.
@@ -128,6 +136,7 @@ namespace LoCoMPro.Pages
         public async Task OnGetAsync(string searchProductName, string searchStoreName, string searchProvinceName, 
             string searchCantonName)
         {
+            UserInPage = await _userManager.GetUserAsync(User);
 
             // Attr of the product from the params of method
             SearchProductName = searchProductName;
@@ -161,8 +170,10 @@ namespace LoCoMPro.Pages
             Product = await products.ToListAsync();
             Store = await stores.ToListAsync();
 
-            // Initial request for all the registers in the database
-            var registers = from r in _context.Registers select r;
+            // Initial request for all the registers in the database if the reportState is not 2
+            var registers = from r in _context.Registers
+                            where r.Reports.All(report => report.ReportState != 2)
+                            select r;
 
             // add the images from every register
             registers = registers.Include(r => r.Images);
@@ -179,7 +190,6 @@ namespace LoCoMPro.Pages
                 registers = registers.Where(x => x.CantonName != null && x.CantonName.Contains(SearchCantonName));
                 registers = registers.Where(x => x.ProvinciaName != null && x.ProvinciaName.Contains(SearchProvinceName));
                 registers = registers.Include(r => r.Images);
-
             }      
 
             // Get the average of the registers within last month.
@@ -194,10 +204,13 @@ namespace LoCoMPro.Pages
             Registers = await registers.ToListAsync();
 
             // Obtains the review made by the user
-            ObtainUserReviews();
+            ObtainUserReviews(UserInPage);
 
             // Obtains the reports made by the user
-            ObtainUserReports();
+            ObtainUserReports(UserInPage);
+
+            // Prepare the list data needed
+            PrepareProductListData();
         }
 
         /// <summary>
@@ -263,11 +276,8 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Gets and sets the review made by the User
         /// </summary>
-        public async void ObtainUserReviews()
+        public async void ObtainUserReviews(User user)
         {
-            // Gets the user that is registered
-            var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
-
             // If there´s is a registered user
             if (user != null)
             {
@@ -284,6 +294,31 @@ namespace LoCoMPro.Pages
             }
         }
 
+        /// <summary>
+        /// Prepares the data needed to work with the list
+        /// </summary>
+        public void PrepareProductListData()
+        {
+            // Gets the product and store
+            Product firstNonNullProduct = Product.FirstOrDefault(r => r.Name != null);
+            Store firstNonNullStore = Store.FirstOrDefault(r => r.Name != null);
+
+            // Creates the element of the list 
+            UserProductListElement ProductAsElement = new UserProductListElement(
+                firstNonNullProduct.Name, firstNonNullProduct.Brand
+                , firstNonNullProduct.Model, firstNonNullStore.Name
+                , firstNonNullStore.ProvinciaName, firstNonNullStore.CantonName
+                , AvgPrice.ToString("N0"));
+
+            ProductAsElement.ProductBrand = ProductAsElement.ProductBrand ?? "N/A";
+            ProductAsElement.ProductModel = ProductAsElement.ProductModel ?? "N/A";
+
+            // Checks if the product is already in the user list
+            if (_userProductList.ExistElementInList(ProductAsElement))
+            {
+                AlreadyInProductList = true;
+            }
+        }
 
         /// <summary>
         /// Add the product to the user list
@@ -310,23 +345,29 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Delete the product from the user list
         /// </summary>
-        //public void RemoveFromProductList()
-        //{
-        //    // Add the first register of this product and store to the list
-        //    if (Registers != null && UserProductList != null && Registers.FirstOrDefault() != null)
-        //    {
-        //        UserProductList.Remove(Registers.FirstOrDefault()!);
-        //    }
-        //}
+        public IActionResult OnPostRemoveFromProductList(string productData)
+        {
+            // Gets and split the data
+            string[] values = SplitString(productData, '\x1F');
+
+            var removeElement = new UserProductListElement(values[0], values[1], values[2]
+                , values[3], values[4], values[5], values[6]);
+
+            // If the element is not in the list
+            if (_userProductList.ExistElementInList(removeElement))
+            {
+                // Adds the element to the list
+                _userProductList.RemoveProductFromList(removeElement);
+            }
+
+            return new JsonResult("OK");
+        }
 
         /// <summary>
         /// Handle report interactions
         /// </summary>
-        public async void ObtainUserReports()
+        public async void ObtainUserReports(User user)
         {
-            // Gets the user that is registered
-            var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
-
             // If there´s is a registered user
             if (user != null)
             {
@@ -339,7 +380,7 @@ namespace LoCoMPro.Pages
                 reports = reports.Where(x => x.StoreName != null && x.StoreName.Contains(SearchStoreName));
 
                 // Make a list with the review
-                UserReports = reports.ToList();
+                UserReports = await reports.ToListAsync();
             }
         }
 
@@ -350,8 +391,11 @@ namespace LoCoMPro.Pages
         /// <param name="reportChanged">Bool to check if a report changed.</param>
         /// <param name="reviewedValue">Float with register review.</param>
         /// <returns>Success message to clients side.</returns>
-        public IActionResult OnPostHandleInteraction(string registerKeys, bool reportChanged, float reviewedValue)
+        public IActionResult OnPostHandleInteraction(string registerKeys, bool reportChanged, string reviewedValue)
         {
+            CultureInfo culture = CultureInfo.InvariantCulture;
+            float.TryParse(reviewedValue, NumberStyles.Float, culture, out float reviewedValueF);
+
             string[] values = SplitString(registerKeys, '\x1F');
             string submitionDate = values[0], contributorId = values[1], productName = values[2], storeName = values[3];
             
@@ -367,10 +411,10 @@ namespace LoCoMPro.Pages
                     productName, storeName, registSubmitDate);
             }
 
-            if (reviewedValue > 0)
+            if (reviewedValueF > 0)
             {
                 HandleReview(user!, registerToUpdate, interactionDate, contributorId,
-                    productName, storeName, registSubmitDate, reviewedValue);
+                    productName, storeName, registSubmitDate, reviewedValueF);
             }
 
             _context.SaveChanges();
@@ -487,5 +531,69 @@ namespace LoCoMPro.Pages
                 lastReview.ReviewDate = interactionDate;
             }
         }
-    }   
+
+        /// <summary>
+        /// Get the amount of images of one registers
+        /// </summary>
+        /// <param name="registerToCheck">Register to check the images count.</param>
+        public int GetNumberOfImagesForRegister(Register registerToCheck)
+        {
+            // Initialize a var int to store the number of images
+            int imagesAmount = 0;
+
+            // Check if the input register is not null
+            if (registerToCheck != null && registerToCheck.Images != null)
+            {
+                // Set imagesAmount to the count of images in the register
+                imagesAmount = registerToCheck.Images.Count;
+            }
+
+            // Return the number of images
+            return imagesAmount;
+        }
+
+        /// <summary>
+        /// Get the amount of images of one registers
+        /// </summary>
+        /// <param name="registerToCheck">Register to directly check if register has images</param>
+        public bool RegisterHasImages(Register registerToCheck)
+        {
+            // Initialize a bool var to indicate whether the register has images.
+            bool hasImages = false;
+
+            // Check if the input register is not null
+            if (registerToCheck != null && registerToCheck.Images != null &&
+                registerToCheck.Images.Any(image => image.ImageData != null))
+            {
+                // Set hasImages to true 
+                hasImages = true;
+            }
+
+            // Return the boolean indicating whether the register has images.
+            return hasImages;
+        }
+
+
+        /// <summary>
+        /// Get the Max status of report of a register
+        /// </summary>
+        /// <param name="registerToCheck">Register to directly check if register has images</param>
+        public int GetHighestReportState(Register registerToCheck)
+        {
+            // Initialize a variable to store the highest report state
+            int highestReportState = 0;
+
+            // Check if the input register has Reports and there's at least one report
+            if (registerToCheck.Reports != null && registerToCheck.Reports.Any())
+            {
+                // Find the maximum ReportState value among the reports
+                highestReportState = registerToCheck.Reports.Max(report => report.ReportState);
+            }
+
+            // Return the highest report state
+            return highestReportState;
+        }
+
+    }
+
 }
