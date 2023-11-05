@@ -366,3 +366,4 @@ FodyWeavers.xsd
 **/LoCoMPro/doc/*
 **/LoCoMPro/doc/**
 
+/data/getGeolocation.py

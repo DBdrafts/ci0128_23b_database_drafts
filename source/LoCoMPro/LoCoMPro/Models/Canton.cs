@@ -1,7 +1,6 @@
 ﻿using LoCoMPro.Data;
-using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+using NetTopologySuite.Geometries;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LoCoMPro.Models
@@ -23,6 +22,11 @@ namespace LoCoMPro.Models
         /// Name of the province that the canton asociates with.
         /// </summary>
         public string? ProvinciaName { get; set; }
+
+        /// <summary>
+        /// WGS 84 coordinates for geolocation.
+        /// </summary>
+        public Point? Geolocation { get; set; }
 
         /// <summary>
         /// Stores that reside inside the canton.
