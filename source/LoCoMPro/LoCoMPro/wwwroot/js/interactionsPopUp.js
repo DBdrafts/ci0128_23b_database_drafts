@@ -30,6 +30,10 @@ function openInteractionsPopup(openButton) {
     setReportedValue(lastReportState);   
 }
 
+function openInteractionsPopupMod(openButton) {
+
+}
+
 /// <summary>
 /// Add the images to the Pop Up
 /// </summary>

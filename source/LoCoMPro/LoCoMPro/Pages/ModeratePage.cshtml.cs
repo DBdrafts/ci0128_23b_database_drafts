@@ -24,45 +24,35 @@ namespace LoCoMPro.Pages
         public ModeratePageModel(LoCoMProContext context, IConfiguration configuration) 
             : base(context, configuration) { }
 
+
+
         /// <summary>
-        /// List of the registers that exist in the database.
+        /// Result of the query.
         /// </summary>
-        public PaginatedList<Register> Register { get; set; } = default!;
+
+        public IList<Report>? Reports { get; set; } = new List<Report>();
 
         /// <summary>
         /// List of users that the reported registers belong to.
         /// </summary>
-        public IList<User> Users { get; set; } = default!;
+        public IList<User> Users { get; set; } = new List<User>();
 
         /// <summary>
         /// GET HTTP request, initializes page values.
         /// </summary>
         public async Task OnGetAsync(int? pageIndex)
         {
-            var registers = from r in _context.Registers select r;
-
-            // Get the registers that are reported
-            // registers = registers.Where(x => x.ReportedStatus == 1);
+            var reports = from r in _context.Reports
+                            select r;
 
             var users = _context.Users
-                .Where(user => registers.Any(register => register.ContributorId == user.Id))
+                .Where(user => reports.Any(report => report.ContributorId == user.Id || report.ReporterId == user.Id))
                 .ToList();
             Users = users;
 
-            // Get th amount of pages that will be needed for all the registers
-            var pageSize = Configuration.GetValue("PageSize", 5);
-
             // Gets the Data From data base 
-            Register = await PaginatedList<Register>.CreateAsync(
-                registers.AsNoTracking(), pageIndex ?? 1, pageSize);
+            Reports = await reports.ToListAsync();
         }
 
-        //public async Task OnPostMoreInformationAsync (string prodName, string contributorID, string storeName, DateTime submissionDate)
-        //{
-        //    System.Diagnostics.Debug.WriteLine(prodName);
-        //    System.Diagnostics.Debug.WriteLine(contributorID);
-        //    System.Diagnostics.Debug.WriteLine(storeName);
-        //    System.Diagnostics.Debug.WriteLine(submissionDate);
-        //}
     }
 }
