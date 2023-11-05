@@ -130,6 +130,8 @@ namespace LoCoMPro.Pages
 
             var match = GetRegistersByType(registers);
 
+            if (match == null) return;
+
             /* Retrieve data from the database */
             // Query to get all categories associated with at least one product in the register list
             Category = await categories
@@ -147,29 +149,26 @@ namespace LoCoMPro.Pages
                             .Where(canton => match.Any(register => register.CantonName == canton.CantonName))
                             .ToList();
 
-            if (match != null)
-            {
-                // Fetch data from the database
-                var productsInRegisters = _context.Products
-                    .Where(product => match.Any(register => register.ProductName == product.Name))
-                    .Include(product => product.Categories)
-                    .ToList();
+            // Fetch data from the database
+            var productsInRegisters = _context.Products
+                .Where(product => match.Any(register => register.ProductName == product.Name))
+                .Include(product => product.Categories)
+                .ToList();
 
-                //  Gets the registers that match with the categories
-                if (productsInRegisters != null)
-                {
-                    var groupedProductsInRegisters = productsInRegisters
-                        .GroupBy(product => product.Name)
-                        .Where(group => group.Any(item => item.Categories != null)) // Filter out groups with null Categories
-                        .ToDictionary(
-                            group => group.Key,  // ProductName as the key
-                            group => string.Join(";", group.SelectMany(item => item.Categories!.Select(category => category.CategoryName)))
-                        );
-                    CategoryMap = groupedProductsInRegisters;
+            //  Gets the registers that match with the categories
+            if (productsInRegisters != null)
+            {
+                var groupedProductsInRegisters = productsInRegisters
+                    .GroupBy(product => product.Name)
+                    .Where(group => group.Any(item => item.Categories != null)) // Filter out groups with null Categories
+                    .ToDictionary(
+                        group => group.Key,  // ProductName as the key
+                        group => string.Join(";", group.SelectMany(item => item.Categories!.Select(category => category.CategoryName)))
+                    );
+                CategoryMap = groupedProductsInRegisters;
                 }
 
-                Registers = match;
-            }
+            
         }
 
         /// <summary>
