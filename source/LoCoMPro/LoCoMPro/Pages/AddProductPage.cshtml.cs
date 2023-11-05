@@ -230,7 +230,7 @@ namespace LoCoMPro.Pages
                 Store = store,
                 Price = price,
                 Comment = comment,
-                Images = CreateFormatedImagesList(user, dateTime, productToAdd, store)
+                Images = CreateFormattedImagesList(user, dateTime, productToAdd, store)
             };          
             return newRegister;
         }
@@ -243,7 +243,7 @@ namespace LoCoMPro.Pages
         /// <param name="productToAdd">Product that the register refers to.</param>
         /// <param name="store">Store where the product is sold.</param>
         /// <returns>New list of images with the data converted in bytes.</returns>
-        private List<Image> CreateFormatedImagesList(User user, DateTime dateTime, Product productToAdd, Store store)
+        internal List<Image> CreateFormattedImagesList(User user, DateTime dateTime, Product productToAdd, Store store)
         {
             List<Image> newImagesList = new List<Image>();
             if (ProductImages != null && ProductImages.Any())

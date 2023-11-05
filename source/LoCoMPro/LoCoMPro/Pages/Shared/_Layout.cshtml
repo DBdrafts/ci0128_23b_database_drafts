@@ -74,8 +74,11 @@
                             <h6>@email</h6>
                             <img src="~/img/UserIconSignedIn.svg" alt="Imagen de Usuario">
                             <h5>@user</h5>
+                            <a class="pop-up-form" asp-page="/UserInfoPage">
+                                <button class="button-general" id="perfil-button">Perfil</button>
+                            </a>
                             <!-- Button to logout -->
-                            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+                            <form class="pop-up-form" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
                                 <button class="button-general" id="logout-button">Cerrar Sesión</button>
                             </form>
                         </div>

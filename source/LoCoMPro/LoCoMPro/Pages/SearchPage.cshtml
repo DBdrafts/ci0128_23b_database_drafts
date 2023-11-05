@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="~/css/SearchPage.css" />
 </head>
 
-<div>
+<div class="search-page-body">
     <!-- Get the Province and Canton -->
     <div hidden>
         <input id="selectedProvince" value="@Model.Province">
@@ -23,57 +23,55 @@
         <!-- Search filter title -->
         <h4> Filtros </h4>
 
-        @if (Model.Category.Count() > 1)
-        {
-            <!-- Filter by category -->
-            <h5> Categoría </h5>
+        <div class="filter-option-section">
+            @if (Model.Category.Count() > 1)
+            {
+                <!-- Filter by category -->
+                <h5> Categoría </h5>
                 @foreach (var category in Model.Category)
                 {
                     <div class="filter-line">
-                        <input type="checkbox" name="SelectedCategories" value="@category.CategoryName" @(Model.SelectedCategories != null 
-                            && Model.SelectedCategories.Contains(category.CategoryName) ? "checked" : "") />
+                        <input type="checkbox" name="SelectedCategories" value="@category.CategoryName" @(Model.SelectedCategories != null
+                       && Model.SelectedCategories.Contains(category.CategoryName) ? "checked" : "") />
                         <label>@Html.DisplayFor(modelItem => category.CategoryName)</label>
                     </div>
                 }
-        }
+            }
 
-        <!-- Filter by Province -->
-        @if (Model.Provinces.Count() > 1)
-        {
-            <h5> Provincia </h5>
+            <!-- Filter by Province -->
+            @if (Model.Provinces.Count() > 1)
+            {
+                <h5> Provincia </h5>
                 @foreach (var province in Model.Provinces)
                 {
                     <div class="filter-line">
-                        <input type="checkbox" name="SelectedProvinces" value="@province.Name" @(Model.SelectedProvinces != null 
-                            && Model.SelectedProvinces.Contains(province.Name) ? "checked" : "") />
+                        <input type="checkbox" name="SelectedProvinces" value="@province.Name" @(Model.SelectedProvinces != null
+                       && Model.SelectedProvinces.Contains(province.Name) ? "checked" : "") />
                         <label>@Html.DisplayFor(modelItem => province.Name)</label>
                     </div>
                 }
-        }
+            }
 
-        <!-- Filter by Canton -->
-        @if (Model.Cantons.Count() > 1)
-        {
-            <h5> Cantón </h5>
+            <!-- Filter by Canton -->
+            @if (Model.Cantons.Count() > 1)
+            {
+                <h5> Cantón </h5>
                 @foreach (var canton in Model.Cantons)
                 {
                     <div class="filter-line">
-                        <input type="checkbox" name="SelectedCantons" value="@canton.CantonName" @(Model.SelectedCantons != null 
-                            && Model.SelectedCantons.Contains(canton.CantonName) ? "checked" : "") />
+                        <input type="checkbox" name="SelectedCantons" value="@canton.CantonName" @(Model.SelectedCantons != null
+                       && Model.SelectedCantons.Contains(canton.CantonName) ? "checked" : "") />
                         <label>@Html.DisplayFor(modelItem => canton.CantonName)</label>
                     </div>
                 }
-        }
+            }
+        </div>
+
+        <!-- General Button to clean filters-->
+        <button type="button" class="clear-filter-button button-general" id="clear-filters">Limpiar Filtros</button>
+
     </div>
     
-    <!-- Space for button to clean filters -->
-    <div class="clear-button-container">
-        <!--Secction to add the clear button-->
-        <div class="clear-section-button"> 
-            <!-- General Button to clean filters-->
-            <button class="button-general" id="clear-filters">Limpiar Filtros</button>
-        </div>
-    </div>  
 
 
     <!-- No product found message -->
@@ -81,19 +79,25 @@
         <h2> No se han encontrado resultados de "@Model.SearchString" al buscar por "@Model.SearchType" </h2>
         <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
     </div>
+
     <!-- Search result section -->
     <div class="search-section" id="search-results">
         <!-- Search section title -->
-        <h1> Resultados "@Model.SearchString" - Búsqueda por "@Model.SearchType" </h1>
         <div class="results-cont-msg" span id="results-count"></div>
 
         <!-- Search section header -->
         <nav>
             <ul class="containerListRegisterColumns">
-                <li>
+                <li id="product-col">
                     <div class="textComment">Producto</div>
                 </li>
-                <li>
+                <li id="brand-col">
+                    <div class="textComment">Marca</div>
+                </li>
+                <li id="model-col">
+                    <div class="textComment">Modelo</div>
+                </li>
+                <li id="store-col">
                     <div class="textComment">Tienda</div>
                 </li>
                 <li>
@@ -106,20 +110,21 @@
                         @await Html.PartialAsync("_OrderButton", "Ubicación")
                     }
                 </li>
-                <li>
-                    <!-- Button to sort by the price -->
-                    @{ViewBag.SortTipe = "#register-price";}
-                    @await Html.PartialAsync("_OrderButton", "Precio")
-                </li>
-
-                <li>
+                <li id="date-col">
                     <div class="textComment">Fecha</div>
+                </li>
+                <li id="price-col">
+                    <!-- Button to sort by the price -->
+                    @{
+                        ViewBag.SortTipe = "#register-price";
+                    }
+                    @await Html.PartialAsync("_OrderButton", "Precio")
                 </li>
             </ul>
         </nav>
 
         <!-- Search results section -->
-        <ul class="result-section">
+        <ul class="search-section">
             <!-- Put in all results -->
             @foreach (var register in Model.SearchResults!)
             {
@@ -128,27 +133,35 @@
 
                 <li class="result-block register-block-pagination">
                     <a asp-page="./ProductPage"
-                        asp-route-pageIndex="1"
-                        asp-route-SearchProductName="@register.ProductName"
-                        asp-route-SearchStoreName="@register.StoreName"
-                        asp-route-SearchCantonName="@register.CantonName"
-                        asp-route-SearchProvinceName="@register.ProvinciaName">
+                       asp-route-pageIndex="1"
+                       asp-route-SearchProductName="@register.ProductName"
+                       asp-route-SearchStoreName="@register.StoreName"
+                       asp-route-SearchCantonName="@register.CantonName"
+                       asp-route-SearchProvinceName="@register.ProvinciaName">
+
                         <span id="register-product-name" value="@register.ProductName">
-                            @Html.DisplayFor(modelItem => register.ProductName)
+                            @register.ProductName
                         </span>
-                        <span id="register-store-name" value="@register.StoreName">
-                            @Html.DisplayFor(modelItem => register.StoreName)
+                        <span class="short-column" id="register-brand-name" value="@register.Brand">
+                            @(string.IsNullOrEmpty(register.Brand) ? "N/A" : register.Brand)
+                        </span>
+                        <span class="short-column" id="register-model-name" value="@register.Model">
+                            @(string.IsNullOrEmpty(register.Model) ? "N/A" : register.Model)
+                        </span>
+                        <span class="short-column" id="register-store-name" value="@register.StoreName">
+                            @register.StoreName
                         </span>
                         <span id="register-location-name" value="@displayText">
                                 @Html.DisplayFor(_ => displayText)
-                            </span>
+                        </span>
+                        <span class="short-column" id="register-date">
+                            @register.SubmitionDate.ToShortDateString()
+                        </span>
                         <span id="register-price" value="@register.Price">
                             ₡ @register.Price.ToString("N0")
                         </span>
-                        <span id="register-date" value="@register.SubmitionDate.Date">
-                            @register.SubmitionDate.ToShortDateString()
-                        </span>
-                        <span id="register-categories" value="@Model.CategoryMap[register.ProductName]" hidden></span>
+
+                        <span id="register-categories" value="@Model.CategoryMap[register.ProductName!]" hidden></span>
                         <span id="register-distance" value="@register.Distance" hidden></span>
                         <span id="register-province-name" value="@register.ProvinciaName" hidden>
                             @Html.DisplayFor(modelItem => register.ProvinciaName)
@@ -160,8 +173,10 @@
                 </li>
             }
         </ul>
-        <!-- Pagination section -->
-        @await Html.PartialAsync("_Pagination")
+        <div class="product-pagination">
+            <!-- Pagination section -->
+            @await Html.PartialAsync("_Pagination")
+        </div>
     </div>
     <script src="~/js/pagination.js"></script>
     <script src="~/js/SearchPage/clearFilters.js"></script>
