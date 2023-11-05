@@ -14,15 +14,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using LoCoMPro.Data;
 
-namespace LoCoMPro.Areas.Identity.Pages.Account.Manage
+namespace LoCoMPro.Areas.Identity.Pages.Account
 {
-    public class EmailModel : PageModel
+    public class ChangeEmailModel : PageModel
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IEmailSender _emailSender;
 
-        public EmailModel(
+        public ChangeEmailModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IEmailSender emailSender)
@@ -122,18 +122,18 @@ namespace LoCoMPro.Areas.Identity.Pages.Account.Manage
                 var callbackUrl = Url.Page(
                     "/Account/ConfirmEmailChange",
                     pageHandler: null,
-                    values: new { area = "Identity", userId = userId, email = Input.NewEmail, code = code },
+                    values: new { area = "Identity", userId, email = Input.NewEmail, code },
                     protocol: Request.Scheme);
                 await _emailSender.SendEmailAsync(
                     Input.NewEmail,
-                    "Confirm your email",
-                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "Confirme su email",
+                    $"Se ha solicitado un cambio de email para el usuario {user.ToString()}.<br>Porfavor confirme su cuenta haciendo <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>click aquí</a>.");
 
-                StatusMessage = "Confirmation link to change email sent. Please check your email.";
+                StatusMessage = "Se ha enviado un correo para verificar su nueva dirección. Porfavor revise su email.";
                 return RedirectToPage();
             }
 
-            StatusMessage = "Your email is unchanged.";
+            StatusMessage = "Su email es el mismo.";
             return RedirectToPage();
         }
 
@@ -158,7 +158,7 @@ namespace LoCoMPro.Areas.Identity.Pages.Account.Manage
             var callbackUrl = Url.Page(
                 "/Account/ConfirmEmail",
                 pageHandler: null,
-                values: new { area = "Identity", userId = userId, code = code },
+                values: new { area = "Identity", userId, code },
                 protocol: Request.Scheme);
             await _emailSender.SendEmailAsync(
                 email,

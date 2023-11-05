@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using LoCoMPro.Services;
+using SendGrid;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,19 +22,16 @@ builder.Services.AddDbContext<LoCoMProContext>(options =>
 // Added default IdentityUser and configured it to not require a confirmed account, also added custom signInManager that overrides PasswordSignInAsync()
 builder.Services.AddDefaultIdentity<User>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false;
+    options.SignIn.RequireConfirmedAccount = true;
     options.User.RequireUniqueEmail = true;
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 !*-._@+";
-}).AddSignInManager<MySignInManager>().AddRoles<IdentityRole>().AddEntityFrameworkStores<LoCoMProContext>();
+}).AddSignInManager<MySignInManager>().AddRoles<IdentityRole>().AddEntityFrameworkStores<LoCoMProContext>().AddDefaultTokenProviders();
 
-builder.Services.AddTransient<IEmailSender, EmailSender>(i => 
-    new EmailSender(
-        builder.Configuration["EmailSender:Host"],
-        builder.Configuration.GetValue<int>("EmailSender:Port"),
-        builder.Configuration.GetValue<bool>("EmailSender:EnableSSL"),
-        builder.Configuration["EmailSender:UserName"],
-        builder.Configuration["EmailSender:Password"]
-    )
+builder.Services.AddTransient<IEmailSender, SendGridEmailSender>(i =>
+{
+   return new SendGridEmailSender(builder.Configuration);
+}
+    
 );
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();

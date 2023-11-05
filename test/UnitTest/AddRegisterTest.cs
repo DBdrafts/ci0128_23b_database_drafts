@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Text;
 
 namespace AddRegisterTest
 {
@@ -131,6 +132,109 @@ namespace AddRegisterTest
             Assert.AreEqual(500, newRegister.Price);
             Assert.AreEqual(comment, newRegister.Comment);
             Assert.AreEqual(user.Id, newRegister.Contributor.Id);
+        }
+
+        // Test by Geancarlo Rivera Hernández C06516
+        [Test]
+        public void CreateFormatedImagesListWithoutImages()
+        {
+            var pageModel = (AddProductPageModel)CreatePageModel("add_register_page");
+
+            // Initializes the attributes that the new register needs to be created
+            DateTime inputDateTime = new DateTime(2023, 11, 4, 15, 30, 45, 0);
+            var product = pageModel.CreateProduct("Arroz", "TIO PELON", "1Kg", null);
+            var provincia = new Provincia() { Name = "Heredia" };
+            var canton = new Canton() { CantonName = "Santo Domingo", Provincia = provincia };
+            var store = new Store() { Name = "Pali", Location = canton };
+            var user = new User() { UserName = "Gean", Location = canton, Id = "c06516" };
+
+            pageModel.ProductImages = null;
+            var result = pageModel.CreateFormattedImagesList(user, inputDateTime, product, store);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, result.Count);
+        }
+
+        // Test by Geancarlo Rivera Hernández C06516
+        [Test]
+        public void CreateFormattedImagesListWithNonNullImages() {
+            // Arrange for the mock configuration
+            // Create an instance of the page model (pageModel) using the CreatePageModel()
+            var pageModel = (AddProductPageModel)CreatePageModel("add_register_page");
+
+            // Initializes the attributes that the new register needs to be created
+            DateTime inputDateTime = new DateTime(2023, 11, 4, 15, 30, 45, 0);
+            var product = pageModel.CreateProduct("Arroz", "TIO PELON", "1Kg", null);
+            var provincia = new Provincia() { Name = "Heredia" };
+            var canton = new Canton() { CantonName = "Santo Domingo", Provincia = provincia };
+            var store = new Store() { Name = "Pali", Location = canton };
+            var user = new User() { UserName = "Gean", Location = canton, Id = "c06516" };
+
+            byte[] imageBytes = new byte[]
+            {
+                0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46, 0x49, 0x46, 0x00, 0x01, 0x01, 0x00, 0x00, 0x01,
+                0x00, 0x01, 0x00, 0x00, 0xFF, 0xDB, 0x00, 0x43, 0x00, 0x03, 0x02, 0x02, 0x03, 0x02, 0x02, 0x03,
+                0x03, 0x03, 0x03, 0x04, 0x03, 0x03, 0x04, 0x05, 0x08, 0x05, 0x05, 0x04, 0x04, 0x05, 0x0A, 0x07,
+                0x07, 0x06, 0x08, 0x0C, 0x0A, 0x0C, 0x0C, 0x0B, 0x0A, 0x0B, 0x0B, 0x0D, 0x0E, 0x12, 0x10, 0x0D
+            };
+
+            var formFiles = new List<IFormFile>
+            {
+               new FormFile(new MemoryStream(imageBytes), 0, imageBytes.Length, "ProductImages", "image1.jpg")
+               {
+                    Headers = new HeaderDictionary(),
+                    ContentType = "image/jpeg"
+               },
+               new FormFile(new MemoryStream(imageBytes), 0, imageBytes.Length, "ProductImages", "image2.jpg")
+               {
+                    Headers = new HeaderDictionary(),
+                    ContentType = "image/jpeg"
+               }
+            };
+
+            pageModel.ProductImages = formFiles;
+            var result = pageModel.CreateFormattedImagesList(user, inputDateTime, product, store);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Count);
+        }
+
+        // Test by Geancarlo Rivera Hernández C06516
+        [Test]
+        public void CreateFormattedImagesListWithZeroBytesImages()
+        {
+            // Arrange for the mock configuration
+            // Create an instance of the page model (pageModel) using the CreatePageModel()
+            var pageModel = (AddProductPageModel)CreatePageModel("add_register_page");
+
+            // Initializes the attributes that the new register needs to be created
+            DateTime inputDateTime = new DateTime(2023, 11, 4, 15, 30, 45, 0);
+            var product = pageModel.CreateProduct("Arroz", "TIO PELON", "1Kg", null);
+            var provincia = new Provincia() { Name = "Heredia" };
+            var canton = new Canton() { CantonName = "Santo Domingo", Provincia = provincia };
+            var store = new Store() { Name = "Pali", Location = canton };
+            var user = new User() { UserName = "Gean", Location = canton, Id = "c06516" };
+
+            byte[] imageBytes = new byte[] { };
+
+            var formFiles = new List<IFormFile>
+            {
+               new FormFile(new MemoryStream(imageBytes), 0, imageBytes.Length, "ProductImages", "image1.jpg")
+               {
+                    Headers = new HeaderDictionary(),
+                    ContentType = "image/jpeg"
+               },
+               new FormFile(new MemoryStream(imageBytes), 0, imageBytes.Length, "ProductImages", "image2.jpg")
+               {
+                    Headers = new HeaderDictionary(),
+                    ContentType = "image/jpeg"
+               }
+            };
+
+            pageModel.ProductImages = formFiles;
+            var result = pageModel.CreateFormattedImagesList(user, inputDateTime, product, store);
+
+            Assert.IsNotNull(result);
+            Assert.IsEmpty(result);
         }
     }
 }

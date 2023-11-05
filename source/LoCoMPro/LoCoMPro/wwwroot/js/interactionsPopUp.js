@@ -161,7 +161,7 @@ jQuery(document).ready(function ($) {
         var rating = $("#rating").val();
         var value = $("#rating_val").val();
         $(this).parent().attr('class', '').addClass('rating_stars').addClass('rating_' + rating);
-        highlight_star(value);
+        highlight_star(0);
     }).click(function () {
         // Review section when clicked
         // Set hidden field value
@@ -180,11 +180,11 @@ jQuery(document).ready(function ($) {
 /// Set the amount of stars highlighted 
 /// </summary>
 function highlight_star(rating) {
+    // If the user has already made a review
+    if (rating == 0 && reviewedValue != 0) {
+        rating = reviewedValue;
+    }
     $('.rating_stars span.s').each(function () {
-        // If the user has already made a review
-        if (rating == 0 && reviewedValue != 0) {
-            rating = reviewedValue;
-        }
         var low = $(this).data('low');
         var high = $(this).data('high');
         $(this).removeClass('active-high').removeClass('active-low');
@@ -198,8 +198,8 @@ function highlight_star(rating) {
 /// </summary>
 function save_reviewed_state(value) {
     // Sets the values of the review
-    highlight_star(value);
     registerReviewed = true;
+    highlight_star(value);
     reviewedValue = value;
 }
 
@@ -209,8 +209,8 @@ function save_reviewed_state(value) {
 function setReviewedValue(lastReviewValue) {
     // If the user has already made a review
     reviewedValue = lastReviewValue == null ? 0 : lastReviewValue;
-    highlight_star(reviewedValue);
     registerReviewed = false;
+    highlight_star(reviewedValue);
 }
 
 /// <summary>

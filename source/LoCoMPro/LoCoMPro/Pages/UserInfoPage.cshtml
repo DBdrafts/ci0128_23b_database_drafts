@@ -1,0 +1,44 @@
+﻿@page
+@model LoCoMPro.Pages.UserInfoPageModel
+@using Microsoft.AspNetCore.Identity;
+@using LoCoMPro.Data;
+@inject UserManager<User> UserManager
+@{
+    ViewBag.ShowSearchBar = true;
+    ViewBag.ShowLogoLink = true;
+    var user = await UserManager.GetUserAsync(User);
+    var email = await UserManager.GetEmailAsync(user!);
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil del usuario</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="~/css/UserInfoPage.css" />
+</head>
+<div class="logo-image">
+    <img src="~/img/LoCoMProLogo.svg" alt="LoCoMPro Logo">
+</div>
+<div class="user-section">
+    <div class="userPage-logo">
+        <img src="~/img/ProfileIcon.svg" alt="User Logo">
+    </div>
+    <div class="user-information">
+        <div id="user-label">Nombre de Usuario</div>
+        <div id="username">@user.ToString()</div>
+        <div id="email-label">Correo Electrónico</div>
+        <div id="email">@email</div>
+    </div>
+    <div class="changeInfo-buttons">
+        <a asp-area="Identity" asp-page="/Account/ChangeUserName" asp-route-email="@email">
+            <button class="button-general" id="changeUsername">Cambiar nombre de usuario</button>
+        </a>
+        <a asp-area="Identity" asp-page="/Account/ChangeEmail" asp-route-email="@email">
+            <button class="button-general" id="changeCorreo">Cambiar correo electrónico</button>
+        </a>
+        <a asp-area="Identity" asp-page="/Account/ChangePassword" asp-route-email="@email">
+            <button class="button-general" id="changePsw">Cambiar contraseña</button>
+        </a>
+    </div>
+</div>
