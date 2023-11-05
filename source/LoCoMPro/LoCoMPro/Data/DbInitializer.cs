@@ -168,35 +168,55 @@ namespace LoCoMPro.Data
             // Add the users
             users.Add(new User {Id = "2f024bae-0bb6-4db0-8c3f-40bafbcd0273", UserName = "Omar123",
                 NormalizedUserName = "OMAR123", Email = "omar123@gmail.com", NormalizedEmail = "OMAR123@GMAIL.COM"
-                , PasswordHash = "AQAAAAIAAYagAAAAEAOQ/Jm+AUOvpKZDfgFCdqEhXjHl5vKkJ4wKvVpWGPv58mgk2A9hkeFuLvnKRFTLRw==",
-                Location = cantones[0]});
+                , PasswordHash = "AQAAAAIAAYagAAAAEAOQ/Jm+AUOvpKZDfgFCdqEhXjHl5vKkJ4wKvVpWGPv58mgk2A9hkeFuLvnKRFTLRw=="
+                , EmailConfirmed = true
+                , SecurityStamp = "b5485742-ed3c-4443-aa34-0159fcc778e2"
+                , ConcurrencyStamp = "d8e5ae03-d369-43aa-9b98-80af46e71c12"
+                , Location = cantones[0]});
             users.Add(new User { Id = "3af5899a-3957-415a-9675-be20966ba6d7", UserName = "Prueba123", 
                 NormalizedUserName = "PRUEBA123", Email = "prueba123@gmail.com", NormalizedEmail = "PRUEBA123@GMAIL.COM"
-                , PasswordHash = "AQAAAAIAAYagAAAAEJfi9TUT6VewLFHdzos2qZ29eaoRr4s0YjS60YhkekCR0Mzbe5LMp3sYgj+elkblVA==", 
-                Location = cantones[0]});
+                , PasswordHash = "AQAAAAIAAYagAAAAEJfi9TUT6VewLFHdzos2qZ29eaoRr4s0YjS60YhkekCR0Mzbe5LMp3sYgj+elkblVA=="
+                , EmailConfirmed = true
+                , SecurityStamp = "993d9233-8ba7-4c7c-930b-cb3c4d2cd674"
+                , ConcurrencyStamp = "bbb4d61b-faf1-4d88-94e1-9aa2ae747da3"
+                , Location = cantones[0]});
             users.Add(new User { Id = "9df2b729-89f7-448a-988d-616892794621", UserName = "geanca567", 
                 NormalizedUserName = "GEANCA567", Email = "geanca567@hotmail.com", NormalizedEmail = "GEANCA567@HOTMAIL.COM"
-                , PasswordHash = "AQAAAAIAAYagAAAAEPYFGrUrFDogPQ7/NslHe12CNANe6GM45VDkOotgLNRR16lUmVUh2C/xeflZ5Inivg==", 
-                Location = cantones[0]});
+                , PasswordHash = "AQAAAAIAAYagAAAAEPYFGrUrFDogPQ7/NslHe12CNANe6GM45VDkOotgLNRR16lUmVUh2C/xeflZ5Inivg=="
+                , EmailConfirmed = true
+                , SecurityStamp = "30f3bb50-5574-4010-a7a6-358b3981151e"
+                , ConcurrencyStamp = "07083dad-871a-47c2-9312-aca84d8410fe"
+                , Location = cantones[0]});
             users.Add(new User { Id = "af37fd1c-51bd-4200-9412-1a710949a6ad", UserName = "Dwayne123", 
                 NormalizedUserName = "DWAYNE123", Email = "dwayne123@gmail.com", NormalizedEmail = "DWAYNE123@GMAIL.COM"
-                , PasswordHash = "AQAAAAIAAYagAAAAEOT77XEI5fND1riqa9P5VKsRTPfAY5i3piTJ0HTzAPDA7+33lAvWvbUmerrQdXwxag==", 
-                Location = cantones[0]});
+                , PasswordHash = "AQAAAAIAAYagAAAAEOT77XEI5fND1riqa9P5VKsRTPfAY5i3piTJ0HTzAPDA7+33lAvWvbUmerrQdXwxag=="
+                , EmailConfirmed = true
+                , SecurityStamp = "0a4575fb-40e3-434a-81ae-09a1a99bc628"
+                , ConcurrencyStamp = "2c58260b-e162-4231-bc86-504ccdbfa8b5"
+                , Location = cantones[0]});
             users.Add(new User { Id = "eabef9c3-0e08-4372-a88c-6f63075c4a0b", UserName = "Julio444", 
                 NormalizedUserName = "JULIO444", Email = "julio444@ucr.ac.cr", NormalizedEmail = "JULIO444@UCR.AC.CR"
-                , PasswordHash = "AQAAAAIAAYagAAAAEBSumaRyX1siCcQ3b8TXll5Km5TWXJry6oq6euj1Bj1JaKgVWIat1jxDrhwvSwZJwA==", 
-                Location = cantones[0]});
+                , PasswordHash = "AQAAAAIAAYagAAAAEBSumaRyX1siCcQ3b8TXll5Km5TWXJry6oq6euj1Bj1JaKgVWIat1jxDrhwvSwZJwA=="
+                , EmailConfirmed = true
+                , SecurityStamp = "92355d52-a3d5-41a0-ba79-7e0658846a59"
+                , ConcurrencyStamp = "06661238-1061-4053-beb1-7e9acdb68f9f"
+                , Location = cantones[0]});
             users.Add(new User { Id = "f4232f1d-5696-4537-b0a1-02fd36e27dd7", UserName = "Alonso111", 
                 NormalizedUserName = "ALONSO111", Email = "alonso111@gmail.com", NormalizedEmail = "ALONSO111@GMAIL.COM"
-                , PasswordHash = "AQAAAAIAAYagAAAAEDcvQfXxtswPnX0ixY3T5EipIoGSk85MVeGdNAVs0tGrkfgseQnfRidNltc5BFSFvw==", 
-                Location = cantones[0]});
+                , PasswordHash = "AQAAAAIAAYagAAAAEDcvQfXxtswPnX0ixY3T5EipIoGSk85MVeGdNAVs0tGrkfgseQnfRidNltc5BFSFvw=="
+                , EmailConfirmed = true
+                , SecurityStamp = "e08c3cb7-6e6e-47ad-ac47-390c40f30518"
+                , ConcurrencyStamp = "3459b6a1-c848-4fd3-ad8e-dba24664fa3b"
+                , Location = cantones[0]});
             users.Add(new User
             { Id = "498fc1e4-db15-4411-94e3-6511dff4a758", Role = "Moderator", UserName = "Moderador",
                 NormalizedUserName = "MODERADOR", Email = "locoModerador@gmail.com",
                 NormalizedEmail = "LOCOMODERADOR@GMAIL.COM",
-                PasswordHash = "AQAAAAIAAYagAAAAEPeUgIjsKiJnOABson+8/zMh8gnzGVre5xjEtLO9GgV2jPSigVwKrDZ89fWRQYDbgQ==",
-                Location = cantones[0]
-            });
+                PasswordHash = "AQAAAAIAAYagAAAAEPeUgIjsKiJnOABson+8/zMh8gnzGVre5xjEtLO9GgV2jPSigVwKrDZ89fWRQYDbgQ=="
+                , EmailConfirmed = true
+                , SecurityStamp = "ff950c9e-55f0-4dd9-9926-d48dba8ae4cb"
+                , ConcurrencyStamp = "0eb293cc-8be8-4a72-a51e-d352f6a6ef28"
+                , Location = cantones[0]});
             context.Users.AddRange(users);
             context.SaveChanges();
         }

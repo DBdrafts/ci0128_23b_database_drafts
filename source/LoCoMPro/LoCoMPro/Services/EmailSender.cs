@@ -1,40 +1,46 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
-namespace LoCoMPro.Services
+namespace LoCoMPro.Services;
+
+public class SendGridEmailSender : IEmailSender
 {
-    public class EmailSender : IEmailSender
-    {
-        private readonly string host;
-        private readonly int port;
-        private readonly bool enableSSL;
-        private readonly string userName;
-        private readonly string password;
+    private readonly IConfiguration _configuration;
 
-        public EmailSender(string host, int port, bool enableSSL, string userName, string password)
+    public SendGridEmailSender(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+
+    public async Task SendEmailAsync(string toEmail, string subject, string message)
+    {
+        string sendGridApiKey = _configuration["EmailSender:ApiKey"];
+        if (string.IsNullOrEmpty(sendGridApiKey))
         {
-            this.host = host;
-            this.port = port;
-            this.enableSSL = enableSSL;
-            this.userName = userName;
-            this.password = password;
+            throw new Exception("The 'SendGridApiKey' is not configured");
         }
 
-        public Task SendEmailAsync(string email, string subject, string htmlMessage)
+        var client = new SendGridClient(sendGridApiKey);
+        var msg = new SendGridMessage()
         {
-            var client = new SmtpClient(host, port)
-            {
-                Credentials = new NetworkCredential(userName, password),
-                EnableSsl = enableSSL
-            };
-            return client.SendMailAsync(
-                new MailMessage(userName, email, subject, htmlMessage) { IsBodyHtml = true }
-            );
+            From = new EmailAddress(_configuration["EmailSender:SenderEmail"], _configuration["EmailSender:SenderName"]),
+            Subject = subject,
+            PlainTextContent = message,
+            HtmlContent = message
+        };
+        msg.AddTo(new EmailAddress(toEmail));
+
+        var response = await client.SendEmailAsync(msg);
+        if (response.IsSuccessStatusCode)
+        {
+            System.Diagnostics.Debug.WriteLine("Email queued successfully");
+        }
+        else
+        {
+            System.Diagnostics.Debug.WriteLine("Failed to send email");
         }
     }
 }

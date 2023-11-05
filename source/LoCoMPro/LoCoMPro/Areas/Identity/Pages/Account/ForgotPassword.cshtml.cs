@@ -70,11 +70,8 @@ namespace LoCoMPro.Areas.Identity.Pages.Account
                     pageHandler: null,
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
-
-                await _emailSender.SendEmailAsync(
-                    Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                await _emailSender.SendEmailAsync(Input.Email, "Recuperar contraseña LoCoMPro",
+                    $"Estimad@ usuario, {user.ToString()}.<br>Si ha olvidado su contraseña porfavor haga <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>click aquí</a> para cambiarla.");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
