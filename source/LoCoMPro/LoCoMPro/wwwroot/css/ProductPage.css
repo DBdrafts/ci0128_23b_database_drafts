@@ -291,11 +291,7 @@
     min-width: 950px;
     width: 100%;
     align-items: center !important;
-}
-
-/* Style for the result block when hover */
-.register-block:hover {
-    background-color: #9F9F9F;
+    font-size: medium;
 }
 
 /* Style for the register block text*/

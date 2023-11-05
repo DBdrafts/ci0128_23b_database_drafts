@@ -48,7 +48,7 @@
     height: auto;
     width: 100%;
     text-decoration: none;
-    color: #000000;
+    color: black;
 }
 
 /* Style for the product list block */
@@ -56,8 +56,8 @@
     display: flex;
     height: auto;
     text-decoration: none;
-    color: #000000;
-    background-color: #E2E3E3;
+    color: black;
+    background-color: var(--locompro-light-gray);
     margin: 10px 0px;
     padding: 0px 10px;
     min-height: 4em;
@@ -67,6 +67,7 @@
     min-width: 950px;
     width: 100%;
     align-items: center !important;
+    font-size: large;
 }
 
 /* Style for the register block text */
@@ -101,12 +102,12 @@
     width: auto;
     text-align: center;
     font-size: larger;
-    background-color: #F87474;
+    background-color: var(--locompro-red);
 }
 
 /* Style for the button that remove the button from the list when hover*/
 .remove-button:hover {
-    background-color: #E25A5A;
+    background-color: var(--locompro-red-hover);
 }
 
 /* Style for the minus circle icon */
@@ -118,7 +119,7 @@
 
 /* Style for the feedback message of the Pop Up */
 .feedback-message {
-    background-color: #F5AA38;
+    background-color: var(--locompro-yellow);
     margin: 26% auto;
     color: black;
     padding: 10px;
@@ -128,8 +129,6 @@
     right: 5%;
     transform: translateX(-50%);
     display: none;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     transition: opacity 0.3s ease;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);

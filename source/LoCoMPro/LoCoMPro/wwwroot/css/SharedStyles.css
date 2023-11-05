@@ -1,5 +1,19 @@
 ﻿/* Style shared by several pages */
 
+/* General colors of the page */
+:root {
+    --locompro-light-gray: #E2E3E3;
+    --locompro-dark-gray: #BABAB8;
+    --locompro-light-blue: #88C8F8;
+    --locompro-light-blue-hover: #39A4F4;
+    --locompro-blue: #39A4F4;
+    --locompro-blue-hover: #88C8F8;
+    --locompro-yellow: #F5AA38;
+    --locompro-yellow-hover: #F6A01D;
+    --locompro-red: #F87474;
+    --locompro-red-hover: #E25A5A;
+}
+
 /* General style for the button */
 .button-general {
     color: black;
