@@ -1,4 +1,5 @@
 ﻿using LoCoMPro.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,16 +15,36 @@ namespace LoCoMPro.Pages
         private readonly ILogger<IndexModel> _logger;
         // Context of the data base 
         private readonly LoCoMPro.Data.LoCoMProContext _context;
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
 
         /// <summary>
         /// Creates an IndexModel instance, needs a loger and a context.
         /// </summary>
         /// <param name="logger">Logger for Index Page.</param>
         /// <param name="context">DB context for Index Page.</param>
-        public IndexModel(ILogger<IndexModel> logger, LoCoMProContext context)
+        /// <param name="signInManager">Sign in manager to user with user</param>
+        /// <param name="userManager"> User manager to make user operations</param>
+        public IndexModel(ILogger<IndexModel> logger, LoCoMProContext context, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _logger = logger;
             _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
+
+        public async Task OnGet()
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+                var dbUser = _context.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
+                if (!await _userManager.IsInRoleAsync(dbUser, "Moderator")) {
+                    if (dbUser.Role == "Moderator")
+                    {
+                        var result = await _userManager.AddToRoleAsync(dbUser, "Moderator");
+                    }
+                }
+            }
         }
 
         /// <summary>

@@ -1,0 +1,116 @@
+﻿@page "~/ProductListPage"
+@model LoCoMPro.Pages.ProductListPageModel
+@{
+    ViewData["Title"] = "Lista de Producto";
+    Layout = "_Layout";
+    ViewBag.ShowSearchBar = true;
+    ViewBag.ShowLogoLink = true;
+    @Html.AntiForgeryToken();
+    char s = (char)31; // ASCII Control Unit Separator
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/ProductListPage.css" />
+
+    <script src="~/js/deleteProductList.js"></script>
+
+    <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
+</head>
+
+<div>
+    <div id="feedbackMessage" class="feedback-message"></div>
+
+    <div class="information-section">
+        <!-- Title of the list-->
+        <div class="list-page-title">
+            <h2>Lista de productos de interés</h2>
+        </div>
+
+        <!-- Amount of products in the list-->
+        <div class="list-page-subtitle">
+            <h5>Cantidad de productos: <span id="product-count">@Model.UserProductList.Count</span></h5>
+
+            <h5>Precio aproximado: ₡ <span id="total-price">@Model.TotalPrice.ToString("N0")</span></h5>
+        </div>
+    </div>
+
+    <!-- Horizontal separating line -->
+    <hr class="style-four">
+
+    <div class="empty-section text-center" id="empty-list"
+            style='display: @(Model.UserProductList.Count == 0 ? "inline-block" : "none")'>
+        <h1>¡No hay elementos en la lista!</h1>
+        <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
+    </div>
+
+    <div class ="product-list-section" id="no-empty-list"
+            style='display: @(Model.UserProductList.Count != 0 ? "inline-block" : "none")'>
+        <!-- Container for column -->
+        <nav>
+            <div class="results-cont-msg" span id="results-count" hidden></div>
+
+            <ul class="list-page-column-title">
+                <li>
+                    <div class="textComment">Producto</div>
+                </li>
+                <li>
+                    <div class="textComment">Marca</div>
+                </li>
+                <li>
+                    <div class="textComment">Modelo</div>
+                </li>
+                <li>
+                    <div class="textComment">Tienda</div>
+                </li>
+                <li>
+                    <div class="textComment">Ubicación</div>
+                </li>
+                <li>
+                    <div class="textComment">Precio Promedio</div>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Search results section -->
+        <ul class="product-list-section">
+            <!-- Put in all results -->
+            @for (int i = 0; i < Model.UserProductList.Count; i++)
+            {
+                var product = Model.UserProductList[i];
+
+                var productData = $"{product.ProductName}{s}{product.ProductBrand}" +
+                        $"{s}{product.ProductModel}{s}{product.StoreName}" +
+                        $"{s}{product.Province}{s}{product.Canton}" +
+                        $"{s}{product.AvgPrice}";
+
+                <!-- A result block -->
+                <li class="product-list-block" id="product-item-@i">
+                    <!-- Route and data for each result -->
+                        <span id="register-product-name" value="@product.ProductName">
+                            @Html.DisplayFor(modelItem => product.ProductName)
+                        </span>
+                        <span id="register-product-brand" value="@product.ProductBrand">
+                            @Html.DisplayFor(modelItem => product.ProductBrand)
+                        </span>
+                        <span id="register-product-model" value="@product.ProductModel">
+                            @Html.DisplayFor(modelItem => product.ProductModel)
+                        </span>
+                        <span id="register-store-name" value="@product.StoreName">
+                            @Html.DisplayFor(modelItem => product.StoreName)
+                        </span>
+                        <span id="register-location-name" value="@product.Province + , + @product.Canton">
+                            @product.Province, @product.Canton
+                        </span>
+                        <span class="align-right" id="register-price" value="@product.AvgPrice">
+                            ₡ @Html.DisplayFor(modelItem => product.AvgPrice)
+                        </span>
+                        <button class="remove-button button-general" type="button"
+                                data-product-data="@productData" onclick="removeProductFromList(this, @i)">
+                            <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                        </button>
+                </li>
+            }
+        </ul>
+    </div>
+    <script src="~/js/feedbackMessage.js"></script>
+</div>

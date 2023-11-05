@@ -1,10 +1,12 @@
 ﻿let pageSize = 5;
-let queryResults = Array.from(document.querySelectorAll('.result-block'));
-let resultBlocks = Array.from(document.querySelectorAll('.result-block'));
+let queryResults = Array.from(document.querySelectorAll('.register-block-pagination'));
+let resultBlocks = Array.from(document.querySelectorAll('.register-block-pagination'));
 let filteredResultBlocks = null;
 let pageButtonsContainer = document.getElementById("pageButtonsContainer");
 let previousButton = document.getElementById('pagination-button-left');
 let nextButton = document.getElementById('pagination-button-right');
+let firstButton = document.getElementById('pagination-button-first');
+let lastButton = document.getElementById('pagination-button-last');
 let total = document.getElementById('total');
 
 let totalPages = Math.ceil(resultBlocks.length / pageSize);
@@ -18,9 +20,8 @@ function getOppositeOrder(order) {
 }
 document.addEventListener("DOMContentLoaded", function () {
     // Sort the result blocks based on the selected sorting criteria
-    window.sortResultBlocks = function (order, field = "#result-product-name") {
+    window.sortResultBlocks = function (order, field = "#register-price") {
         // Implement your sorting logic here
-        // Example: Sort by price
         resultBlocks.sort((a, b) => {
             const valueA = parseFloat(a.querySelector(field).getAttribute("value"));
             const valueB = parseFloat(b.querySelector(field).getAttribute("value"));
@@ -42,14 +43,26 @@ document.addEventListener("DOMContentLoaded", function () {
             block.style.display = index >= startIndex && index < endIndex ? 'block' : 'none';
         });
 
-        total.textContent = `Página ${currentPage} de ${totalPages}`;
+        // Range of results of the current page
+        const firstResultCurrentPage = (currentPage - 1) * pageSize + 1;
+        const lastResultCurrentPage = Math.min(currentPage * pageSize, resultBlocks.length);
 
+
+        let resultsRangeMsg = `${firstResultCurrentPage}-${lastResultCurrentPage} de ${resultBlocks.length} elementos`;
+
+        if (firstResultCurrentPage === resultBlocks.length) {
+            resultsRangeMsg = `Elemento ${lastResultCurrentPage} de ${resultBlocks.length}`
+        }
+
+        document.getElementById("results-count").textContent = resultsRangeMsg;
+        total.textContent = `Página ${currentPage} de ${totalPages}`;
     }
+ 
 
     // Hides left and right navigation buttons.
     window.updateNavigationButtons = function () {
-        previousButton.hidden = currentPage === 1;
-        nextButton.hidden = currentPage === totalPages;
+        firstButton.hidden = previousButton.hidden = currentPage === 1;
+        lastButton.hidden = nextButton.hidden = currentPage === totalPages;
 
         pageButtonsContainer.innerHTML = ""; // Clear the container
 
@@ -95,6 +108,20 @@ document.addEventListener("DOMContentLoaded", function () {
             showPage(currentPage);
             updateNavigationButtons();
         }
+    });
+
+    // First Page Button
+    firstButton.addEventListener('click', () => {
+        currentPage = 1;
+        showPage(currentPage);
+        updateNavigationButtons();
+    });
+
+    // Last Page Button
+    lastButton.addEventListener('click', () => {
+        currentPage = totalPages;
+        showPage(currentPage);
+        updateNavigationButtons();
     });
 
     // Sort buttons (e.g., "Menores precios" and "Mayores precios")

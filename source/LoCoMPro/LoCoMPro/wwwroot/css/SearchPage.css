@@ -1,66 +1,167 @@
-﻿/* Styles for the search page */
+﻿
+/* Style for the body of the page */
+.search-page-body {
+    width: 100%;
+    min-width: 1200px;
+    height: auto;
+}
 
 /* Style for the filter section */
 .filter-section {
     display: inline-block;
     height: 100%;
-    width: 14%;
+    width: 13%;
     float: left;
-    margin: 50px 10px 0px 0px;
-    max-height: 450px;
-    overflow-y: auto;
-    overflow-x: auto;
+    margin: 85px 0px 0px 0px;
 }
 
 /* Style for the filter section title h4 */
 .filter-section h4 {
     font-weight: bold;
+    font-size: 28px;
     margin: 20px 0px;
+}
+
+/* Style for the filter section title h5*/
+.filter-section h5 {
+    font-size: 23px;
+}
+
+
+.filter-option-section {
+    display: inline-block;
+    height: 100%;
+    max-height: 300px;
+    max-width: 400px;
+    overflow-y: auto;
+    overflow-x: auto;
 }
 
 /* Style for the filter section line */
 .filter-line {
     font-size: larger;
-    margin: 5px 0px;
+    margin: 3px 0px;
 }
 
 /* Style for the filter button */
-.filter-section button {
+.clear-filter-button {
     background-color: #88C8F8;
-    float: right;
-    margin: 20px 50px;
+    margin: 20px 0px;
     text-align: center;
-    align-items: center;
-    align-content: center;
-    width: 45%;
-    height: 45px;
-   font-size: medium;
+    width: 140px;
+    height: auto;
+    font-size: medium;
+    padding: 5px 5px;
 }
 
 /* Style for the filter button when hover*/
-.filter-section button:hover {
+.clear-filter-button:hover {
     background-color: #39A4F4;
 }
 
-/* Style for the search section */
-.search-section {
-    display: inline-block;
-    height: 100%;
-    width: 83%;
-    text-align: center;
+/* Style for search title */
+.containerListRegisterColumns {
+    display: inline-flex;
+    height: auto;
+    width: 100%;
+    justify-content:space-between;
+    list-style: none;
+    margin: 10px 0px;
+    min-width: 950px;
 }
 
-/* Style for the search section title h1*/
-.search-section h1 {
-    font-weight: bold;
-    text-align: left;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin: 0px;
+/* Style for search title columns */
+.containerListRegisterColumns li {
+    font-size: x-large;
+    flex: 0 0 0%;
+    text-align: center;
+    margin: 0px 25px 0px 0px;
+    padding: 0px 15px;
 }
+
+/* Style for columns */
+.containerListRegisterColumns ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+
+/* Style for the search section */
+
+/*VER!!!!!*/
+.search-section {
+    height: 100%;
+    display:inline-block;
+    width: 86%;
+    min-width: 950px;
+}
+
+.search-section ul {
+    width: 100%;
+    height: auto;
+    margin: 10px 5px;
+    padding: 5px;
+}
+
+/* Style for the result register block */
+.result-block {
+    display: inline-block;
+    height: auto;
+    width: 100%;
+    text-decoration: none;
+    color: #000000;
+    margin: 10px 0px;
+    min-height: 4em;
+    border-radius: 15px;
+    text-align: left;
+    min-width: 950px;
+    font-size:18px;
+}
+
+/* Style for the result register block text*/
+.result-block a span {
+    display: inline-flex;
+    width: 16%;
+    margin: auto auto;
+    margin: 0px 10px
+}
+
+/* Style for the result register block text */
+.result-block a {
+    /*flex: 0 0 calc(16.67% - 20px);*/
+    display: flex;
+    height: 4em;
+    width: 100%;
+    background-color: #E2E3E3;
+    justify-content: space-around;
+    border-radius: 15px;
+    padding: 10px 15px;
+    max-height: 3.9em;
+    text-decoration: none;
+    overflow: clip;
+    text-overflow: ellipsis;
+    color: #000000;
+}
+
+.short-column {
+    width: 10% !important;
+}
+
+/* Style for the result block when hover */
+.result-block a:hover {
+    color: #000000;
+    border: 1px solid #BABAB8;
+}
+
+
+/* Style for the register block text of the price */
+.align-right {
+    justify-content: flex-end !important;
+}
+
 
 /* Style for the page when product not found */
-.product-not-found {
+#product-not-found {
     display: inline-block;
     flex: content;
     width: 84%;
@@ -72,174 +173,31 @@
     align-content: center;
     align-items: center;
     margin-top: 40px;
+    margin-left:70px
 }
 
 /* Style for the page image when product not found */
-.product-not-found img {
+#product-not-found img {
     width: 40%;
     height: 40%;
     margin: -50px
 }
 
-/* Style for the search section title */
-.search-title {
-    display: flex;
-    height: auto;
-    width: 100%;
-    justify-content: space-between;
-}
-
-/* Style for the search section paragraph */
-.search-title p {
-    font-size: x-large;
-    flex: 0 0 16%;
-    text-align: center;
-    margin: 10px 0px;
-}
-
-/* Style for the result section */
-.result-section {
-    height: auto;
-    width: 100%;
-    text-decoration: none;
-    color: #000000;
-}
-
-/* Style for the result section paragraph */
-.result-block div {
-    font-size: medium;
-    flex: 0 0 16%;
-    text-align: center;
-    margin: 10px 0px;
-    align-items: center;
-    overflow: clip;
-    text-overflow: ellipsis;
-    padding: 0px 5px;
-}
-
-/* Style for the result block */
-/*.result-block {
-    display: flex;
-    height: 4em;
-    width: 100%;
-    background-color: #E2E3E3;
-    justify-content: space-between;
-    border-radius: 15px;
-    margin: 10px 0px;
-    max-height: 4em;
-}*/
-
-.result-block {
-    height: auto;
-    width: 100%;
-    text-decoration: none;
-    color: #000000;
-}
-
-.result-block a {
-    /*flex: 0 0 calc(16.67% - 20px);*/
-    display: flex;
-    height: 4em;
-    width: 100%;
-    background-color: #E2E3E3;
-    justify-content: space-around;
-    border-radius: 15px;
-    margin: 10px 0px;
-    padding: 0px 10px;
-    max-height: 4em;
-    text-decoration: none;
-    overflow: clip;
-    text-overflow: ellipsis;
-    color: #000000;
-}
-
-.result-block a span {
-    flex: 0 0 16%;
+.results-cont-msg {
+    margin-left: 30px;
     text-align: left;
-    margin: 10px 0px;
+    font-size: 18px;
+    margin-bottom: 10px;
 }
 
-#result-price {
-    text-align: right;
-}
-/* Style for the result block when hover */
-.result-block a:hover {
-    color: #000000;
-    border: 1px solid #BABAB8;
+#register-date {
+    text-align: center !important;
 }
 
-/* Style for dropdown options */
-.dropdownOption {
-    text-align: center;
-    height: auto;
-    font-size: large;
-    margin: 0px;
-}   
-
-/* Style for search title */
-.containerListRegisterColumns {
-    display: inline-flex;
-    height: auto;
-    width: 100%;
-    justify-content: space-between;
-    list-style: none;
-    margin: 10px 0px;
+#product-col {
+    margin-right: 60px;
 }
 
-
-/* Style for search title columns */
-.containerListRegisterColumns li {
-    font-size: xx-large;
-    flex: 0 0 16%;
-    text-align: center;
-}
-
-/* Style for columns */
-.containerListRegisterColumns ul {
-    margin: 0px;
-    padding: 0px;
-}
-
-
-/* Style for search title links */
-.containerListRegisterColumns a {
-    color: black;
-    text-decoration: none;
-    text-align: center;
-}
-
-/* Style for search title links when hover */
-.containerListRegisterColumns > li:hover > a {
-    color: #208EE0;
-}
-
-/* Style for the vertical menu */
-.menu-vertical {
-    position: absolute;
-    display: none;
-    list-style: none;
-    width: 200px;
-    background-color: darkgrey;
-    border-radius: 15px;
-}
-
-/* Style for the vertical menu when hover the columns */
-.containerListRegisterColumns li:hover .menu-vertical {
-    display: block;
-}
-
-/* Style for the vertical menu when display */
-.menu-vertical li a {
-    display: grid;
-    color: white;
-    text-decoration: none;
-    padding: 15px;
-    font-size: large;
-    text-align: center;
-}
-
-/* Style for comment */
-.textComment {
-    text-align: center;
-    margin: 0px;
+#brand-col{
+    margin: 0px -10px 0px 0px;
 }

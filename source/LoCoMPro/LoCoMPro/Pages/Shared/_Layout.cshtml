@@ -53,6 +53,13 @@
                         var user = await UserManager.GetUserAsync(User);
                         var email = await UserManager.GetEmailAsync(user!);
 
+                        <!-- Add user product list button of the layout -->
+                        <!-- If user is signed in this button redirects to ProductList page -->
+                        <a href="/ProductListPage" class="layout-button button-general">
+                            <img src="~/img/UserProductListIcon.svg" alt="Lista de Productos del usuario">
+                            <p>Lista</p>
+                        </a>
+
                         <!-- Add register button of the layout -->
                         <!-- If user is signed in this button redirects to AddProduct page -->
                         <a href="/AddProductPage" class="layout-button button-general">
@@ -68,15 +75,29 @@
                         </button>
                         <!-- Popup displayed through the script -->
                         <div class="popup-user text-center" id="popup-logged">
+                            @if(User.IsInRole("Moderator"))
+                            {
+                                <h7 id="moderador">Moderador</h7>
+                            }
                             <h6>@email</h6>
                             <img src="~/img/UserIconSignedIn.svg" alt="Imagen de Usuario">
                             <h5>@user</h5>
+                            <a class="pop-up-form" asp-page="/UserInfoPage">
+                                <button class="button-general" id="perfil-button">Perfil</button>
+                            </a>
                             <!-- Button to logout -->
-                            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+                            <form class="pop-up-form" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
                                 <button class="button-general" id="logout-button">Cerrar Sesión</button>
                             </form>
                         </div>
                     } else {
+                        <!-- Add user product list button of the layout -->
+                        <!-- If user is not signed in this button redirects to Login page -->
+                        <a asp-area="Identity" asp-page="/Account/Login" class="layout-button button-general">
+                            <img src="~/img/UserProductListIcon.svg" alt="Lista de Productos del usuario">
+                            <p>Lista</p>
+                        </a>
+
                         <!-- Add register button of the layout -->
                         <!-- If user is not signed in this button redirects to Login page -->
                         <a asp-area="Identity" asp-page="/Account/Login" class="layout-button button-general">

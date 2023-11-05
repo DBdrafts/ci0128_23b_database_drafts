@@ -5,22 +5,34 @@
     // Check if any substring in the array is found in the lowercase input string
     return substringsArray.some(substring => lowerCaseInput.includes(substring.toLowerCase()));
 }
-// .ready means that the function is executed when the document is fully loaded and ready to be manipulated
-document.addEventListener("DOMContentLoaded", function () {
-    const resultSection = document.getElementById("search-results");
+$(document).ready(function () {
     // Function to update the URL and trigger a GET request
+    const resultSection = document.getElementById("search-results");
+
+    function clearFilters() {
+        // Uncheck all boxes in the filter section
+        $("#filter-section input[type=checkbox]").prop("checked", false);
+
+        filterResults();
+    }
+
+    // Event listener for the botton of clean
+    $("#clear-filters").click(clearFilters);
+
     function filterResults() {
         const selectedCategories = getSelectedCheckboxes('SelectedCategories');
         const selectedProvinces = getSelectedCheckboxes('SelectedProvinces');
         const selectedCantons = getSelectedCheckboxes('SelectedCantons');
-        const notfound = document.getElementById("product-not-found-result");
+        notfound = document.getElementById("product-not-found");
+        filterSection = document.getElementById("filter-section");
+        buttonClearSection = document.getElementById("clear-filters");
 
         // Filter the resultBlocks based on the selected criteria
         resultBlocks = queryResults.filter(block => {
-            const productName = block.querySelector('#result-product-name').getAttribute("value");
-            const province = block.querySelector('#result-province-name').getAttribute("value");
-            const canton = block.querySelector('#result-canton-name').getAttribute("value");
-            const categories = block.querySelector('#result-categories').getAttribute("value");
+            const productName = block.querySelector('#register-product-name').getAttribute("value");
+            const province = block.querySelector('#register-province-name').getAttribute("value");
+            const canton = block.querySelector('#register-canton-name').getAttribute("value");
+            const categories = block.querySelector('#register-categories').getAttribute("value");
 
             const meetsCategoryFilter = selectedCategories.length === 0 || stringContainsSubstringIgnoreCase(categories, selectedCategories);
             const meetsProvinceFilter = selectedProvinces.length === 0 || selectedProvinces.includes(province);
@@ -30,10 +42,15 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (resultBlocks.length <= 0) {
+            // hidden elements in case 0 match
             notfound.hidden = false;
             resultSection.hidden = true;
-        } else {
+            filterSection.hidden = true;
+            buttonClearSection.hidden = true;
+            document.getElementById("results-count").textContent = "0";
 
+        } else {
+           
             // Sort the filtered resultBlocks
             sortResultBlocks("desc");
 
@@ -54,6 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             notfound.hidden = true;
             resultSection.hidden = false;
+            filterSection.hidden = false;
         }
     }
 
@@ -78,3 +96,4 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initialize the filter on page load
     filterResults();
 });
+

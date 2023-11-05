@@ -5,82 +5,139 @@
     Layout = "_Layout";
     ViewBag.ShowSearchBar = true;
     ViewBag.ShowLogoLink = true;
+    @Html.AntiForgeryToken();
+    char s = (char)31; // ASCII Control Unit Separator
 }
+@using Microsoft.AspNetCore.Identity
+@using LoCoMPro.Data;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 
 <head>
     <link rel="stylesheet" href="~/css/ProductPage.css" />
+    <script src="~/js/interactionsPopUp.js"></script>
+
+    <link rel="stylesheet" href="~/css/RateRegister.css" />
+
+    <script src="~/js/productListButton.js"></script>
+
+    <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
 </head>
 
 <div class="product-page">
     <!-- Name of product Search -->
-    <div class="titleProduct">
-        @Model.SearchProductName
-    </div>
-
-    <!-- Section for columns of specifications from Search product -->
-    <div class="product-page-section">
-        @{ // select the first matches
+    <div id="feedbackMessage" class="feedback-message"></div>
+    <div class="product-information">
+        @{
+            // select the first matches
             var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
             var firstNonNullStore = Model.Store.FirstOrDefault(r => r.Name != null);
+            if (firstNonNullProduct!.Brand == null) firstNonNullProduct.Brand = "N/A";
+            if (firstNonNullProduct!.Model == null) firstNonNullProduct.Model = "N/A";
+            // create a var for amount of images
+            int imagesAmount = 0;
         }
-        <!-- brand column -->
-        <div class="column">
-            <h2>Marca</h2>
-            @{ // Get the name of the product brand
-                if (firstNonNullProduct != null)
-                {
-                    <p>@firstNonNullProduct.Brand</p>
-                }
-            }
-        </div>
-
-        <!-- model column -->
-        <div class="column">
-            <h2>Modelo</h2>
-            @{ // Get the name of the product model
-                if (firstNonNullProduct != null)
-                {
-                    <p>@firstNonNullProduct.Model</p>
-                }
-            }
+        <!-- Upper section of images -->
+        <div class="images-section">
+            <div class="carousel-section">
+                <div class="img-carousel">
+                    
+                    @foreach (var register in Model.Registers)
+                    { // in each register done
+                        @if (Model.RegisterHasImages(register))
+                        { // if images is not null
+                            @foreach (var image in register.Images)
+                            { // for each image in register
+                                if (imagesAmount < 5)
+                                { // limit the amount of images to show
+                                    // add the image
+                                    <div class="small-img-space">
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(image.ImageData)" alt="Imagen" class="small-image" style="width:48.5px;height:48.5px;border-radius:5px;object-fit:fill;">
+                                    </div>
+                                    imagesAmount++;
+                                }
+                                
+                            }
+                        }
+                    }
+                </div>
             </div>
-
-        <!-- establishment column -->
-        <div class="column">
-            <h2>Establecimiento</h2>
-            @{ // Get the name of the store
-                if (firstNonNullStore != null)
+            <div class="main-imagen-section">
+                
+                @if (Model.Registers.Any())
                 {
-                    <p>@firstNonNullStore.Name</p>
+                    var firstRegisterWithImages = Model.Registers.FirstOrDefault(r => r.Images != null && r.Images.Any());
+                    if (firstRegisterWithImages != null)
+                    {
+                        // Show the first image of first register with image
+                        <div class="main-img-space">
+                            <img id="mainImage" src="data:image/jpeg;base64,@Convert.ToBase64String(firstRegisterWithImages.Images.First().ImageData)" 
+                            alt="Imagen Principal" class="img-responsive" style="width:348.5px;height:323.5px;border-radius: 30px; overflow:hidden; object-fit: fill;">
+                        </div>
+                    }
+                    else
+                    {
+                        // If no register with images, show no images found
+                        <div class="main-img-space">
+                            <img src="~/img/No_image_found.svg" alt="No se encontraron imágenes" 
+                            style="width:348.5px;height:323.5px;border-radius: 30px; object-fit: fill;">
+                        </div>
+                    }
                 }
-            }
-        </div>
-
-        <!-- cantón column -->
-        <div class="column">
-            <h2>Cantón</h2>
-            @{ // Get the name of the Canton Location
-                if (firstNonNullStore != null)
+                else
                 {
-                    <p>@firstNonNullStore.CantonName</p>
+                    // Weird case there is no register for the product 
+                    <div class="main-img-space">
+                        <img src="~/img/No_image_found.svg" alt="No se encontraron imágenes" style="width:348.5px;height:323.5px;border-radius: 30px; object-fit: fill;">
+                    </div>
                 }
-            }
+            </div>
         </div>
+        <div class="info-section">
+            <div class="title-section">
+                <div class="titleProduct">
+                    @Model.SearchProductName
+                </div>
+            </div>
+            <div class="caracteristcs-section">
+                @{
+                    // Get the information of producto and store
+                    if (firstNonNullProduct != null)
+                    {
+                        <p>Marca: @firstNonNullProduct.Brand</p>
+                        <p>Modelo: @firstNonNullProduct.Model</p>
+                    }
+                    if (firstNonNullStore != null)
+                    {
+                        <p>Tienda: @firstNonNullStore.Name</p>
+                        <p>Ubicación: @firstNonNullStore.ProvinciaName, @firstNonNullStore.CantonName </p>
+                        <p>Precio Aproximado: ₡ @Model.AvgPrice.ToString("N0")</p>
+                    }
+                    var productData = $"{firstNonNullProduct.Name}{s}{firstNonNullProduct.Brand}" +
+                        $"{s}{firstNonNullProduct.Model}{s}{Model.SearchStoreName}" +
+                        $"{s}{firstNonNullStore.ProvinciaName}{s}{firstNonNullStore.CantonName}" +
+                        $"{s}{Model.AvgPrice.ToString("N0")}";
 
-        <!-- province column -->
-        <div class="column">
-            <h2>Provincia</h2>
-            @{ // Get the name of the Province Location
-                if (firstNonNullStore != null)
-                {
-                    <p>@firstNonNullStore.ProvinciaName</p>
-                }
-            }
-        </div>
-        <!-- price column -->
-        <div class="column">
-            <h2>Precio Prom.</h2>
-            <p>₡ @Model.AvgPrice.ToString("N0")</p>
+                    if (SignInManager.IsSignedIn(User))
+                    {
+                        <div class="text-center">
+                            <button type="button" class="button-general product-list-button" data-product-data="@productData"
+                                    onclick="callAddProductToList(this)" id="add-to-list"
+                                    style='display: @(Model.AlreadyInProductList ? "none" : "inline-block")'>
+                                Añadir a lista de interés
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                            </button>
+
+                            <button type="button" class="button-general product-list-button" data-product-data="@productData"
+                                    onclick="callRemoveProductFromList(this)" id="remove-from-list"
+                                    style='display: @(Model.AlreadyInProductList ? "inline-block" : "none")'>
+                                Eliminar de la lista de interés
+                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                            </button>
+                        </div>  
+                    }
+                  }
+            </div>
         </div>
     </div>
     
@@ -93,55 +150,21 @@
         Lista de registros
     </div>
 
+    <div class="results-cont-msg" span id="results-count" hidden></div>
+
     <!-- Container for column options -->
-   <nav>
+   <nav>  
         <ul class="containerListRegistercolumns">
-			<li>
-				<a href="#">Fecha</a>
-				<ul class="menu-vertical">
-                    <li>
-                        <a asp-page="./ProductPage"
-                           asp-route-SearchProductName="@Model.SearchProductName"
-                           asp-route-SearchStoreName="@Model.SearchStoreName"
-                           asp-route-SearchCantonName="@Model.SearchCantonName"
-                           asp-route-SearchProvinceName="@Model.SearchProvinceName"
-                           asp-route-sortOrder="date" style="text-decoration: none;display: grid;font-size: 20px;
-                              color: white; text-align: center;"> Más recientes</a>
-                    </li>
-                    <li>
-                        <a asp-page="./ProductPage"
-                           asp-route-SearchProductName="@Model.SearchProductName"
-                           asp-route-SearchStoreName="@Model.SearchStoreName"
-                           asp-route-SearchCantonName="@Model.SearchCantonName"
-                           asp-route-SearchProvinceName="@Model.SearchProvinceName"
-                           asp-route-sortOrder="date_desc" style="text-decoration: none;display: grid;font-size: 20px;
-                              color: white; text-align: center;"> Más antiguos</a>
-                    </li>
-				</ul>
-			</li>
-			<li>
-				<a href="#">Precio</a>
-				<ul class="menu-vertical">
-                    <li>
-                        <a asp-page="./ProductPage"
-                           asp-route-SearchProductName="@Model.SearchProductName"
-                           asp-route-SearchStoreName="@Model.SearchStoreName"
-                           asp-route-SearchCantonName="@Model.SearchCantonName"
-                           asp-route-SearchProvinceName="@Model.SearchProvinceName"
-                           asp-route-sortOrder="price" style="text-decoration: none;display: grid;font-size: 20px;
-                              color: white; text-align: center;"> Menores precios</a>
-                    </li>
-                    <li>    
-                        <a asp-page="./ProductPage"
-                           asp-route-SearchProductName="@Model.SearchProductName"
-                           asp-route-SearchStoreName="@Model.SearchStoreName"
-                           asp-route-SearchCantonName="@Model.SearchCantonName"
-                           asp-route-SearchProvinceName="@Model.SearchProvinceName"
-                           asp-route-sortOrder="price_desc" style="text-decoration: none;display: grid;font-size: 20px;
-                              color: white; text-align: center;"> Mayores precios</a>
-                    </li>
-				</ul>
-			</li>
+            <li>
+                <!-- Button to sort by the date -->
+                @{ViewBag.SortTipe = "#register-date";}
+                @await Html.PartialAsync("_OrderButton", "Fecha")
+            </li>
+            <li>
+                <!-- Button to sort by the price -->
+                @{ViewBag.SortTipe = "#register-price";}
+                @await Html.PartialAsync("_OrderButton", "Precio")
+            </li>
             <li>
                 <div class="textComment">Comentarios</div>
             </li>
@@ -149,87 +172,132 @@
 		</ul>
 	</nav>
 
-   <div class="register-section">
+    <ul class="register-section">
         <!-- Individual registers -->
-        @foreach (var register in Model.Register)
+        @foreach (var register in Model.Registers)
         {
             <!-- Search result section -->
-                <!-- Individual registers -->
-                <div class="register-block">
-                <p>@Html.DisplayFor(modelItem => register.SubmitionDate)</p>
-                <p>₡@Html.DisplayFor(modelItem => register.Price)</p>
-                <p>@Html.DisplayFor(modelItem => register.Comment)</p>
-                </div>
-        }
-        
-    </div>
+            <!-- Individual registers -->
+            var user = Model.Users.FirstOrDefault(u => u.Id == register.ContributorId)?.UserName;
+            var reviewValue = Model.UserReviews.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReviewValue;
+            var reportState = Model.UserReports.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReportState;
+            if (reportState == null) reportState = -1;
+            var registerKeys = $"{register.SubmitionDate}{s}{register.ContributorId}{s}{register.ProductName}" +
+            $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToShortDateString()}" +
+            $"{s}{user}{s}{register.Comment}{s}{reviewValue}{s}{reportState}";
 
-    <div class="product-pagination">
-        <!-- Disables the buttons if there´s no previous or next button -->
-        @{
-            var prevDisabled = !Model.Register.HasPreviousPage ? "disabled" : "";
-            var nextDisabled = !Model.Register.HasNextPage ? "disabled" : "";
-        }
-
-        <!-- Search pagination section -->
-        <div class="pagination-section">
-            <!-- If there´s a previous page -->
-            @if (@prevDisabled != "disabled")
-            {
-                <!-- Link to go to the previous page -->
-                <a asp-page="./ProductPage"
-                   asp-route-pageIndex="@(Model.Register.PageIndex - 1)"
-                   asp-route-SearchProductName="@Model.SearchProductName"
-                   asp-route-SearchStoreName="@Model.SearchStoreName"
-                   asp-route-SearchCantonName="@Model.SearchCantonName"
-                   asp-route-SearchProvinceName="@Model.SearchProvinceName"
-                   asp-route-sortOrder="@Model.CurrentSort"
-                   class="button-general pagination-button" id="pagination-button-left">
-                    <img src="~/img/ArrowLeftIcon.svg" alt="Anterior">
-                </a>
-            }
-
-            <!-- Page button section that behaves dynamically -->
-            @for (int i = Model.Register.PageIndex - 1; i <= Model.Register.TotalPages && i <= Model.Register.PageIndex + 3; i++)
-            {
-                <!-- If there´re previous pages higher that 0 -->
-                if (i >= 1)
-                {
-                    <!-- Pagination square of the pages -->
-                    <div id="pagination-square">
-                        <a asp-page="./ProductPage"
-                           asp-route-pageIndex="@i"
-                           asp-route-SearchProductName="@Model.SearchProductName"
-                           asp-route-SearchStoreName="@Model.SearchStoreName"
-                           asp-route-SearchCantonName="@Model.SearchCantonName"
-                           asp-route-SearchProvinceName="@Model.SearchProvinceName"
-                           asp-route-sortOrder="@Model.CurrentSort"
-                           class="@(i == Model.Register.PageIndex ? "pagination-square-active" : "")">
-                            <p>@i</p>
-                        </a>
-                    </div>
+            // images in registers
+            int imagecount = 0;
+            var registerImages = "";
+            if (register.Images != null && register.Images.Any())
+            { // In case registers has images
+                foreach (var image in register.Images)
+                { // For each image in register
+                    if (image.ImageData != null)
+                    {   
+                        // Cover the bytes of images to string
+                        registerImages += $"{s}ImageData{imagecount}: {Convert.ToBase64String(image.ImageData)}";
+                        imagecount++;
+                    }
                 }
             }
 
-            <!-- If there´s a next page -->
-            @if (nextDisabled != "disabled")
-            {
-                <!-- Link to go to the next page -->
-                <a asp-page="./ProductPage"
-                   asp-route-pageIndex="@(Model.Register.PageIndex + 1)"
-                   asp-route-SearchProductName="@Model.SearchProductName"
-                   asp-route-SearchStoreName="@Model.SearchStoreName"
-                   asp-route-SearchCantonName="@Model.SearchCantonName"
-                   asp-route-SearchProvinceName="@Model.SearchProvinceName"
-                   asp-route-sortOrder="@Model.CurrentSort"
-                   class="button-general pagination-button" id="pagination-button-right">
-                    <img src="~/img/ArrowRightIcon.svg" alt="Siguiente">
+            <li class="register-block align register-block-pagination">
+                <a>
+                    <span id="register-date" value="@register.SubmitionDate.Date">
+                        @register.SubmitionDate.ToShortDateString()
+                    </span>
+                    <span id="register-price" value="@register.Price">
+                        ₡ @register.Price.ToString("N0")
+                    </span>
+                    <span id="register-comment" value="@register.Comment">
+                        @Html.DisplayFor(modelItem => register.Comment)
+                    </span>
+                    <div class="text-center align">
+                        <button class="open-interactions-button" data-register-id="@registerKeys" images-register-id="@registerImages" onclick="openInteractionsPopup(this)">
+                            <img src="~/img/MoreIcon.svg" alt="Más opciones">
+                        </button>
+                    </div>
                 </a>
-            }
+            </li>
+        }
+    </ul>
+
+    <!-- Code for interactive pop up -->
+    <div class="interactive-popup-section">
+        <div class="interactions-popup">
+            <div class="interactions-popup-content">
+                <p><b>Fecha:</b> <span id="popup-submitionDate"> </span></p>
+                <p><b>Precio:</b> <span id="popup-price"></span></p>
+                <p><b>Aporde de:</b> <span id="popup-userName"></span></p>
+                <p><b>Comentario:</b> <span id="popup-comment"></span></p>
+
+                <div class="carousel-section-pop-up">
+                    <div class="img-carousel-pop-up">
+                    </div>
+                </div>
+
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div class="report-icon-container">
+                        <img id="reportIcon" src="~/img/DesactiveReportIcon.svg" alt="Reportar" onclick="toggleReport()" title="Reportar registro" />
+                    </div>
+
+                    <!-- Interactive rating code-->
+                    <h5><strong>Valora el registro</strong></h5>
+                    @*
+                    Note: This code was adapted from the page "codepen.io" to satisfies the needs of the project. All the credit go to this page.
+                    The specific link of the page where the code was take from is: https://codepen.io/ashdurham/pen/AVVGvP
+                    *@
+                    <span class="rating_stars rating_0">
+                        <span class='s' data-low='0.5' data-high='1'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+                        <span class='s' data-low='1.5' data-high='2'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+                        <span class='s' data-low='2.5' data-high='3'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+                        <span class='s' data-low='3.5' data-high='4'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+                        <span class='s' data-low='4.5' data-high='5'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+
+                        <span class='r r0_5' data-rating='5' data-value='0.5'></span>
+                        <span class='r r1' data-rating='10' data-value='1'></span>
+                        <span class='r r1_5' data-rating='15' data-value='1.5'></span>
+                        <span class='r r2' data-rating='20' data-value='2'></span>
+                        <span class='r r2_5' data-rating='25' data-value='2.5'></span>
+                        <span class='r r3' data-rating='30' data-value='3'></span>
+                        <span class='r r3_5' data-rating='35' data-value='3.5'></span>
+                        <span class='r r4' data-rating='40' data-value='4'></span>
+                        <span class='r r4_5' data-rating='45' data-value='4.5'></span>
+                        <span class='r r5' data-rating='50' data-value='5'></span>
+                    </span>
+
+                    <div class="values" hidden>
+                        <div>
+                            <input type="text" id="rating" value="0" />
+                        </div>
+                        <div>
+                            <input type="text" name="rating" id="rating_val" value="0" />
+                        </div>
+                    </div>
+                }
+                
+                <div class="buttons-container">
+                    <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>
+                    <button id="saveButton" onclick="saveInteractions()" style="visibility: hidden;">Guardar</button>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <script>
+                            document.getElementById("saveButton").style.visibility = "visible";
+                        </script>
+                    }
+                    
+                </div>
+            </div>
         </div>
-
-        <!-- Code for orders registers--> </>
-
     </div>
 
+    <div class="product-pagination">
+        <!-- Pagination section -->
+        @await Html.PartialAsync("_Pagination")
+    </div>
+    <script src="~/js/ProductPage/imageChanger.js"></script>
+    <script src="~/js/feedbackMessage.js"></script>
+    <script src="~/js/pagination.js"></script>
 </div>

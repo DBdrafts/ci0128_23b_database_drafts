@@ -78,13 +78,14 @@ public class BaseTest
         // created with the database context and mock configuration
         // real instance
         return CreateLoCoMProPageModel(dbContext, mockConfiguration, mockUserManager, mockSignInManager
-            , mockUserStore, pageType);
+            , mockUserStore, mockHttpContextAccessor, pageType);
     }
 
     // Create LoCoMPro page model depending of the string received
     protected LoCoMProPageModel CreateLoCoMProPageModel(LoCoMProContext dbContext
         , Mock<IConfiguration> mockConfiguration, Mock<UserManager<User>> mockUserManager
         , Mock<SignInManager<User>> mockSignInManager, Mock<IUserStore<User>> mockUserStore
+        , Mock<IHttpContextAccessor> mockHttpContextAccessor
         , string pageType)
     {
         // Return the type of the LoCoMPro 
@@ -96,7 +97,7 @@ public class BaseTest
 
             // Have to return a Product page
             case "product_page":
-                return new ProductPageModel(dbContext, mockConfiguration.Object);
+                return new ProductPageModel(dbContext, mockConfiguration.Object, mockUserManager.Object, mockHttpContextAccessor.Object);
 
             // Have to return a Add Register page
             case "add_register_page":
