@@ -425,7 +425,7 @@ namespace LoCoMPro.Pages
             
             DateTime registSubmitDate = DateTime.Parse(submitionDate);
             var user = _context.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
-            DateTime interactionDate = FormatDateTimeNow();
+            DateTime interactionDate = TruncateSubSeconds(DateTime.Now);
 
             var registerToUpdate = GetRegisterToUpdate(contributorId, productName, storeName, registSubmitDate);
 
@@ -463,15 +463,19 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
-        /// Returns current dateTime without mili, micro and nanoseconds.
+        /// Returns a dateTime variable without mili, micro and nanoseconds.
         /// </summary>
         /// <returns>Current dateTime formatted.</returns>
-        static private DateTime FormatDateTimeNow()
+        internal static DateTime TruncateSubSeconds(DateTime dateTime)
         {
-            DateTime dateTimeNow = DateTime.Now;
-            dateTimeNow = new DateTime(dateTimeNow.Year, dateTimeNow.Month, dateTimeNow.Day,
-                dateTimeNow.Hour, dateTimeNow.Minute, dateTimeNow.Second, 0);
-            return dateTimeNow;
+            if (dateTime <= DateTime.MinValue)
+            {
+                throw new ArgumentException("Invalid dateTimeValue");
+            }
+            
+            dateTime = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day,
+                dateTime.Hour, dateTime.Minute, dateTime.Second, 0);
+            return dateTime;
         }
 
         /// <summary>
@@ -480,8 +484,13 @@ namespace LoCoMPro.Pages
         /// <param name="input">The input string to split.</param>
         /// <param name="delimiter">The character used as the delimiter.</param>
         /// <returns>An array of substrings created by splitting the input string.</returns>
-        static string[] SplitString(string input, char delimiter)
+        internal static string[] SplitString(string input, char delimiter)
         {
+            if (string.IsNullOrEmpty(input))
+            {
+                throw new ArgumentException("Input string cannot be empty or null.");
+            }
+
             return input.Split(delimiter);
         }
 
