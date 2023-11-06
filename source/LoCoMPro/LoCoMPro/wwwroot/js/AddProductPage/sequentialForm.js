@@ -32,7 +32,7 @@
     });
 
     // When a location is saved, enable store field
-    $("#saveLocation-button").on("click", function () {
+    $("#saveLocationMap-button").on("click", function () {
         $("#store").prop("disabled", false); 
     });
 });

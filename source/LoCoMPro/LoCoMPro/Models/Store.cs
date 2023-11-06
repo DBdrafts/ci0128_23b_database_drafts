@@ -29,7 +29,6 @@ namespace LoCoMPro.Models
         /// <summary>
         /// WGS 84 coordinates for geolocation.
         /// </summary>
-        [NotMapped]
         public Point? Geolocation { get; set; }
 
         /// <summary>

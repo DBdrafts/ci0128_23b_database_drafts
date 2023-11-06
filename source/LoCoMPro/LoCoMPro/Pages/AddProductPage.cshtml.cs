@@ -12,6 +12,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.Index.IntervalRTree;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -94,8 +96,8 @@ namespace LoCoMPro.Pages
             }
 
             // Get the information of the form
-            string provinciaName = Request.Form["selectedProvince"]!;
-            string cantonName = Request.Form["selectedCanton"]!;
+            string provinciaName = Request.Form["province"]!;
+            string cantonName = Request.Form["canton"]!;
             string storeName = Request.Form["store"]!;
             string productName = Request.Form["productName"]!;
             float price = Convert.ToSingle(Request.Form["price"]);
@@ -103,6 +105,10 @@ namespace LoCoMPro.Pages
             string? brandName = CheckNull(Request.Form["brand"]);
             string? modelName = CheckNull(Request.Form["model"]);
             string? comment = CheckNull(Request.Form["comment"]);
+            double latitude = Convert.ToDouble(Request.Form["latitude"]);
+            double longitude = Convert.ToDouble(Request.Form["longitude"]);
+            var coordinates = new Coordinate(longitude, latitude);
+            var geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
 
 
             // Get the product if exists in the context
@@ -115,7 +121,7 @@ namespace LoCoMPro.Pages
             // Get the user by their ID
             var user = _context.Users.First(u => u.Id == _userManager.GetUserId(User));
             // Check and create a new store if not exists
-            var store = AddStoreRelation(storeName, cantonName, provinciaName);
+            var store = AddStoreRelation(storeName, cantonName, provinciaName, geolocation);
             // Get category can be null
             var category = _context.Categories.FirstOrDefault(c => c.CategoryName == chosenCategory);
 
@@ -150,18 +156,23 @@ namespace LoCoMPro.Pages
         }
 
         // Method that creates a new store if not exists
-        private Store AddStoreRelation(string storeName, string cantonName, string provinceName)
+        private Store AddStoreRelation(string storeName, string cantonName, string provinceName, Point geolocation)
         {
             var store = _context.Stores.Find(storeName, cantonName, provinceName);
             if (store == null) // If the store doesn't exist
             {
                 // Create new store
-                store = new()
+                store = new Store()
                 {
                     Name = storeName,
                     Location = _context.Cantones.First(c => c.CantonName == cantonName),
+                    Geolocation = geolocation,
+
                 };
                 _context.Stores.Add(store);
+            } else if (store.Geolocation == null)
+            {
+                store.Geolocation = geolocation;
             }
             return store;
         }

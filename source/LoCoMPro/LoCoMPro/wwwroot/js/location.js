@@ -1,13 +1,18 @@
-let hasPopulatedProvinceSelect = false;
 let changeFromMap = false;
+let markers = [];
+// Google services
 let map = null;
+let geocoder = null;
+let placesService = null;
 // Variables to use for page logic
 var selectedProvince = null;
 var selectedCanton = null;
 var selectedLocation = null;
 var selectedMarker = null;
+var selectedStore = null;
 
 $(document).ready(function () {
+    let hasPopulatedProvinceSelect = false;
     const currentPageUrl = window.location.href;
     // Show the popup when the button is clicked
     $("#showPopupButton").on("click", function () {
@@ -27,14 +32,12 @@ $(document).ready(function () {
     });
 
     $("#saveLocationMap-button").on("click", function () {
-        var text = getLocationButtonText(selectedProvince, selectedCanton);
-        $("#buttonSpan").text(text);
         saveLocation();
         $("#mapPopup").hide();
     });
 
     // Call the function to populate provinceSelect only once
-    populateProvinceSelect();
+    populateProvinceSelect(hasPopulatedProvinceSelect);
 
     $("#province").on("click", function () {
         changeFromMap = false;
@@ -43,26 +46,10 @@ $(document).ready(function () {
     $("#province").on("change", function () {
         selectedProvince = $("#province").val();
         if (selectedProvince) {
-            if (!currentPageUrl.includes("/AddProductPage") == null) document.getElementById("chosenProvince").textContent = selectedProvince;
+            if (!currentPageUrl.includes("/AddProductPage") == null) $("#chosenProvince").text(selectedProvince);
             // Make a fetch request to get the cantons of the selected province
-            fetch(`/Index?handler=Cantones&provincia=${selectedProvince}`)
-                .then(response => response.json()) // Convert the response to JSON
-                .then(data => {
-                    $("#canton").html(""); // Clear the canton select
-                    data.forEach(canton => {
-                        // Create options for each canton and add them to the select
-                        const option = document.createElement("option");
-                        option.value = canton.value;
-                        option.text = canton.text;
-                        if (canton.value == "") option.hidden = true;
-                        $("#canton").append(option);
-                    });
-                    $("#canton").removeAttr("disabled"); // Enable the canton select
-
-                })
-                .catch(error => {
-                    console.error("Error getting cantons:", error); // Error handling
-                });
+            populateCantonSelect(selectedProvince);
+            
         } else {
             $("#canton").attr("disabled", "disabled"); // Disable the canton select if no province is selected
             $("#canton").html('<option value="" disabled selected hidden>Select a canton</option>'); // Restore the default value
@@ -72,10 +59,8 @@ $(document).ready(function () {
     $("#canton").on("change", function () {
         selectedCanton = $("#canton").val();
         if (selectedCanton) {
-            if (!currentPageUrl.includes("/AddProductPage")) {
-                $("#chosenCanton").text(selectedCanton);
-                if (changeFromMap == false) { getCoordinatesFromName(); }
-            }
+            $("#chosenCanton").text(selectedCanton);
+            if (changeFromMap == false) { getCoordinatesFromName(); }
         }
     });
 });
@@ -85,6 +70,7 @@ function initializeMap() {
     const startingLocation = { lat: 9.9280694, lng: -84.0907246 };
 
     if (map !== null) return;
+
 
     var costaRicaBounds = new google.maps.LatLngBounds(
         new google.maps.LatLng(8.0364, -85.7733),  // Southwestern boundary
@@ -99,7 +85,8 @@ function initializeMap() {
         restriction: {
             latLngBounds: costaRicaBounds,
             strictBounds: true
-        }
+        },
+        mapTypeId: "roadmap"
     };
 
     // Get map from api and select the locations.
@@ -111,19 +98,19 @@ function initializeMap() {
         // Function to handle the user's click on the map
         handleMapClick(event.latLng);
     });
-    // Add your map functionality here, such as allowing users to select a point.
+
+    // Initialize Search bar if in product page.
+    if (window.location.href.includes("/AddProductPage")) {
+        initializeSearchBar();
+    }
 }
 
 // Function to handle the user's click on the map
 function handleMapClick(location) {
     changeFromMap = true;
-    // You can do something with the selected location here
-    console.log('User clicked at latitude: ' + location.lat() + ', longitude: ' + location.lng());
-    console.log(location);
 
     updateMarkerPosition(location);
     reverseGeocodeLocation(location);
-   // 
 }
 
 // Function to update the marker's position
@@ -140,10 +127,88 @@ function updateMarkerPosition(location) {
     selectedMarker.setPosition(location);
 }
 
+// Initializes SearchBar only if in addProductPage
+function initializeSearchBar() {
+    // Create a search input and link it to the map.
+    const input = document.createElement('input');
+    input.id = 'search-input';
+    input.type = 'text';
+    input.placeholder = 'Search for places';
+
+    // Create the search box and link it to the UI element.
+    const searchBox = new google.maps.places.SearchBox(input);
+
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+    // Bias the SearchBox results towards current map's viewport.
+    map.addListener("bounds_changed", () => {
+        searchBox.setBounds(map.getBounds());
+    });
+
+    let markers = [];
+
+    // Listen for the event fired when the user selects a prediction and retrieve
+    // more details for that place.
+    searchBox.addListener("places_changed", () => {
+        const places = searchBox.getPlaces();
+
+        if (places.length == 0) {
+            return;
+        }
+
+        // Clear out the old markers.
+        markers.forEach((marker) => {
+            marker.setMap(null);
+        });
+        markers = [];
+
+        // For each place, get the icon, name and location.
+        const bounds = new google.maps.LatLngBounds();
+
+        places.forEach((place) => {
+            if (!place.geometry || !place.geometry.location) {
+                console.log("Returned place contains no geometry");
+                return;
+            }
+
+            const icon = {
+                url: place.icon,
+                size: new google.maps.Size(85, 85),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(25, 25),
+            };
+
+            // Create a marker for each place.
+            markers.push(
+                new google.maps.Marker({
+                    map,
+                    icon,
+                    title: place.name,
+                    position: place.geometry.location,
+                }),
+            );
+            if (place.geometry.viewport) {
+                // Only geocodes have viewport.
+                bounds.union(place.geometry.viewport);
+            } else {
+                bounds.extend(place.geometry.location);
+            }
+        });
+        changeFromMap = true;
+        /*var firstplace = places[0];*/
+        selectedStore = places[0].name;
+        selectedLocation = places[0].geometry.location;
+        reverseGeocodeLocation(selectedLocation);
+        map.fitBounds(bounds);
+    });
+}
+
 // Function to perform reverse geocoding when a marker is selected
 function reverseGeocodeLocation(location) {
-    var geocoder = new google.maps.Geocoder();
 
+    if (geocoder == null) {
+        geocoder = new google.maps.Geocoder();
+    }
     geocoder.geocode({ 'location': location }, function (results, status) {
         if (status === 'OK') {
             if (results[0]) {
@@ -153,7 +218,7 @@ function reverseGeocodeLocation(location) {
                 for (var i = 0; i < results[0].address_components.length; i++) {
                     const addressComponent = results[0].address_components[i];
                     const types = addressComponent.types;
-                    /*const longName = addressComponent.long_name;*/
+                    const longName = addressComponent.long_name;
                     const shortName = addressComponent.short_name;
                     if (types[0] == 'administrative_area_level_1') {
                         /*console.log('Marker is in the province of ' + shortName);*/
@@ -161,17 +226,11 @@ function reverseGeocodeLocation(location) {
                     } else if ((types[0] == 'administrative_area_level_2' || types[0] == 'locality') && types[1] == 'political') {
                         cantonName = shortName;
                     }
-                    //console.log('Address Component Types:', types);
-                    //console.log('Long Name:', longName);
-                    //console.log('Short Name:', shortName);
-                    //console.log('---');
                 }
-                
-                $("#province").val(provinceName);
-                $('#province').trigger('change');
 
-                $("#canton").val(cantonName);
-                $('#canton').trigger('change');
+                selectedCanton = cantonName;
+                $("#province").val(provinceName).trigger('change');
+
             } else {
                 console.log('No results found');
             }
@@ -181,18 +240,25 @@ function reverseGeocodeLocation(location) {
     });
 }
 
+
 function saveLocation() {
     var text = getLocationButtonText(selectedProvince, selectedCanton);
-    $("#buttonSpan").text(text);
-    $("#chosenProvince").text(selectedProvince);
-    $("#chosenCanton").text(selectedCanton);
+    
     $("#latitude").val(selectedLocation.lat);
     $("#longitude").val(selectedLocation.lng);
     if (window.location.href.includes("/AddProductPage")) {
-        $("#locationInfo").text(`Ubicaci\u00F3n elegida: ${selectedProvince}, ${selectedCanton}`);
+        $("#locationInfo").text(`Ubicaci\u00F3n elegida: ${text}`);
         $("#locationInfo").show();
-        document.getElementById("selectedProvince").value = selectedProvince;
-        document.getElementById("selectedCanton").value = selectedCanton;
+        if (selectedStore !== null) {
+            $("#store").removeAttr("disabled");
+            $("#store").val(selectedStore.replace(/\s+.*/g, '')).trigger('input');
+            /*$("#store").text(selectedStore);*/
+            
+        }
+    } else {
+        $("#buttonSpan").text(text);
+        $("#chosenProvince").text(selectedProvince);
+        $("#chosenCanton").text(selectedCanton);
     }
 }
 
@@ -206,7 +272,7 @@ function getLocationButtonText(province, canton) {
     return text;
 }
 
-function populateProvinceSelect() {
+function populateProvinceSelect(hasPopulatedProvinceSelect) {
     // Check if the population has already occurred
     if (hasPopulatedProvinceSelect) {
         return; // Exit the function if already populated
@@ -245,6 +311,35 @@ function populateProvinceSelect() {
     });
 }
 
+function populateCantonSelect(canton) {
+    fetch(`/Index?handler=Cantones&provincia=${selectedProvince}`)
+        .then(response => response.json()) // Convert the response to JSON
+        .then(data => {
+            $("#canton").html(""); // Clear the canton select
+            data.forEach(canton => {
+                // Create options for each canton and add them to the select
+                const option = document.createElement("option");
+                option.value = canton.value;
+                option.text = canton.text;
+                if (canton.value == "") option.hidden = true;
+                $("#canton").append(option);
+            });
+            $("#canton").removeAttr("disabled"); // Enable the canton select
+
+            if (changeFromMap) {
+                const found = $("#canton option[value='" + selectedCanton + "']").length > 0;
+                const cantonName = found ? selectedCanton : "";
+                $("#canton").val(cantonName);
+                $("#chosenCanton").text(cantonName);
+            }
+        })
+        .catch(error => {
+            console.error("Error getting cantons:", error); // Error handling
+        }
+    );
+}
+
+// Gets coordinates from name.
 function getCoordinatesFromName() {
     // Ask for the Location
     $.ajax({
@@ -259,7 +354,7 @@ function getCoordinatesFromName() {
             const longitude = geoJson["coordinates"][0]
 
             const latlng = new google.maps.LatLng(latitude, longitude);
-            
+
             map.setCenter(latlng);
             updateMarkerPosition(latlng);
         },
@@ -268,3 +363,4 @@ function getCoordinatesFromName() {
         }
     });
 }
+
