@@ -8,14 +8,11 @@ using System.Threading.Tasks;
 
 namespace functional_tests
 {
-    public class Login : GeneralPageElement
+    internal class Login : MainPage
     {
-        protected WebDriver _driver;
-        public string url => "https://localhost:7119/Identity/Account/Login";
-
         public Login(WebDriver driver) : base(driver)
         {
-            _driver = driver;
+            url = "https://localhost:7119/Identity/Account/Login";
         }
 
         public void SingIn(string email, string password)

@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace functional_tests.Shared
 {
-    public class GeneralPageElement
+    public class GeneralPageElements
     {
         protected IWebDriver driver { get; }
 
-        public GeneralPageElement(IWebDriver newDriver)
+        protected string url { get; set; } = "https://localhost:7119";
+
+        public GeneralPageElements(IWebDriver newDriver)
         {
             driver = newDriver;
         }
@@ -64,7 +65,7 @@ namespace functional_tests.Shared
             return driver.FindElement(By.Id("Input_Email"));
         }
 
-        protected IWebElement PasswordInput ()
+        protected IWebElement PasswordInput()
         {
             return driver.FindElement(By.Id("psw"));
         }
