@@ -65,12 +65,20 @@ namespace LoCoMPro.Pages
             // Gets the Data From data base 
             Reports = await reports.ToListAsync();
         }
-
         public IActionResult OnPostAcceptReport(string reportData)
         {
             CultureInfo culture = CultureInfo.InvariantCulture;
+            string[] values = SplitString(reportData, '\x1F');
+            string reporterId = values[0], contributorId = values[1], productName = values[2],
+                storeName = values[3], submitionDate = values[4], cantonName = values[5],
+                provinceName = values[6], reportDate = values[7];
+            int reportState = int.Parse(values[8]);
 
-            var report = getReportToUpdate(reportData);
+            DateTime reportSubmitDate = DateTime.Parse(reportDate);
+            DateTime contributionDate = DateTime.Parse(submitionDate);
+
+            var report = getReportToUpdate(reporterId, contributorId, productName, storeName, contributionDate,
+                cantonName, provinceName, reportSubmitDate);
 
             report.ReportState = 2;
 
@@ -79,30 +87,28 @@ namespace LoCoMPro.Pages
             return new JsonResult("OK");
         }
 
-        public Report getReportToUpdate (string reportData) {
-            string[] values = SplitString(reportData, '\x1F');
-            string reporterId = values[0], contributorId = values[1], productName = values[2],
-                storeName = values[3], submitionDate = values[4], cantonName = values[5],
-                provinceName = values[6], reportDate = values[7], reportState = values[8];
 
-            DateTime reportSubmitDate = DateTime.Parse(reportDate);
-            DateTime contributionDate = DateTime.Parse(submitionDate); 
-
-            var report = _context.Reports.FirstOrDefault(r =>
-                r.ReporterId == reporterId &&
-                r.ContributorId == contributorId &&
-                r.ProductName == productName &&
-                r.StoreName == storeName &&
-                r.SubmitionDate == contributionDate &&
-                r.CantonName == cantonName &&
-                r.ProvinceName == provinceName &&
-                r.ReportDate == reportSubmitDate &&
-                r.ReportState.ToString() == reportState
-            );
-            if (report == null) {
-                System.Diagnostics.Debug.WriteLine("Report is null when trying to update it");
-            }
-            return report;
+        /// <summary>
+        /// Gets the register on which an interaction was performed.
+        /// </summary>
+        /// <param name="contributorId">ID of the user associated with the register.</param>
+        /// <param name="productName">Product associated with the register.</param>
+        /// <param name="storeName">Store associated with the register.</param>
+        /// <param name="registSubmitDate">Date and time the registration was made.</param>
+        /// <returns>Register to update.</returns>
+        public Report getReportToUpdate(string reporterId, string contributorId,
+            string productName, string storeName, DateTime submitionDate, string cantonName,
+                string provinceName, DateTime reportDate)
+        {
+            return _context.Reports.Include(r => r.Reporter).First(r => r.ReporterId == reporterId
+                && r.ContributorId == contributorId
+                && r.ProductName == productName
+                && r.StoreName == storeName
+                && r.SubmitionDate == submitionDate
+                && r.CantonName == cantonName
+                && r.ProvinceName == provinceName
+                && r.ReportDate == reportDate
+                );
         }
 
         /// <summary>
