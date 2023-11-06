@@ -1,14 +1,16 @@
-﻿using OpenQA.Selenium.Chrome;
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace functional_tests
+namespace functional_tests.Shared
 {
     public class SignInTest
     {
+        // Test by Geancarlo Rivera Hernández C06516 | Sprint 2
         [Test]
         public void SignInWithValidUserAccount()
         {
@@ -21,11 +23,11 @@ namespace functional_tests
             var password = "Geanca567!";
 
             // Act
-
             login.SingIn(email, password);
 
             // Assert
-            //Assert.That(login.IsLoggedIn(), Is.True);
+            IWebElement userLogged = driver.FindElement(By.Id("usr-logged"));
+            Assert.IsNotNull(userLogged);
         }
     }
 }

@@ -1,12 +1,11 @@
-﻿using functional_tests.Shared;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace functional_tests
+namespace functional_tests.Shared
 {
     internal class Login : MainPage
     {
