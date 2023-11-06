@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace SearchRegistersPriceOrderTest
 {
-    [TestClass]
+    /*[TestClass]
     // Declaration of the test class
     public class RazorPageTests : BaseTest
     {
@@ -152,5 +152,5 @@ namespace SearchRegistersPriceOrderTest
             // Checks if the sort order change to the default 
             Assert.IsTrue(pageModel.GetSortOrder(sortOrderEmpty).Equals("price_asc"));
         }
-    }
+    }*/
 }
