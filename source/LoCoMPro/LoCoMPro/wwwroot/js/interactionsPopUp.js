@@ -55,13 +55,6 @@ function openInteractionsPopupMod(openButton) {
 
     // Load the images in the pop up
     loadRegisterImages(imagesData)
-
-    // Set the information of the report button
-    //document.getElementById('reportIcon').src = '/img/DesactiveReportIcon.svg';
-
-    // Sets the information for the review function and report
-    //setReviewedValue(lastReviewValue);
-    //setReportedValue(lastReportState);
 }
 
 /// <summary>
@@ -186,12 +179,14 @@ function acceptReport() {
             hideReport(reportNumber);
             console.log('Report updated successfully' + data);
             showFeedbackMessage('El reporte de ha sido aprobado exitosamente', 'feedbackMessage');
+            updateReportList();
         },
         error: function (error) {
             console.error('Error saving report: ' + error);
             showFeedbackMessage('Error al aceptar el reporte ', 'feedbackMessage');
         }
     });
+    closeInteractionsPopup();
 }
 
 /// <summary>
@@ -221,13 +216,30 @@ function rejectReport() {
             hideReport(reportNumber);
             console.log('Report updated successfully' + data);
             showFeedbackMessage('El reporte de ha sido aprobado exitosamente', 'feedbackMessage');
+            updateReportList();
         },
         error: function (error) {
             console.error('Error saving report: ' + error);
             showFeedbackMessage('Error al aceptar el reporte ', 'feedbackMessage');
         }
     });
+    closeInteractionsPopup();
 } 
+
+function updateReportList() {
+    var reportCount = parseInt(document.getElementById("report-count").textContent);
+
+    --reportCount;
+
+    document.getElementById("report-count").textContent = reportCount;
+
+    if (reportCount == 0) {
+        document.getElementById("cant-reportes").style.display = 'none';
+        document.getElementById("report-count").style.display = 'none';
+        document.getElementById("empty-list").style.display = 'inline-block';
+        document.getElementById("no-empty-list").style.display = 'none';
+    }
+}
 
 
 //Note: This code was adapted from the page "codepen.io" to satisfies the needs of the project. All the credit go to this page.

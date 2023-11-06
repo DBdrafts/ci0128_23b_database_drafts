@@ -23,7 +23,19 @@
 
 <div class="reported-page-body">
     <div id="feedbackMessage" class="feedback-message"></div>
-    <div class="reports-section" id="reports-results">
+    <div id="cant-reportes">
+        <h5>Cantidad de reportes: <span id="report-count">@Model.Reports.Count</span></h5>
+    </div>
+    <hr class="style-four">
+    <div class="empty-section text-center" id="empty-list"
+         style='display: @(Model.Reports.Count == 0 ? "inline-block" : "none")'>
+        <h1>¡No hay reportes que revisar!</h1>
+        <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
+    </div>
+
+
+
+    <div class="reports-section" id="no-empty-list">
         <!-- Search section title -->
         <div class="results-cont-msg" span id="results-count"></div>
 
@@ -40,11 +52,7 @@
                     <div class="textComment">Reportado por</div>
                 </li>
                 <li id="date-col">
-                    <!-- Button to sort by the date -->
-                    @{
-                        ViewBag.SortTipe = "#register-date";
-                    }
-                    @await Html.PartialAsync("_OrderButton", "Fecha de reporte")
+                    <div class="textComment">Fecha de Reporte</div>
                 </li>
             </ul>
         </nav>
@@ -128,7 +136,7 @@
                 <div class="interactions-popup-content">
                     <p><b>Aporte de:</b> <span id="popup-contributorName"></span></p>
                     <p><b>Fecha de Contribución:</b> <span id="popup-submitionDate"></span></p>
-                    <p><b>Nombre de Producto:</b> <span id="popup-prodName"></span></p>
+                    <p><b>Producto:</b> <span id="popup-prodName"></span></p>
                     <p><b>Tienda:</b> <span id="popup-store"></span></p>
                     <p><b>Precio:</b> <span id="popup-price"></span></p>
                     <p><b>Reportado por:</b> <span id="popup-reporterName"></span></p>
@@ -140,9 +148,11 @@
                     </div>
 
                     <div class="buttons-container">
-                        <button id ="acceptReport" onclick="acceptReport()">Aceptar Reporte</button>
+                        
                         <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>
+                        <button id="acceptReport" onclick="acceptReport()" style="visibility: hidden;">Aceptar</button>
                         <button id="rejectReport" onclick="rejectReport()" style="visibility: hidden;">Rechazar</button>
+                        
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <script>
@@ -155,13 +165,8 @@
                 </div>
             </div>
         </div>
-        <div class="product-pagination">
-            <!-- Pagination section -->
-            @await Html.PartialAsync("_Pagination")
-        </div>
     </div>
     <script src="~/js/ProductPage/imageChanger.js"></script>
     <script src="~/js/feedbackMessage.js"></script>
-    <script src="~/js/pagination.js"></script>
 </div>
 <!-- Pagination section -->

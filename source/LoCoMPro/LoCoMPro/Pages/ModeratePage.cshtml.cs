@@ -1,6 +1,7 @@
 using LoCoMPro.Data;
 using LoCoMPro.Models;
 using LoCoMPro.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Build.Framework;
@@ -10,11 +11,13 @@ using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
+
 namespace LoCoMPro.Pages
 {
     /// <summary>
     /// Page model for Moderate Page, accesess database to show reported registers.
     /// </summary>
+    [Authorize(Roles = "Moderator")]
     public class ModeratePageModel : LoCoMProPageModel
     {
         /// <summary>
@@ -65,6 +68,10 @@ namespace LoCoMPro.Pages
             // Gets the Data From data base 
             Reports = await reports.ToListAsync();
         }
+
+        /// <summary>
+        /// POST HTTP request. Makes the report valid, sets its status to 2 and hides it from everyone.
+        /// </summary>
         public IActionResult OnPostAcceptReport(string reportData)
         {
             CultureInfo culture = CultureInfo.InvariantCulture;
@@ -87,24 +94,53 @@ namespace LoCoMPro.Pages
             return new JsonResult("OK");
         }
 
+        /// <summary>
+        /// POST HTTP request. Makes the report invalid, sets its status to 0 and returns the register to its original state.
+        /// </summary>
+        public IActionResult OnPostRejectReport(string reportData)
+        {
+            CultureInfo culture = CultureInfo.InvariantCulture;
+            string[] values = SplitString(reportData, '\x1F');
+            string reporterId = values[0], contributorId = values[1], productName = values[2],
+                storeName = values[3], submitionDate = values[4], cantonName = values[5],
+                provinceName = values[6], reportDate = values[7];
+            int reportState = int.Parse(values[8]);
+
+            DateTime reportSubmitDate = DateTime.Parse(reportDate);
+            DateTime contributionDate = DateTime.Parse(submitionDate);
+
+            var report = getReportToUpdate(reporterId, contributorId, productName, storeName, contributionDate,
+                cantonName, provinceName, reportSubmitDate);
+
+            report.ReportState = 0;
+
+            _context.SaveChanges();
+
+            return new JsonResult("OK");
+        }
+
 
         /// <summary>
-        /// Gets the register on which an interaction was performed.
+        /// Gets the report on which an interaction was performed.
         /// </summary>
-        /// <param name="contributorId">ID of the user associated with the register.</param>
-        /// <param name="productName">Product associated with the register.</param>
-        /// <param name="storeName">Store associated with the register.</param>
-        /// <param name="registSubmitDate">Date and time the registration was made.</param>
-        /// <returns>Register to update.</returns>
+        /// <param name="reporterId">ID of the user that reported the register.</param>
+        /// <param name="contributorId">ID of the user that made the contribution.</param>
+        /// <param name="productName">Name of the product.</param>
+        /// <param name="storeName">Name of the store.</param>
+        /// <param name="submitionDate">Date and time the register was made.</param>
+        /// <param name="cantonName">Name of the canton.</param>
+        /// <param name="provinceName">Province name.</param>
+        /// <param name="reportDate">Date and time the report was made.</param>
+        /// <returns>Report to update.</returns>
         public Report getReportToUpdate(string reporterId, string contributorId,
             string productName, string storeName, DateTime submitionDate, string cantonName,
                 string provinceName, DateTime reportDate)
         {
-            return _context.Reports.Include(r => r.Reporter).First(r => r.ReporterId == reporterId
+            var reports = from r in _context.Reports select r;
+            return reports.First(r => r.ReporterId == reporterId
                 && r.ContributorId == contributorId
                 && r.ProductName == productName
                 && r.StoreName == storeName
-                && r.SubmitionDate == submitionDate
                 && r.CantonName == cantonName
                 && r.ProvinceName == provinceName
                 && r.ReportDate == reportDate
