@@ -23,15 +23,15 @@ function openInteractionsPopup(openButton) {
     // Load the images in the pop up
     loadRegisterImages(imagesData)
 
+    // Copies the validation star of the register
+    copyRegisterValidation(registerNumber);
+
     // Set the information of the report button
     document.getElementById('reportIcon').src = '/img/DesactiveReportIcon.svg';
 
     // Sets the information for the review function and report
     setReviewedValue(lastReviewValue);   
     setReportedValue(lastReportState);   
-
-    // Copies the validation star of the register
-    copyRegisterValidation(registerNumber);
 }
 
 /// <summary>

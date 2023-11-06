@@ -290,7 +290,7 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Gets and sets the review made by the User
         /// </summary>
-        public async void ObtainUserReviews(User user)
+        public void ObtainUserReviews(User user)
         {
             // If there´s is a registered user
             if (user != null)
@@ -380,7 +380,7 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Handle report interactions
         /// </summary>
-        public async void ObtainUserReports(User user)
+        public void ObtainUserReports(User user)
         {
             // If there´s is a registered user
             if (user != null)
@@ -394,7 +394,7 @@ namespace LoCoMPro.Pages
                 reports = reports.Where(x => x.StoreName != null && x.StoreName.Contains(SearchStoreName));
 
                 // Make a list with the review
-                UserReports = await reports.ToListAsync();
+                UserReports = reports.ToList();
             }
         }
 

@@ -255,12 +255,13 @@
                     </div>
                 </div>
 
+                <div class="report-icon-container">
+                    <img id="reportIcon" src="~/img/DesactiveReportIcon.svg" alt="Reportar" onclick="toggleReport()" title="Reportar registro"
+                         style='display: @(!SignInManager.IsSignedIn(User) ? "none" : "flex")' />
+                </div>
+
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <div class="report-icon-container">
-                        <img id="reportIcon" src="~/img/DesactiveReportIcon.svg" alt="Reportar" onclick="toggleReport()" title="Reportar registro" />
-                    </div>
-
                     <!-- Interactive rating code-->
                     <h5><strong>Valora el registro</strong></h5>
                     @*
