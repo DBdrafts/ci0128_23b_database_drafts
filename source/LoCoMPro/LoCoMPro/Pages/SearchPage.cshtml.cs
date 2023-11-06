@@ -117,12 +117,16 @@ namespace LoCoMPro.Pages
 
             var coordinates = new Coordinate(0.0, 0.0);
             var geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
+
             if (latitude != 0.0 && longitude != 0.0)
             {
                 coordinates = new Coordinate(longitude, latitude);
                 geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
                 AreDistancesCalculated = true;
-            }
+            }/* else if (User.geolocalizacion)
+            {
+                geolocation = User.GetHashCode();
+            }*/
             SearchResults = _context.GetSearchResults(SearchType ?? "Nombre", SearchString!, geolocation);
 
             SearchResults = SearchResults.GroupBy(r => new { r.ProductName, r.StoreName })

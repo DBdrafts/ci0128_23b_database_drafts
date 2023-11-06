@@ -9,6 +9,9 @@ var selectedMarker = null;
 
 $(document).ready(function () {
     const currentPageUrl = window.location.href;
+    if (currentPageUrl.includes('/UserInfoPage')) {
+        console.log('funciona');
+    }
     // Show the popup when the button is clicked
     $("#showPopupButton").on("click", function () {
         $("#mapPopup").show();
@@ -193,7 +196,17 @@ function saveLocation() {
         $("#locationInfo").show();
         document.getElementById("selectedProvince").value = selectedProvince;
         document.getElementById("selectedCanton").value = selectedCanton;
+    } else if (window.location.href.includes("/UserInfoPage")) {
+        $("#province-change").text(selectedProvince);
+        $("#ubicacion-change").text(`${selectedProvince}, ${selectedCanton}`);
+        try {
+            const response = updateProvinciaToUser(selectedProvince);
+            console.log('Province Updated: ', response.message);
+        } catch (error) {
+            console.error('Fail in update: ', error);
+        }
     }
+
 }
 
 function getLocationButtonText(province, canton) {
@@ -267,4 +280,27 @@ function getCoordinatesFromName() {
             console.error('Error: ', error);
         }
     });
+}
+
+function updateProvinciaToUser(province) {
+    $.ajax({
+        type: 'POST',
+        url: '/UserInfoPage?handler=UpdateProvince', // Specify the handler
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+        },
+        data: { longitude: selectedLocation.lng, latitude: selectedLocation.lat },
+
+        success: function (data) {
+            console.log('Province Updated: ', data.message);
+            return data;
+        },
+
+        error: function (error) {
+            console.error('Fail in update: ', error);
+            return data;
+        }
+    });
+
 }

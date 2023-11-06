@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
+using NetTopologySuite.Geometries;
 
 namespace LoCoMPro.Pages
 {
@@ -27,10 +28,16 @@ namespace LoCoMPro.Pages
         /// </summary>
         public User UserInPage { get; set; }
 
+
         /// <summary>
         /// Name in the province
         /// </summary>
         public string Provincia { get; set; }
+
+        public double latitud { get; set; }
+
+        public double longitud { get; set; }
+
 
         /// <summary>
         /// Name of the canton
@@ -45,25 +52,40 @@ namespace LoCoMPro.Pages
             // Set the Province string name to display
             if (UserInPage.ProvinciaName != null)
             {
+                // Set the province as the data in the model
                 Provincia = UserInPage.ProvinciaName;
             }
             else
-            {
+            {   // Else alert to user
                 Provincia = "No agregada";
             }
-            
 
             // Set the Canton string name to display 
             if (UserInPage.CantonName != null)
             {
+                // Set the Canton as the data in the model
                 Canton = UserInPage.CantonName;
             }
             else
-            {
+            {   // Else alert the user
                 Canton = "No agregada";
             }
 
 
         }
+
+        public IActionResult OnPostUpdateProvince(double longitude, double latitude)
+        {
+            //UserInPage = await _userManager.GetUserAsync(User);
+
+            var coordinates = new Coordinate(longitude, latitude);
+            var geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
+
+            latitud = latitude;
+            longitud = longitude;
+            var response = new { message = "Provincia actualizada exitosamente" };
+            return new JsonResult(response);
+        }
+
     }
 }

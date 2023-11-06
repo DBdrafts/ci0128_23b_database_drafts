@@ -9,9 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const locationPopup = document.getElementById("locationPopup"); // The popup itself
     const provinceSelect = document.getElementById("province"); // Province select
     const cantonSelect = document.getElementById("canton"); // Canton select
-    const saveLocationButton = document.getElementById("saveLocation-button"); // Button to save location
+    const saveLocationButton = document.getElementById("saveLocationMap-button"); // Button to save location
     const addProductForm = document.getElementById("addProductForm"); // Form
-    const closePopupButton = document.getElementById("closePopup-button"); // Button to close the popup
+    const closePopupButton = document.getElementById("closePopupMap-button"); // Button to close the popup
     var span = document.getElementById("buttonSpan");
     const currentPageUrl = window.location.href;
 
@@ -135,6 +135,55 @@ document.addEventListener("DOMContentLoaded", function () {
                 span.textContent = text;
             }
             locationPopup.style.display = "none"; // Hide the popup after saving the location
+
+            // Update the Province property in the user model
+            try {
+                const response = updateProvinciaToUser(selectedProvince);
+                console.log('Province Updated: ', response.message);
+            } catch (error) {
+                console.error('Fail in update: ', error);
+            }
         }
+
+        
     });
+
+    // Add a change event to the province select
+    //provinceSelect.addEventListener("change", async function () {
+    //    const selectedProvince = provinceSelect.value;
+
+    //    // Set the province
+    //    const selectedProvinceInput = document.getElementById("selectedProvinceInput");
+    //    selectedProvinceInput.value = selectedProvince;
+
+    //    // Update the Province property in the user model
+    //    try {
+    //        const response = await updateProvinciaToUser(selectedProvince);
+    //        console.log('Province Updated: ', response.message);
+    //    } catch (error) {
+    //        console.error('Fail in update: ', error);
+    //    }
+    //});
+
+    function updateProvinciaToUser(provice) {
+        $.ajax({
+            type: 'POST',
+            url: '/UserInfoPage?handler=UpdateProvince', // Specify the handler
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            data: { provice:provice },
+
+            success: function (data) {
+                console.log('Province Updated: ', data.message);
+            },
+
+            error: function (error) {
+                console.error('Fail in update: ', error);
+            }
+        });
+
+    }
+
 });
