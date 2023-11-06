@@ -1,0 +1,40 @@
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Edge;
+
+namespace functional_tests
+{
+    public class AddToUserProductListTest
+    {
+        private IWebDriver driver;
+
+        [SetUp]
+        public void Setup()
+        {
+            var options = new EdgeOptions();
+            //options.UseChronium = true;
+            driver = new EdgeDriver(options);
+        }
+
+        [Test]
+        public void AddToUserProductList()
+        {
+            driver.Navigate().GoToUrl("https://www.selenium.dev/selenium/web/web-form.html");
+
+            var title = driver.Title;
+
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(500);
+
+            var textBox = driver.FindElement(By.Name("my-text"));
+            var submitButton = driver.FindElement(By.TagName("button"));
+
+            textBox.SendKeys("Selenium");
+            submitButton.Click();
+
+            var message = driver.FindElement(By.Id("message"));
+            var value = message.Text;
+
+            driver.Quit();
+        }
+    }
+}
