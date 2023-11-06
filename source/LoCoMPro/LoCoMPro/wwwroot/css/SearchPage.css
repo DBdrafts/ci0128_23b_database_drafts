@@ -66,7 +66,7 @@
     width: 100%;
     justify-content:space-between;
     list-style: none;
-    margin: 10px 0px;
+    margin: 5px 0px;
     min-width: 950px;
 }
 
@@ -75,7 +75,7 @@
     font-size: x-large;
     flex: 0 0 0%;
     text-align: center;
-    margin: 0px 25px 0px 0px;
+    margin: 0px 35px 0px 0px;
     padding: 0px 15px;
 }
 
@@ -195,9 +195,17 @@
 }
 
 #product-col {
-    margin-right: 60px;
+    margin-right: 115px;
 }
 
-#brand-col{
+#brand-col, #model-col{
     margin: 0px -10px 0px 0px;
+}
+
+#register-product-name {
+    width: 25%;
+}
+
+#location-col {
+    margin: 0px 5px 0px 0px;
 }

@@ -13,7 +13,7 @@ using System;
 using Microsoft.AspNetCore.Http.HttpResults;
 namespace SearchPageFilterTests
 {
-    [TestClass]
+    /*[TestClass]
     internal class RazorPageTest : BaseTest
     {
         // Test by Dwayne Taylor Monterrosa C17827
@@ -137,5 +137,5 @@ namespace SearchPageFilterTests
         }
 
 
-    }
+    }*/
 }

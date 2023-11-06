@@ -119,9 +119,9 @@ namespace LoCoMPro.Pages
         public bool AlreadyInProductList { get; set; }
 
         /// <summary>
-        /// Number of results.
+        /// Average review value of the registers
         /// </summary>
-        public int ResultsNumber;
+        public IList<float> registerAverageReview { get; set; }
 
         public User UserInPage;
 
@@ -198,8 +198,6 @@ namespace LoCoMPro.Pages
             List<string> userIds = registers.Select(r => r.ContributorId).Distinct().ToList()!;
             Users = await _context.Users.Where(u => userIds.Contains(u.Id)).ToListAsync();
 
-            ResultsNumber = registers.Count();
-
             // Gets the Data From data base 
             Registers = await registers.ToListAsync();
 
@@ -211,6 +209,9 @@ namespace LoCoMPro.Pages
 
             // Prepare the list data needed
             PrepareProductListData();
+
+            // Gets the average review value of the registers
+            ObtainAverageReviewValues();
         }
 
         /// <summary>
@@ -274,9 +275,22 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
+        /// Obtains the averages review values of the registers
+        /// </summary>
+        public void ObtainAverageReviewValues()
+        {
+            registerAverageReview = new List<float>();
+            // Gets the average value for each register
+            foreach (Register register in Registers) {
+                registerAverageReview.Add(_context.GetAverageReviewValue(register.ContributorId
+                    , register.ProductName, register.StoreName, register.SubmitionDate));
+            }
+        }
+
+        /// <summary>
         /// Gets and sets the review made by the User
         /// </summary>
-        public async void ObtainUserReviews(User user)
+        public void ObtainUserReviews(User user)
         {
             // If there´s is a registered user
             if (user != null)
@@ -366,7 +380,7 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Handle report interactions
         /// </summary>
-        public async void ObtainUserReports(User user)
+        public void ObtainUserReports(User user)
         {
             // If there´s is a registered user
             if (user != null)
@@ -380,7 +394,7 @@ namespace LoCoMPro.Pages
                 reports = reports.Where(x => x.StoreName != null && x.StoreName.Contains(SearchStoreName));
 
                 // Make a list with the review
-                UserReports = await reports.ToListAsync();
+                UserReports = reports.ToList();
             }
         }
 

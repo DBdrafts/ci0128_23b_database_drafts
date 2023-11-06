@@ -168,14 +168,21 @@
             <li>
                 <div class="textComment">Comentarios</div>
             </li>
-
+            <li>
+                <!-- Button to sort by the veracity -->
+                @{ViewBag.SortTipe = "#register-veracity";}
+                @await Html.PartialAsync("_OrderButton", "Veracidad")
+            </li>
 		</ul>
 	</nav>
 
     <ul class="register-section">
         <!-- Individual registers -->
-        @foreach (var register in Model.Registers)
+        @for (int i = 0; i < Model.Registers.Count(); i++)
         {
+            var register = Model.Registers.ElementAt(i);
+
+
             <!-- Search result section -->
             <!-- Individual registers -->
             var user = Model.Users.FirstOrDefault(u => u.Id == register.ContributorId)?.UserName;
@@ -184,7 +191,7 @@
             if (reportState == null) reportState = -1;
             var registerKeys = $"{register.SubmitionDate}{s}{register.ContributorId}{s}{register.ProductName}" +
             $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToShortDateString()}" +
-            $"{s}{user}{s}{register.Comment}{s}{reviewValue}{s}{reportState}";
+            $"{s}{user}{s}{register.Comment}{s}{reviewValue}{s}{reportState}{s}{@i}";
 
             // images in registers
             int imagecount = 0;
@@ -202,23 +209,33 @@
                 }
             }
 
-            <li class="register-block align register-block-pagination">
-                <a>
-                    <span id="register-date" value="@register.SubmitionDate.Date">
-                        @register.SubmitionDate.ToShortDateString()
-                    </span>
-                    <span id="register-price" value="@register.Price">
-                        ₡ @register.Price.ToString("N0")
-                    </span>
-                    <span id="register-comment" value="@register.Comment">
-                        @Html.DisplayFor(modelItem => register.Comment)
-                    </span>
-                    <div class="text-center align">
-                        <button class="open-interactions-button" data-register-id="@registerKeys" images-register-id="@registerImages" onclick="openInteractionsPopup(this)">
-                            <img src="~/img/MoreIcon.svg" alt="Más opciones">
-                        </button>
+            // Veracity values
+            float veracityValue = Model.registerAverageReview[i];
+
+            <li class="register-block register-block-pagination">
+                <div class="register-column short-column" id="register-date" value="@register.SubmitionDate.Date">
+                    @register.SubmitionDate.ToShortDateString()
+                </div>
+                <div class="register-column short-column align-right" id="register-price" value="@register.Price">
+                    ₡ @register.Price.ToString("N0")
+                </div>
+                <div class="register-column" id="register-comment" value="@register.Comment">
+                    @Html.DisplayFor(modelItem => register.Comment)
+                </div>
+                <div class="register-section-stars">
+                    <div class="veracity-stars register-column" id="register-veracity" value="@veracityValue">
+                        <span id="register_veracity_@i">
+                            @{ViewBag.VeracityValue = veracityValue;}
+                            @await Html.PartialAsync("_VeracityStars")
+                        </span>
                     </div>
-                </a>
+                </div>
+                <div class="interaction-button">
+                    <button class="open-interactions-button" id="open-popup-button-@i" data-register-id="@registerKeys"
+                            data-index="@i" images-register-id="@registerImages" onclick="openInteractionsPopup(this)">
+                        <img src="~/img/MoreIcon.svg" alt="Más opciones">
+                    </button>
+                </div>
             </li>
         }
     </ul>
@@ -230,6 +247,7 @@
                 <p><b>Fecha:</b> <span id="popup-submitionDate"> </span></p>
                 <p><b>Precio:</b> <span id="popup-price"></span></p>
                 <p><b>Aporde de:</b> <span id="popup-userName"></span></p>
+                <p><b>Veracidad:</b> <span class="veracity-stars" id="popup-veracity"></span></p>
                 <p><b>Comentario:</b> <span id="popup-comment"></span></p>
 
                 <div class="carousel-section-pop-up">
@@ -237,12 +255,13 @@
                     </div>
                 </div>
 
+                <div class="report-icon-container">
+                    <img id="reportIcon" src="~/img/DesactiveReportIcon.svg" alt="Reportar" onclick="toggleReport()" title="Reportar registro"
+                         style='display: @(!SignInManager.IsSignedIn(User) ? "none" : "flex")' />
+                </div>
+
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <div class="report-icon-container">
-                        <img id="reportIcon" src="~/img/DesactiveReportIcon.svg" alt="Reportar" onclick="toggleReport()" title="Reportar registro" />
-                    </div>
-
                     <!-- Interactive rating code-->
                     <h5><strong>Valora el registro</strong></h5>
                     @*
