@@ -8,6 +8,7 @@
     ViewBag.ShowLogoLink = true;
     var user = await UserManager.GetUserAsync(User);
     var email = await UserManager.GetEmailAsync(user!);
+    
 }
 
 <head>
@@ -16,6 +17,7 @@
     <title>Perfil del usuario</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="~/css/UserInfoPage.css" />
+    <script src="~/js/location.js" defer></script>
 </head>
 <div class="logo-image">
     <img src="~/img/LoCoMProLogo.svg" alt="LoCoMPro Logo">
@@ -25,12 +27,13 @@
         <img src="~/img/ProfileIcon.svg" alt="User Logo">
     </div>
     <div class="user-information">
-        <div id="user-label">Nombre de Usuario</div>
-        <div id="username">@user.ToString()</div>
-        <div id="email-label">Correo Electrónico</div>
-        <div id="email">@email</div>
+        <div id="simple-label">Nombre de Usuario: <strong>@user.ToString()</strong></div>
+        <div id="simple-label">Correo Electrónico: <strong>@email</strong></div>
+        <div id="simple-label">Provicia de preferencia: <strong>@Model.Provincia</strong></div>
+        <div id="simple-label">Canton de preferencia: <strong>@Model.Canton</strong></div>
     </div>
     <div class="changeInfo-buttons">
+        <button class="button-general" id="showPopupButton "> Seleccionar ubicación de preferencia</button>
         <a asp-area="Identity" asp-page="/Account/ChangeUserName" asp-route-email="@email">
             <button class="button-general" id="changeUsername">Cambiar nombre de usuario</button>
         </a>
