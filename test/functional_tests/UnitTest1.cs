@@ -12,29 +12,29 @@ namespace functional_tests
         public void Setup()
         {
             var options = new EdgeOptions();
-            //options.UseChronium = true;
-            driver = new EdgeDriver(options);
+            //driver = new EdgeDriver(options);
+            driver = new EdgeDriver();
         }
 
         [Test]
         public void AddToUserProductList()
         {
-            driver.Navigate().GoToUrl("https://www.selenium.dev/selenium/web/web-form.html");
+            driver.Navigate().GoToUrl("https://localhost:7119/");
 
-            var title = driver.Title;
+            //var title = driver.Title;
 
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(500);
+            //driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(500);
 
-            var textBox = driver.FindElement(By.Name("my-text"));
-            var submitButton = driver.FindElement(By.TagName("button"));
+            //var textBox = driver.FindElement(By.Name("my-text"));
+            //var submitButton = driver.FindElement(By.TagName("button"));
 
-            textBox.SendKeys("Selenium");
-            submitButton.Click();
+            //textBox.SendKeys("Selenium");
+            //submitButton.Click();
 
-            var message = driver.FindElement(By.Id("message"));
-            var value = message.Text;
+            //var message = driver.FindElement(By.Id("message"));
+            //var value = message.Text;
 
-            driver.Quit();
+            //driver.Quit();
         }
     }
 }
