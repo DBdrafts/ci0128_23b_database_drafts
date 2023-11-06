@@ -174,18 +174,17 @@ function saveInteractions() {
 /// </summary>
 function acceptReport() {
 
-    hideReport(reportNumber);
-
     $.ajax({
         type: 'POST',
-        url: '/ModeratePage?handler=acceptReport',
+        url: '/ModeratePage?handler=AcceptReport',
         beforeSend: function (xhr) {
             xhr.setRequestHeader("XSRF-TOKEN",
                 $('input:hidden[name="__RequestVerificationToken"]').val());
         },
         data: { reportData: reportData },
         success: function (data) {
-            console.log('Product removed successfully' + data);
+            hideReport(reportNumber);
+            console.log('Report updated successfully' + data);
             showFeedbackMessage('El reporte de ha sido aprobado exitosamente', 'feedbackMessage');
         },
         error: function (error) {
@@ -209,18 +208,18 @@ function hideReport(reportNumber) {
 /// The moderator rejects the report, hiding the report and setting its ReportState to 0
 /// </summary>
 function rejectReport() {
-    hideReport(reportNumber);
-
+    
     $.ajax({
         type: 'POST',
-        url: '/ModeratePage?handler=rejectReport',
+        url: '/ModeratePage?handler=RejectReport',
         beforeSend: function (xhr) {
             xhr.setRequestHeader("XSRF-TOKEN",
                 $('input:hidden[name="__RequestVerificationToken"]').val());
         },
         data: { reportData: reportData },
         success: function (data) {
-            console.log('Product removed successfully' + data);
+            hideReport(reportNumber);
+            console.log('Report updated successfully' + data);
             showFeedbackMessage('El reporte de ha sido aprobado exitosamente', 'feedbackMessage');
         },
         error: function (error) {

@@ -4,8 +4,10 @@ using LoCoMPro.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Build.Framework;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace LoCoMPro.Pages
@@ -51,6 +53,7 @@ namespace LoCoMPro.Pages
             registers = registers.Include(r => r.Images);
 
             var reports = from r in _context.Reports
+                          where r.ReportState == 1
                             select r;
 
             var users = _context.Users
@@ -62,6 +65,60 @@ namespace LoCoMPro.Pages
             // Gets the Data From data base 
             Reports = await reports.ToListAsync();
         }
-        
+
+        public IActionResult OnPostAcceptReport(string reportData)
+        {
+            CultureInfo culture = CultureInfo.InvariantCulture;
+
+            var report = getReportToUpdate(reportData);
+
+            report.ReportState = 2;
+
+            _context.SaveChanges();
+
+            return new JsonResult("OK");
+        }
+
+        public Report getReportToUpdate (string reportData) {
+            string[] values = SplitString(reportData, '\x1F');
+            string reporterId = values[0], contributorId = values[1], productName = values[2],
+                storeName = values[3], submitionDate = values[4], cantonName = values[5],
+                provinceName = values[6], reportDate = values[7], reportState = values[8];
+
+            DateTime reportSubmitDate = DateTime.Parse(reportDate);
+            DateTime contributionDate = DateTime.Parse(submitionDate); 
+
+            var report = _context.Reports.FirstOrDefault(r =>
+                r.ReporterId == reporterId &&
+                r.ContributorId == contributorId &&
+                r.ProductName == productName &&
+                r.StoreName == storeName &&
+                r.SubmitionDate == contributionDate &&
+                r.CantonName == cantonName &&
+                r.ProvinceName == provinceName &&
+                r.ReportDate == reportSubmitDate &&
+                r.ReportState.ToString() == reportState
+            );
+            if (report == null) {
+                System.Diagnostics.Debug.WriteLine("Report is null when trying to update it");
+            }
+            return report;
+        }
+
+        /// <summary>
+        /// Splits a string into an array of substrings based on the specified delimiter character.
+        /// </summary>
+        /// <param name="input">The input string to split.</param>
+        /// <param name="delimiter">The character used as the delimiter.</param>
+        /// <returns>An array of substrings created by splitting the input string.</returns>
+        internal static string[] SplitString(string input, char delimiter)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                throw new ArgumentException("Input string cannot be empty or null.");
+            }
+
+            return input.Split(delimiter);
+        }
     }
 }

@@ -302,7 +302,7 @@ namespace LoCoMPro.Data
                         , Reporter = users[GenerateRandom(0, users.Count)]
                         , ReportDate = new DateTime(2024, 2, 15, 12, 0, 0, DateTimeKind.Utc)
                         , CantonName = registers[registerIndex].CantonName!
-                        , ProvinceName = registers[registerIndex].ProvinciaName!, ReportState = 0});
+                        , ProvinceName = registers[registerIndex].ProvinciaName!, ReportState = 1});
             }
 
             context.Reports.AddRange(reports);

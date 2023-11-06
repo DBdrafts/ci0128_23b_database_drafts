@@ -127,7 +127,7 @@
             <div class="interactions-popup">
                 <div class="interactions-popup-content">
                     <p><b>Aporte de:</b> <span id="popup-contributorName"></span></p>
-                    <p><b>F.Contribución:</b> <span id="popup-submitionDate"></span></p>
+                    <p><b>Fecha de Contribución:</b> <span id="popup-submitionDate"></span></p>
                     <p><b>Nombre de Producto:</b> <span id="popup-prodName"></span></p>
                     <p><b>Tienda:</b> <span id="popup-store"></span></p>
                     <p><b>Precio:</b> <span id="popup-price"></span></p>
@@ -140,13 +140,14 @@
                     </div>
 
                     <div class="buttons-container">
-                        <button class="interactions-close-button" onclick="acceptReport()">Aceptar Reporte</button>
+                        <button id ="acceptReport" onclick="acceptReport()">Aceptar Reporte</button>
                         <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>
-                        <button id="saveButton" onclick="rejectReport()" style="visibility: hidden;">Rechazar</button>
+                        <button id="rejectReport" onclick="rejectReport()" style="visibility: hidden;">Rechazar</button>
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <script>
-                                document.getElementById("saveButton").style.visibility = "visible";
+                                document.getElementById("rejectReport").style.visibility = "visible";
+                                document.getElementById("acceptReport").style.visibility = "visible";
                             </script>
                         }
 
