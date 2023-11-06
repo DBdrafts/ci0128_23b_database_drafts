@@ -31,7 +31,37 @@ function openInteractionsPopup(openButton) {
 }
 
 function openInteractionsPopupMod(openButton) {
+    var interactionsPopup = document.querySelector('.interactions-popup');
+    interactionsPopup.style.display = 'block';
+    reportData = openButton.getAttribute('report-data');
+    reportNumber = openButton.getAttribute('report-number');
 
+    // Gets the register data
+    var [ReporterId, ContributorId, ProductName, StoreName, SubmitionDate, CantonName,
+        ProvinceName, ReportDate, ReportState, reporterName, contributorName, price] = reportData.split(String.fromCharCode(31));
+
+    
+
+    // Sets the register data
+    document.getElementById('popup-contributorName').textContent = contributorName;
+    document.getElementById('popup-submitionDate').textContent = SubmitionDate;
+    document.getElementById('popup-prodName').textContent = ProductName;
+    document.getElementById('popup-store').textContent = StoreName;
+    document.getElementById('popup-price').textContent = '₡' + price;
+    document.getElementById('popup-reporterName').textContent = reporterName;
+
+    // Set the images data
+    var imagesData = openButton.getAttribute('images-register-id').split(String.fromCharCode(31));
+
+    // Load the images in the pop up
+    loadRegisterImages(imagesData)
+
+    // Set the information of the report button
+    //document.getElementById('reportIcon').src = '/img/DesactiveReportIcon.svg';
+
+    // Sets the information for the review function and report
+    //setReviewedValue(lastReviewValue);
+    //setReportedValue(lastReportState);
 }
 
 /// <summary>
@@ -139,6 +169,66 @@ function saveInteractions() {
     }
     closeInteractionsPopup();
 }
+/// <summary>
+/// The moderator accepts the report, hiding the report and setting its ReportState to 2
+/// </summary>
+function acceptReport() {
+
+    hideReport(reportNumber);
+
+    $.ajax({
+        type: 'POST',
+        url: '/ModeratePage?handler=acceptReport',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+        },
+        data: { reportData: reportData },
+        success: function (data) {
+            console.log('Product removed successfully' + data);
+            showFeedbackMessage('El reporte de ha sido aprobado exitosamente', 'feedbackMessage');
+        },
+        error: function (error) {
+            console.error('Error saving report: ' + error);
+            showFeedbackMessage('Error al aceptar el reporte ', 'feedbackMessage');
+        }
+    });
+}
+
+/// <summary>
+/// Hides the report visually from the moderator
+/// </summary>
+function hideReport(reportNumber) {
+    // Hides the entry of the visual list that have this index
+    var reportItem = document.getElementById("report-item-" + reportNumber);
+    if (reportItem) {
+        reportItem.style.display = "none";
+    }
+}
+/// <summary>
+/// The moderator rejects the report, hiding the report and setting its ReportState to 0
+/// </summary>
+function rejectReport() {
+    hideReport(reportNumber);
+
+    $.ajax({
+        type: 'POST',
+        url: '/ModeratePage?handler=rejectReport',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+        },
+        data: { reportData: reportData },
+        success: function (data) {
+            console.log('Product removed successfully' + data);
+            showFeedbackMessage('El reporte de ha sido aprobado exitosamente', 'feedbackMessage');
+        },
+        error: function (error) {
+            console.error('Error saving report: ' + error);
+            showFeedbackMessage('Error al aceptar el reporte ', 'feedbackMessage');
+        }
+    });
+} 
 
 
 //Note: This code was adapted from the page "codepen.io" to satisfies the needs of the project. All the credit go to this page.

@@ -25,11 +25,14 @@ namespace LoCoMPro.Pages
             : base(context, configuration) { }
 
 
+        /// <summary>
+        /// List of the registers that exist in the database.
+        /// </summary>
+        public IEnumerable<Register>? Registers { get; set; } = new List<Register>();
 
         /// <summary>
         /// Result of the query.
         /// </summary>
-
         public IList<Report>? Reports { get; set; } = new List<Report>();
 
         /// <summary>
@@ -42,6 +45,11 @@ namespace LoCoMPro.Pages
         /// </summary>
         public async Task OnGetAsync(int? pageIndex)
         {
+            var registers = from r in _context.Registers
+                            select r;
+
+            registers = registers.Include(r => r.Images);
+
             var reports = from r in _context.Reports
                             select r;
 
@@ -50,9 +58,10 @@ namespace LoCoMPro.Pages
                 .ToList();
             Users = users;
 
+            Registers = await registers.ToListAsync();
             // Gets the Data From data base 
             Reports = await reports.ToListAsync();
         }
-
+        
     }
 }
