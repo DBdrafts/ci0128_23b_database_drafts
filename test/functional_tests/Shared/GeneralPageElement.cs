@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace functional_tests.Shared
 {
-    internal class GeneralPageElement
+    public class GeneralPageElement
     {
         protected IWebDriver driver { get; }
 
@@ -69,7 +69,7 @@ namespace functional_tests.Shared
             return driver.FindElement(By.Id("psw"));
         }
 
-        protected IWebElement SubmitLogInButton()
+        protected IWebElement SignInButton()
         {
             return driver.FindElement(By.Id("iniSesion"));
         }
