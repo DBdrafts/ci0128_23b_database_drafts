@@ -46,7 +46,9 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
-
+.pop-up-form {
+    width: fit-content;
+}
 /* Style for the login button */
 #login-button {
     background-color: #F5AA38;
@@ -59,12 +61,24 @@ button.accept-policy {
 
 /* Style for the logout button */
 #logout-button {
+    margin-top: 5px;
     background-color: #F87474;
 }
 
 /* Style for the logout button when the cursor is on the button */
 #logout-button:hover {
     background-color: #E25A5A;
+}
+
+/* Style for the logout button */
+#perfil-button {
+    border: 1px #BABAB8 solid;
+    background-color: white;
+}
+
+/* Style for the logout button when the cursor is on the button */
+#perfil-button:hover {
+    background-color: #e5e5e5;
 }
 
 /* Style for the register button */
@@ -93,6 +107,12 @@ button.accept-policy {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     z-index: 1;
     padding: 15px;
+    min-width: 175px;
+}
+
+#popup-logged button {
+    width: 80%;
+    height: auto;
 }
 
 /* Style for the PopUp text */

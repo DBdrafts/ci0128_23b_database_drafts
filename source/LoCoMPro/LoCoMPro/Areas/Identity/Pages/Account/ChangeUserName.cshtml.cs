@@ -1,4 +1,4 @@
-ï»¿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
@@ -11,15 +11,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using LoCoMPro.Data;
 
-namespace LoCoMPro.Areas.Identity.Pages.Account.Manage
+namespace LoCoMPro.Areas.Identity.Pages.Account
 {
-    public class ChangePasswordModel : PageModel
+    public class ChangeUserNameModel : PageModel
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<ChangePasswordModel> _logger;
 
-        public ChangePasswordModel(
+        public ChangeUserNameModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILogger<ChangePasswordModel> logger)
@@ -28,6 +28,11 @@ namespace LoCoMPro.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
             _logger = logger;
         }
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        public string UserName {  get; set; } 
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -54,28 +59,22 @@ namespace LoCoMPro.Areas.Identity.Pages.Account.Manage
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [DataType(DataType.Password)]
-            [Display(Name = "Current password")]
-            public string OldPassword { get; set; }
+            [DataType(DataType.Text)]
+            [StringLength(12, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
+            [Display(Name = "User Name")]
+            public string NewUserName { get; set; }
+        }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
-            [DataType(DataType.Password)]
-            [Display(Name = "New password")]
-            public string NewPassword { get; set; }
+        internal async Task LoadAsync(User user)
+        {
+            var username = user.ToString();
+            UserName = username;
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-            [DataType(DataType.Password)]
-            [Display(Name = "Confirm new password")]
-            [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
-            public string ConfirmPassword { get; set; }
+            Input = new InputModel
+            {
+                NewUserName = username,
+            };
+
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -86,12 +85,7 @@ namespace LoCoMPro.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var hasPassword = await _userManager.HasPasswordAsync(user);
-            if (!hasPassword)
-            {
-                return RedirectToPage("./SetPassword");
-            }
-
+            await LoadAsync(user);
             return Page();
         }
 
@@ -108,10 +102,10 @@ namespace LoCoMPro.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
-            if (!changePasswordResult.Succeeded)
+            var setUserNameResult = await _userManager.SetUserNameAsync(user, Input.NewUserName);
+            if (!setUserNameResult.Succeeded)
             {
-                foreach (var error in changePasswordResult.Errors)
+                foreach (var error in setUserNameResult.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
@@ -119,8 +113,8 @@ namespace LoCoMPro.Areas.Identity.Pages.Account.Manage
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
+            _logger.LogInformation("User changed their userName successfully");
+            StatusMessage = "Su nombre de usuario ha sido cambiado con éxito";
 
             return RedirectToPage();
         }
