@@ -4,21 +4,23 @@
 @using LoCoMPro.Data;
 @inject UserManager<User> UserManager
 @{
-    ViewBag.ShowSearchBar = true;
+    ViewBag.ShowSearchBar = false;
     ViewBag.ShowLogoLink = true;
     var user = await UserManager.GetUserAsync(User);
     var email = await UserManager.GetEmailAsync(user!);
-    
 }
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil del usuario</title>
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="~/css/UserInfoPage.css" />
+    <link rel="stylesheet" href="~/css/LocationButton.css" />
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBMFkBOkHqUiPh9GoSqq8F6h1RZDNRSJ8&libraries=places&region=CR"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/js/location.js" defer></script>
 </head>
+
 <div class="logo-image">
     <img src="~/img/LoCoMProLogo.svg" alt="LoCoMPro Logo">
 </div>
@@ -29,11 +31,11 @@
     <div class="user-information">
         <div id="simple-label">Nombre de Usuario: <strong>@user.ToString()</strong></div>
         <div id="simple-label">Correo Electrónico: <strong>@email</strong></div>
-        <div id="simple-label">Provicia de preferencia: <strong>@Model.Provincia</strong></div>
+        <div id="simple-label">Provincia de preferencia: <strong>@Model.Provincia</strong></div>
         <div id="simple-label">Canton de preferencia: <strong>@Model.Canton</strong></div>
     </div>
     <div class="changeInfo-buttons">
-        <button class="button-general" id="showPopupButton "> Seleccionar ubicación de preferencia</button>
+        <button class="button-general" id="showPopupButton"> Seleccionar ubicación de preferencia</button>
         <a asp-area="Identity" asp-page="/Account/ChangeUserName" asp-route-email="@email">
             <button class="button-general" id="changeUsername">Cambiar nombre de usuario</button>
         </a>
@@ -44,4 +46,21 @@
             <button class="button-general" id="changePsw">Cambiar contraseña</button>
         </a>
     </div>
+</div>
+
+<div id="mapPopup">
+    <h2 class="selectHeader">Seleccionar ubicación</h2>
+    <div id="map"></div>
+    <label for="province" id="province-label">Provincia:</label>
+    <select id="province" name="province">
+        <option value="" disabled selected hidden>Seleccionar provincia</option>
+    </select>
+    <label for="canton" id="canton-label">Cantón:</label>
+    <select id="canton" name="canton" disabled>
+        <option value="" disabled selected hidden>Seleccione una provincia primero</option>
+    </select>
+    <input type="hidden" name="latitude" value="" id="latitude">
+    <input type="hidden" name="longitude" value="" id="longitude">
+    <button type="button" id="closePopupMap-button">Cerrar</button>
+    <button type="button" id="saveLocationMap-button">Guardar</button>
 </div>
