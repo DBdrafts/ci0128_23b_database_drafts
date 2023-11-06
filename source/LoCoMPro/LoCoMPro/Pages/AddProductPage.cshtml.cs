@@ -156,7 +156,7 @@ namespace LoCoMPro.Pages
         }
 
         // Method that creates a new store if not exists
-        private Store AddStoreRelation(string storeName, string cantonName, string provinceName, Point geolocation)
+        internal Store AddStoreRelation(string storeName, string cantonName, string provinceName, Point? geolocation = null)
         {
             var store = _context.Stores.Find(storeName, cantonName, provinceName);
             if (store == null) // If the store doesn't exist
