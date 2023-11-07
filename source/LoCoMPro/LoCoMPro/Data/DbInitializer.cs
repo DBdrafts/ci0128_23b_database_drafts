@@ -24,7 +24,12 @@ namespace LoCoMPro.Data
             context.ExecuteSqlScriptFile(currentDir + "/Data/SearchRegister.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/CalculateDistance.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetSearchResults.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/CountUserRegisters.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/GetAmountImagesForProduct.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetAverageReviewValue.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/GetAverageReviewValueOnUserRegisters.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/UpdateUserRoleOnRegister.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/UpdateUserRoleOnReview.sql");
 
             List<Provincia> provincias = new();
             List<Canton> cantones = new();
