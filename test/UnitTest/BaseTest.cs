@@ -179,6 +179,14 @@ public class BaseTest
         return result;
     }
 
+    protected LoCoMProContext createLocoproContext ()
+    {
+        var options = new DbContextOptionsBuilder<LoCoMProContext>()
+            .UseInMemoryDatabase(databaseName: "InMemoryDatabase")
+            .Options;
+        return new LoCoMProContext(options);
+    }
+
     // Test to create elements of the list
     public static UserProductListElement CreateElementTest()
     {
