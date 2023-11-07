@@ -10,16 +10,16 @@ jq(document).ready(function () {
     $(".required-field").on("input", function () {
         var $this = $(this); // Capture the current field as a jQuery object
         var currentField = "#" + $this.attr("id");
-        var province = document.getElementById("selectedProvince").value;
-        var canton = document.getElementById("selectedCanton").value;
-        var store = document.getElementById("store").value;
+        var province = selectedProvince;
+        var canton = selectedCanton;
+        var store = $("#store").val();
         if (fields.includes(currentField)) {
             jq(currentField).autocomplete({
                 // Ask the database for information to fill the autocomplete
                 source: function (request, response) {
                     $.ajax({
                         url: "/AddProductPage?handler=AutocompleteSuggestions",
-                        data: { field: currentField, term: request.term, provinceName: province, cantonName: canton, storeName: store },
+                        data: { field: currentField, term: request.term, provinceName: province, cantonName: canton},
                         success: function (data) {
                             response(data);
                         }

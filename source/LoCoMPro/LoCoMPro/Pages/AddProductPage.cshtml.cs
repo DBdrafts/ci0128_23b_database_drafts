@@ -12,6 +12,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.Index.IntervalRTree;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -58,7 +60,9 @@ namespace LoCoMPro.Pages
         public List<IFormFile>? ProductImages { get; set; }
 
 
-        // Method for loading the list of categories from the database
+        /// <summary>
+        /// Loads categories from the DB.
+        /// </summary>
         private void LoadCategories()
         {
             // Retrieves all categories from the database and stores them
@@ -94,8 +98,8 @@ namespace LoCoMPro.Pages
             }
 
             // Get the information of the form
-            string provinciaName = Request.Form["selectedProvince"]!;
-            string cantonName = Request.Form["selectedCanton"]!;
+            string provinciaName = Request.Form["province"]!;
+            string cantonName = Request.Form["canton"]!;
             string storeName = Request.Form["store"]!;
             string productName = Request.Form["productName"]!;
             float price = Convert.ToSingle(Request.Form["price"]);
@@ -103,8 +107,12 @@ namespace LoCoMPro.Pages
             string? brandName = CheckNull(Request.Form["brand"]);
             string? modelName = CheckNull(Request.Form["model"]);
             string? comment = CheckNull(Request.Form["comment"]);
+            double latitude = Convert.ToDouble(Request.Form["latitude"]);
+            double longitude = Convert.ToDouble(Request.Form["longitude"]);
+            var coordinates = new Coordinate(longitude, latitude);
+            var geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
 
-
+            cantonName = ValidateCanton(provinciaName, cantonName);
             // Get the product if exists in the context
             var productToAdd = _context.Products
                 .Include(p => p.Registers)
@@ -115,7 +123,7 @@ namespace LoCoMPro.Pages
             // Get the user by their ID
             var user = _context.Users.First(u => u.Id == _userManager.GetUserId(User));
             // Check and create a new store if not exists
-            var store = AddStoreRelation(storeName, cantonName, provinciaName);
+            var store = AddStoreRelation(storeName, cantonName, provinciaName, geolocation);
             // Get category can be null
             var category = _context.Categories.FirstOrDefault(c => c.CategoryName == chosenCategory);
 
@@ -146,22 +154,36 @@ namespace LoCoMPro.Pages
             // Save all changes in the contextDB
             await _context.SaveChangesAsync();
 
+            TempData["FeedbackMessage"] = "Su registro fue agregado correctamente!";
+
             return RedirectToPage("/Index");
         }
 
-        // Method that creates a new store if not exists
-        private Store AddStoreRelation(string storeName, string cantonName, string provinceName)
+        /// <summary>
+        /// Adds a store to the context if it does not exist already.
+        /// </summary>
+        /// <param name="storeName">Name of the store to add.</param>
+        /// <param name="cantonName">Canton where the store is located.</param>
+        /// <param name="provinceName">Province where the store is located.</param>
+        /// <param name="geolocation">Geolocation of the store to add.</param>
+        /// <returns>A new store if it was not added, or found store.</returns>
+        internal Store AddStoreRelation(string storeName, string cantonName, string provinceName, Point? geolocation = null)
         {
             var store = _context.Stores.Find(storeName, cantonName, provinceName);
             if (store == null) // If the store doesn't exist
             {
                 // Create new store
-                store = new()
+                store = new Store()
                 {
                     Name = storeName,
                     Location = _context.Cantones.First(c => c.CantonName == cantonName),
+                    Geolocation = geolocation,
+
                 };
                 _context.Stores.Add(store);
+            } else if (store.Geolocation == null)
+            {
+                store.Geolocation = geolocation;
             }
             return store;
         }
@@ -221,7 +243,6 @@ namespace LoCoMPro.Pages
             dateTime = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day
                 , dateTime.Hour, dateTime.Minute, dateTime.Second, 0);
 
-            // Create new Register
             Register newRegister = new()
             {
                 SubmitionDate = dateTime,
@@ -290,13 +311,10 @@ namespace LoCoMPro.Pages
         /// <param name="term"> Term to look up and recommend data for.</param>
         /// <param name="provinceName"> Name of the Province asociated with the store.</param>
         /// <param name="cantonName"> Name of the Canton asociated with the store.</param>
-        /// <param name="storeName"> Name of the store asociated with the product</param>
         /// <returns>List of suggestions for the autocomplete</returns>
-        public IActionResult OnGetAutocompleteSuggestions(string field, string term, string provinceName, string cantonName, string storeName)
+        public IActionResult OnGetAutocompleteSuggestions(string field, string term, string provinceName, string cantonName)
         {
-            // Create a list with the available suggestions, given the current inputs
             List<String> availableSuggestions = new List<string>() { "" };
-            // When aked for the autofill for store
             if (field == "#store")
             {
                 // Look for saved Stores in current location
@@ -305,7 +323,6 @@ namespace LoCoMPro.Pages
                     .Select(s => s.Name)
                     .ToList();
             }
-            // When asked for the autofill for product
             else if (field == "#productName")
             {
                 // Take the available sources form the store inventory or from the total number of produts.
@@ -346,6 +363,25 @@ namespace LoCoMPro.Pages
             data["#category"] = (productMatch.Categories != null && productMatch.Categories.Any()) ? productMatch.Categories.First().CategoryName : "";
 
             return new JsonResult(data);
+        }
+
+        /// <summary>
+        /// Ensures that canton is a valid canton.
+        /// </summary>
+        /// <param name="province">Province to take into consideration</param>
+        /// <param name="canton">Canton to validate.</param>
+        /// <returns>Valid canton to save</returns>
+        private string ValidateCanton(string province, string canton)
+        {
+            var response = "";
+            if (canton == "")
+            {
+                response = (province.Equals("Guanacaste")) ? "Liberia" : province;
+            } else
+            {
+                response = canton;
+            }
+            return response;
         }
     }
 }

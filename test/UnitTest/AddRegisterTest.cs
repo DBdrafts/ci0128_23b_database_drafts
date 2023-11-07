@@ -17,6 +17,7 @@ using Microsoft.Extensions.Primitives;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Text;
+using NetTopologySuite.Geometries;
 
 namespace AddRegisterTest
 {
@@ -244,6 +245,53 @@ namespace AddRegisterTest
             // Asserts
             Assert.IsNotNull(result);
             Assert.IsEmpty(result);
+        }
+
+        // Test by Dwayne Taylor Monterrosa C17827 | Sprint 2
+        [Test]
+        public void AddStoreGeolocationWhenNull()
+        {
+            // Arrange for the mock configuration
+            // Create an instance of the page model (pageModel) using the CreatePageModel()
+            var pageModel = (AddProductPageModel)CreatePageModel("add_register_page");
+
+            // Initializes data for store to add.
+            string storeName = "GenericStore1";
+            string provinceName = "GenericProvince";
+            string cantonName = "GenericCanton1";
+
+
+            // New coordinates
+            var coordinates = new Coordinate(6.9, 4.2);
+            var geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
+            // Call the create method with the attributes and get the new product
+            var store = pageModel.AddStoreRelation(storeName, cantonName, provinceName, geolocation);
+
+            // Assert that the Geolocation for store was updated.
+            Assert.IsTrue(geolocation.Equals(store.Geolocation));
+        }
+
+        // Test by Dwayne Taylor Monterrosa C17827 | Sprint 2
+        [Test]
+        public void AddStoreGeolocationWhenNotNull()
+        {
+            // Arrange for the mock configuration
+            // Create an instance of the page model (pageModel) using the CreatePageModel()
+            var pageModel = (AddProductPageModel)CreatePageModel("add_register_page");
+
+            // Initializes data for store to add.
+            string storeName = "GenericStore2";
+            string cantonName = "GenericCanton2";
+            string provinceName = "GenericProvince";
+
+            // New coordinates
+            var coordinates = new Coordinate(4.2, 6.9);
+            var geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
+            // Call the create method with the attributes and get the new product
+            var store = pageModel.AddStoreRelation(storeName, cantonName, provinceName, geolocation);
+
+            // Assert that the Geolocation for store was not updated.
+            Assert.IsTrue(!geolocation.Equals(store.Geolocation));
         }
     }
 }

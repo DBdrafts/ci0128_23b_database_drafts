@@ -7,12 +7,21 @@
 }
 
  <div class="text-center">
-     <!-- Logo image of LoCoMPro -->
     <div class="logo-image">
         <img src="~/img/LoCoMProLogo.svg" alt="LoCoMPro Logo">
     </div>
 
-    <!-- Section of the search bar and buttons -->
     @await Html.PartialAsync("_SearchBar")
-</div>
 
+    <div id="feedbackMessage" class="feedback-message"></div>
+
+    <script>
+        var feedbackMessageTemp = '@TempData["FeedbackMessage"]';
+    </script>
+
+    <script src="~/js/feedbackMessage.js"></script>
+
+    <script>
+        <@TempData.Remove("FeedbackMessage"); 
+    </script>
+</div>

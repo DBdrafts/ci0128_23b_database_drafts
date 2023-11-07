@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using Newtonsoft.Json;
+using System.Configuration;
 using System.Drawing;
 
 namespace LoCoMPro.Pages
@@ -13,11 +14,10 @@ namespace LoCoMPro.Pages
     /// <summary>
     /// Model for Index page, handles requests for the lists of provinces and cantons.
     /// </summary>
-    public class IndexModel : PageModel
+    public class IndexModel : LoCoMProPageModel
     {
         private readonly ILogger<IndexModel> _logger;
         // Context of the data base 
-        private readonly LoCoMPro.Data.LoCoMProContext _context;
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
 
@@ -26,16 +26,21 @@ namespace LoCoMPro.Pages
         /// </summary>
         /// <param name="logger">Logger for Index Page.</param>
         /// <param name="context">DB context for Index Page.</param>
+        /// <param name="configuration">Configuration for page</param>
         /// <param name="signInManager">Sign in manager to user with user</param>
         /// <param name="userManager"> User manager to make user operations</param>
-        public IndexModel(ILogger<IndexModel> logger, LoCoMProContext context, UserManager<User> userManager, SignInManager<User> signInManager)
+        public IndexModel(ILogger<IndexModel> logger, LoCoMProContext context, IConfiguration configuration, UserManager<User> userManager, SignInManager<User> signInManager)
+            : base(context, configuration)
         {
             _logger = logger;
-            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
         }
 
+        /// <summary>
+        /// Signs the user if a signed user is found.
+        /// </summary>
+        /// <returns>Asyncronus Task</returns>
         public async Task OnGet()
         {
             if (_signInManager.IsSignedIn(User))

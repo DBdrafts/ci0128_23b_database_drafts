@@ -19,6 +19,8 @@ using Castle.Core.Smtp;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
+using NetTopologySuite.IO;
+using NetTopologySuite.Geometries;
 
 [TestClass]
 // Declaration of the test class
@@ -51,8 +53,12 @@ public class BaseTest
             .UseInMemoryDatabase(databaseName: "InMemoryDatabase")
             .Options;
 
+        // Mock logger.
+        var mockLogger = new Mock<ILogger<IndexModel>>();
+
         // Create a context instance of the DB using the configured options
         var dbContext = new LoCoMProContext(options);
+        InitContext(ref dbContext);
 
         // Create a UserStore to be used as a required argument in UserManager
         var mockUserStore = new Mock<IUserStore<User>>();
@@ -78,14 +84,14 @@ public class BaseTest
         // created with the database context and mock configuration
         // real instance
         return CreateLoCoMProPageModel(dbContext, mockConfiguration, mockUserManager, mockSignInManager
-            , mockUserStore, mockHttpContextAccessor, pageType);
+            , mockUserStore, mockHttpContextAccessor, mockLogger, pageType);
     }
 
     // Create LoCoMPro page model depending of the string received
     protected LoCoMProPageModel CreateLoCoMProPageModel(LoCoMProContext dbContext
         , Mock<IConfiguration> mockConfiguration, Mock<UserManager<User>> mockUserManager
         , Mock<SignInManager<User>> mockSignInManager, Mock<IUserStore<User>> mockUserStore
-        , Mock<IHttpContextAccessor> mockHttpContextAccessor
+        , Mock<IHttpContextAccessor> mockHttpContextAccessor, Mock<ILogger<IndexModel>> mockLogger
         , string pageType)
     {
         // Return the type of the LoCoMPro 
@@ -111,6 +117,8 @@ public class BaseTest
             case "register_page":
                 return new RegisterModel(dbContext, mockConfiguration.Object, mockUserManager.Object
                     , mockUserStore.Object, mockSignInManager.Object, null, null);
+            case "index_page":
+                return new IndexModel(mockLogger.Object, dbContext, mockConfiguration.Object, mockUserManager.Object, mockSignInManager.Object);
 
             // Have to return a Product List page
             case "product_list":
@@ -195,5 +203,47 @@ public class BaseTest
     {
         return new UserProductListElement("ProductTest1", "BrandTest"
            , "ModelTest", "StoreTest", "ProvinceTest", "CantonTest", "25");
+    }
+
+    private void InitContext(ref LoCoMProContext context)
+    {
+        var province = new Provincia { Name = "GenericProvince" };
+
+        var coordinates = new Coordinate(6.9, 4.2);
+        var geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
+        
+        var canton1 = new Canton { CantonName = "GenericCanton1", Provincia = province };
+        var canton2 = new Canton { CantonName = "GenericCanton2", Provincia = province, Geolocation = geolocation};
+
+        var category = new Category { CategoryName = "Category" };
+        var product = new Product { Name = "GenericProduct", Model = "GenericModel", Brand = "GenericBrand" };
+        product.Categories!.Add(category);
+        var store1 = new Store
+        {
+            Name = "GenericStore1",
+            Location = canton1,
+            ProvinciaName = "GenericProvince",
+            CantonName = "GenericCanton1",
+        };
+
+        var store2 = new Store
+        { 
+            Name = "GenericStore2",
+            Location = canton2,
+            ProvinciaName = "GenericProvince",
+            CantonName = "GenericCanton2",
+            Geolocation = geolocation
+        };
+        if (!context.Provincias.Any())
+        {
+            context.Provincias.Add(province);
+            context.Provincias.Add(province);
+            context.Cantones.Add(canton1);
+            context.Cantones.Add(canton2);
+            context.Stores.Add(store1);
+            context.Stores.Add(store2);
+            context.Products.Add(product);
+            context.SaveChanges();
+        }
     }
 }
