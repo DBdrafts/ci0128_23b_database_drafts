@@ -1,15 +1,10 @@
 using LoCoMPro.Data;
 using LoCoMPro.Models;
-using LoCoMPro.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Build.Framework;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
-using System.Text.RegularExpressions;
 
 
 namespace LoCoMPro.Pages
@@ -21,22 +16,12 @@ namespace LoCoMPro.Pages
     public class ModeratePageModel : LoCoMProPageModel
     {
         /// <summary>
-        /// Creates a new ModeratePageModel.
-        /// </summary>
-        /// <param name="context">DB Context to pull data from.</param>
-        /// <param name="configuration">Configuration for page.</param>
-        // Moderate Page constructor 
-        public ModeratePageModel(LoCoMProContext context, IConfiguration configuration) 
-            : base(context, configuration) { }
-
-
-        /// <summary>
         /// List of the registers that exist in the database.
         /// </summary>
         public IEnumerable<Register>? Registers { get; set; } = new List<Register>();
 
         /// <summary>
-        /// Result of the query.
+        /// List of reports.
         /// </summary>
         public IList<Report>? Reports { get; set; } = new List<Report>();
 
@@ -49,6 +34,16 @@ namespace LoCoMPro.Pages
         /// Average review value of the registers
         /// </summary>
         public IList<float> registerAverageReview { get; set; }
+
+        /// <summary>
+        /// Creates a new ModeratePageModel.
+        /// </summary>
+        /// <param name="context">DB Context to pull data from.</param>
+        /// <param name="configuration">Configuration for page.</param>
+        // Moderate Page constructor 
+        public ModeratePageModel(LoCoMProContext context, IConfiguration configuration) 
+            : base(context, configuration) { }
+
 
         /// <summary>
         /// GET HTTP request, initializes page values.

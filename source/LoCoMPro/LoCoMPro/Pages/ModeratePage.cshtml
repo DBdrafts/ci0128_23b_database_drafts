@@ -37,29 +37,26 @@
 
 
     <div class="reports-section" id="no-empty-list">
-        <!-- Search section title -->
         <div class="results-cont-msg" span id="results-count"></div>
 
-        <!-- Search section header -->
         <nav>
-            <ul class="containerListReportColumns" style='display: @(Model.Reports.Count != 0 ? "flex" : "none")'>
+            <ul class="container-List-Report-Columns" style='display: @(Model.Reports.Count != 0 ? "flex" : "none")'>
                 <li id="product-col">
-                    <div class="textComment">Producto</div>
+                    <div class="text-Comment">Producto</div>
                 </li>
                 <li id="contributor-col">
-                    <div class="textComment">Contribuidor</div>
+                    <div class="text-Comment">Contribuidor</div>
                 </li>
                 <li id="reporter-col">
-                    <div class="textComment">Reportado por</div>
+                    <div class="text-Comment">Reportado por</div>
                 </li>
                 <li id="date-col">
-                    <div class="textComment">Fecha de Reporte</div>
+                    <div class="text-Comment">Fecha de Reporte</div>
                 </li>
             </ul>
         </nav>
 
         <ul class="reports-section">
-            <!-- Put in all results -->
             @for (int reportNum = 0; reportNum < Model.Reports.Count; reportNum++)
             {
                 var report = Model.Reports[reportNum];
@@ -86,33 +83,27 @@
                     $"{s}{report.ReportState}{s}{reporterName}" +
                     $"{s}{contributorName}{s}{register.Price}{s}{@reportNum}";
                 
-                // images in registers
                 int imagecount = 0;
                 var registerImages = "";
                 if (register.Images != null && register.Images.Any())
-                { // In case registers has images
+                {
                     foreach (var image in register.Images)
-                    { // For each image in register
+                    {
                         if (image.ImageData != null)
                         {
-                            // Cover the bytes of images to string
                             registerImages += $"{s}ImageData{imagecount}: {Convert.ToBase64String(image.ImageData)}";
                             imagecount++;
                         }
                     }
                 }
 
-                // Veracity values
                 float veracityValue = Model.registerAverageReview[reportNum];
 
-                <!-- A result block -->
                 <li class="result-block register-block-pagination" id="report-item-@reportNum">
-                    <!-- Route and data for each result -->
                     <a>
                         <span id="register-product-name" value="@report.ProductName">
                             @report.ProductName
                         </span>
-                        <!-- This can be use with the geolocalitation -->
                         <span id="register-user" value="@contributorName">
                             @contributorName
                         </span>
@@ -145,7 +136,6 @@
             }
         </ul>
 
-        <!-- Code for interactive pop up -->
         <div class="interactive-popup-section">
             <div class="interactions-popup">
                 <div class="interactions-popup-content">
@@ -185,4 +175,3 @@
     <script src="~/js/ProductPage/imageChanger.js"></script>
     <script src="~/js/feedbackMessage.js"></script>
 </div>
-<!-- Pagination section -->

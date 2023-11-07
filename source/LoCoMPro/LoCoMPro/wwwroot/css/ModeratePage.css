@@ -32,25 +32,25 @@
 }
 
 /* Style for search title */
-.containerListReportColumns {
+.container-List-Report-Columns {
     display: inline-block;
     flex-direction: row;
     height: auto;
     width: 91%;
-    justify-content:space-around;
+    justify-content: space-around;
     list-style: none;
     margin: 10px 0px;
     min-width: 950px;
 }
 
 /* Style for search title columns */
-.containerListReportColumns li {
+.container-List-Report-Columns li {
     font-size: x-large;
     text-align: center;
 }
 
 /* Style for columns */
-.containerListReportColumns ul {
+.container-List-Report-Columns ul {
     margin: 0px;
     padding: 0px;
 }
