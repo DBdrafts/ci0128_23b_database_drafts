@@ -478,6 +478,7 @@
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     font-weight: 500;
+    z-index: 10;
 }
 
 /* Style for the report icon */
@@ -496,6 +497,7 @@
 .feedback-message.active {
     display: block; /* Mostrar el mensaje */
     opacity: 1; /* Hacerlo visible */
+    z-index: 10;
 }
 
 /* Style for the button that manage the user list */

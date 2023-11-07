@@ -1,6 +1,7 @@
 ﻿using NetTopologySuite.Geometries;
 using LoCoMPro.Models;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
 
 namespace LoCoMPro.Data
 {
@@ -23,7 +24,12 @@ namespace LoCoMPro.Data
             context.ExecuteSqlScriptFile(currentDir + "/Data/SearchRegister.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/CalculateDistance.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetSearchResults.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/CountUserRegisters.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/GetAmountImagesForProduct.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetAverageReviewValue.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/GetAverageReviewValueOnUserRegisters.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/UpdateUserRoleOnRegister.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/UpdateUserRoleOnReview.sql");
 
             List<Provincia> provincias = new();
             List<Canton> cantones = new();
@@ -81,7 +87,8 @@ namespace LoCoMPro.Data
             {
                 var province = provinces.Find(s => s.Name == group.Key.ProvinceName);
 
-                if (float.TryParse(group.Key.Latitude, out float latitude) && float.TryParse(group.Key.Longitude, out float longitude))
+                CultureInfo culture = CultureInfo.InvariantCulture;
+                if (float.TryParse(group.Key.Latitude, culture, out float latitude) && float.TryParse(group.Key.Longitude, culture,out float longitude))
                 {
                     var coordinates = new Coordinate (longitude, latitude);
                     var canton = new Canton
@@ -305,12 +312,12 @@ namespace LoCoMPro.Data
         public static void InitializeReports(LoCoMProContext context, ref List<Report> reports
             , ref List<Register> registers, ref List<User> users)
         {
-            for(int registerIndex = 0 ; registerIndex < (registers.Count / users.Count); registerIndex++) {
+            for(int registerIndex = 0 ; registerIndex < (registers.Count / (users.Count * 3)); registerIndex++) {
                 reports.Add(new Report() { ReportedRegister = registers[registerIndex]
                         , Reporter = users[GenerateRandom(0, users.Count)]
                         , ReportDate = new DateTime(2024, 2, 15, 12, 0, 0, DateTimeKind.Utc)
                         , CantonName = registers[registerIndex].CantonName!
-                        , ProvinceName = registers[registerIndex].ProvinciaName!, ReportState = 0});
+                        , ProvinceName = registers[registerIndex].ProvinciaName!, ReportState = 1});
             }
 
             context.Reports.AddRange(reports);

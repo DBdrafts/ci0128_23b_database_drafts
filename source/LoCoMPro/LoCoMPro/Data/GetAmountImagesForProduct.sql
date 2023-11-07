@@ -1,20 +1,20 @@
-﻿CREATE FUNCTION dbo.GetAverageReviewValue (
+CREATE FUNCTION dbo.GetAmountImagesForProduct (
     @ContributorId NVARCHAR(450),
     @ProductName NVARCHAR(450),
     @StoreName NVARCHAR(450),
     @SubmitionDate DATETIME2
 )
-RETURNS REAL
+	RETURNS INT
 AS
 BEGIN
-    DECLARE @AverageReviewValue REAL
+    DECLARE @AmountOfImages INT
 
-    SELECT @AverageReviewValue = AVG(ReviewValue)
-    FROM Review
+    SELECT @AmountOfImages = COUNT(*)
+    FROM Image
     WHERE ContributorId = @ContributorId
       AND ProductName = @ProductName
       AND StoreName = @StoreName
       AND SubmitionDate = @SubmitionDate
 
-    RETURN @AverageReviewValue
+      RETURN @AmountOfImages
 END

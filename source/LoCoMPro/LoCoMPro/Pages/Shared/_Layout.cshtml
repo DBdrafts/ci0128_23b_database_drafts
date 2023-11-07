@@ -40,10 +40,21 @@
                 }
                 <!-- Navegation bar buttons -->
                 <div class="w-100 d-flex justify-content-end">
+
                     @if (SignInManager.IsSignedIn(User))
                     {
                         var user = await UserManager.GetUserAsync(User);
                         var email = await UserManager.GetEmailAsync(user!);
+
+                        @if (User.IsInRole("Moderator"))
+                        {
+                            <!-- Moderate button of the layout -->
+                            <!-- Only displayed when the user is a moderator -->
+                            <a href="/ModeratePage" class="layout-button button-general">
+                                <img src="~/img/ModerateIcon.svg" alt="Moderar">
+                                <p>Moderar</p>
+                            </a>
+                        }
 
                         <!-- Add user product list button of the layout -->
                         <!-- If user is signed in this button redirects to ProductList page -->

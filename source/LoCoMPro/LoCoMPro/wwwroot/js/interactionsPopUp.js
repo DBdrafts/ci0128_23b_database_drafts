@@ -34,6 +34,37 @@ function openInteractionsPopup(openButton) {
     setReportedValue(lastReportState);   
 }
 
+function openInteractionsPopupMod(openButton) {
+    var interactionsPopup = document.querySelector('.interactions-popup');
+    interactionsPopup.style.display = 'block';
+    reportData = openButton.getAttribute('report-data');
+    reportNumber = openButton.getAttribute('report-number');
+
+    // Gets the register data
+    var [ReporterId, ContributorId, ProductName, StoreName, SubmitionDate, CantonName,
+        ProvinceName, ReportDate, ReportState, reporterName, contributorName, price, registerNumber, comment] = reportData.split(String.fromCharCode(31));
+
+    
+
+    // Sets the register data
+    document.getElementById('popup-contributorName').textContent = contributorName;
+    document.getElementById('popup-submitionDate').textContent = SubmitionDate;
+    document.getElementById('popup-prodName').textContent = ProductName;
+    document.getElementById('popup-store').textContent = StoreName;
+    document.getElementById('popup-price').textContent = '₡' + price;
+    document.getElementById('popup-comment').textContent = comment;
+    document.getElementById('popup-reporterName').textContent = reporterName;
+
+    // Set the images data
+    var imagesData = openButton.getAttribute('images-register-id').split(String.fromCharCode(31));
+
+    // Copies the validation star of the register
+    copyRegisterValidation(registerNumber);
+
+    // Load the images in the pop up
+    loadRegisterImages(imagesData)
+}
+
 /// <summary>
 /// Add the images to the Pop Up
 /// </summary>
@@ -138,6 +169,84 @@ function saveInteractions() {
         });
     }
     closeInteractionsPopup();
+}
+/// <summary>
+/// The moderator accepts the report, hiding the report and setting its ReportState to 2
+/// </summary>
+function acceptReport() {
+
+    $.ajax({
+        type: 'POST',
+        url: '/ModeratePage?handler=AcceptReport',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+        },
+        data: { reportData: reportData },
+        success: function (data) {
+            hideReport(reportNumber);
+            console.log('Report updated successfully' + data);
+            showFeedbackMessage('El reporte ha sido aprobado exitosamente', 'feedbackMessage');
+            updateReportList();
+        },
+        error: function (error) {
+            console.error('Error saving report: ' + error);
+            showFeedbackMessage('Error al aceptar el reporte ', 'feedbackMessage');
+        }
+    });
+    closeInteractionsPopup();
+}
+
+/// <summary>
+/// Hides the report visually from the moderator
+/// </summary>
+function hideReport(reportNumber) {
+    // Hides the entry of the visual list that have this index
+    var reportItem = document.getElementById("report-item-" + reportNumber);
+    if (reportItem) {
+        reportItem.style.display = "none";
+    }
+}
+/// <summary>
+/// The moderator rejects the report, hiding the report and setting its ReportState to 0
+/// </summary>
+function rejectReport() {
+    
+    $.ajax({
+        type: 'POST',
+        url: '/ModeratePage?handler=RejectReport',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+        },
+        data: { reportData: reportData },
+        success: function (data) {
+            hideReport(reportNumber);
+            console.log('Report updated successfully' + data);
+            showFeedbackMessage('El reporte ha sido rechazado exitosamente', 'feedbackMessage');
+            updateReportList();
+        },
+        error: function (error) {
+            console.error('Error saving report: ' + error);
+            showFeedbackMessage('Error al rechazar el reporte ', 'feedbackMessage');
+        }
+    });
+    closeInteractionsPopup();
+} 
+
+function updateReportList() {
+    var reportCount = parseInt(document.getElementById("report-count").textContent);
+
+    --reportCount;
+
+    document.getElementById("report-count").textContent = reportCount;
+
+    if (reportCount == 0) {
+        document.getElementById("cant-reportes").style.display = 'none';
+        document.getElementById("report-count").style.display = 'none';
+        document.getElementById("empty-list").style.display = 'inline-block';
+        document.getElementById("no-empty-list").style.display = 'none';
+    }
 }
 
 
