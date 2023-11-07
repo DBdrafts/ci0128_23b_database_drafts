@@ -37,6 +37,10 @@ namespace LoCoMPro.Pages
             _signInManager = signInManager;
         }
 
+        /// <summary>
+        /// Signs the user if a signed user is found.
+        /// </summary>
+        /// <returns>Asyncronus Task</returns>
         public async Task OnGet()
         {
             if (_signInManager.IsSignedIn(User))

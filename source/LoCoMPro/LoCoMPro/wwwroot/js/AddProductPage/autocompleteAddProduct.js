@@ -19,7 +19,7 @@ jq(document).ready(function () {
                 source: function (request, response) {
                     $.ajax({
                         url: "/AddProductPage?handler=AutocompleteSuggestions",
-                        data: { field: currentField, term: request.term, provinceName: province, cantonName: canton, storeName: store },
+                        data: { field: currentField, term: request.term, provinceName: province, cantonName: canton},
                         success: function (data) {
                             response(data);
                         }

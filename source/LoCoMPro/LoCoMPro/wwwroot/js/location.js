@@ -11,7 +11,7 @@ var selectedLocation = null;
 var selectedMarker = null;
 var selectedStore = null;
 
-let cantonMapping = { }
+let cantonMapping = {}
 
 $(document).ready(function () {
     let hasPopulatedProvinceSelect = false;
@@ -77,14 +77,16 @@ function initializeMap() {
 
 
     var costaRicaBounds = new google.maps.LatLngBounds(
-        new google.maps.LatLng(8.0364, -85.7733),  // Southwestern boundary
+        //new google.maps.LatLng(8.0364, -85.7733),  // Southwestern boundary
+        new google.maps.LatLng(7.96, -85.70),  // Southwestern boundary
+        //new google.maps.LatLng(11.2188, -82.6312)  // Northeastern boundary
         new google.maps.LatLng(11.2188, -82.6312)  // Northeastern boundary
     );
 
     var mapOptions = {
         center: { lat: startingLocation.lat, lng: startingLocation.lng },
         zoom: 15,
-        maxZoom: 20, // Set a maximum zoom level
+        maxZoom: 500, // Set a maximum zoom level
         disableDefaultUI: true,
         restriction: {
             latLngBounds: costaRicaBounds,
@@ -232,7 +234,7 @@ function reverseGeocodeLocation(location) {
                     }
                 }
 
-                selectedCanton = (cantonName in cantonMapping) ? cantonMapping[cantonName] : cantonName;
+                selectedCanton = (provinceName in cantonMapping && cantonName in cantonMapping[provinceName]) ? cantonMapping[provinceName][cantonName] : cantonName;
                 $("#province").val(provinceName).trigger('change');
 
             } else {
@@ -369,5 +371,39 @@ function getCoordinatesFromName() {
 }
 
 function fillCantonMapping() {
-    cantonMapping['San Pedro'] = 'Montes de Oca';
+    cantonMapping['San Jos\u00E9'] = {};
+    cantonMapping['San Jos\u00E9']['San Pedro'] = 'Montes de Oca';
+    cantonMapping['San Jos\u00E9']['San Rafael de Escaz\u00FA'] = 'Escaz\u00FA';
+    cantonMapping['San Jos\u00E9']['Escazu'] = 'Escaz\u00FA';
+    cantonMapping['San Jos\u00E9']['San Rafael'] = 'Escaz\u00FA';
+    cantonMapping['San Jos\u00E9']['Guadalupe'] = 'Goicoechea';
+    cantonMapping['San Jos\u00E9']['Copey District'] = 'Dato';
+    cantonMapping['San Jos\u00E9']['Vásquez de Coronado'] = 'Vázquez de Coronado';
+    cantonMapping['San Jos\u00E9']['San Isidro'] = 'Vázquez de Coronado';
+
+    cantonMapping['Cartago'] = {};
+    cantonMapping['Cartago']['Guadalupe'] = 'Cartago';
+    cantonMapping['Cartago']['Orosi'] = 'Para\u00EDso';
+    cantonMapping['Cartago']['Llanos de Santa Luc\u00EDa'] = 'Para\u00EDso';
+    cantonMapping['Cartago']['San Rafael'] = 'Oreamuno';
+
+    cantonMapping['Lim\u00F3n'] = {};
+    cantonMapping['Lim\u00F3n']['Gu\u00E1piles'] = 'Pococ\u00ED';
+    cantonMapping['Lim\u00F3n']['Telire'] = 'Talamanca';
+    cantonMapping['Lim\u00F3n']['Puerto Viejo de Talamanca'] = 'Talamanca';
+    cantonMapping['Lim\u00F3n']['Florida'] = 'Siquirres';
+
+
+    cantonMapping['Alajuela'] = {};
+    cantonMapping['Alajuela']['La Tigra'] = 'San Carlos';
+    cantonMapping['Alajuela']['Pocosol'] = 'San Carlos';
+    cantonMapping['Alajuela']['Cd Quesada'] = 'San Carlos';
+    cantonMapping['Alajuela']['Santa Rosa de Pocosol'] = 'San Carlos';
+    cantonMapping['Alajuela']['Aguas Zarcas'] = 'San Carlos';
+    cantonMapping['Alajuela']['La Fortuna'] = 'San Carlos';
+    cantonMapping['Alajuela']['Valverde Vega'] = 'Sarch\u00ED';
+
+    cantonMapping['Heredia'] = {};
+    cantonMapping['Heredia']['Puerto Viejo'] = 'Sarapiqu\u00ED';
+
 }

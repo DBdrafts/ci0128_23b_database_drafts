@@ -60,7 +60,9 @@ namespace LoCoMPro.Pages
         public List<IFormFile>? ProductImages { get; set; }
 
 
-        // Method for loading the list of categories from the database
+        /// <summary>
+        /// Loads categories from the DB.
+        /// </summary>
         private void LoadCategories()
         {
             // Retrieves all categories from the database and stores them
@@ -155,7 +157,14 @@ namespace LoCoMPro.Pages
             return RedirectToPage("/Index");
         }
 
-        // Method that creates a new store if not exists
+        /// <summary>
+        /// Adds a store to the context if it does not exist already.
+        /// </summary>
+        /// <param name="storeName">Name of the store to add.</param>
+        /// <param name="cantonName">Canton where the store is located.</param>
+        /// <param name="provinceName">Province where the store is located.</param>
+        /// <param name="geolocation">Geolocation of the store to add.</param>
+        /// <returns>A new store if it was not added, or found store.</returns>
         internal Store AddStoreRelation(string storeName, string cantonName, string provinceName, Point? geolocation = null)
         {
             var store = _context.Stores.Find(storeName, cantonName, provinceName);
@@ -232,7 +241,6 @@ namespace LoCoMPro.Pages
             dateTime = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day
                 , dateTime.Hour, dateTime.Minute, dateTime.Second, 0);
 
-            // Create new Register
             Register newRegister = new()
             {
                 SubmitionDate = dateTime,
@@ -301,13 +309,10 @@ namespace LoCoMPro.Pages
         /// <param name="term"> Term to look up and recommend data for.</param>
         /// <param name="provinceName"> Name of the Province asociated with the store.</param>
         /// <param name="cantonName"> Name of the Canton asociated with the store.</param>
-        /// <param name="storeName"> Name of the store asociated with the product</param>
         /// <returns>List of suggestions for the autocomplete</returns>
-        public IActionResult OnGetAutocompleteSuggestions(string field, string term, string provinceName, string cantonName, string storeName)
+        public IActionResult OnGetAutocompleteSuggestions(string field, string term, string provinceName, string cantonName)
         {
-            // Create a list with the available suggestions, given the current inputs
             List<String> availableSuggestions = new List<string>() { "" };
-            // When aked for the autofill for store
             if (field == "#store")
             {
                 // Look for saved Stores in current location
@@ -316,7 +321,6 @@ namespace LoCoMPro.Pages
                     .Select(s => s.Name)
                     .ToList();
             }
-            // When asked for the autofill for product
             else if (field == "#productName")
             {
                 // Take the available sources form the store inventory or from the total number of produts.
