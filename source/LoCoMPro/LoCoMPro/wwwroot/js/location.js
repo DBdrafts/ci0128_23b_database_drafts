@@ -388,20 +388,33 @@ function fillCantonMapping() {
     cantonMapping['San Jos\u00E9']['Escazu'] = 'Escaz\u00FA';
     cantonMapping['San Jos\u00E9']['San Rafael'] = 'Escaz\u00FA';
     cantonMapping['San Jos\u00E9']['Guadalupe'] = 'Goicoechea';
-    cantonMapping['San Jos\u00E9']['Copey District'] = 'Dato';
-    cantonMapping['San Jos\u00E9']['Vásquez de Coronado'] = 'Vázquez de Coronado';
-    cantonMapping['San Jos\u00E9']['San Isidro'] = 'Vázquez de Coronado';
+    cantonMapping['San Jos\u00E9']['Copey District'] = 'Dota';
+    cantonMapping['San Jos\u00E9']['Santa María'] = 'Dota';
+    cantonMapping['San Jos\u00E9']['V\u00E1squez de Coronado'] = 'V\u00E1zquez de Coronado';
+    cantonMapping['San Jos\u00E9']['San Isidro'] = 'V\u00E1zquez de Coronado';
+    cantonMapping['San Jos\u00E9']['Carara'] = 'Turrubares';
+    cantonMapping['San Jos\u00E9']['San Lorenzo'] = 'Terraz\u00FA';
+    cantonMapping['San Jos\u00E9']['Tarrazu'] = 'Terraz\u00FA';
+    cantonMapping['San Jos\u00E9']['Rivas'] = 'P\u00E9rez Zeled\u00F3n';
 
     cantonMapping['Cartago'] = {};
     cantonMapping['Cartago']['Guadalupe'] = 'Cartago';
+    cantonMapping['Cartago']['Tierra Blanca'] = 'Cartago';
+    cantonMapping['Cartago']['Llano Grande'] = 'Cartago';
     cantonMapping['Cartago']['Orosi'] = 'Para\u00EDso';
     cantonMapping['Cartago']['Llanos de Santa Luc\u00EDa'] = 'Para\u00EDso';
     cantonMapping['Cartago']['San Rafael'] = 'Oreamuno';
+    cantonMapping['Cartago']['San Diego'] = 'La Uni\u00F3n';
+    cantonMapping['Cartago']['Cot'] = 'Oreamuno';
+    cantonMapping['Cartago']['Tres Equis'] = 'Turrialba';
 
     cantonMapping['Lim\u00F3n'] = {};
     cantonMapping['Lim\u00F3n']['Gu\u00E1piles'] = 'Pococ\u00ED';
+    cantonMapping['Lim\u00F3n']['Jim\u00E9nez'] = 'Pococ\u00ED';
     cantonMapping['Lim\u00F3n']['Telire'] = 'Talamanca';
     cantonMapping['Lim\u00F3n']['Puerto Viejo de Talamanca'] = 'Talamanca';
+    cantonMapping['Lim\u00F3n']['Dikoguicha'] = 'Talamanca';
+    cantonMapping['Lim\u00F3n']['Sibubeta'] = 'Talamanca';
     cantonMapping['Lim\u00F3n']['Florida'] = 'Siquirres';
 
 
@@ -411,10 +424,16 @@ function fillCantonMapping() {
     cantonMapping['Alajuela']['Cd Quesada'] = 'San Carlos';
     cantonMapping['Alajuela']['Santa Rosa de Pocosol'] = 'San Carlos';
     cantonMapping['Alajuela']['Aguas Zarcas'] = 'San Carlos';
+    cantonMapping['Alajuela']['Gloria'] = 'San Carlos';
     cantonMapping['Alajuela']['La Fortuna'] = 'San Carlos';
     cantonMapping['Alajuela']['Valverde Vega'] = 'Sarch\u00ED';
+    cantonMapping['Alajuela']['San Ramon'] = 'San Ram\u00F3n';
 
     cantonMapping['Heredia'] = {};
     cantonMapping['Heredia']['Puerto Viejo'] = 'Sarapiqu\u00ED';
+    cantonMapping['Heredia']['Sarapiqui'] = 'Sarapiqu\u00ED';
+
+    cantonMapping['Puntarenas'] = {};
+    cantonMapping['Puntarenas']['Pitahaya'] = 'Puntarenas'
 
 }

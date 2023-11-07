@@ -112,7 +112,7 @@ namespace LoCoMPro.Pages
             var coordinates = new Coordinate(longitude, latitude);
             var geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
 
-
+            cantonName = ValidateCanton(provinciaName, cantonName);
             // Get the product if exists in the context
             var productToAdd = _context.Products
                 .Include(p => p.Registers)
@@ -363,6 +363,25 @@ namespace LoCoMPro.Pages
             data["#category"] = (productMatch.Categories != null && productMatch.Categories.Any()) ? productMatch.Categories.First().CategoryName : "";
 
             return new JsonResult(data);
+        }
+
+        /// <summary>
+        /// Ensures that canton is a valid canton.
+        /// </summary>
+        /// <param name="province">Province to take into consideration</param>
+        /// <param name="canton">Canton to validate.</param>
+        /// <returns>Valid canton to save</returns>
+        private string ValidateCanton(string province, string canton)
+        {
+            var response = "";
+            if (canton == "")
+            {
+                response = (province.Equals("Guanacaste")) ? "Liberia" : province;
+            } else
+            {
+                response = canton;
+            }
+            return response;
         }
     }
 }
