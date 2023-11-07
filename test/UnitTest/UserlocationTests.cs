@@ -23,7 +23,7 @@ namespace UserLocationTests
     [TestClass]
     public class RazorPageTests : BaseTest
     {
-        // Test by Omar Fabian Camacho Calvo C11476
+        // Test by Omar Fabian Camacho Calvo C11476 | Sprint 2
         [Test]
         public void CheckUserWithLocation()
         {
@@ -64,7 +64,7 @@ namespace UserLocationTests
             Assert.IsTrue(result);
         }
 
-        // Test by Omar Fabian Camacho Calvo C11476
+        // Test by Omar Fabian Camacho Calvo C11476 | Sprint 2
         [Test]
         public void CheckUserWithoutLocation()
         {

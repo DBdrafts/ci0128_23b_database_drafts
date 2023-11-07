@@ -79,6 +79,7 @@
     align-items: center;
     justify-content: center;
     vertical-align: middle;
+    min-width: 500px;
 }
 
 /*Style for information section*/

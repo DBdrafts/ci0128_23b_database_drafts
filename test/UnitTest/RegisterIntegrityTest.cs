@@ -19,7 +19,7 @@ namespace RegisterIntegrityTest
     [TestClass]
     public class RazorPageTests : BaseTest
     {
-        // Test by Omar Fabian Camacho Calvo C11476
+        // Test by Omar Fabian Camacho Calvo C11476 | Sprint 2
         [Test]
         public void MaxReportTest()
         {
@@ -45,7 +45,7 @@ namespace RegisterIntegrityTest
             }
         }
 
-        // Test by Omar Fabian Camacho Calvo C11476
+        // Test by Omar Fabian Camacho Calvo C11476 | Sprint 2
         [Test]
         public void ReportStatusAreNotNegative()
         {
@@ -70,7 +70,7 @@ namespace RegisterIntegrityTest
             }
         }
 
-        // Test by Omar Fabian Camacho Calvo C11476
+        // Test by Omar Fabian Camacho Calvo C11476 | Sprint 2
         [Test]
         public void GetHighestReportState_ReturnsValidValue()
         {
@@ -93,7 +93,7 @@ namespace RegisterIntegrityTest
             }
         }
 
-        // Test by Omar Fabian Camacho Calvo C11476
+        // Test by Omar Fabian Camacho Calvo C11476 | Sprint 2
         [Test]
         public void GetNumberOfRegisters_Empty()
         {
@@ -114,7 +114,7 @@ namespace RegisterIntegrityTest
             Assert.AreEqual(0, result);
         }
 
-        // Test by Omar Fabian Camacho Calvo C11476
+        // Test by Omar Fabian Camacho Calvo C11476 | Sprint 2
         [Test]
         public void ImagesAreNotNullVerify()
         {
@@ -139,7 +139,7 @@ namespace RegisterIntegrityTest
             }
         }
 
-        // Test by Omar Fabian Camacho Calvo C11476
+        // Test by Omar Fabian Camacho Calvo C11476 | Sprint 2
         [Test]
         public void ImagesAreNullVerify()
         {
