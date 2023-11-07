@@ -297,7 +297,7 @@ namespace LoCoMPro.Data
         public static void InitializeReports(LoCoMProContext context, ref List<Report> reports
             , ref List<Register> registers, ref List<User> users)
         {
-            for(int registerIndex = 0 ; registerIndex < (registers.Count / users.Count); registerIndex++) {
+            for(int registerIndex = 0 ; registerIndex < (registers.Count / (users.Count * 3)); registerIndex++) {
                 reports.Add(new Report() { ReportedRegister = registers[registerIndex]
                         , Reporter = users[GenerateRandom(0, users.Count)]
                         , ReportDate = new DateTime(2024, 2, 15, 12, 0, 0, DateTimeKind.Utc)

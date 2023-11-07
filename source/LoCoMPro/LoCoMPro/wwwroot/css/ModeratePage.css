@@ -24,13 +24,6 @@
     min-width: 950px;
 }
 
-.reports-section ul {
-    width: 100%;
-    height: auto;
-    margin: 7px 5px;
-    padding: 5px;
-}
-
 .results-cont-msg {
     margin-left: 30px;
     text-align: left;
@@ -40,10 +33,10 @@
 
 /* Style for search title */
 .containerListReportColumns {
-    display: flex;
+    display: inline-block;
     flex-direction: row;
     height: auto;
-    width: 90%;
+    width: 91%;
     justify-content:space-around;
     list-style: none;
     margin: 10px 0px;
@@ -90,25 +83,25 @@
     width: 100%;
     text-decoration: none;
     color: #000000;
-    margin: 10px 0px;
+    margin: 5px 0px;
     min-height: 4em;
     border-radius: 15px;
     text-align: left;
     min-width: 950px;
-    font-size:18px;
+    font-size: large;
 }
 
 /* Style for the result register block text*/
 .result-block a span {
     display: inline-flex;
     width: 16%;
-    margin: auto auto;
-    margin: 0px 10px
+    margin: 0px 10px;
+    overflow: clip;
+    text-overflow: ellipsis;
 }
 
 /* Style for the result register block text */
 .result-block a {
-    /*flex: 0 0 calc(16.67% - 20px);*/
     display: flex;
     height: 4em;
     width: 100%;
@@ -118,8 +111,7 @@
     padding: 10px 15px;
     max-height: 3.9em;
     text-decoration: none;
-    overflow: clip;
-    text-overflow: ellipsis;
+    
     color: #000000;
 }
 
@@ -175,6 +167,7 @@
     cursor: pointer;
     background-color: transparent;
     border: none;
+    margin: 10px 0px;
 }
 
 /* Style for the save button of the pop up */
@@ -191,10 +184,10 @@
     width: auto;
 }
 
-    /* Style for the save button of the pop up when hover*/
-    #saveButton:hover {
-        background-color: #5AABE2;
-    }
+/* Style for the save button of the pop up when hover*/
+#saveButton:hover {
+    background-color: #5AABE2;
+}
 
 /* Style for the button that close the Interaction Pop Up */
 .interactions-close-button {
@@ -331,13 +324,6 @@
     background-color: #E25A5A;
 }
 
-/* Style for the button that open the Interaction Pop Up */
-.open-interactions-button {
-    cursor: pointer;
-    background-color: transparent;
-    border: none;
-    margin: 10px;
-}
 
 .feedback-message {
     background-color: #F5AA38;

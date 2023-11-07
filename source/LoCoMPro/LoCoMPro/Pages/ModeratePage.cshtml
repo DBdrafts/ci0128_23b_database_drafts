@@ -22,6 +22,7 @@
 </head>
 
 <div class="reported-page-body">
+    <h2 class="text-center">Registros reportados</h2>
     <div id="feedbackMessage" class="feedback-message"></div>
     <div id="cant-reportes">
         <h5>Cantidad de reportes: <span id="report-count">@Model.Reports.Count</span></h5>
@@ -41,7 +42,7 @@
 
         <!-- Search section header -->
         <nav>
-            <ul class="containerListReportColumns">
+            <ul class="containerListReportColumns" style='display: @(Model.Reports.Count != 0 ? "flex" : "none")'>
                 <li id="product-col">
                     <div class="textComment">Producto</div>
                 </li>
