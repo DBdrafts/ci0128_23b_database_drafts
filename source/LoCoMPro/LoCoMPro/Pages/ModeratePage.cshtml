@@ -84,7 +84,7 @@
                     $"{s}{report.SubmitionDate.ToShortDateString()}{s}{report.CantonName}" +
                     $"{s}{report.ProvinceName}{s}{report.ReportDate}" +
                     $"{s}{report.ReportState}{s}{reporterName}" +
-                    $"{s}{contributorName}{s}{register.Price}";
+                    $"{s}{contributorName}{s}{register.Price}{s}{@reportNum}";
                 
                 // images in registers
                 int imagecount = 0;
@@ -102,6 +102,9 @@
                     }
                 }
 
+                // Veracity values
+                float veracityValue = Model.registerAverageReview[reportNum];
+
                 <!-- A result block -->
                 <li class="result-block register-block-pagination" id="report-item-@reportNum">
                     <!-- Route and data for each result -->
@@ -110,11 +113,11 @@
                             @report.ProductName
                         </span>
                         <!-- This can be use with the geolocalitation -->
-                        <span id="register-reporter" value="@reporterName">
-                            @reporterName
-                        </span>
                         <span id="register-user" value="@contributorName">
                             @contributorName
+                        </span>
+                        <span id="register-reporter" value="@reporterName">
+                            @reporterName
                         </span>
                         <span class="short-column" id="register-date" value="@report.ReportDate">
                             @report.ReportDate.ToShortDateString()
@@ -125,6 +128,17 @@
                                 images-register-id="@registerImages" onclick="openInteractionsPopupMod(this)">
                                 <img src="~/img/MoreIcon.svg" alt="Más opciones">
                             </button>
+                        </div>
+
+                        <div class="register-section-stars" style="display:none">
+                            <div class="veracity-stars register-column" id="register-veracity" value="@veracityValue">
+                                <span id="register_veracity_@reportNum">
+                                    @{
+                                        ViewBag.VeracityValue = veracityValue;
+                                    }
+                                    @await Html.PartialAsync("_VeracityStars")
+                                </span>
+                            </div>
                         </div>
                     </a>
                 </li>
@@ -140,6 +154,7 @@
                     <p><b>Producto:</b> <span id="popup-prodName"></span></p>
                     <p><b>Tienda:</b> <span id="popup-store"></span></p>
                     <p><b>Precio:</b> <span id="popup-price"></span></p>
+                    <p><b>Veracidad:</b> <span class="veracity-stars" id="popup-veracity"></span></p>
                     <p><b>Reportado por:</b> <span id="popup-reporterName"></span></p>
                     
 

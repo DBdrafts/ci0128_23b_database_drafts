@@ -46,6 +46,11 @@ namespace LoCoMPro.Pages
         public IList<User> Users { get; set; } = new List<User>();
 
         /// <summary>
+        /// Average review value of the registers
+        /// </summary>
+        public IList<float> registerAverageReview { get; set; }
+
+        /// <summary>
         /// GET HTTP request, initializes page values.
         /// </summary>
         public async Task OnGetAsync(int? pageIndex)
@@ -67,6 +72,9 @@ namespace LoCoMPro.Pages
             Registers = await registers.ToListAsync();
             // Gets the Data From data base 
             Reports = await reports.ToListAsync();
+
+            // Gets the average review value of the registers
+            ObtainAverageReviewValues();
         }
 
         /// <summary>
@@ -145,6 +153,20 @@ namespace LoCoMPro.Pages
                 && r.ProvinceName == provinceName
                 && r.ReportDate == reportDate
                 );
+        }
+
+        /// <summary>
+        /// Obtains the averages review values of the registers
+        /// </summary>
+        public void ObtainAverageReviewValues()
+        {
+            registerAverageReview = new List<float>();
+            // Gets the average value for each register
+            foreach (Register register in Registers)
+            {
+                registerAverageReview.Add(_context.GetAverageReviewValue(register.ContributorId
+                    , register.ProductName, register.StoreName, register.SubmitionDate));
+            }
         }
 
         /// <summary>

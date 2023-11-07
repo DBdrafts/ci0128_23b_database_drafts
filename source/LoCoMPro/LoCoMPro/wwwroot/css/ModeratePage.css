@@ -63,19 +63,6 @@
     margin-left: 30px
 }
 
-#contributor-col {
-
-}
-
-#reporter-col {
-
-}
-
-#date-col {
-
-}
-
-
 /* Style for the result register block */
 .result-block {
     display: inline-block;
@@ -115,6 +102,7 @@
     color: #000000;
 }
 
+/* Style for the short */
 .short-column {
     width: 10% !important;
 }
@@ -167,7 +155,7 @@
     cursor: pointer;
     background-color: transparent;
     border: none;
-    margin: 10px 0px;
+    margin: 5px 0px 0px 0px;
 }
 
 /* Style for the save button of the pop up */
@@ -203,15 +191,11 @@
     width: auto;
 }
 
-    /* Style for the button that close the Interaction Pop Up when hover */
-    .interactions-close-button:hover {
-        background-color: #e5e5e5;
-    }
-
-/* Style for the button that open the Interaction Pop Up */
-.open-interactions-button {
-    margin: 10px;
+/* Style for the button that close the Interaction Pop Up when hover */
+.interactions-close-button:hover {
+    background-color: #e5e5e5;
 }
+
 
 /* Style for the button container */
 .buttons-container {
@@ -347,4 +331,19 @@
 .feedback-message.active {
     display: block; /* Mostrar el mensaje */
     opacity: 1; /* Hacerlo visible */
+}
+
+/* Style for the veracity stars */
+.veracity-stars {
+    width: auto;
+    display: inline-block;
+    font-size: 30px;
+    color: #F5AA38;
+    text-align: center;
+}
+
+/* Style for the veracity stars in the register section*/
+.register-section-stars {
+    width: 20%;
+    display: inline-block;
 }

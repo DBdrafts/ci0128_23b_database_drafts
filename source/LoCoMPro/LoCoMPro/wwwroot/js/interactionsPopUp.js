@@ -42,7 +42,7 @@ function openInteractionsPopupMod(openButton) {
 
     // Gets the register data
     var [ReporterId, ContributorId, ProductName, StoreName, SubmitionDate, CantonName,
-        ProvinceName, ReportDate, ReportState, reporterName, contributorName, price] = reportData.split(String.fromCharCode(31));
+        ProvinceName, ReportDate, ReportState, reporterName, contributorName, price, registerNumber] = reportData.split(String.fromCharCode(31));
 
     
 
@@ -56,6 +56,9 @@ function openInteractionsPopupMod(openButton) {
 
     // Set the images data
     var imagesData = openButton.getAttribute('images-register-id').split(String.fromCharCode(31));
+
+    // Copies the validation star of the register
+    copyRegisterValidation(registerNumber);
 
     // Load the images in the pop up
     loadRegisterImages(imagesData)

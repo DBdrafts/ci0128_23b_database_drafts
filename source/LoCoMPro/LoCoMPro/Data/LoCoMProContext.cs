@@ -324,8 +324,28 @@ namespace LoCoMPro.Data
             float? result = Database.SqlQueryRaw<float?>(sqlQuery, contributorIdParam, productNameParam, storeNameParam, submitionDateParam)
                 .AsEnumerable().SingleOrDefault();
 
+            // Round to the closer multiple of 5
+            float roundResult = RoundToCloserReal(result);
+
             // Return the value or 0 if the value was 0
-            return result ?? 0;
+            return roundResult;
+        }
+
+        /// <summary>
+        /// Round a real number to the closer real number multiple of 0.5
+        /// </summary>
+        /// <param name="value">Real number to round.</param>
+        /// <returns>Closer real number multiple of 0.5</returns>
+        public float RoundToCloserReal(float? value)
+        {
+            float roundResult = 0;
+            
+            // If exist and is higher than 0
+            if (value.HasValue && value > 0)
+            {
+                roundResult = (float)(Math.Round(value.Value * 2) / 2);
+            }
+            return roundResult;
         }
     }
 }
