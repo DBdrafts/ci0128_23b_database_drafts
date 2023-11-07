@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using LoCoMPro.Models;
+using System.Reflection.Metadata;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NetTopologySuite.Geometries;
 using Microsoft.Data.SqlClient;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
@@ -297,5 +300,32 @@ namespace LoCoMPro.Data
             return results;
         }
 
+        /// <summary>
+        /// Gets the average review value of a register
+        /// </summary>
+        /// <param name="contributorId">Id of the user that make the register.</param>
+        /// <param name="productName">Name of the product.</param>
+        /// <param name="storeName">Name of the store.</param>
+        /// <param name="submitionDate">Date the register was made.</param>
+        /// <returns>Average review value of the register.</returns>
+        public float GetAverageReviewValue(string contributorId
+            , string productName, string storeName, DateTime submitionDate)
+        {
+            // Creates the SQL Query use to get the average review values
+            string sqlQuery = "SELECT dbo.GetAverageReviewValue(@ContributorId, @ProductName, @StoreName, @SubmitionDate)";
+
+            // Link the parameters with the register value
+            var contributorIdParam = new SqlParameter("@ContributorId", contributorId);
+            var productNameParam = new SqlParameter("@ProductName", productName);
+            var storeNameParam = new SqlParameter("@StoreName", storeName);
+            var submitionDateParam = new SqlParameter("@SubmitionDate", submitionDate);
+
+            // Gets the average review value of the register
+            float? result = Database.SqlQueryRaw<float?>(sqlQuery, contributorIdParam, productNameParam, storeNameParam, submitionDateParam)
+                .AsEnumerable().SingleOrDefault();
+
+            // Return the value or 0 if the value was 0
+            return result ?? 0;
+        }
     }
 }

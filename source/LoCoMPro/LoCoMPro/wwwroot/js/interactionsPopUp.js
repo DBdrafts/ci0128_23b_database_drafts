@@ -8,7 +8,7 @@ function openInteractionsPopup(openButton) {
 
     // Gets the register data
     var [submitionDate, userID, productName, storeName, price, date,
-        userName, comment, lastReviewValue, lastReportState] = registerKeys.split(String.fromCharCode(31));
+        userName, comment, lastReviewValue, lastReportState, registerNumber] = registerKeys.split(String.fromCharCode(31));
 
     // Sets the register data
     document.getElementById('popup-submitionDate').textContent = date;
@@ -16,11 +16,15 @@ function openInteractionsPopup(openButton) {
     document.getElementById('popup-userName').textContent = userName;
     document.getElementById('popup-comment').textContent = comment;
 
+
     // Set the images data
     var imagesData = openButton.getAttribute('images-register-id').split(String.fromCharCode(31));
 
     // Load the images in the pop up
     loadRegisterImages(imagesData)
+
+    // Copies the validation star of the register
+    copyRegisterValidation(registerNumber);
 
     // Set the information of the report button
     document.getElementById('reportIcon').src = '/img/DesactiveReportIcon.svg';
@@ -169,6 +173,7 @@ jQuery(document).ready(function ($) {
 
         save_reviewed_state(value)
     });
+
 });
 
 /// <summary>
@@ -219,4 +224,16 @@ function setReportedValue(lastReportedValue) {
         reportIcon.src = '/img/ActiveReportIcon.svg';
     }
     reportChanged = false;
+}
+
+/// <summary>
+/// Copies the representation of the register stars
+/// </summary>
+function copyRegisterValidation(registerNumber) {
+
+    // Gets the representation of that register
+    var veracityContent = $("#register_veracity_" + registerNumber).html();
+
+    // Change the actual representation of the veracity
+    $("#popup-veracity").html(veracityContent);
 }

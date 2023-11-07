@@ -4,13 +4,13 @@ using NuGet.Protocol;
 using NUnit.Framework;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-namespace LoactionTests
+namespace LocationTests
 {
     [TestClass]
     // Declaration of the test class
     public class RazorPageTests : BaseTest
     {
-        // Test by Dwayne Taylor Monterrosa C17827
+        // Test by Dwayne Taylor Monterrosa C17827 | Sprint 2
         [Test]
         public void GetProvincesForSelector()
         {
@@ -25,7 +25,7 @@ namespace LoactionTests
             Assert.IsTrue(provinces.Contains("GenericProvince"));
         }
 
-        // Test by Dwayne Taylor Monterrosa C17827
+        // Test by Dwayne Taylor Monterrosa C17827 | Sprint 2
         [Test]
         public void GetCantonsForSelector()
         {
@@ -40,7 +40,7 @@ namespace LoactionTests
             Assert.IsTrue(cantons.Contains("GenericCanton1") && cantons.Contains("GenericCanton2"));
         }
 
-        // Test by Dwayne Taylor Monterrosa C17827
+        // Test by Dwayne Taylor Monterrosa C17827 | Sprint 2
         [Test]
         public void GetCantonsInvalidProvince()
         {
@@ -56,6 +56,7 @@ namespace LoactionTests
             Assert.IsTrue(expected.Equals(cantons));
         }
 
+        // Test by Dwayne Taylor Monterrosa C17827 | Sprint 2
         [Test]
         public void GetCoordinatesFromValidCanton()
         {
@@ -79,8 +80,9 @@ namespace LoactionTests
             Assert.IsTrue(latitude == 6.9 && longitude == 4.2);
         }
 
+        // Test by Dwayne Taylor Monterrosa C17827 | Sprint 2
         [Test]
-        public void GetCoordinatesFromInvalidCanton()
+        public void GetCoordinatesFromValidCantonWithoutLocation()
         {
             // Arrange for the mock configuration
             // Create an instance of the page model (pageModel) using the CreatePageModel()
@@ -88,6 +90,21 @@ namespace LoactionTests
 
             // Get the geolocation for Paraiso canton.
             var result = pageModel.OnGetLocationFromCanton("GenericProvince", "GenericCanton1");
+
+            // Ensure that since Cartago does not have a Geolocation, to return the geolocation for said canton.
+            Assert.IsTrue(result.StatusCode == 500);
+        }
+
+        // Test by Dwayne Taylor Monterrosa C17827 | Sprint 2
+        [Test]
+        public void GetCoordinatesFromInValidCanton()
+        {
+            // Arrange for the mock configuration
+            // Create an instance of the page model (pageModel) using the CreatePageModel()
+            var pageModel = (IndexModel)CreatePageModel("index_page");
+
+            // Get the geolocation for Paraiso canton.
+            var result = pageModel.OnGetLocationFromCanton("GenericProvince", "Invalid");
 
             // Ensure that since Cartago does not have a Geolocation, to return the geolocation for said canton.
             Assert.IsTrue(result.StatusCode == 500);

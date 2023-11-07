@@ -120,6 +120,10 @@ public class BaseTest
             case "index_page":
                 return new IndexModel(mockLogger.Object, dbContext, mockConfiguration.Object, mockUserManager.Object, mockSignInManager.Object);
 
+            // Have to return a Product List page
+            case "product_list":
+                return new ProductListPageModel(dbContext, mockConfiguration.Object, null);
+
             // Return a base page model
             default:
                 return new LoCoMProPageModel(dbContext, mockConfiguration.Object);
@@ -181,6 +185,24 @@ public class BaseTest
         }
         // returns the list of initialized registers
         return result;
+    }
+
+    // Test to create elements of the list
+    public static UserProductListElement CreateElementTest()
+    {
+        return new UserProductListElement("ProductTest", "BrandTest"
+           , "ModelTest", "StoreTest", "ProvinceTest", "CantonTest", "10");
+    }
+    public static UserProductListElement CreateDifferentElementTest()
+    {
+        return new UserProductListElement("ProductTest1", "BrandTest1"
+           , "ModelTest1", "StoreTest1", "ProvinceTest1", "CantonTest1", "100");
+    }
+
+    public static UserProductListElement CreateSimilarElementTest()
+    {
+        return new UserProductListElement("ProductTest1", "BrandTest"
+           , "ModelTest", "StoreTest", "ProvinceTest", "CantonTest", "25");
     }
 
     private void InitContext(ref LoCoMProContext context)

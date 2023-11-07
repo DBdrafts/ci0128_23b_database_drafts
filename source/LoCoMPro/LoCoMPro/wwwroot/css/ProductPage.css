@@ -203,28 +203,29 @@
 
 /*Style for list registers columns*/
 .containerListRegistercolumns {
-    list-style: none;
     display: grid;
-    grid-template-columns: 1fr 1fr 3fr;
-    padding-left: 0;
+    grid-template-columns: 4fr 7fr 9fr 7fr;
+    padding-left: 25px;
+    height: auto;
+    width: 100%;
+    list-style: none;
+    min-width: 950px;
+    margin: 10px 25px 10px 0px;
 }
 
 /*Style for text in the html list*/
-.containerListRegistercolumns > li > a {
-    display: block;
-    padding: 15px 20px;
-    color: black;
-    text-decoration: none;
-    background-image: url('/img/ArrowDownIcon.svg');
-    background-repeat: no-repeat;
-    background-position: 150px 30px;
-    text-align: left;
-    padding-left: 30px;
+.containerListRegistercolumns li {
+    font-size: x-large;
+    width: 100%;
+    text-align: left !important;
+    flex: 0 0 0%;
+    margin: 0px 10px;
 }
 
 /*Style for text in the selected option of the list */
-.containerListRegistercolumns > li:hover > a {
-    color: #208EE0;
+.containerListRegistercolumns ul {
+    margin: 0px;
+    padding: 0px;
 }
 
 /*Style for the vertical menu */
@@ -261,53 +262,53 @@
 
 /*Style for comment */
 .textComment {
-    text-align: center;
+    text-align: left;
     font-size: 30px;
     margin: 0px;
-    padding: 15px 20px;
+    padding: 0px;
 }
 
 /* Style for the result section */
 .register-section {
     height: auto;
     width: 100%;
+    text-decoration: none;
+    color: #000000;
 }
 
 /* Style for the register block */
 .register-block {
-    text-decoration: none;
-    background-color: #E2E3E3;
-    border-radius: 15px;
-    margin: 10px 0px;
-    max-height: 4em;
-}
-
-/* Style for the register block text*/
-.register-block a {
+    position: relative;
     display: flex;
-    height: 4em;
+    height: auto;
     background-color: #E2E3E3;
-    justify-content: space-around;
-    border-radius: 15px;
     margin: 10px 0px;
-    padding: 0px 10px;
-    max-height: 4em;
-    text-decoration: none;
-    overflow: clip;
-    text-overflow: ellipsis;
-    color: #000000;
+    padding: 0px 15px;
+    min-height: 4em;
+    border-radius: 15px;
+    text-align: left;
+    justify-content: space-around;
+    min-width: 950px;
+    width: 100%;
+    align-items: center !important;
+    font-size: medium;
 }
 
 /* Style for the register block text*/
-.register-block a span {
-    flex: 0 0 28%;
-    text-align: left;
+.register-column {
+    display: inline-block;
+    width: 45%;
+    text-decoration: none;
     margin: 10px 0px;
+    max-height: 3.3em;
+    padding: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* Style for the result block when hover */
-.register-block:hover {
-    background-color: #9F9F9F;
+/*Style for the short column of the register*/
+.short-column {
+    width: 14%;
 }
 
 /* Style for the search section */
@@ -317,7 +318,7 @@
     align-items: center;
 }
 
-/* style for po pop up carousel*/
+/* style for pop up carousel*/
 .carousel-section-pop-up {
     display: flex;
     justify-content: center;
@@ -406,11 +407,18 @@
     position: relative;
 }
 
+.interaction-button {
+    position: absolute;
+    bottom: 20px;
+    display: inline-block;
+}
+
 /* Style for the button that open the Interaction Pop Up */
 .open-interactions-button {
+    display: inline-block;
     cursor: pointer;
     background-color: transparent;
-    border:none;
+    border: none;
 }
 
 /* Style for the save button of the pop up */
@@ -452,11 +460,6 @@
 /* Style for the button that close the Interaction Pop Up when hover */
 .interactions-close-button:hover {
     background-color: #E25A5A;
-}
-
-/* Style for the button that open the Interaction Pop Up */
-.open-interactions-button {
-    margin: 10px;
 }
 
 /* Style for the feedback message of the Pop Up */
@@ -540,4 +543,24 @@
     font-size: 22px !important;
     text-align: center;
     margin: 0px 10px;
+}
+
+/* Style for the veracity stars */
+.veracity-stars {
+    width: auto;
+    display: inline-block;
+    font-size: 30px;
+    color: #F5AA38;
+    text-align: center;
+}
+
+/* Style for the veracity stars in the register section*/
+.register-section-stars {
+    width: 20%;
+    display: inline-block;
+}
+
+/* Style for the register block text of the price */
+.align-right {
+    justify-content: flex-end !important;
 }
