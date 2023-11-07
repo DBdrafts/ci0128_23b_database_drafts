@@ -18,7 +18,7 @@ $(document).ready(function () {
         /* $("mapPopUp").style.display = "block";*/
         initializeMap();
     });
-
+        
     // Close the popup when clicking outside of it
     $(document).on("click", function (e) {
         if (!$(e.target).closest("#mapPopup").length && !$(e.target).closest("#showPopupButton").length && $('#mapPopup').css('display') !== 'none') {
@@ -197,8 +197,8 @@ function saveLocation() {
         document.getElementById("selectedProvince").value = selectedProvince;
         document.getElementById("selectedCanton").value = selectedCanton;
     } else if (window.location.href.includes("/UserInfoPage")) {
-        $("#province-change").text(selectedProvince);
-        $("#ubicacion-change").text(`${selectedProvince}, ${selectedCanton}`);
+        $("#ubicacion-change").html(`<strong>${selectedProvince}, ${selectedCanton}<strong>`);
+        //showFeedbackMessage('Su lugar de preferencia se ha guardado!', 'feedbackMessage');
         try {
             const response = updateProvinciaToUser(selectedProvince);
             console.log('Province Updated: ', response.message);
@@ -304,3 +304,28 @@ function updateProvinciaToUser(province) {
     });
 
 }
+
+function setNullToUser() {
+    //showFeedbackMessage('Su lugar de preferencia se ha guardado!', 'feedbackMessage');
+    $("#ubicacion-change").html(`<strong>No agregada</strong>`);
+    $.ajax({
+        type: 'POST',
+        url: '/UserInfoPage?handler=ResetGeolocation', // Specify the handler
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+        },
+        data: { },
+        success: function (data) {
+            console.log('Province Updated: ', data);
+            return data;
+        },
+
+        error: function (error) {
+            console.error('Fail in update: ', error);
+            return data;
+        }
+    });
+
+}
+

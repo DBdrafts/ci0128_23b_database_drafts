@@ -19,6 +19,7 @@ using Castle.Core.Smtp;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
+using NetTopologySuite.Geometries;
 
 [TestClass]
 // Declaration of the test class
@@ -93,7 +94,7 @@ public class BaseTest
         {
             // Have to return a Search page
             case "search_page":
-                return new SearchPageModel(dbContext, mockConfiguration.Object);
+                return new SearchPageModel(dbContext, mockConfiguration.Object, mockUserManager.Object);
 
             // Have to return a Product page
             case "product_page":

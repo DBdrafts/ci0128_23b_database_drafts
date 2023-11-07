@@ -1,5 +1,6 @@
 using LoCoMPro.Data;
 using LoCoMPro.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -13,13 +14,18 @@ namespace LoCoMPro.Pages
     /// </summary>
     public class SearchPageModel : LoCoMProPageModel
     {
+        private readonly UserManager<User> _userManager;
         /// <summary>
         /// Creates a new SearchPageModel, requires a context and configuration.
         /// </summary>
         /// <param name="context">DB context to use for page.</param>
         /// <param name="configuration">Configuration for page.</param>
-        public SearchPageModel(LoCoMProContext context, IConfiguration configuration)
-            : base(context, configuration) { }
+        public SearchPageModel(LoCoMProContext context, IConfiguration configuration,
+            UserManager<User> userManager)
+            : base(context, configuration) 
+        {
+            _userManager = userManager;
+        }
 
         /// <summary>
         /// Categories that the user wants to filter by.
@@ -97,6 +103,11 @@ namespace LoCoMPro.Pages
         public bool AreDistancesCalculated { get; set; } = false;
 
         /// <summary>
+        /// User in the page
+        /// </summary>
+        public User UserInPage;
+
+        /// <summary>
         /// OnGet method that handles the GET request.
         /// </summary>
         /// <param name="latitude">Latitude of location to use as base of search.</param>
@@ -105,6 +116,8 @@ namespace LoCoMPro.Pages
         /// 
         public async Task OnGetAsync(double latitude = 0.0, double longitude = 0.0)
         {
+            // get the user in the page
+            UserInPage = await _userManager.GetUserAsync(User);
 
             // Prepare the query to retrieve data from the database
             var categories = from c in _context.Categories
@@ -114,19 +127,22 @@ namespace LoCoMPro.Pages
                             where r.Reports.All(report => report.ReportState != 2)
                             select r;
 
-
+            // Get the coordenades dots to search
             var coordinates = new Coordinate(0.0, 0.0);
             var geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
 
             if (latitude != 0.0 && longitude != 0.0)
-            {
+            { // check first if the user select a location
                 coordinates = new Coordinate(longitude, latitude);
                 geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
                 AreDistancesCalculated = true;
-            }/* else if (User.geolocalizacion)
-            {
-                geolocation = User.GetHashCode();
-            }*/
+
+            }else if (UserhasLocation(UserInPage))
+            { // else if the user has a location in their profile
+                coordinates = new Coordinate(UserInPage.Geolocation.X, UserInPage.Geolocation.Y);
+                geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
+            }
+
             SearchResults = _context.GetSearchResults(SearchType ?? "Nombre", SearchString!, geolocation);
 
             SearchResults = SearchResults.GroupBy(r => new { r.ProductName, r.StoreName })
@@ -217,5 +233,24 @@ namespace LoCoMPro.Pages
             return resultQuery;
         }
 
+        /// <summary>
+        /// Get if the user has location
+        /// </summary>
+        /// <param name="userToCheck">Register to directly check if register has images</param>
+        public bool UserhasLocation(User userToCheck)
+        {
+            // Initialize a bool var to indicate whether the register has images.
+            bool hasLocation = false;
+
+            // Check if the input register is not null
+            if (userToCheck.Geolocation != null)
+            {
+                // Set hasLocation to true 
+                hasLocation = true;
+            }
+
+            // Return the boolean indicating whether the register has images.
+            return hasLocation;
+        }
     }
 }

@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="~/css/LocationButton.css" />
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBMFkBOkHqUiPh9GoSqq8F6h1RZDNRSJ8&libraries=places&region=CR"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/feedbackMessage.js"></script>
     <script src="~/js/location.js" defer></script>
 </head>
 
@@ -26,17 +27,23 @@
     <img src="~/img/LoCoMProLogo.svg" alt="LoCoMPro Logo">
 </div>
 <div class="user-section">
+
     <div class="userPage-logo">
         <img src="~/img/ProfileIcon.svg" alt="User Logo">
     </div>
     <div class="user-information">
         <div id="simple-label">Nombre de Usuario: <strong>@user.ToString()</strong></div>
         <div id="simple-label">Correo Electrónico: <strong>@email</strong></div>
-        <div id="simple-label">Ubicacion de preferencia: <div id="ubicacion-change" style="display: inline;"> @Model.geolocationInPerfil</div></div>
+        <div id="simple-label">Ubicacion de preferencia: <div id="ubicacion-change" style="display: inline;"><strong>@Model.geolocationInPerfil</strong></div></div>
     </div>
     <div class="changeInfo-buttons">
-        <button class="button-general" id="showPopupButton"> Seleccionar ubicación de preferencia</button>
-        <button class="button-general">  Eliminar ubicacion de preferencia</button>
+        <button class="button-general" id="showPopupButton">  Seleccionar ubicación de preferencia</button>
+      
+        <button class="button-general" id="deleteGeolocationButton" type="submit" onclick="setNullToUser()">
+            Eliminar ubicación de preferencia
+        </button>
+       
+
         <a asp-area="Identity" asp-page="/Account/ChangeUserName" asp-route-email="@email">
             <button class="button-general" id="changeUsername">Cambiar nombre de usuario</button>
         </a>

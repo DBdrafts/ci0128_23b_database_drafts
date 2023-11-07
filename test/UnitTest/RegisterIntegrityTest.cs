@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using NUnit.Framework.Internal;
 using Microsoft.Win32;
 
-namespace RegisterReportTest
+namespace RegisterIntegrityTest
 {
     [TestClass]
     public class RazorPageTests : BaseTest

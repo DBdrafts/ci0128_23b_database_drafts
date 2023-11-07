@@ -39,16 +39,6 @@ namespace LoCoMPro.Pages
         public User UserInPage { get; set; }
 
         /// <summary>
-        /// Name in the province
-        /// </summary>
-        public string Provincia { get; set; }
-
-        /// <summary>
-        /// Name of the canton
-        /// </summary>
-        public string Canton { get; set; }
-
-        /// <summary>
         /// double of latitud
         /// </summary>
         public double latitud { get; set; }
@@ -69,18 +59,19 @@ namespace LoCoMPro.Pages
         public string? geolocationInPerfil { get; set; }
 
         /// <summary>
+        /// trigger to delete the location
+        /// </summary
+        [BindProperty]
+        public bool DeleteGeolocation { get; set; }
+
+
+        /// <summary>
         /// GET HTTP request, initializes page values.
         /// </summary>
         public async Task OnGetAsync()
         {
             // Stores the user in the page
             UserInPage = await _userManager.GetUserAsync(User);
-
-            // Set the Province string name to display
-            Provincia = UserInPage.ProvinciaName != null ? UserInPage.ProvinciaName : "No agregada";
-
-            // Set the Canton string name to display 
-            Canton = UserInPage.CantonName != null ? UserInPage.CantonName : "No agregada";
 
             // Set the Canton string name to display 
             geolocationSelected = UserInPage.Geolocation;
@@ -89,6 +80,10 @@ namespace LoCoMPro.Pages
             geolocationInPerfil = UserInPage.Geolocation != null ? "Agregada" : "No agregada";
         }
 
+
+        /// <summary>
+        /// POST, initializes selected pages.
+        /// </summary>
         public void OnPostUpdateProvince(double longitude, double latitude)
         {
             // set a new points to add to the user
@@ -104,6 +99,10 @@ namespace LoCoMPro.Pages
             SaveGeolocationAsync().Wait();
         }
 
+
+        /// <summary>
+        /// Saves the geolocation into the data base
+        /// </summary>
         private async Task SaveGeolocationAsync()
         {
             // Get the actual user
@@ -130,6 +129,46 @@ namespace LoCoMPro.Pages
         }
 
 
+        /// <summary>
+        /// POST, reset the geolocation of the user.
+        /// </summary>
+        public void OnPostResetGeolocation()
+        {
+            // Set geolocationSelected to null
+            geolocationSelected = null;
 
+            // Save the changes to the user's data in your database (if needed)
+            //UserInPage.Geolocation = null; // Update the user's geolocation in your data store
+
+            CleanGeolocationAsync().Wait();
+        }
+
+        /// <summary>
+        /// POST, delete the geolocation in the user model.
+        /// </summary>
+        private async Task CleanGeolocationAsync()
+        {
+            // Get the actual user
+            var user = await _userManager.GetUserAsync(User);
+
+            // Set null the value user geolocation
+            user.Geolocation = null;
+
+            // Save the state to retun in javascript
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                var response = new { message = "Usuario actualizada exitosamente" };
+                Response.StatusCode = (int)HttpStatusCode.OK;
+                await Response.WriteAsync(JsonConvert.SerializeObject(response));
+            }
+            else
+            {
+                var response = new { message = "Error al actualizar la geolocalización" };
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                await Response.WriteAsync(JsonConvert.SerializeObject(response));
+            }
+        }
     }
 }
