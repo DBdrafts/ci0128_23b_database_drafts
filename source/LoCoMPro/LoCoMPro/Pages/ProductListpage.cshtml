@@ -6,7 +6,7 @@
     ViewBag.ShowSearchBar = true;
     ViewBag.ShowLogoLink = true;
     @Html.AntiForgeryToken();
-    char s = (char)31; // ASCII Control Unit Separator
+    char s = (char)31;
 }
 
 <head>
@@ -21,20 +21,17 @@
     <div id="feedbackMessage" class="feedback-message"></div>
 
     <div class="information-section">
-        <!-- Title of the list-->
         <div class="list-page-title">
             <h2>Lista de productos de interés</h2>
         </div>
 
-        <!-- Amount of products in the list-->
         <div class="list-page-subtitle">
-            <h5>Cantidad de productos: <span id="product-count">@Model.UserProductList.Count</span></h5>
+            <h4>Cantidad de productos: <span id="product-count">@Model.UserProductList.Count</span></h4>
 
-            <h5>Precio aproximado: ₡ <span id="total-price">@Model.TotalPrice.ToString("N0")</span></h5>
+            <h4>Precio aproximado: ₡ <span id="total-price">@Model.TotalPrice.ToString("N0")</span></h4>
         </div>
     </div>
 
-    <!-- Horizontal separating line -->
     <hr class="style-four">
 
     <div class="empty-section text-center" id="empty-list"
@@ -45,35 +42,32 @@
 
     <div class ="product-list-section" id="no-empty-list"
             style='display: @(Model.UserProductList.Count != 0 ? "inline-block" : "none")'>
-        <!-- Container for column -->
         <nav>
             <div class="results-cont-msg" span id="results-count" hidden></div>
 
             <ul class="list-page-column-title">
                 <li>
-                    <div class="textComment">Producto</div>
+                    <div class="text-comment">Producto</div>
                 </li>
                 <li>
-                    <div class="textComment">Marca</div>
+                    <div class="text-comment">Marca</div>
                 </li>
                 <li>
-                    <div class="textComment">Modelo</div>
+                    <div class="text-comment">Modelo</div>
                 </li>
                 <li>
-                    <div class="textComment">Tienda</div>
+                    <div class="text-comment">Tienda</div>
                 </li>
                 <li>
-                    <div class="textComment">Ubicación</div>
+                    <div class="text-comment">Ubicación</div>
                 </li>
                 <li>
-                    <div class="textComment">Precio Promedio</div>
+                    <div class="text-comment">Precio Promedio</div>
                 </li>
             </ul>
         </nav>
 
-        <!-- Search results section -->
         <ul class="product-list-section">
-            <!-- Put in all results -->
             @for (int i = 0; i < Model.UserProductList.Count; i++)
             {
                 var product = Model.UserProductList[i];
@@ -83,9 +77,7 @@
                         $"{s}{product.Province}{s}{product.Canton}" +
                         $"{s}{product.AvgPrice}";
 
-                <!-- A result block -->
                 <li class="product-list-block" id="product-item-@i">
-                    <!-- Route and data for each result -->
                         <span id="register-product-name" value="@product.ProductName">
                             @Html.DisplayFor(modelItem => product.ProductName)
                         </span>

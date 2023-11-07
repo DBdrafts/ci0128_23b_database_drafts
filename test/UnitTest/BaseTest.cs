@@ -113,6 +113,10 @@ public class BaseTest
                 return new RegisterModel(dbContext, mockConfiguration.Object, mockUserManager.Object
                     , mockUserStore.Object, mockSignInManager.Object, null, null);
 
+            // Have to return a Product List page
+            case "product_list":
+                return new ProductListPageModel(dbContext, mockConfiguration.Object, null);
+
             // Return a base page model
             default:
                 return new LoCoMProPageModel(dbContext, mockConfiguration.Object);
@@ -247,4 +251,21 @@ public class BaseTest
         return result;
     }
 
+    // Test to create elements of the list
+    public static UserProductListElement CreateElementTest()
+    {
+        return new UserProductListElement("ProductTest", "BrandTest"
+           , "ModelTest", "StoreTest", "ProvinceTest", "CantonTest", "10");
+    }
+    public static UserProductListElement CreateDifferentElementTest()
+    {
+        return new UserProductListElement("ProductTest1", "BrandTest1"
+           , "ModelTest1", "StoreTest1", "ProvinceTest1", "CantonTest1", "100");
+    }
+
+    public static UserProductListElement CreateSimilarElementTest()
+    {
+        return new UserProductListElement("ProductTest1", "BrandTest"
+           , "ModelTest", "StoreTest", "ProvinceTest", "CantonTest", "25");
+    }
 }

@@ -10,7 +10,7 @@ using NetTopologySuite.Geometries;
 namespace LoCoMPro.Pages
 {
     /// <summary>
-    /// Page model for SearchPage, handels requests, database access, and preparing data for the page.
+    /// Page model for SearchPage, handles requests, database access, and preparing data for the page.
     /// </summary>
     public class SearchPageModel : LoCoMProPageModel
     {
@@ -37,7 +37,7 @@ namespace LoCoMPro.Pages
         /// Provinces that the user wants to filter by.
         /// <p>Its string with province names separated by a comma.</p>
         /// </summary>
-        public string? SelectedProvinces { get; set; }
+        internal string? SelectedProvinces { get; set; }
 
         /// <summary>
         /// Cantons that the user wants to filter by.
@@ -88,17 +88,12 @@ namespace LoCoMPro.Pages
         public Dictionary<string, string> CategoryMap { get; set; } = default!;
 
         /// <summary>
-        /// Result of the query.
-        /// </summary>
-        public IEnumerable<Register>? Registers { get; set; } = new List<Register>();
-
-        /// <summary>
         /// Search results with extended Data Types.
         /// </summary>
         public IEnumerable<SearchResult>? SearchResults { get; set; } = new List<SearchResult>();
 
         /// <summary>
-        /// Flag of wether or not non zero distances are calculated for registers.
+        /// Flag of whether or not non zero distances are calculated for registers.
         /// </summary>
         public bool AreDistancesCalculated { get; set; } = false;
 
@@ -113,16 +108,12 @@ namespace LoCoMPro.Pages
         /// <param name="latitude">Latitude of location to use as base of search.</param>
         /// <param name="longitude">Longitude of location to use as base of search.</param>
         /// <returns></returns>
-        /// 
         public async Task OnGetAsync(double latitude = 0.0, double longitude = 0.0)
         {
             // get the user in the page
             UserInPage = await _userManager.GetUserAsync(User);
 
             // Prepare the query to retrieve data from the database
-            var categories = from c in _context.Categories
-                             select c;
-
             var registers = from r in _context.Registers
                             where r.Reports.All(report => report.ReportState != 2)
                             select r;
@@ -152,12 +143,10 @@ namespace LoCoMPro.Pages
 
             if (match == null) return;
 
+
             /* Retrieve data from the database */
             // Query to get all categories associated with at least one product in the register list
-            Category = await categories
-                            .Where(category => category.Products!.Any(product =>
-                                match.Any(register => register.ProductName == product.Name)))
-                            .ToListAsync();
+            Category = GetCategories(match);
 
             // Query to get all provinces associated with at least one register in the register list
             Provinces = _context.Provincias
@@ -186,18 +175,22 @@ namespace LoCoMPro.Pages
                         group => string.Join(";", group.SelectMany(item => item.Categories!.Select(category => category.CategoryName)))
                     );
                 CategoryMap = groupedProductsInRegisters;
-                }
-
-            
+                }   
         }
 
         /// <summary>
-        /// OnPost method that sent request.
+        /// Gets the categories of the products that match with the search
         /// </summary>
-        /// <returns>Redirect to search results page.</returns>
-        public IActionResult OnPost()
+        /// <param name="match">Registers that match with the search.</param>
+        /// <returns></returns>
+        public List<Category> GetCategories(IQueryable<Register>? match)
         {
-            return Page();
+            var categories = from c in _context.Categories
+                             select c;
+
+            return categories.Where(category => category.Products!.Any(product =>
+                              match!.Any(register => register.ProductName == product.Name)))
+                              .ToList();
         }
 
         /// <summary>

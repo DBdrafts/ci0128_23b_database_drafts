@@ -96,7 +96,7 @@
                 <li id="store-col">
                     <div class="textComment">Tienda</div>
                 </li>
-                <li>
+                <li id="location-col">
                     @if(!Model.AreDistancesCalculated)
                     {
                         <div class="textComment">Ubicación</div>
@@ -141,7 +141,7 @@
                         <span class="short-column" id="register-model-name" value="@register.Model">
                             @(string.IsNullOrEmpty(register.Model) ? "N/A" : register.Model)
                         </span>
-                        <span class="short-column" id="register-store-name" value="@register.StoreName">
+                        <span id="register-store-name" value="@register.StoreName">
                             @register.StoreName
                         </span>
                         <span id="register-location-name" value="@displayText">
@@ -150,7 +150,7 @@
                         <span class="short-column" id="register-date">
                             @register.SubmitionDate.ToShortDateString()
                         </span>
-                        <span id="register-price" value="@register.Price">
+                        <span class="align-right" id="register-price" value="@register.Price">
                             ₡ @register.Price.ToString("N0")
                         </span>
 
