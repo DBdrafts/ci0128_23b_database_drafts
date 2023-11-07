@@ -269,7 +269,7 @@ namespace LoCoMPro.Pages
             {
                 registers = registers.Where(r => (r.SubmitionDate >= from) && (r.SubmitionDate <= to));
             }
-            double avgPrice = (registers is not null && registers.Count() > 1) ? registers.Average(r => r.Price) : 0.0;
+            double avgPrice = (registers is not null) ? registers.Average(r => r.Price) : 0.0;
             return Convert.ToDecimal(avgPrice);
         }
 

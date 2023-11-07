@@ -11,6 +11,8 @@ var selectedLocation = null;
 var selectedMarker = null;
 var selectedStore = null;
 
+let cantonMapping = { }
+
 $(document).ready(function () {
     let hasPopulatedProvinceSelect = false;
     const currentPageUrl = window.location.href;
@@ -63,6 +65,8 @@ $(document).ready(function () {
             if (changeFromMap == false) { getCoordinatesFromName(); }
         }
     });
+
+    fillCantonMapping();
 });
 
 // Google Maps initialization function
@@ -218,7 +222,7 @@ function reverseGeocodeLocation(location) {
                 for (var i = 0; i < results[0].address_components.length; i++) {
                     const addressComponent = results[0].address_components[i];
                     const types = addressComponent.types;
-                    const longName = addressComponent.long_name;
+                    /*const longName = addressComponent.long_name;*/
                     const shortName = addressComponent.short_name;
                     if (types[0] == 'administrative_area_level_1') {
                         /*console.log('Marker is in the province of ' + shortName);*/
@@ -228,7 +232,7 @@ function reverseGeocodeLocation(location) {
                     }
                 }
 
-                selectedCanton = cantonName;
+                selectedCanton = (cantonName in cantonMapping) ? cantonMapping[cantonName] : cantonName;
                 $("#province").val(provinceName).trigger('change');
 
             } else {
@@ -251,7 +255,7 @@ function saveLocation() {
         $("#locationInfo").show();
         if (selectedStore !== null) {
             $("#store").removeAttr("disabled");
-            $("#store").val(selectedStore.replace(/\s+.*/g, '')).trigger('input');
+            $("#store").val(selectedStore.replace(/\s+\u2022.*/g, '')).trigger('input');
             /*$("#store").text(selectedStore);*/
             
         }
@@ -364,3 +368,6 @@ function getCoordinatesFromName() {
     });
 }
 
+function fillCantonMapping() {
+    cantonMapping['San Pedro'] = 'Montes de Oca';
+}
