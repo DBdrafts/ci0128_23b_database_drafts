@@ -12,5 +12,16 @@
     </div>
 
     @await Html.PartialAsync("_SearchBar")
-</div>
 
+    <div id="feedbackMessage" class="feedback-message"></div>
+
+    <script>
+        var feedbackMessageTemp = '@TempData["FeedbackMessage"]';
+    </script>
+
+    <script src="~/js/feedbackMessage.js"></script>
+
+    <script>
+        <@TempData.Remove("FeedbackMessage"); 
+    </script>
+</div>

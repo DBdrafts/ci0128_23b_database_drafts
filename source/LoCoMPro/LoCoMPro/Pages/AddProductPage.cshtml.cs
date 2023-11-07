@@ -154,6 +154,8 @@ namespace LoCoMPro.Pages
             // Save all changes in the contextDB
             await _context.SaveChangesAsync();
 
+            TempData["FeedbackMessage"] = "Su registro fue agregado correctamente!";
+
             return RedirectToPage("/Index");
         }
 

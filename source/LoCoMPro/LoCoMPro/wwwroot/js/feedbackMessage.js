@@ -12,3 +12,9 @@ function showFeedbackMessage(message, elementId) {
         console.error('Element with ID ' + elementId + ' not found.');
     }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    if (feedbackMessageTemp && feedbackMessageTemp.trim() !== "") {
+        showFeedbackMessage(feedbackMessageTemp, 'feedbackMessage');
+    }
+});
