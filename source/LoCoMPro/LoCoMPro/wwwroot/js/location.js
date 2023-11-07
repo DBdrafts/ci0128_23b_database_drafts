@@ -131,6 +131,7 @@ function updateMarkerPosition(location) {
     }
     selectedLocation = location;
     selectedMarker.setPosition(location);
+    clearMarkers();
 }
 
 // Initializes SearchBar only if in addProductPage
@@ -149,8 +150,6 @@ function initializeSearchBar() {
     map.addListener("bounds_changed", () => {
         searchBox.setBounds(map.getBounds());
     });
-
-    let markers = [];
 
     // Listen for the event fired when the user selects a prediction and retrieve
     // more details for that place.
@@ -206,6 +205,8 @@ function initializeSearchBar() {
         selectedLocation = places[0].geometry.location;
         reverseGeocodeLocation(selectedLocation);
         map.fitBounds(bounds);
+        selectedMarker.setMap(null);
+        selectedMarker = null;
     });
 }
 
@@ -368,6 +369,16 @@ function getCoordinatesFromName() {
             console.error('Error: ', error);
         }
     });
+}
+
+function clearMarkers() {
+    if (markers.length > 0) {
+        // Clear out the old markers.
+        markers.forEach((marker) => {
+            marker.setMap(null);
+        });
+        markers = [];
+    }
 }
 
 function fillCantonMapping() {
