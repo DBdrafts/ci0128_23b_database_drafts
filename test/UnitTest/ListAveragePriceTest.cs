@@ -17,7 +17,7 @@ namespace ListAveragePriceTest
     // Declaration of the test class
     public class RazorPageTests : BaseTest
     {
-        // Test by Julio Alejandro Rodríguez Salguera C16717
+        // Test by Julio Alejandro Rodríguez Salguera C16717 | Sprint 2
         [Test]
         public void ConvertIntFromStringWithComma()
         {
@@ -39,7 +39,7 @@ namespace ListAveragePriceTest
             Assert.IsTrue(intFromString == 1000);
         }
 
-        // Test by Julio Alejandro Rodríguez Salguera C16717
+        // Test by Julio Alejandro Rodríguez Salguera C16717 | Sprint 2
         [Test]
         public void ConvertIntFromStringWithDot()
         {
@@ -61,7 +61,7 @@ namespace ListAveragePriceTest
             Assert.IsTrue(intFromString == 1000);
         }
 
-        // Test by Julio Alejandro Rodríguez Salguera C16717
+        // Test by Julio Alejandro Rodríguez Salguera C16717 | Sprint 2
         [Test]
         public void ConvertIntFromStringWithSpace()
         {
@@ -83,7 +83,7 @@ namespace ListAveragePriceTest
             Assert.IsTrue(intFromString == 1000);
         }
 
-        // Test by Julio Alejandro Rodríguez Salguera C16717
+        // Test by Julio Alejandro Rodríguez Salguera C16717 | Sprint 2
         [Test]
         public void ConvertInvalidIntFromString()
         {
@@ -105,7 +105,7 @@ namespace ListAveragePriceTest
             Assert.IsTrue(intFromString == 0);
         }
 
-        // Test by Julio Alejandro Rodríguez Salguera C16717
+        // Test by Julio Alejandro Rodríguez Salguera C16717 | Sprint 2
         [Test]
         public void CalculateTotalPriceStandard()
         {
@@ -129,7 +129,7 @@ namespace ListAveragePriceTest
             Assert.IsTrue(pageModel.TotalPrice == 135);
         }
 
-        // Test by Julio Alejandro Rodríguez Salguera C16717
+        // Test by Julio Alejandro Rodríguez Salguera C16717 | Sprint 2
         [Test]
         public void CalculateTotalPriceDifferentString()
         {
@@ -164,7 +164,7 @@ namespace ListAveragePriceTest
             Assert.IsTrue(pageModel.TotalPrice == 3000);
         }
 
-        // Test by Julio Alejandro Rodríguez Salguera C16717
+        // Test by Julio Alejandro Rodríguez Salguera C16717 | Sprint 2
         [Test]
         public void CalculateTotalPriceInvalidString()
         {
