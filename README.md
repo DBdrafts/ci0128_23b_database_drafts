@@ -68,6 +68,7 @@ al mismo tiempo beneficiarse de esta información para sus propias compras.
 |       +---docgen
 \---test
     \---UnitTest
+    \---functional_tests
 ```
 
 - El directorio ["./data/"](./data) contiene información importante para generar los datos para la base de datos
@@ -253,18 +254,27 @@ Si aplicó todos estos pasos, entonces se abrirá en su navegador la aplicación
 
 ![Imagen de instalación VS9](./img/vs_installation/InstalacionVS_9.PNG)
 
-*Nota*: Puede elegir el navegador de su preferencia en el que quiere que se abra la aplicación dando click en el desplegable que se encuentra ubicado a la derecha de la flecha verde con la que ejecuta el programa.
 
 
 ## Ejecutar Tests
-Para ejecutar los tests de la aplicación abra el proyecto en Visual Studio y en la barra de opciones, en la sección Test seleccione Test Explorer como se muestra en la siguiente imagen:
+Para ejecutar los tests, primero que nada, debe correr la aplicación al menos una vez sin estar en modo debug y utilizando Google Chrome, el cuál fue el navegador estándar que se definió para poder ejecutar pruebas funcionales, por lo que debe tenerlo instalado en su computadora para poder realizar las pruebas, puede correr la aplicación sin estar en modo debug presionando el botón de la flecha verde de Visual Studio como se muestra en la siguiente imagen:
 
-![Imagen Tests1](./img/tests/EjecutarTests_1.png)
+![Imagen Tests1](./img/tests/EjecutarTests_0.01.png)
 
-El paso anterior abrirá una ventana emergente donde puede ver el detalle de los tests disponibles, para ejecutarlos simplemente presione el botón de la flecha verde como se muestra en la siguiente imagen:
 
-![Imagen Tests2](./img/tests/EjecutarTests_2.PNG)
+
+Luego de ejecutar la aplicación, en la barra de opciones, en la sección Test seleccione Test Explorer como se muestra en la siguiente imagen:
+
+![Imagen Tests2](./img/tests/EjecutarTests_1.png)
+
+El paso anterior abrirá una ventana emergente donde puede ver el detalle de los tests disponibles, para ejecutar los test unitarios simplemente de click derecho a `UnitTest` y seleccione la opción Run como se muestra en la siguiente imagen:
+
+![Imagen Tests3](./img/tests/EjecutarTests_1.2.PNG)
+
+Si quiere probar los test funcionales repita el paso anterior pero dando click derecho a `functional_tests` y seleccionando Run:
+
+![Imagen Tests4](./img/tests/EjecutarTests_1.3.PNG)
 
 Una vez ejecutado los tests, podrá ver y explorar los resultados de cada uno, la siguiente imagen muestra el caso en el que todos los tests disponibles pasaron satisfactoriamente:
 
-![Imagen Tests3](./img/tests/EjecutarTests_3.PNG)
+![Imagen Tests5](./img/tests/EjecutarTests_3.1.PNG)

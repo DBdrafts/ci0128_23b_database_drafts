@@ -1,1 +1,23 @@
 ﻿
+.feedback-message.active {
+    display: block;
+}
+
+.feedback-message {
+    background-color: #F5AA38;
+    margin: 42% auto;
+    color: black;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: 15px;
+    right: -7%;
+    transform: translateX(-50%);
+    display: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    font-weight: 500;
+}

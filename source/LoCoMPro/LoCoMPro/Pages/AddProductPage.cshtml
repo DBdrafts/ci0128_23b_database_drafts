@@ -17,6 +17,8 @@
 <html lang="es">
 <head>
     <title>Nuevo Registro</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBMFkBOkHqUiPh9GoSqq8F6h1RZDNRSJ8&libraries=places&region=CR"></script>
+    <script src="~/js/location.js" defer></script>
     <link rel="stylesheet" href="~/css/AddProductPage.css">
 </head>
 
@@ -31,10 +33,7 @@
             <label for="chosenlocation">Ubicación<span class="required-marker">*</span>
                 <span class="required-tooltip">Campo obligatorio</span></label>
             <div class="location-container">
-                <button type="button" class="location-button" id="locationButton">Elegir ubicación</button>
-                <input type="text" id="chosenLocation" class="required-field" name="chosenLocation" style="display: none;" readonly>
-                <input type="hidden" id="selectedProvince" name="selectedProvince">
-                <input type="hidden" id="selectedCanton" name="selectedCanton">
+                <button type="button" class="location-button" id="showPopupButton">Elegir ubicación</button>
                 <div id="locationInfo" style="display: none;"></div>
             </div>
 
@@ -75,20 +74,21 @@
             <label for="comment">Comentario</label>
             <textarea id="comment" name="comment" placeholder="Comentario adicional del producto..."></textarea>
 
-           <div id="locationPopup" class="popup">
-                <div class="popup-content">
-                    <h2>Seleccionar ubicación</h2>
-                    <label for="province">Provincia:</label>
-                    <select id="province" name="province">
-                        <option value="" disabled selected hidden>Seleccionar provincia</option>
-                    </select>
-                    <label for="canton">Cantón:</label>
-                    <select id="canton" name="canton" disabled>
-                        <option value="" disabled selected hidden>Seleccione una provincia primero</option>
-                    </select>
-                    <button type="button" id="closePopup-button">Cerrar</button>
-                    <button type="button" id="saveLocation-button">Guardar</button>
-                </div>
+            <div id="mapPopup" class="popup">
+                <h2 class="selectHeader">Seleccionar ubicación</h2>
+                <div id="map"></div>
+                <label for="province" id="province-label">Provincia:</label>
+                <select id="province" name="province">
+                    <option value="" disabled selected hidden>Seleccionar provincia</option>
+                </select>
+                <label for="canton" id="canton-label">Cantón:</label>
+                <select id="canton" name="canton" disabled>
+                    <option value="" disabled selected hidden>Seleccione una provincia primero</option>
+                </select>
+                <input type="hidden" name="latitude" value="" id="latitude">
+                <input type="hidden" name="longitude" value="" id="longitude">
+                <button type="button" id="closePopupMap-button">Cerrar</button>
+                <button type="button" id="saveLocationMap-button">Guardar</button>
             </div>
             <label for="images">Imágenes</label>
             <input type="file" id="productImages" name="productImages" accept="image/*" multiple>
@@ -102,7 +102,6 @@
 
         </form>
     </div>
-    <script src="~/js/selectLocation.js"></script>
     <script src="~/js/AddProductPage/sequentialForm.js"></script>
     <script src="~/js/AddProductPage/autocompleteAddProduct.js"></script>
     <script src="~/js/feedbackMessage.js"></script>
