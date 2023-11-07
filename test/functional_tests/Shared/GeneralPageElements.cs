@@ -58,6 +58,28 @@ namespace functional_tests.Shared
             return driver.FindElement(By.Id("search-button"));
         }
 
+        protected IReadOnlyCollection<IWebElement> SearchOptions() {
+            return driver.FindElements(By.TagName("option"));
+        }
+        protected IWebElement SearchTypeSelect()
+        {
+            return driver.FindElement(By.Id("type-search-selector"));
+        }
+
+        protected IWebElement SearchBarLocationButton()
+        {
+            return driver.FindElement(By.Id("showPopupButton"));
+        }
+
+        protected IWebElement LocationProvinceSelect()
+        {
+            return driver.FindElement(By.Id("province"));
+        }
+
+        protected IWebElement LocationCantonSelect()
+        {
+            return driver.FindElement(By.Id("canton"));
+        }
 
         // For Log In
         protected IWebElement EmailInput()

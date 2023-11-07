@@ -17,34 +17,34 @@ namespace LoCoMPro.Pages
         /// Categories that the user wants to filter by.
         /// <p>Its string with category names separated by a comma.</p>
         /// </summary>
-        public string? SelectedCategories{ get; set; }
+        public string SelectedCategories { get; set; } = "";
 
         /// <summary>
         /// Provinces that the user wants to filter by.
         /// <p>Its string with province names separated by a comma.</p>
         /// </summary>
-        internal string? SelectedProvinces { get; set; }
+        internal string SelectedProvinces { get; set; } = "";
 
         /// <summary>
         /// Cantons that the user wants to filter by.
         /// <p>Its string with canton names separated by a comma.</p>
         /// </summary>
-        public string? SelectedCantons { get; set; }
+        public string SelectedCantons { get; set; } = "";
 
         /// <summary>
         /// List of the categories that the user can filter by.
         /// </summary>
-        public IList<Category> Category { get; set; } = default!;
+        public IList<Category> Category { get; set; } = new List<Category>();
 
         /// <summary>
         /// List of the provinces that the user can filter by.
         /// </summary>
-        public IList<Provincia> Provinces { get; set; } = default!;
+        public IList<Provincia> Provinces { get; set; } = new List<Provincia>();
 
         /// <summary>
         /// List of the cantons that the user can filter by.
         /// </summary>
-        public IList<Canton> Cantons { get; set; } = default!;
+        public IList<Canton> Cantons { get; set; } = new List<Canton>();
 
         /// <summary>
         /// Search String introduced by the user.
@@ -71,12 +71,12 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Maps product name to list of categories.
         /// </summary>
-        public Dictionary<string, string> CategoryMap { get; set; } = default!;
+        public Dictionary<string, string> CategoryMap { get; set; } = new Dictionary<string, string>();
 
         /// <summary>
         /// Search results with extended Data Types.
         /// </summary>
-        public IEnumerable<SearchResult>? SearchResults { get; set; } = new List<SearchResult>();
+        public IEnumerable<SearchResult> SearchResults { get; set; } = new List<SearchResult>();
 
         /// <summary>
         /// Flag of whether or not non zero distances are calculated for registers.
@@ -100,6 +100,8 @@ namespace LoCoMPro.Pages
         public async Task OnGetAsync(double latitude = 0.0, double longitude = 0.0)
         {
 
+            if (SearchString == "" || SearchString is null || SearchString.Contains(';')) return;
+
             // Prepare the query to retrieve data from the database
             var registers = from r in _context.Registers
                             where r.Reports.All(report => report.ReportState != 2)
@@ -114,10 +116,20 @@ namespace LoCoMPro.Pages
                 geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
                 AreDistancesCalculated = true;
             }
-            SearchResults = _context.GetSearchResults(SearchType ?? "Nombre", SearchString!, geolocation);
+            
+            try
+            {
+                SearchResults = _context.GetSearchResults(SearchType ?? "Nombre", SearchString!, geolocation);
 
-            SearchResults = SearchResults.GroupBy(r => new { r.ProductName, r.StoreName })
-                        .Select(grouped => grouped.OrderByDescending(r => r.SubmitionDate).First());
+                SearchResults = SearchResults.GroupBy(r => new { r.ProductName, r.StoreName })
+                            .Select(grouped => grouped.OrderByDescending(r => r.SubmitionDate).First());
+            } catch (Exception ex)
+            {
+                // Handle the exception here
+                Console.Error.WriteLine("An exception occurred: " + ex.Message);
+                return;
+            } 
+            
 
             var match = GetRegistersByType(registers);
 
