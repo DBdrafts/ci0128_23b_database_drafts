@@ -1,5 +1,6 @@
 ﻿using LoCoMPro.Models;
 using Microsoft.AspNetCore.Identity;
+using NetTopologySuite.Geometries;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -30,6 +31,11 @@ namespace LoCoMPro.Data
         public string? ProvinciaName { get; set; }
 
         /// <summary>
+        /// Geolocation of the user
+        /// </summary>
+        public Point? Geolocation { get; set; }
+
+        /// <summary>
         /// Registers that the user has submitted.
         /// </summary>
         public ICollection<Register>? Registers { get; set; } = new List<Register>();
@@ -43,6 +49,10 @@ namespace LoCoMPro.Data
         /// Reviews made by this user
         /// </summary>
         public ICollection<Review>? Reviews { get; set; } = new List<Review>();
+
+        /// <summary>
+        /// Reports made by this user
+        /// </summary>
         public ICollection<Report>? Reports { get; set; } = new List<Report>();
     };
 }

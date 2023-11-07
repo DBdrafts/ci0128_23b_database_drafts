@@ -12,19 +12,19 @@
 //using System;
 //using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace SearchRegistersPriceOrderTest
-{
-    /*[TestClass]
-    // Declaration of the test class
-    public class RazorPageTests : BaseTest
-    {
-        //  Test by Julio Alejandro Rodríguez Salguera C16717
-        [Test]
-        public void SearchProductPageOrdersByPriceAscendant()
-        {
-            // Arrange for the mock configuration
-            // Create an instance of the page model (pageModel) using the CreatePageModel().
-            var pageModel = (SearchPageModel)CreatePageModel("search_page");
+//namespace SearchRegistersPriceOrderTest
+//{
+//    [TestClass]
+//    // Declaration of the test class
+//    public class RazorPageTests : BaseTest
+//    {
+//        //  Test by Julio Alejandro Rodríguez Salguera C16717
+//        [Test]
+//        public void SearchProductPageOrdersByPriceAscendant()
+//        {
+//            // Arrange for the mock configuration
+//            // Create an instance of the page model (pageModel) using the CreatePageModel().
+//            var pageModel = (SearchPageModel)CreatePageModel("search_page");
 
 //            // Initialize a list of registers
 //            List<Register> registers = InitRegisters();
@@ -149,8 +149,8 @@ namespace SearchRegistersPriceOrderTest
 //            // String empty to sort
 //            string sortOrderEmpty= "";
 
-            // Checks if the sort order change to the default 
-            Assert.IsTrue(pageModel.GetSortOrder(sortOrderEmpty).Equals("price_asc"));
-        }
-    }*/
-}
+//            // Checks if the sort order change to the default 
+//            Assert.IsTrue(pageModel.GetSortOrder(sortOrderEmpty).Equals("price_asc"));
+//        }
+//    }
+//}

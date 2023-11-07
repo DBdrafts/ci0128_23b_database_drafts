@@ -43,7 +43,7 @@ namespace UserProductListTest
 
         }*/
 
-        // Test by Julio Alejandro Rodríguez Salguera C16717
+        // Test by Julio Alejandro Rodríguez Salguera C16717 | Sprint 2
         [Test]
         public void GetSameElementsInList() {
             // Arrange
@@ -64,7 +64,7 @@ namespace UserProductListTest
             Assert.AreEqual(newTestElement, testElement);
         }
 
-        // Test by Julio Alejandro Rodríguez Salguera C16717
+        // Test by Julio Alejandro Rodríguez Salguera C16717 | Sprint 2
         [Test]
         public void GetDiferentElementsInList()
         {
@@ -85,7 +85,7 @@ namespace UserProductListTest
             Assert.IsNull(testElement);
         }
 
-        // Test by Julio Alejandro Rodríguez Salguera C16717
+        // Test by Julio Alejandro Rodríguez Salguera C16717 | Sprint 2
         [Test]
         public void GetSimilarElementsInList()
         {

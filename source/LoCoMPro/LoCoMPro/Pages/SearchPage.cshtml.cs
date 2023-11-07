@@ -1,5 +1,6 @@
 using LoCoMPro.Data;
 using LoCoMPro.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,19 @@ namespace LoCoMPro.Pages
     /// </summary>
     public class SearchPageModel : LoCoMProPageModel
     {
+        private readonly UserManager<User> _userManager;
+        /// <summary>
+        /// Creates a new SearchPageModel, requires a context and configuration.
+        /// </summary>
+        /// <param name="context">DB context to use for page.</param>
+        /// <param name="configuration">Configuration for page.</param>
+        public SearchPageModel(LoCoMProContext context, IConfiguration configuration,
+            UserManager<User> userManager)
+            : base(context, configuration) 
+        {
+            _userManager = userManager;
+        }
+
         /// <summary>
         /// Categories that the user wants to filter by.
         /// <p>Its string with category names separated by a comma.</p>
@@ -84,12 +98,9 @@ namespace LoCoMPro.Pages
         public bool AreDistancesCalculated { get; set; } = false;
 
         /// <summary>
-        /// Creates a new SearchPageModel, requires a context and configuration.
+        /// User in the page
         /// </summary>
-        /// <param name="context">DB context to use for page.</param>
-        /// <param name="configuration">Configuration for page.</param>
-        public SearchPageModel(LoCoMProContext context, IConfiguration configuration)
-            : base(context, configuration) { }
+        public User UserInPage;
 
         /// <summary>
         /// OnGet method that handles the GET request.
@@ -99,6 +110,8 @@ namespace LoCoMPro.Pages
         /// <returns></returns>
         public async Task OnGetAsync(double latitude = 0.0, double longitude = 0.0)
         {
+            // get the user in the page
+            UserInPage = await _userManager.GetUserAsync(User);
 
             if (SearchString == "" || SearchString is null || SearchString.Contains(';')) return;
 
@@ -107,14 +120,24 @@ namespace LoCoMPro.Pages
                             where r.Reports.All(report => report.ReportState != 2)
                             select r;
 
-
+            // Get the coordenades dots to search
             var coordinates = new Coordinate(0.0, 0.0);
             var geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
+
             if (latitude != 0.0 && longitude != 0.0)
-            {
+            { // check first if the user select a location
                 coordinates = new Coordinate(longitude, latitude);
                 geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
                 AreDistancesCalculated = true;
+
+            }else if (UserInPage != null)
+            { // else if the user has a location in their profile
+                if (UserhasLocation(UserInPage)){
+                    coordinates = new Coordinate(UserInPage.Geolocation.X, UserInPage.Geolocation.Y);
+                    geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
+                    AreDistancesCalculated = true;
+                }
+               
             }
             
             try
@@ -219,12 +242,23 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
-        /// OnPost method that sent request.
+        /// Get if the user has location
         /// </summary>
-        /// <returns>Redirect to search results page.</returns>
-        public IActionResult OnPost()
+        /// <param name="userToCheck">Register to directly check if register has images</param>
+        public bool UserhasLocation(User userToCheck)
         {
-            return Page();
+            // Initialize a bool var to indicate whether the register has images.
+            bool hasLocation = false;
+
+            // Check if the input register is not null
+            if (userToCheck.Geolocation != null)
+            {
+                // Set hasLocation to true 
+                hasLocation = true;
+            }
+
+            // Return the boolean indicating whether the register has images.
+            return hasLocation;
         }
     }
 }

@@ -22,7 +22,7 @@ $(document).ready(function () {
         /* $("mapPopUp").style.display = "block";*/
         initializeMap();
     });
-
+        
     // Close the popup when clicking outside of it
     $(document).on("click", function (e) {
         if (!$(e.target).closest("#mapPopup").length && !$(e.target).closest("#showPopupButton").length && $('#mapPopup').css('display') !== 'none') {
@@ -250,23 +250,34 @@ function reverseGeocodeLocation(location) {
 
 function saveLocation() {
     var text = getLocationButtonText(selectedProvince, selectedCanton);
-    
+    $("#buttonSpan").text(text);
+
     $("#latitude").val(selectedLocation.lat);
     $("#longitude").val(selectedLocation.lng);
+
     if (window.location.href.includes("/AddProductPage")) {
         $("#locationInfo").text(`Ubicaci\u00F3n elegida: ${text}`);
         $("#locationInfo").show();
+
         if (selectedStore !== null) {
             $("#store").removeAttr("disabled");
             $("#store").val(selectedStore.replace(/\s+\u2022.*/g, '')).trigger('input');
-            /*$("#store").text(selectedStore);*/
-            
+        }
+    } else if (window.location.href.includes("/UserInfoPage")) {
+        $("#ubicacion-change").html(`<strong>${selectedProvince}, ${selectedCanton}<strong>`);
+        //showFeedbackMessage('Su lugar de preferencia se ha guardado!', 'feedbackMessage');
+        try {
+            const response = updateProvinciaToUser(selectedProvince);
+            console.log('Province Updated: ', response.message);
+        } catch (error) {
+            console.error('Fail in update: ', error);
         }
     } else {
         $("#buttonSpan").text(text);
         $("#chosenProvince").text(selectedProvince);
         $("#chosenCanton").text(selectedCanton);
     }
+
 }
 
 function getLocationButtonText(province, canton) {
@@ -437,3 +448,50 @@ function fillCantonMapping() {
     cantonMapping['Puntarenas']['Pitahaya'] = 'Puntarenas'
 
 }
+function updateProvinciaToUser(province) {
+    $.ajax({
+        type: 'POST',
+        url: '/UserInfoPage?handler=UpdateProvince', // Specify the handler
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+        },
+        data: { longitude: selectedLocation.lng, latitude: selectedLocation.lat },
+
+        success: function (data) {
+            console.log('Province Updated: ', data.message);
+            return data;
+        },
+
+        error: function (error) {
+            console.error('Fail in update: ', error);
+            return data;
+        }
+    });
+
+}
+
+function setNullToUser() {
+    //showFeedbackMessage('Su lugar de preferencia se ha guardado!', 'feedbackMessage');
+    $("#ubicacion-change").html(`<strong>No agregada</strong>`);
+    $.ajax({
+        type: 'POST',
+        url: '/UserInfoPage?handler=ResetGeolocation', // Specify the handler
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+        },
+        data: { },
+        success: function (data) {
+            console.log('Province Updated: ', data);
+            return data;
+        },
+
+        error: function (error) {
+            console.error('Fail in update: ', error);
+            return data;
+        }
+    });
+
+}
+

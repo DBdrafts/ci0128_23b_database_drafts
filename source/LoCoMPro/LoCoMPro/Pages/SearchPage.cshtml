@@ -18,9 +18,8 @@
         <input id="selectedCanton" value="@Model.Canton">
     </div>
 
-    <!-- Search filter section -->
+    
     <div class="filter-section" id="filter-section">
-        <!-- Search filter title -->
         <h4> Filtros </h4>
 
         <div class="filter-option-section">
@@ -80,12 +79,9 @@
         <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
     </div>
 
-    <!-- Search result section -->
     <div class="search-section" id="search-results">
-        <!-- Search section title -->
+        <h1> Resultados "@Model.SearchString" - Búsqueda por "@Model.SearchType" </h1>
         <div class="results-cont-msg" span id="results-count"></div>
-
-        <!-- Search section header -->
         <nav>
             <ul class="containerListRegisterColumns">
                 <li id="product-col">
@@ -113,11 +109,8 @@
                 <li id="date-col">
                     <div class="textComment">Fecha</div>
                 </li>
-                <li id="price-col">
-                    <!-- Button to sort by the price -->
-                    @{
-                        ViewBag.SortTipe = "#register-price";
-                    }
+                <li>
+                    @{ViewBag.SortTipe = "#register-price";}
                     @await Html.PartialAsync("_OrderButton", "Precio")
                 </li>
             </ul>
