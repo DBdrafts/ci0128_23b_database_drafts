@@ -616,7 +616,25 @@ namespace LoCoMPro.Pages
             // Return the highest report state
             return highestReportState;
         }
-
+        /// <summary>
+        /// Checks if the reporter is the owner of the register
+        /// </summary>
+        public int checkReporterIsOwner(Report report, User reporter)
+        {
+            int result = -1;
+            if (report != null && reporter != null)
+            {
+                if (report.ContributorId == reporter.Id)
+                {
+                    result = 1;
+                }
+                else
+                {
+                    result = 0;
+                }
+            }
+            return result;
+        }
     }
 
 }
