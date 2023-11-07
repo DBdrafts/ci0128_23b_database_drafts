@@ -1,6 +1,7 @@
 ﻿using NetTopologySuite.Geometries;
 using LoCoMPro.Models;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
 
 namespace LoCoMPro.Data
 {
@@ -23,6 +24,7 @@ namespace LoCoMPro.Data
             context.ExecuteSqlScriptFile(currentDir + "/Data/SearchRegister.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/CalculateDistance.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetSearchResults.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/GetAverageReviewValue.sql");
 
             List<Provincia> provincias = new();
             List<Canton> cantones = new();
@@ -80,7 +82,8 @@ namespace LoCoMPro.Data
             {
                 var province = provinces.Find(s => s.Name == group.Key.ProvinceName);
 
-                if (float.TryParse(group.Key.Latitude, out float latitude) && float.TryParse(group.Key.Longitude, out float longitude))
+                CultureInfo culture = CultureInfo.InvariantCulture;
+                if (float.TryParse(group.Key.Latitude, culture, out float latitude) && float.TryParse(group.Key.Longitude, culture,out float longitude))
                 {
                     var coordinates = new Coordinate (longitude, latitude);
                     var canton = new Canton
