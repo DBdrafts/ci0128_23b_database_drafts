@@ -135,6 +135,7 @@ namespace LoCoMPro.Pages
                 if (UserhasLocation(UserInPage)){
                     coordinates = new Coordinate(UserInPage.Geolocation.X, UserInPage.Geolocation.Y);
                     geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
+                    AreDistancesCalculated = true;
                 }
                
             }
