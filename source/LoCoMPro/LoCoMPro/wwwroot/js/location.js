@@ -251,15 +251,18 @@ function reverseGeocodeLocation(location) {
 function saveLocation() {
     var text = getLocationButtonText(selectedProvince, selectedCanton);
     $("#buttonSpan").text(text);
-    $("#chosenProvince").text(selectedProvince);
-    $("#chosenCanton").text(selectedCanton);
+
     $("#latitude").val(selectedLocation.lat);
     $("#longitude").val(selectedLocation.lng);
+
     if (window.location.href.includes("/AddProductPage")) {
         $("#locationInfo").text(`Ubicaci\u00F3n elegida: ${text}`);
         $("#locationInfo").show();
-        document.getElementById("selectedProvince").value = selectedProvince;
-        document.getElementById("selectedCanton").value = selectedCanton;
+
+        if (selectedStore !== null) {
+            $("#store").removeAttr("disabled");
+            $("#store").val(selectedStore.replace(/\s+\u2022.*/g, '')).trigger('input');
+        }
     } else if (window.location.href.includes("/UserInfoPage")) {
         $("#ubicacion-change").html(`<strong>${selectedProvince}, ${selectedCanton}<strong>`);
         //showFeedbackMessage('Su lugar de preferencia se ha guardado!', 'feedbackMessage');
@@ -269,6 +272,10 @@ function saveLocation() {
         } catch (error) {
             console.error('Fail in update: ', error);
         }
+    } else {
+        $("#buttonSpan").text(text);
+        $("#chosenProvince").text(selectedProvince);
+        $("#chosenCanton").text(selectedCanton);
     }
 
 }
@@ -441,9 +448,6 @@ function fillCantonMapping() {
     cantonMapping['Puntarenas']['Pitahaya'] = 'Puntarenas'
 
 }
-    });
-}
-
 function updateProvinciaToUser(province) {
     $.ajax({
         type: 'POST',
