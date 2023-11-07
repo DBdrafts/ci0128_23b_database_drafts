@@ -128,10 +128,13 @@ namespace LoCoMPro.Pages
                 geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
                 AreDistancesCalculated = true;
 
-            }else if (UserhasLocation(UserInPage))
+            }else if (UserInPage != null)
             { // else if the user has a location in their profile
-                coordinates = new Coordinate(UserInPage.Geolocation.X, UserInPage.Geolocation.Y);
-                geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
+                if (UserhasLocation(UserInPage)){
+                    coordinates = new Coordinate(UserInPage.Geolocation.X, UserInPage.Geolocation.Y);
+                    geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
+                }
+               
             }
 
             SearchResults = _context.GetSearchResults(SearchType ?? "Nombre", SearchString!, geolocation);
