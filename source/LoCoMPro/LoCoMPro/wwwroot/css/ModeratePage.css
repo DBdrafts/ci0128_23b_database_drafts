@@ -323,14 +323,14 @@
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     transition: opacity 0.3s ease;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     font-weight: 500;
+    z-index: 10;
 }
 
 .feedback-message.active {
     display: block; /* Mostrar el mensaje */
     opacity: 1; /* Hacerlo visible */
+    z-index: 10;
 }
 
 /* Style for the veracity stars */

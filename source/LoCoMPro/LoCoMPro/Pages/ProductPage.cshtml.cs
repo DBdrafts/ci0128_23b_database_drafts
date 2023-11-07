@@ -326,6 +326,8 @@ namespace LoCoMPro.Pages
                 reviews = reviews.Where(x => x.ReviewerId == user.Id);
                 reviews = reviews.Where(x => x.ProductName != null && x.ProductName.Contains(SearchProductName));
                 reviews = reviews.Where(x => x.StoreName != null && x.StoreName.Contains(SearchStoreName));
+                reviews = reviews.Where(x => x.ProvinceName != null && x.ProvinceName.Contains(SearchProvinceName));
+                reviews = reviews.Where(x => x.CantonName != null && x.CantonName.Contains(SearchCantonName));
 
                 // Make a list with the review
                 UserReviews = reviews.ToList();
@@ -416,6 +418,8 @@ namespace LoCoMPro.Pages
                 reports = reports.Where(x => x.ReporterId == user.Id);
                 reports = reports.Where(x => x.ProductName != null && x.ProductName.Contains(SearchProductName));
                 reports = reports.Where(x => x.StoreName != null && x.StoreName.Contains(SearchStoreName));
+                reports = reports.Where(x => x.ProvinceName != null && x.ProvinceName.Contains(SearchProvinceName));
+                reports = reports.Where(x => x.CantonName != null && x.CantonName.Contains(SearchCantonName));
 
                 // Make a list with the review
                 UserReports = reports.ToList();

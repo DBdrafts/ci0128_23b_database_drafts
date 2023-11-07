@@ -81,7 +81,8 @@
                     $"{s}{report.SubmitionDate.ToShortDateString()}{s}{report.CantonName}" +
                     $"{s}{report.ProvinceName}{s}{report.ReportDate}" +
                     $"{s}{report.ReportState}{s}{reporterName}" +
-                    $"{s}{contributorName}{s}{register.Price}{s}{@reportNum}";
+                    $"{s}{contributorName}{s}{register.Price}{s}{@reportNum}" +
+                    $"{s}{register.Comment}";
                 
                 int imagecount = 0;
                 var registerImages = "";
@@ -144,6 +145,7 @@
                     <p><b>Producto:</b> <span id="popup-prodName"></span></p>
                     <p><b>Tienda:</b> <span id="popup-store"></span></p>
                     <p><b>Precio:</b> <span id="popup-price"></span></p>
+                    <p><b>Comentario:</b> <span id="popup-comment"></span></p>
                     <p><b>Veracidad:</b> <span class="veracity-stars" id="popup-veracity"></span></p>
                     <p><b>Reportado por:</b> <span id="popup-reporterName"></span></p>
                     

@@ -42,7 +42,7 @@ function openInteractionsPopupMod(openButton) {
 
     // Gets the register data
     var [ReporterId, ContributorId, ProductName, StoreName, SubmitionDate, CantonName,
-        ProvinceName, ReportDate, ReportState, reporterName, contributorName, price, registerNumber] = reportData.split(String.fromCharCode(31));
+        ProvinceName, ReportDate, ReportState, reporterName, contributorName, price, registerNumber, comment] = reportData.split(String.fromCharCode(31));
 
     
 
@@ -52,6 +52,7 @@ function openInteractionsPopupMod(openButton) {
     document.getElementById('popup-prodName').textContent = ProductName;
     document.getElementById('popup-store').textContent = StoreName;
     document.getElementById('popup-price').textContent = '₡' + price;
+    document.getElementById('popup-comment').textContent = comment;
     document.getElementById('popup-reporterName').textContent = reporterName;
 
     // Set the images data
@@ -185,7 +186,7 @@ function acceptReport() {
         success: function (data) {
             hideReport(reportNumber);
             console.log('Report updated successfully' + data);
-            showFeedbackMessage('El reporte de ha sido aprobado exitosamente', 'feedbackMessage');
+            showFeedbackMessage('El reporte ha sido aprobado exitosamente', 'feedbackMessage');
             updateReportList();
         },
         error: function (error) {
@@ -222,12 +223,12 @@ function rejectReport() {
         success: function (data) {
             hideReport(reportNumber);
             console.log('Report updated successfully' + data);
-            showFeedbackMessage('El reporte de ha sido aprobado exitosamente', 'feedbackMessage');
+            showFeedbackMessage('El reporte ha sido rechazado exitosamente', 'feedbackMessage');
             updateReportList();
         },
         error: function (error) {
             console.error('Error saving report: ' + error);
-            showFeedbackMessage('Error al aceptar el reporte ', 'feedbackMessage');
+            showFeedbackMessage('Error al rechazar el reporte ', 'feedbackMessage');
         }
     });
     closeInteractionsPopup();
