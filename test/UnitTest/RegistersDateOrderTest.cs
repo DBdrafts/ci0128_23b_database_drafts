@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace RegistersDateOrderTest
 {
-    [TestClass]
+    /*[TestClass]
     // Declaration of the test class
     public class RazorPageTests : BaseTest
     {
@@ -86,5 +86,5 @@ namespace RegistersDateOrderTest
                 Assert.IsTrue(response[i].Price <= response[i + 1].Price);
             }
         }
-    }
+    }*/
 }

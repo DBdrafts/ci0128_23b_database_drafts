@@ -101,7 +101,14 @@
                     <div class="textComment">Tienda</div>
                 </li>
                 <li id="location-col">
-                    <div class="textComment">Ubicación</div>
+                    @if(!Model.AreDistancesCalculated)
+                    {
+                        <div class="textComment">Ubicación</div>
+                    } else
+                    {
+                        ViewBag.SortTipe = "#register-distance";
+                        @await Html.PartialAsync("_OrderButton", "Ubicación")
+                    }
                 </li>
                 <li id="date-col">
                     <div class="textComment">Fecha</div>
@@ -119,11 +126,12 @@
         <!-- Search results section -->
         <ul class="search-section">
             <!-- Put in all results -->
-            @foreach (var register in Model.Registers!)
+            @foreach (var register in Model.SearchResults!)
             {
-                <!-- A result block -->
+
+                var displayText = $"{register.ProvinciaName}, {register.CantonName}";
+
                 <li class="result-block register-block-pagination">
-                    <!-- Route and data for each result -->
                     <a asp-page="./ProductPage"
                        asp-route-pageIndex="1"
                        asp-route-SearchProductName="@register.ProductName"
@@ -134,37 +142,33 @@
                         <span id="register-product-name" value="@register.ProductName">
                             @register.ProductName
                         </span>
-                        <span class="short-column" id="register-brand-name" value="@register.Product.Brand">
-                            @(string.IsNullOrEmpty(register.Product.Brand) ? "N/A" : register.Product.Brand)
+                        <span class="short-column" id="register-brand-name" value="@register.Brand">
+                            @(string.IsNullOrEmpty(register.Brand) ? "N/A" : register.Brand)
                         </span>
-                        <span class="short-column" id="register-model-name" value="@register.Product.Model">
-                            @(string.IsNullOrEmpty(register.Product.Model) ? "N/A" : register.Product.Model)
+                        <span class="short-column" id="register-model-name" value="@register.Model">
+                            @(string.IsNullOrEmpty(register.Model) ? "N/A" : register.Model)
                         </span>
-                        <span class="short-column" id="register-store-name" value="@register.StoreName">
+                        <span id="register-store-name" value="@register.StoreName">
                             @register.StoreName
                         </span>
-
-                        <!-- Note: This may be use in the future, please delete if not -->
-                        <span id="register-province-name" value="@register.ProvinciaName" hidden>
-                            @register.ProvinciaName
+                        <span id="register-location-name" value="@displayText">
+                                @Html.DisplayFor(_ => displayText)
                         </span>
-                        <span  id="register-canton-name" value="@register.CantonName" hidden>
-                            @register.CantonName
-                        </span>
-                        <!-- Ends here -->
-
-                        <!-- This can be use with the geolocalitation -->
-                        <span id="register-location" value="@register.ProvinciaName + @register.CantonName">
-                            @register.ProvinciaName, @register.CantonName
-                        </span>
-
                         <span class="short-column" id="register-date">
                             @register.SubmitionDate.ToShortDateString()
                         </span>
-                        <span class="short-column align-right" id="register-price" value="@register.Price">
+                        <span class="align-right" id="register-price" value="@register.Price">
                             ₡ @register.Price.ToString("N0")
                         </span>
-                        <span id="register-categories" value="@Model.CategoryMap[register.Product.Name]" hidden></span>
+
+                        <span id="register-categories" value="@Model.CategoryMap[register.ProductName!]" hidden></span>
+                        <span id="register-distance" value="@register.Distance" hidden></span>
+                        <span id="register-province-name" value="@register.ProvinciaName" hidden>
+                            @Html.DisplayFor(modelItem => register.ProvinciaName)
+                        </span>
+                        <span id="register-canton-name" value="@register.CantonName" hidden>
+                            @Html.DisplayFor(modelItem => register.CantonName)
+                        </span>
                     </a>
                 </li>
             }

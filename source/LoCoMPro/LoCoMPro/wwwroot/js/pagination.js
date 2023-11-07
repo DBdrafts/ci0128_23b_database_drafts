@@ -20,7 +20,8 @@ function getOppositeOrder(order) {
 }
 document.addEventListener("DOMContentLoaded", function () {
     // Sort the result blocks based on the selected sorting criteria
-    window.sortResultBlocks = function (order, field = "#register-price") {
+    window.sortResultBlocks = function (order, field = "#register-distance") {
+
         if ($(field).length === 0) {
             field = "#register-date";
         }

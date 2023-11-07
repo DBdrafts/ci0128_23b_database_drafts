@@ -24,7 +24,7 @@ namespace AddRegisterTest
     // Declaration of the test class
     public class RazorPageTests : BaseTest
     {
-        // Test by Geancarlo Rivera Hernández C06516
+        // Test by Geancarlo Rivera Hernández C06516 | Sprint 1
         [Test]
         public void CheckNullForEmptyStrings()
         {
@@ -38,7 +38,7 @@ namespace AddRegisterTest
             Assert.IsNull(response);
         }
 
-        // Test by Geancarlo Rivera Hernández C06516
+        // Test by Geancarlo Rivera Hernández C06516 | Sprint 1
         [Test]
         public void CheckNullForStringsWithData()
         {
@@ -52,7 +52,7 @@ namespace AddRegisterTest
             Assert.IsNotNull(response);
         }
 
-        // Test by Geancarlo Rivera Hernández C06516
+        // Test by Geancarlo Rivera Hernández C06516 | Sprint 1
         [Test]
         public void CreateProductWhenCategoryIsNull()
         {
@@ -79,7 +79,7 @@ namespace AddRegisterTest
             Assert.Zero(newProduct.Categories!.Count);
         }
 
-        // Test by Geancarlo Rivera Hernández C06516
+        // Test by Geancarlo Rivera Hernández C06516 | Sprint 1
         [Test]
         public void CreateProductWhenCategoryIsNotNull()
         {
@@ -106,7 +106,7 @@ namespace AddRegisterTest
             Assert.Greater(newProduct.Categories!.Count, 0);
         }
 
-        // Test by Geancarlo Rivera Hernández C06516
+        // Test by Geancarlo Rivera Hernández C06516 | Sprint 1
         [Test]
         public void CreateRegister()
         {
@@ -134,12 +134,13 @@ namespace AddRegisterTest
             Assert.AreEqual(user.Id, newRegister.Contributor.Id);
         }
 
-        // Test by Geancarlo Rivera Hernández C06516
+        // Test by Geancarlo Rivera Hernández C06516 | Sprint 2
         [Test]
         public void CreateFormatedImagesListWithoutImages()
         {
             var pageModel = (AddProductPageModel)CreatePageModel("add_register_page");
 
+            // Arrange
             // Initializes the attributes that the new register needs to be created
             DateTime inputDateTime = new DateTime(2023, 11, 4, 15, 30, 45, 0);
             var product = pageModel.CreateProduct("Arroz", "TIO PELON", "1Kg", null);
@@ -149,12 +150,15 @@ namespace AddRegisterTest
             var user = new User() { UserName = "Gean", Location = canton, Id = "c06516" };
 
             pageModel.ProductImages = null;
+            // Act
             var result = pageModel.CreateFormattedImagesList(user, inputDateTime, product, store);
+
+            // Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Count);
         }
 
-        // Test by Geancarlo Rivera Hernández C06516
+        // Test by Geancarlo Rivera Hernández C06516 | Sprint 2
         [Test]
         public void CreateFormattedImagesListWithNonNullImages() {
             // Arrange for the mock configuration
@@ -192,13 +196,15 @@ namespace AddRegisterTest
             };
 
             pageModel.ProductImages = formFiles;
+            // Act
             var result = pageModel.CreateFormattedImagesList(user, inputDateTime, product, store);
 
+            //Asserts
             Assert.IsNotNull(result);
             Assert.AreEqual(2, result.Count);
         }
 
-        // Test by Geancarlo Rivera Hernández C06516
+        // Test by Geancarlo Rivera Hernández C06516 | Sprint 2
         [Test]
         public void CreateFormattedImagesListWithZeroBytesImages()
         {
@@ -231,8 +237,11 @@ namespace AddRegisterTest
             };
 
             pageModel.ProductImages = formFiles;
+
+            // Act
             var result = pageModel.CreateFormattedImagesList(user, inputDateTime, product, store);
 
+            // Asserts
             Assert.IsNotNull(result);
             Assert.IsEmpty(result);
         }
