@@ -1,0 +1,28 @@
+﻿<!-- Partial view of the veracity stars section -->
+
+<head>
+    <!-- Shared style for several pages-->
+    <link rel="stylesheet" href="~/css/VeracityStars.css" />
+</head>
+
+@{
+    float veracityValue = @ViewBag.VeracityValue;
+    var fullStarts = Math.Floor(veracityValue);
+    var halfStarts = veracityValue % 1 == 0.5;
+}
+
+<div class="veracity-stars-section">
+    @for (int i = 0; i < fullStarts; ++i)
+    {
+        <i class="fa fa-star"></i>
+    }
+    @if (halfStarts)
+    {
+        <i class="fa fa-star-half-o"></i>
+        ++fullStarts;
+    }
+    @for (int i = 0; i < 5 - fullStarts; ++i)
+    {
+        <i class="fa fa-star-o"></i>
+    }
+</div>

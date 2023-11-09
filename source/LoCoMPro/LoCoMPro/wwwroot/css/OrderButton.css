@@ -1,0 +1,26 @@
+﻿/* Style for the order button of the partial view */
+
+/* Style for the order button */
+.sort-button {
+    cursor: pointer;
+    border: none;
+    background-color: white;
+    color: black;
+    text-decoration: none;
+}
+
+/* Hide the image at the beginning */
+.hidden-image {
+    display: none;
+}
+
+/* Rotates the img */
+.rotate-img {
+    transform: rotate(180deg);
+    transform-origin: center;
+}
+
+/* Style for the order button when hover */
+.sort-button:hover {
+    color: #39A4F4;
+}

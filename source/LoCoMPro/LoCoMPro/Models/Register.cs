@@ -10,7 +10,7 @@ namespace LoCoMPro.Models
     /// Model for the Register entity, has a user, store, and a product asociated with it.
     /// It is intended to keep track of a product's price over time.
     /// </summary>
-    [PrimaryKey(nameof(ContributorId), nameof(ProductName), nameof(StoreName), nameof(SubmitionDate))]
+    [PrimaryKey(nameof(ContributorId), nameof(ProductName), nameof(StoreName), nameof(CantonName), nameof(ProvinciaName), nameof(SubmitionDate))]
     public class Register
     {
         /// <summary>
@@ -28,11 +28,13 @@ namespace LoCoMPro.Models
         /// <summary>
         /// Navigation atribute for the store that the register refers to.
         /// </summary>
+        [ForeignKey(nameof(StoreName))]
         public required Store Store { get; set; }
 
         /// <summary>
         /// Date when the register was submitted.
         /// </summary>
+        [ForeignKey(nameof(SubmitionDate))]
         public required DateTime SubmitionDate { get; set; }
 
         /// <summary>
@@ -51,8 +53,9 @@ namespace LoCoMPro.Models
         /// Number of negative votes that the register has.
         /// Currently not implemented.
         /// </summary>
+
         [NotMapped]
-        public uint? NumCorrections { get; set; }
+        public uint NumCorrections { get; set; }
 
         /// <summary>
         /// Comment that the user made about the current register.
@@ -83,5 +86,22 @@ namespace LoCoMPro.Models
         /// Name of the province where the store is.
         /// </summary>
         public string? ProvinciaName { get; set; }
+
+
+        /// <summary>
+        /// Reviews made of this register
+        /// </summary>
+        public ICollection<Review>? Reviews { get; set; } = new List<Review>();
+
+        /// <summary>
+        /// Reports made of this register
+        /// </summary>
+        public ICollection<Report>? Reports { get; set; } = new List<Report>();
+
+        /// <summary>
+        /// Images associated with the register
+        /// </summary>
+        public ICollection<Image>? Images { get; set; }
+
     }
 }

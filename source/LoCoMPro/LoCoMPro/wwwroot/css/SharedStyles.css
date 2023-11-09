@@ -1,5 +1,19 @@
 ﻿/* Style shared by several pages */
 
+/* General colors of the page */
+:root {
+    --locompro-light-gray: #E2E3E3;
+    --locompro-dark-gray: #BABAB8;
+    --locompro-light-blue: #88C8F8;
+    --locompro-light-blue-hover: #39A4F4;
+    --locompro-blue: #39A4F4;
+    --locompro-blue-hover: #88C8F8;
+    --locompro-yellow: #F5AA38;
+    --locompro-yellow-hover: #F6A01D;
+    --locompro-red: #F87474;
+    --locompro-red-hover: #E25A5A;
+}
+
 /* General style for the button */
 .button-general {
     color: black;
@@ -25,10 +39,11 @@
 /* Style for the layout buttons */
 .layout-button {
     background: none;
-    margin: 0px 10px -15px 0px;
+    margin: 0px 10px -15px 5px;
     display: inline-block;
     text-align: center;
     text-decoration: none;
+    min-width: 55px;
 }
 
 /* Style for the paragraph in the layout button */
@@ -57,83 +72,9 @@
     width: 120px;
 }
 
-/* Style for the pagination section */
-.pagination-section {
-    display: inline-block;
+/* Style for the search section */
+.product-pagination {
+    height: 100%;
+    text-align: center;
     align-items: center;
-    width: 100%;
-    height: 100%;
-}
-
-/* Style for the pagination square for the pages */
-#pagination-square {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    margin: 0px;
-    text-align: center;
-}
-
-/* Style for the pagination square links for the pages */
-#pagination-square a {
-    display: block;
-    color: black;
-    text-decoration: none;
-    border-radius: 0px;
-    border: 1px solid #E2E3E3;
-    width: 100%;
-    height: 100%;
-    line-height: 50px;
-}
-
-/* Style for the pagination square links to not change when hover */
-#pagination-square:hover {
-    background-color: #E2E3E3;
-}
-
-/* Style for the pagination square of the page that is active */
-.pagination-square-active {
-    background-color: #F5AA38;
-    border: 1px solid #000000;
-}
-
-/* Style for the pagination square of the page that is active when hover*/
-.pagination-square-active:hover {
-    background-color: #f6a01d;
-}
-
-/* Style for the pagination button for change the page */
-.pagination-button {
-    display: inline-flex;
-    width: 65px;
-    height: 50px;
-    margin: 0px;
-    border-radius: 0px;
-    text-align: center;
-    background-color: #88C8F8;
-    border: 1px solid #E2E3E3;
-}
-
-/* Style for the pagination button for change the page when hover*/
-.pagination-button:hover {
-    background-color: #39A4F4;
-}
-
-/* Style for the pagination button image */
-.pagination-button img {
-    margin: 16px 0px 0px 23px;
-    width: 15px;
-    height: 15px;
-}
-
-/* Style for the pagination button for change the page to the previous one */
-#pagination-button-left {
-    border-bottom-left-radius: 15px;
-    border-top-left-radius: 15px;
-}
-
-/* Style for the pagination button for change the page to the next one */
-#pagination-button-right {
-    border-bottom-right-radius: 15px;
-    border-top-right-radius: 15px;
 }

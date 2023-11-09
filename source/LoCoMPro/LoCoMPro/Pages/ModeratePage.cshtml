@@ -1,0 +1,179 @@
+﻿@page
+@model LoCoMPro.Pages.ModeratePageModel
+@{
+    ViewData["Title"] = "Registros reportados";
+    Layout = "_Layout";
+    ViewBag.ShowSearchBar = true;
+    ViewBag.ShowLogoLink = true;
+    char s = (char)31; // ASCII Control Unit Separator
+}
+@using Microsoft.AspNetCore.Identity
+@using LoCoMPro.Data;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+
+<head>
+    <link rel="stylesheet" href="~/css/ModeratePage.css" />
+    <script src="~/js/interactionsPopUp.js"></script>
+    <script src="~/js/productListButton.js"></script>
+    <link rel="stylesheet" href="~/css/RateRegister.css" />
+    <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
+</head>
+
+<div class="reported-page-body">
+    <h2 class="text-center">Registros reportados</h2>
+    <div id="feedbackMessage" class="feedback-message"></div>
+    <div id="cant-reportes">
+        <h5>Cantidad de reportes: <span id="report-count">@Model.Reports.Count</span></h5>
+    </div>
+    <hr class="style-four">
+    <div class="empty-section text-center" id="empty-list"
+         style='display: @(Model.Reports.Count == 0 ? "inline-block" : "none")'>
+        <h1>¡No hay reportes que revisar!</h1>
+        <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
+    </div>
+
+
+
+    <div class="reports-section" id="no-empty-list">
+        <div class="results-cont-msg" span id="results-count"></div>
+
+        <nav>
+            <ul class="container-List-Report-Columns" style='display: @(Model.Reports.Count != 0 ? "flex" : "none")'>
+                <li id="product-col">
+                    <div class="text-Comment">Producto</div>
+                </li>
+                <li id="contributor-col">
+                    <div class="text-Comment">Contribuidor</div>
+                </li>
+                <li id="reporter-col">
+                    <div class="text-Comment">Reportado por</div>
+                </li>
+                <li id="date-col">
+                    <div class="text-Comment">Fecha de Reporte</div>
+                </li>
+            </ul>
+        </nav>
+
+        <ul class="reports-section">
+            @for (int reportNum = 0; reportNum < Model.Reports.Count; reportNum++)
+            {
+                var report = Model.Reports[reportNum];
+
+                var register = Model.Registers.FirstOrDefault(register =>
+                register.ContributorId == report.ContributorId &&
+                register.ProductName == report.ProductName &&
+                register.StoreName == report.StoreName &&
+                register.CantonName == report.CantonName &&
+                register.ProvinciaName == report.ProvinceName &&
+                register.SubmitionDate == report.SubmitionDate
+                );
+
+                string contributorName = Model.Users
+                    .First(u => u.Id == report.ContributorId).ToString();
+
+                string reporterName = Model.Users
+                    .First(u => u.Id == report.ReporterId).ToString();
+
+                var reportData = $"{report.ReporterId}{s}{report.ContributorId}" +
+                    $"{s}{report.ProductName}{s}{report.StoreName}" +
+                    $"{s}{report.SubmitionDate.ToShortDateString()}{s}{report.CantonName}" +
+                    $"{s}{report.ProvinceName}{s}{report.ReportDate}" +
+                    $"{s}{report.ReportState}{s}{reporterName}" +
+                    $"{s}{contributorName}{s}{register.Price}{s}{@reportNum}" +
+                    $"{s}{register.Comment}";
+                
+                int imagecount = 0;
+                var registerImages = "";
+                if (register.Images != null && register.Images.Any())
+                {
+                    foreach (var image in register.Images)
+                    {
+                        if (image.ImageData != null)
+                        {
+                            registerImages += $"{s}ImageData{imagecount}: {Convert.ToBase64String(image.ImageData)}";
+                            imagecount++;
+                        }
+                    }
+                }
+
+                float veracityValue = Model.registerAverageReview[reportNum];
+
+                <li class="result-block register-block-pagination" id="report-item-@reportNum">
+                    <a>
+                        <span id="register-product-name" value="@report.ProductName">
+                            @report.ProductName
+                        </span>
+                        <span id="register-user" value="@contributorName">
+                            @contributorName
+                        </span>
+                        <span id="register-reporter" value="@reporterName">
+                            @reporterName
+                        </span>
+                        <span class="short-column" id="register-date" value="@report.ReportDate">
+                            @report.ReportDate.ToShortDateString()
+                        </span>
+
+                        <div class="text-center align">
+                            <button class="open-interactions-button" report-data="@reportData" report-number="@reportNum"
+                                images-register-id="@registerImages" onclick="openInteractionsPopupMod(this)">
+                                <img src="~/img/MoreIcon.svg" alt="Más opciones">
+                            </button>
+                        </div>
+
+                        <div class="register-section-stars" style="display:none">
+                            <div class="veracity-stars register-column" id="register-veracity" value="@veracityValue">
+                                <span id="register_veracity_@reportNum">
+                                    @{
+                                        ViewBag.VeracityValue = veracityValue;
+                                    }
+                                    @await Html.PartialAsync("_VeracityStars")
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            }
+        </ul>
+
+        <div class="interactive-popup-section">
+            <div class="interactions-popup">
+                <div class="interactions-popup-content">
+                    <p><b>Aporte de:</b> <span id="popup-contributorName"></span></p>
+                    <p><b>Fecha de Contribución:</b> <span id="popup-submitionDate"></span></p>
+                    <p><b>Producto:</b> <span id="popup-prodName"></span></p>
+                    <p><b>Tienda:</b> <span id="popup-store"></span></p>
+                    <p><b>Precio:</b> <span id="popup-price"></span></p>
+                    <p><b>Comentario:</b> <span id="popup-comment"></span></p>
+                    <p><b>Veracidad:</b> <span class="veracity-stars" id="popup-veracity"></span></p>
+                    <p><b>Reportado por:</b> <span id="popup-reporterName"></span></p>
+                    
+
+                    <div class="carousel-section-pop-up">
+                        <div class="img-carousel-pop-up">
+                        </div>
+                    </div>
+
+                    <div class="buttons-container">
+                        
+                        <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>
+                        <button id="acceptReport" onclick="acceptReport()" style="visibility: hidden;">Aceptar</button>
+                        <button id="rejectReport" onclick="rejectReport()" style="visibility: hidden;">Rechazar</button>
+                        
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <script>
+                                document.getElementById("rejectReport").style.visibility = "visible";
+                                document.getElementById("acceptReport").style.visibility = "visible";
+                            </script>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/js/ProductPage/imageChanger.js"></script>
+    <script src="~/js/feedbackMessage.js"></script>
+</div>

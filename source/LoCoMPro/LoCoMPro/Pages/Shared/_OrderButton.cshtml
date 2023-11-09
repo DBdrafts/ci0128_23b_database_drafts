@@ -1,0 +1,15 @@
+﻿<!-- Partial view of the order button -->
+
+<head>
+    <!-- Shared style for several pages-->
+    <link rel="stylesheet" href="~/css/OrderButton.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/orderButton.js" defer></script>
+</head>
+
+<!-- Order button -->
+<button class="sort-button" data-sort-order="desc" target=@ViewBag.SortTipe>
+    <span class="textComment">@Model</span>
+    <img class="hidden-image asc" src="~/img/ArrowDownIcon.svg" alt="order">
+    <img class="hidden-image desc rotate-img" src="~/img/ArrowDownIcon.svg" alt="order">
+</button>

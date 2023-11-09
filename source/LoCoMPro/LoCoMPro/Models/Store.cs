@@ -1,17 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using NetTopologySuite.Geometries;
 
 namespace LoCoMPro.Models
 {
     /// <summary>
-    /// Moedl class that represents a store, has a name and a location asociated with it.
+    /// Moedl class that represents a store, has a name and a location associated with it.
     /// </summary>
     [PrimaryKey(nameof(Name), nameof(CantonName), nameof(ProvinciaName))]
     public class Store
     {
         /// <summary>
-        /// Store name, it's thie primary key.
+        /// Store name, it's the primary key.
         /// </summary>
         public required string Name { get; set; }
         
@@ -24,6 +25,11 @@ namespace LoCoMPro.Models
         /// Name of province asociated withe the store.
         /// </summary>
         public string? ProvinciaName { get; set; }
+
+        /// <summary>
+        /// WGS 84 coordinates for geolocation.
+        /// </summary>
+        public Point? Geolocation { get; set; }
 
         /// <summary>
         /// Registers asociated with the store.
