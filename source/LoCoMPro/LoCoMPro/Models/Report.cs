@@ -77,5 +77,10 @@ namespace LoCoMPro.Models
         [DefaultValue(0)]
         public int ReportState { get; set; }
 
+        /// <summary>
+        /// Comment that the user made about the current report.
+        /// </summary>
+        public string? Reason { get; set; }
+
     }
 }
