@@ -432,12 +432,12 @@ namespace LoCoMPro.Pages
         /// <param name="registerKeys">Foreign keys for identification the specific register.</param>
         /// <param name="reportChanged">Bool to check if a report changed.</param>
         /// <param name="reviewedValue">Float with register review.</param>
+        /// <param name="reportComment">Reason of the report</param>
         /// <returns>Success message to clients side.</returns>
-        public IActionResult OnPostHandleInteraction(string registerKeys, bool reportChanged, string reviewedValue)
+        public IActionResult OnPostHandleInteraction(string registerKeys, bool reportChanged, string reviewedValue, string reportComment)
         {
             CultureInfo culture = CultureInfo.InvariantCulture;
             float.TryParse(reviewedValue, NumberStyles.Float, culture, out float reviewedValueF);
-
             string[] values = SplitString(registerKeys, '\x1F');
             string submitionDate = values[0], contributorId = values[1], productName = values[2], storeName = values[3];
             
@@ -450,7 +450,7 @@ namespace LoCoMPro.Pages
             if (reportChanged)
             {
                 HandleReport(user!, registerToUpdate, interactionDate, contributorId,
-                    productName, storeName, registSubmitDate);
+                    productName, storeName, registSubmitDate, reportComment);
             }
 
             if (reviewedValueF > 0)
@@ -518,12 +518,13 @@ namespace LoCoMPro.Pages
         /// <param name="user">User that made the report.</param>
         /// <param name="registerToUpdate">Register to which the report was made.</param>
         /// <param name="registSubmitDate"><See cref="GetRegisterToUpdate"/>).</param>
+        /// <param name="reportComment">Reason of the report</param>
         /// <param name="interactionDate">Date and time the report is made.</param>
         /// <param name="contributorId"><See cref="GetRegisterToUpdate"/>).</param>
         /// <param name="productName"><See cref="GetRegisterToUpdate"/>).</param>
         /// <param name="storeName"><See cref="GetRegisterToUpdate"/>).</param>
         private void HandleReport(User user, Register registerToUpdate, DateTime interactionDate,
-           string contributorId, string productName, string storeName, DateTime registSubmitDate)
+           string contributorId, string productName, string storeName, DateTime registSubmitDate, string reportComment)
         {
             var lastReport = _context.Reports.FirstOrDefault(r => r.ReporterId == user!.Id
                 && r.ProductName == productName
@@ -540,7 +541,8 @@ namespace LoCoMPro.Pages
                     ReportDate = interactionDate,
                     CantonName = registerToUpdate.CantonName!,
                     ProvinceName = registerToUpdate.ProvinciaName!,
-                    ReportState = User.IsInRole("Moderator") ? 2 : 1
+                    ReportState = User.IsInRole("Moderator") ? 2 : 1,
+                    Reason = reportComment
                 });
             }
             else

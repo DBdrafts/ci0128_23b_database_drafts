@@ -339,13 +339,13 @@ textarea {
 }
 
 
-    #mapPopup h2.selectHeader {
-        font-size: 24px;
-        color: black;
-        margin-bottom: 20px;
-        margin-top: 20px;
-        text-align: center;
-    }
+#mapPopup h2.selectHeader {
+    font-size: 24px;
+    color: black;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    text-align: center;
+}
 
 #map {
     margin: 0 auto;
@@ -380,9 +380,9 @@ textarea {
     margin-left: 47px;
 }
 
-    #canton:disabled::placeholder {
-        color: #00000030;
-    }
+#canton:disabled::placeholder {
+    color: #00000030;
+}
 
 /* Style for saveLocation botton*/
 #saveLocationMap-button {
@@ -401,10 +401,10 @@ textarea {
     margin-top: 8px;
 }
 
-    /* SaveLocation-button when hover*/
-    #saveLocationMap-button:hover {
-        background-color: #5AABE2;
-    }
+/* SaveLocation-button when hover*/
+#saveLocationMap-button:hover {
+    background-color: #5AABE2;
+}
 
 
 /* Style for save closePopup botton*/
@@ -423,10 +423,10 @@ textarea {
     margin-top: 8px;
 }
 
-    /* SaveLocation-button when hover*/
-    #closePopupMap-button:hover {
-        background-color: #E25A5A;
-    }
+/* SaveLocation-button when hover*/
+#closePopupMap-button:hover {
+    background-color: #E25A5A;
+}
 
 #canton-label, #province-label {
     display: block; /* Hacer que el label sea un elemento de bloque */

@@ -3,6 +3,8 @@
 /// </summary>
 function openInteractionsPopup(openButton) {
     var interactionsPopup = document.querySelector('.interactions-popup');
+    reportCommentInput = document.getElementById('reportComment');
+    reportLabel = document.getElementById('reportLabel');
     interactionsPopup.style.display = 'block';
     registerKeys = openButton.getAttribute('data-register-id');
 
@@ -14,7 +16,7 @@ function openInteractionsPopup(openButton) {
     document.getElementById('popup-submitionDate').textContent = date;
     document.getElementById('popup-price').textContent = '₡' + price;
     document.getElementById('popup-userName').textContent = userName;
-    document.getElementById('popup-comment').textContent = comment;
+    document.getElementById('popup-comment').textContent = (comment !== null && comment !== '') ? comment : "N/A";
 
 
     // Set the images data
@@ -110,21 +112,29 @@ function closeInteractionsPopup() {
     // Returns the values to it´s original form
     reviewedValue = 0;
     var popup = document.querySelector('.interactions-popup');
+    if (reportCommentInput && reportLabel) {
+        reportCommentInput.style.display = 'none';
+        reportLabel.style.display = 'none';
+    }
     popup.style.display = 'none';
 }
 
 /// <summary>
-/// Toggle the report button between active and deactivate
+/// Toggle the report button between active and deactivate to show reason input field
 /// </summary>
 function toggleReport() {
     if (reportIcon.src.endsWith('DesactiveReportIcon.svg')) {
         // Active
         reportIcon.src = '/img/ActiveReportIcon.svg';
         reportActivated = true;
+        reportLabel.style.display = 'block';
+        reportCommentInput.style.display = 'block';
     } else {
         // Deactivate
         reportIcon.src = '/img/DesactiveReportIcon.svg';
         reportActivated = false;
+        reportLabel.style.display = 'none';
+        reportCommentInput.style.display = 'none';
     }
     reportChanged = !reportChanged;
 
@@ -137,6 +147,7 @@ function toggleReport() {
 function saveInteractions() {
     // If the user made a change
     if (reportChanged || registerReviewed) {
+        var reportComment = document.getElementById('reportComment').value;
         $.ajax({
             type: 'POST',
             url: '/ProductPage/1?handler=HandleInteraction', // Specify the handler
@@ -144,7 +155,7 @@ function saveInteractions() {
                 xhr.setRequestHeader("XSRF-TOKEN",
                     $('input:hidden[name="__RequestVerificationToken"]').val());
             },
-            data: { registerKeys: registerKeys, reportChanged: reportChanged, reviewedValue: reviewedValue },
+            data: { registerKeys: registerKeys, reportChanged: reportChanged, reviewedValue: reviewedValue, reportComment: reportComment },
             success: function (data) {
                 console.log('Report saved successfully' + data);
                 if (reportChanged && registerReviewed) {

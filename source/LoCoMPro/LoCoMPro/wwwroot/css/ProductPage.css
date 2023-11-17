@@ -419,6 +419,26 @@
     border: none;
 }
 
+/* Style for report input field*/
+#reportComment {
+    display: none;
+    width: 100%;
+    padding: 15px;
+    margin-top: 5px;
+    border: 1px solid #9F9F9F;
+    border-radius: 15px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+/* Style for reportComment label*/
+#reportLabel {
+    display: none;
+    font-size:large;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
 /* Style for the save button of the pop up */
 #saveButton {
     background-color: #74C2F8;
