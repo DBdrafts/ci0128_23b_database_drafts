@@ -1,0 +1,92 @@
+﻿@page "~/ListReportPage"
+@model LoCoMPro.Pages.ListReportPageModel
+@{
+    ViewData["Title"] = "Reporte de la Lista";
+    Layout = "_Layout";
+    ViewBag.ShowSearchBar = true;
+    ViewBag.ShowLogoLink = true;
+    @Html.AntiForgeryToken();
+    char s = (char)31;
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/~~~~~+.css" />
+
+    <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
+</head>
+
+
+<div>
+    <div class="information-section">
+        <div>
+            <h2>Reporte de lista de compra</h2>
+        </div>
+    </div>
+
+    <div class="report-list-section" id="no-empty-list">
+
+        <nav>
+            <ul class="report-list-column-title">
+                <li>
+                    <div class="text-comment">Producto</div>
+                </li>
+                <li>
+                    <div class="text-comment">Ubicación</div>
+                </li>
+                <li>
+                    <div class="text-comment">Precio total</div>
+                </li>
+                <li>
+                    <div class="text-comment">Cantidad de productos</div>
+                </li>
+            </ul>
+        </nav>
+
+        <ul class="report-list-section">
+            @for (int reportIndex = 0; reportIndex < 3 /*TODO*/ ; reportIndex++)
+            {
+                
+
+                <li class="report-list-block" id="report-item-@reportIndex">
+
+                    <div class="report-block-information">
+                        <!-- TODO -->
+                        <span value="1">
+                            <!-- TODO -->
+                        </span>
+                    </div>
+
+                    <div class="report-product-list" hidden>
+
+                        <hr class="style-four">
+
+                        <nav>
+                            <ul class="report-product-list-title">
+                                <li>
+                                    <div class="text-comment">Producto</div>
+                                </li>
+                                <li>
+                                    <div class="text-comment">Precio</div>
+                                </li>
+                            </ul>
+                        </nav>
+
+
+                        <ul class="report-list-product-block">
+                            <!-- TODO -->
+                            @for (int productIndex = 0; productIndex < 3; productIndex++)
+                            {
+                                <li class="report-list-block-products">
+                                    <!-- TODO -->
+                                    <span value="1">
+                                        <!-- TODO -->
+                                    </span>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
