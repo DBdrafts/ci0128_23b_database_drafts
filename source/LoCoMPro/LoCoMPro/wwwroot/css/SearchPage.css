@@ -69,25 +69,24 @@
     min-width: 950px;
 }
 
-    /* Style for search title columns */
-    .containerListRegisterColumns li {
-        font-size: x-large;
-        flex: 0 0 16%;
-        text-align: center;
-        margin: 0px;
-        padding: 0px 15px;
-    }
+/* Style for search title columns */
+.containerListRegisterColumns li {
+    font-size: x-large;
+    flex: 0 0 16%;
+    text-align: center;
+    margin: 0px;
+    padding: 0px 15px;
+}
 
-    /* Style for columns */
-    .containerListRegisterColumns ul {
-        margin: 0px;
-        padding: 0px;
-    }
+/* Style for columns */
+.containerListRegisterColumns ul {
+    margin: 0px;
+    padding: 0px;
+}
 
 
 /* Style for the search section */
 
-/*VER!!!!!*/
 .search-section {
     height: 100%;
     display: inline-block;
@@ -95,12 +94,12 @@
     min-width: 950px;
 }
 
-    .search-section ul {
-        width: 100%;
-        height: auto;
-        margin: 10px 5px;
-        padding: 5px;
-    }
+.search-section ul {
+    width: 100%;
+    height: auto;
+    margin: 10px 5px;
+    padding: 5px;
+}
 
 /* Style for the result register block */
 .result-block {
@@ -117,30 +116,30 @@
     font-size: 18px;
 }
 
-    /* Style for the result register block text*/
-    .result-block a span {
-        display: inline-flex;
-        width: 16%;
-        margin: auto auto;
-        margin: 0px 10px
-    }
+/* Style for the result register block text*/
+.result-block a span {
+    display: inline-flex;
+    width: 16%;
+    margin: auto auto;
+    margin: 0px 10px
+}
 
-    /* Style for the result register block text */
-    .result-block a {
-        /*flex: 0 0 calc(16.67% - 20px);*/
-        display: flex;
-        height: 4em;
-        width: 100%;
-        background-color: #E2E3E3;
-        justify-content: space-around;
-        border-radius: 15px;
-        padding: 10px 15px;
-        max-height: 3.9em;
-        text-decoration: none;
-        overflow: clip;
-        text-overflow: ellipsis;
-        color: #000000;
-    }
+/* Style for the result register block text */
+.result-block a {
+    /*flex: 0 0 calc(16.67% - 20px);*/
+    display: flex;
+    height: 4em;
+    width: 100%;
+    background-color: #E2E3E3;
+    justify-content: space-around;
+    border-radius: 15px;
+    padding: 10px 15px;
+    max-height: 3.9em;
+    text-decoration: none;
+    overflow: clip;
+    text-overflow: ellipsis;
+    color: #000000;
+}
 
 .short-column {
     width: 10% !important;
@@ -175,12 +174,12 @@
     margin-left: 70px
 }
 
-    /* Style for the page image when product not found */
-    #product-not-found img {
-        width: 40%;
-        height: 40%;
-        margin: -50px
-    }
+/* Style for the page image when product not found */
+#product-not-found img {
+    width: 40%;
+    height: 40%;
+    margin: -50px
+}
 
 .results-cont-msg {
     margin-left: 30px;

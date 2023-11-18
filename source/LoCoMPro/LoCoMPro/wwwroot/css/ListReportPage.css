@@ -111,7 +111,7 @@
 
 /* Style for list title columns of the list block  */
 .report-product-list-title li {
-    font-size: larger;
+    font-size: large;
     flex: 0 0 45%;
     width: auto;
     text-align: center;
