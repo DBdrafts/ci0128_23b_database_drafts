@@ -25,6 +25,11 @@ namespace LoCoMPro.Pages
         public IList<UserProductListElement> UserProductList { get; set; }
 
         /// <summary>
+        /// List with products in the list of the user
+        /// </summary>
+        public IList<Product> WantedProducts { get; set; }
+
+        /// <summary>
         /// Structure that bind the stores with the products that sells
         /// </summary>
         public Dictionary<Store, List<Register>> StoreProducts { get; set; } = new Dictionary<Store, List<Register>>();
@@ -66,7 +71,7 @@ namespace LoCoMPro.Pages
 
         internal void ObtainStoresThatSells()
         {
-            IList<Product> WantedProducts = ObtainProductsFromList();
+            WantedProducts = ObtainProductsFromList();
             
             foreach(var product in WantedProducts)
             {
@@ -104,5 +109,7 @@ namespace LoCoMPro.Pages
                 }
             }
         }
+
     }
+
 }

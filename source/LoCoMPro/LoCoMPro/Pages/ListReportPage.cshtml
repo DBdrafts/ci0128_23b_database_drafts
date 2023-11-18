@@ -10,9 +10,11 @@
 }
 
 <head>
-    <link rel="stylesheet" href="~/css/~~~~~+.css" />
+    <link rel="stylesheet" href="~/css/ListReportPage.css" />
 
     <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
+
+    <script src="~/js/listReportPage.js"></script>
 </head>
 
 
@@ -28,7 +30,7 @@
         <nav>
             <ul class="report-list-column-title">
                 <li>
-                    <div class="text-comment">Producto</div>
+                    <div class="text-comment">Establecimiento</div>
                 </li>
                 <li>
                     <div class="text-comment">Ubicación</div>
@@ -43,16 +45,32 @@
         </nav>
 
         <ul class="report-list-section">
-            @for (int reportIndex = 0; reportIndex < 3 /*TODO*/ ; reportIndex++)
+            @{int reportIndex = 0;}
+            @foreach (var storeEntry in Model.StoreProducts)
             {
-                
+                var store = storeEntry.Key;
+                var productList = storeEntry.Value;
+
+                float totalPrice = 0;
+                @foreach(var register in productList)
+                {
+                    totalPrice += register.Price;
+                } 
 
                 <li class="report-list-block" id="report-item-@reportIndex">
 
                     <div class="report-block-information">
-                        <!-- TODO -->
-                        <span value="1">
-                            <!-- TODO -->
+                        <span id="report-store-name" value="@store.Name">
+                            @Html.DisplayFor(modelItem => store.Name)
+                        </span>
+                        <span id="report-location-name" value="@store.ProvinciaName + , + @store.CantonName">
+                            @store.ProvinciaName, @store.CantonName
+                        </span>
+                        <span class="align-right" id="report-price" value="totalPrice">
+                            ₡ @totalPrice
+                        </span>
+                        <span class="align-center" id="report-product-amount" value="@productList.Count">
+                            @productList.Count de @Model.WantedProducts.Count
                         </span>
                     </div>
 
@@ -72,21 +90,27 @@
                         </nav>
 
 
-                        <ul class="report-list-product-block">
-                            <!-- TODO -->
-                            @for (int productIndex = 0; productIndex < 3; productIndex++)
+                        <ul class="report-list-product-section">
+                            @foreach (var register in productList)
                             {
                                 <li class="report-list-block-products">
-                                    <!-- TODO -->
-                                    <span value="1">
-                                        <!-- TODO -->
+                                    <span id="product-name" value="@register.ProductName">
+                                        @Html.DisplayFor(modelItem => register.ProductName)
+                                    </span>
+                                    <span class="align-right" id="product-price" value="@register.Price">
+                                        ₡ @Html.DisplayFor(modelItem => register.Price)
                                     </span>
                                 </li>
                             }
                         </ul>
                     </div>
                 </li>
+                ++reportIndex;
             }
         </ul>
     </div>
+    <div class="product-pagination">
+        @await Html.PartialAsync("_Pagination")
+    </div>
+    <script src="~/js/pagination.js"></script>
 </div>

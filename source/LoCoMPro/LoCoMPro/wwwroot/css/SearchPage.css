@@ -14,17 +14,17 @@
     margin: 85px 0px 0px 0px;
 }
 
-    /* Style for the filter section title h4 */
-    .filter-section h4 {
-        font-weight: bold;
-        font-size: 28px;
-        margin: 20px 0px;
-    }
+/* Style for the filter section title h4 */
+.filter-section h4 {
+    font-weight: bold;
+    font-size: 28px;
+    margin: 20px 0px;
+}
 
-    /* Style for the filter section title h5*/
-    .filter-section h5 {
-        font-size: 23px;
-    }
+/* Style for the filter section title h5*/
+.filter-section h5 {
+    font-size: 23px;
+}
 
 
 .filter-option-section {
@@ -53,10 +53,10 @@
     padding: 5px 5px;
 }
 
-    /* Style for the filter button when hover*/
-    .clear-filter-button:hover {
-        background-color: #39A4F4;
-    }
+/* Style for the filter button when hover*/
+.clear-filter-button:hover {
+    background-color: #39A4F4;
+}
 
 /* Style for search title */
 .containerListRegisterColumns {

@@ -1,0 +1,175 @@
+﻿/* Style for the report page of the user list */
+
+/* Style for the information section */
+.information-section {
+    display: inline-block;
+    width: 100%;
+    height: auto;
+    color: black;
+    text-align: center;
+}
+
+/* Style for the title of the columns */
+.report-list-column-title {
+    padding: 0px 10px;
+    display: inline-flex;
+    height: auto;
+    width: 100%;
+    justify-content: space-between;
+    list-style: none;
+    margin: 15px 0px;
+    min-width: 950px;
+}
+
+/* Style for list title columns */
+.report-list-column-title li {
+    font-size: x-large;
+    flex: 0 0 20%;
+    width: auto;
+    text-align: center;
+    margin: 0px 25px;
+}
+
+/* Style for columns */
+.report-list-column-title ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+/* Style for the report list section */
+.report-list-section {
+    height: auto;
+    width: 100%;
+    text-decoration: none;
+    color: black;
+}
+
+/* Style for the report list block */
+.report-list-block {
+    display: inline-block;
+    height: auto;
+    text-decoration: none;
+    color: black;
+    background-color: var(--locompro-light-gray);
+    margin: 7px 0px;
+    padding: 0px 15px;
+    min-height: 4em;
+    border-radius: 15px;
+    min-width: 950px;
+    width: 100%;
+    font-size: large;
+}
+
+/* Style for the report list block when hover */
+.report-list-block:hover {
+    color: #000000;
+    border: 1px solid #BABAB8;
+}
+
+/* Style for the information block of the report */
+.report-block-information {
+    display: inline-flex;
+    width: 100%;
+    height: 4em;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Style for the report block text */
+.report-list-block span {
+    display: inline-flex;
+    text-align: center;
+    width: 24%;
+    overflow: clip;
+    text-overflow: ellipsis;
+    margin: 0px;
+    max-height: 3.3em;
+    padding: 0px;
+    font-size: large;
+    justify-content: left;
+}
+
+/* Style for the product list of the block */
+.report-product-list {
+    height: 100%;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+
+/* Style for the title of the columns of the list block */
+.report-product-list-title {
+    padding: 0px 10px;
+    display: inline-flex;
+    height: auto;
+    width: 100%;
+    justify-content: space-between;
+    list-style: none;
+    margin: 15px 0px;
+    min-width: 925px;
+}
+
+/* Style for list title columns of the list block  */
+.report-product-list-title li {
+    font-size: larger;
+    flex: 0 0 45%;
+    width: auto;
+    text-align: center;
+    margin: 0px 25px;
+}
+
+/* Style for columns of the list block */
+.report-product-list-title ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+/* Style for the report list product section */
+.report-list-product-section {
+    height: auto;
+    width: 100%;
+    text-decoration: none;
+    color: black;
+}
+
+/* Style for the report list product block */
+.report-list-block-products {
+    display: inline-block;
+    height: auto;
+    text-decoration: none;
+    color: black;
+    background-color: var(--locompro-light-gray);
+    margin: 0px;
+    padding: 0px;
+    min-width: 950px;
+    width: 100%;
+    font-size: large;
+    justify-content: space-between;
+}
+/* Style for the report list product block text */
+.report-list-block-products span {
+    display: inline-flex;
+    text-align: center;
+    width: 49%;
+    overflow: clip;
+    text-overflow: ellipsis;
+    margin: 0px;
+    padding: 0px 50px;
+    font-size: large;
+    justify-content: left;
+}
+
+/* Style for the register block text of the price */
+.align-right {
+    justify-content: flex-end !important;
+}
+
+/* Style for the center the item */
+.align-center {
+    justify-content: center !important;
+}
+
+/* Style for the line of the list block */
+.report-product-list hr {
+    margin: 0px !important;
+}
