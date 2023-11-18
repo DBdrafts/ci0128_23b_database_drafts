@@ -87,79 +87,6 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
-        /// Adds the product to the DB, and redirects to Main Page.
-        /// </summary>
-        /// <returns>Redirect to Same page if the product is not valid, and to /Index was added successfully.</returns>
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            // Get the information of the form
-            string provinciaName = Request.Form["province"]!;
-            string cantonName = Request.Form["canton"]!;
-            string storeName = Request.Form["store"]!;
-            string productName = Request.Form["productName"]!;
-            float price = Convert.ToSingle(Request.Form["price"]);
-            string? chosenCategory = Request.Form["category"];
-            string? brandName = CheckNull(Request.Form["brand"]);
-            string? modelName = CheckNull(Request.Form["model"]);
-            string? comment = CheckNull(Request.Form["comment"]);
-            double latitude = Convert.ToDouble(Request.Form["latitude"]);
-            double longitude = Convert.ToDouble(Request.Form["longitude"]);
-            var coordinates = new Coordinate(longitude, latitude);
-            var geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
-
-            cantonName = ValidateCanton(provinciaName, cantonName);
-            // Get the product if exists in the context
-            var productToAdd = _context.Products
-                .Include(p => p.Registers)
-                .Include(p => p.Stores)
-                .Include(p => p.Categories)
-                .FirstOrDefault(p => p.Name == productName);
-
-            // Get the user by their ID
-            var user = _context.Users.First(u => u.Id == _userManager.GetUserId(User));
-            // Check and create a new store if not exists
-            var store = AddStoreRelation(storeName, cantonName, provinciaName, geolocation);
-            // Get category can be null
-            var category = _context.Categories.FirstOrDefault(c => c.CategoryName == chosenCategory);
-
-            // If the product doesn't exists
-            if (productToAdd == null)
-            {
-                // Create new product
-                productToAdd = CreateProduct(productName, brandName, modelName, category);
-
-                // Add the product to the context
-                _context.Products.Add(productToAdd);
-            }
-            // Checks if the category-store (AsociatedWith) relationship already exists, if not, adds it
-            else if (category != null && !productToAdd.Categories!.Contains(category))
-            {
-                productToAdd.Categories.Add(category);
-            }
-
-            // Checks if the produc-store (Sells) relationship already exists, if not, adds it
-            if (!productToAdd.Stores!.Contains(store)) productToAdd.Stores.Add(store);
-
-            // Create new Register
-            var newRegister = CreateRegister(productToAdd, store, price, comment, user);
-
-            // Add the product to the context
-            _context.Registers.Add(newRegister);
-
-            // Save all changes in the contextDB
-            await _context.SaveChangesAsync();
-
-            TempData["FeedbackMessage"] = "Su registro fue agregado correctamente!";
-
-            return RedirectToPage("/Index");
-        }
-
-        /// <summary>
         /// Adds a store to the context if it does not exist already.
         /// </summary>
         /// <param name="storeName">Name of the store to add.</param>
@@ -384,23 +311,84 @@ namespace LoCoMPro.Pages
             return response;
         }
 
-        public IActionResult OnPostUploadImage([FromForm] List<IFormFile> ProductImages, string store, string productName)
-        {
-            this.ProductImages = ProductImages;
-            string storex = store;
-            string productx = productName;
-            if (storex != null && storex != "")
-            {
-                Test(storex);
 
+        /// <summary>
+        /// Handle the submition request and redirect to /Index on success.
+        /// </summary>
+        /// <returns>Success Protocol Message.</returns>
+        public IActionResult OnPostHandleFormSubmission()
+        {
+            string? storeName = Request.Form["store"];
+            if (!string.IsNullOrEmpty(storeName))
+            {
+                _ = StoreFormDataAsync(storeName);
             }
             return new JsonResult("OK");
+
         }
 
-        public string Test(string store)
+        /// <summary>
+        /// Adds the product data to the DB.
+        /// <param name="storeName">Store name where the product is sold.</param>
+        /// </summary>
+        private async Task StoreFormDataAsync(string storeName)
         {
-            string Testing = store;
-            return "Hi";
+            string provinciaName = Request.Form["province"]!;
+            string cantonName = Request.Form["canton"]!;
+            string productName = Request.Form["productName"]!;
+            float price = Convert.ToSingle(Request.Form["price"]);
+            string? chosenCategory = Request.Form["category"];
+            string? brandName = CheckNull(Request.Form["brand"]);
+            string? modelName = CheckNull(Request.Form["model"]);
+            string? comment = CheckNull(Request.Form["comment"]);
+            double latitude = Convert.ToDouble(Request.Form["latitude"]);
+            double longitude = Convert.ToDouble(Request.Form["longitude"]);
+            var coordinates = new Coordinate(longitude, latitude);
+            var geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
+
+            cantonName = ValidateCanton(provinciaName, cantonName);
+            // Get the product if exists in the context
+            var productToAdd = _context.Products
+                .Include(p => p.Registers)
+                .Include(p => p.Stores)
+                .Include(p => p.Categories)
+                .FirstOrDefault(p => p.Name == productName);
+
+            // Get the user by their ID
+            var user = _context.Users.First(u => u.Id == _userManager.GetUserId(User));
+            // Check and create a new store if not exists
+            var store = AddStoreRelation(storeName, cantonName, provinciaName, geolocation);
+            // Get category can be null
+            var category = _context.Categories.FirstOrDefault(c => c.CategoryName == chosenCategory);
+
+            // If the product doesn't exists
+            if (productToAdd == null)
+            {
+                // Create new product
+                productToAdd = CreateProduct(productName, brandName, modelName, category);
+
+                // Add the product to the context
+                _context.Products.Add(productToAdd);
+            }
+            // Checks if the category-store (AsociatedWith) relationship already exists, if not, adds it
+            else if (category != null && !productToAdd.Categories!.Contains(category))
+            {
+                productToAdd.Categories.Add(category);
+            }
+
+            // Checks if the produc-store (Sells) relationship already exists, if not, adds it
+            if (!productToAdd.Stores!.Contains(store)) productToAdd.Stores.Add(store);
+
+            // Create new Register
+            var newRegister = CreateRegister(productToAdd, store, price, comment, user);
+
+            // Add the product to the context
+            _context.Registers.Add(newRegister);
+
+            // Save all changes in the contextDB
+            await _context.SaveChangesAsync();
+
+            TempData["FeedbackMessage"] = "Su registro fue agregado correctamente!";
         }
     }
 }

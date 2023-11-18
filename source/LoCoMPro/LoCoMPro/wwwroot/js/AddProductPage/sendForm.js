@@ -2,7 +2,7 @@
 var myDropzone;
 document.addEventListener('DOMContentLoaded', function () {
     myDropzone = new Dropzone("#dragDropZone", {
-        url: "/AddProductPage/?handler=UploadImage",
+        url: "/AddProductPage/?handler=HandleFormSubmission",
         paramName: "productImages",
         maxFiles: 5,
         acceptedFiles: "image/*",
@@ -32,11 +32,8 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        formData.append('store', document.getElementById('store').value);
-        formData.append('productName', document.getElementById('productName').value);
-
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/AddProductPage?handler=UploadImage', true);
+        xhr.open('POST', '/AddProductPage?handler=HandleFormSubmission', true);
         xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
 
         xhr.onload = function () {
