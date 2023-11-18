@@ -383,5 +383,24 @@ namespace LoCoMPro.Pages
             }
             return response;
         }
+
+        public IActionResult OnPostUploadImage([FromForm] List<IFormFile> ProductImages, string store, string productName)
+        {
+            this.ProductImages = ProductImages;
+            string storex = store;
+            string productx = productName;
+            if (storex != null && storex != "")
+            {
+                Test(storex);
+
+            }
+            return new JsonResult("OK");
+        }
+
+        public string Test(string store)
+        {
+            string Testing = store;
+            return "Hi";
+        }
     }
 }

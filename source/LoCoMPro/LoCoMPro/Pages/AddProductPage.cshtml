@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/dropzone.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/min/dropzone.min.js"></script>
-
 }
 
 <!DOCTYPE html>
@@ -28,7 +27,6 @@
             @Html.AntiForgeryToken()
             <h2>Nuevo registro de producto</h2>
             <hr class="title-separator">
-
 
             <label for="chosenlocation">Ubicación<span class="required-marker">*</span>
                 <span class="required-tooltip">Campo obligatorio</span></label>
@@ -93,7 +91,9 @@
             <label for="images">Imágenes</label>
             <input type="file" id="productImages" name="productImages" accept="image/*" multiple>
             
-            <button type="submit" class="submit-button" form="addProductForm">
+            <div id="dragDropZone" class="dropzone"></div>
+            
+            <button type="button" class="submit-button" id="form-submit-button">
                 <div class="button-content">
                     <span class="button-text">Agregar Registro</span>
                     <img src="~/img/AddRegisterIcon.svg" alt="addRegIcon" class="icon">
