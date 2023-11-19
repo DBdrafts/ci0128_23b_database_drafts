@@ -1,13 +1,16 @@
 ﻿Dropzone.autoDiscover = false;
 var myDropzone;
+maxImages = 5;
 document.addEventListener('DOMContentLoaded', function () {
     myDropzone = new Dropzone("#dragDropZone", {
         url: "/AddProductPage/?handler=HandleFormSubmission",
         paramName: "productImages",
-        maxFiles: 5,
+        maxFiles: maxImages,
         acceptedFiles: "image/*",
         addRemoveLinks: true,
         dictRemoveFile: "Eliminar",
+        dictDefaultMessage: "Haz clic o arrastra y suelta aquí las imágenes del producto",
+        dictFileTooMany: "Ha excedido el límite de imágenes permitidas (" + maxImages + " máx).",
         autoProcessQueue: false,
         init: function () {
             this.on("success", function (file, response) {
@@ -23,6 +26,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('form-submit-button').addEventListener('click', function (e) {
         e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
+
         myDropzone.processQueue();
         var formData = new FormData(document.getElementById('addProductForm'));
 
@@ -47,5 +55,35 @@ document.addEventListener('DOMContentLoaded', function () {
 
         xhr.send(formData);
     });
+
+    function validateForm() {
+        var requiredFields = [
+            { id: 'province', message: 'Por favor, seleccione una ubicación.' },
+            { id: 'store', message: 'Por favor, ingrese el nombre del establecimiento.' },
+            { id: 'productName', message: 'Por favor, ingrese el nombre del producto.' },
+            { id: 'price', message: 'Por favor, ingrese el precio del producto.' }
+        ];
+
+        var isValid = true;
+
+        for (var i = 0; i < requiredFields.length; i++) {
+            var field = requiredFields[i];
+            var fieldElement = document.getElementById(field.id);
+            var fieldValue = fieldElement.value.trim();
+
+            if (fieldValue === '') {
+                isValid = false;
+                displayErrorMessage(fieldElement, field.message);
+                break;
+            }
+        }
+
+        return isValid;
+    }
+
+    function displayErrorMessage(element, message) {
+        showFeedbackMessage(message, 'feedbackMessage');
+    }
+
 
 });

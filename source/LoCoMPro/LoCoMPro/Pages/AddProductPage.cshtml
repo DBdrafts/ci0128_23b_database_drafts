@@ -23,11 +23,11 @@
 
 <body>
     <div class="register-section">
+        <div id="feedbackMessage" class="feedback-message"></div>
         <form id="addProductForm" method="post" asp-page="AddProductPage" enctype="multipart/form-data">
             @Html.AntiForgeryToken()
             <h2>Nuevo registro de producto</h2>
             <hr class="title-separator">
-
             <label for="chosenlocation">Ubicación<span class="required-marker">*</span>
                 <span class="required-tooltip">Campo obligatorio</span></label>
             <div class="location-container">
