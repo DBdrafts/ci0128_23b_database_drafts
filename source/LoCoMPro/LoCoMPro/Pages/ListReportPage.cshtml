@@ -26,7 +26,7 @@
     </div>
 
     <div class="report-list-section" id="no-empty-list">
-
+        <div class="results-cont-msg" span id="results-count"></div>
         <nav>
             <ul class="report-list-column-title">
                 <li>
@@ -55,9 +55,9 @@
                 @foreach(var register in productList)
                 {
                     totalPrice += register.Price;
-                } 
+                }
 
-                <li class="report-list-block" id="report-item-@reportIndex">
+                <li class="report-list-block register-block-pagination" id="report-item-@reportIndex">
 
                     <div class="report-block-information">
                         <span id="report-store-name" value="@store.Name">
@@ -71,6 +71,10 @@
                         </span>
                         <span class="align-center" id="report-product-amount" value="@productList.Count">
                             @productList.Count de @Model.WantedProducts.Count
+                        </span>
+                        <span class="block-arrow">
+                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                            <i class="fa fa-angle-up" aria-hidden="true" hidden></i>
                         </span>
                     </div>
 
