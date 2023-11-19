@@ -21,100 +21,110 @@
 <div>
     <div class="information-section">
         <div>
-            <h2>Reporte de lista de compras</h2>
+            <h2>Reporte de lista de compra</h2>
         </div>
     </div>
 
-    <div class="report-list-section" id="no-empty-list">
-        <div class="results-cont-msg" span id="results-count"></div>
-        <nav>
-            <ul class="report-list-column-title">
-                <li>
-                    <div class="text-comment">Establecimiento</div>
-                </li>
-                <li>
-                    <div class="text-comment">Ubicación</div>
-                </li>
-                <li>
-                    <div class="text-comment">Precio total</div>
-                </li>
-                <li>
-                    <div class="text-comment">Cantidad de productos</div>
-                </li>
-            </ul>
-        </nav>
+    @if (Model.StoreProducts.Count == 0)
+    {
+        <div class="empty-section text-center" id="empty-list">
+            <h1>¡No se encontraron establecimientos que cumplan con los requisitos!</h1>
+            <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
+        </div>
+    }
+    else
+    {
+        <div class="report-list-section" id="no-empty-list">
+            <div class="results-cont-msg" span id="results-count"></div>
+            <nav>
+                <ul class="report-list-column-title">
+                    <li>
+                        <div class="text-comment">Establecimiento</div>
+                    </li>
+                    <li>
+                        <div class="text-comment">Ubicación</div>
+                    </li>
+                    <li>
+                        <div class="text-comment">Precio total</div>
+                    </li>
+                    <li>
+                        <div class="text-comment">Cantidad de productos</div>
+                    </li>
+                </ul>
+            </nav>
 
-        <ul class="report-list-section">
-            @{int reportIndex = 0;}
-            @foreach (var storeEntry in Model.StoreProducts)
-            {
-                var store = storeEntry.Key;
-                var productList = storeEntry.Value;
-
-                float totalPrice = 0;
-                @foreach(var register in productList)
+            <ul class="report-list-section">
+                @{int reportIndex = 0;}
+                @foreach (var storeEntry in Model.StoreProducts)
                 {
-                    totalPrice += register.Price;
-                }
+                    var store = storeEntry.Key;
+                    var productList = storeEntry.Value;
 
-                <li class="report-list-block register-block-pagination" id="report-item-@reportIndex">
+                    float totalPrice = 0;
+                    @foreach(var register in productList)
+                    {
+                        totalPrice += register.Price;
+                    }
 
-                    <div class="report-block-information">
-                        <span id="report-store-name" value="@store.Name">
-                            @Html.DisplayFor(modelItem => store.Name)
-                        </span>
-                        <span id="report-location-name" value="@store.ProvinciaName + , + @store.CantonName">
-                            @store.ProvinciaName, @store.CantonName
-                        </span>
-                        <span class="align-right" id="report-price" value="totalPrice">
-                            ₡ @totalPrice
-                        </span>
-                        <span class="align-center" id="report-product-amount" value="@productList.Count">
-                            @productList.Count de @Model.WantedProducts.Count
-                        </span>
-                        <span class="block-arrow">
-                            <i class="fa fa-angle-down" aria-hidden="true"></i>
-                            <i class="fa fa-angle-up" aria-hidden="true" hidden></i>
-                        </span>
-                    </div>
+                    <li class="report-list-block register-block-pagination" id="report-item-@reportIndex">
 
-                    <div class="report-product-list" hidden>
+                        <div class="report-block-information">
+                            <span id="report-store-name" value="@store.Name">
+                                @Html.DisplayFor(modelItem => store.Name)
+                            </span>
+                            <span id="report-location-name" value="@store.ProvinciaName + , + @store.CantonName">
+                                @store.ProvinciaName, @store.CantonName
+                            </span>
+                            <span class="align-right" id="report-price" value="totalPrice">
+                                ₡ @totalPrice.ToString("N0")
+                            </span>
+                            <span class="align-center" id="report-product-amount" value="@productList.Count">
+                                @productList.Count de @Model.WantedProducts.Count
+                            </span>
+                            <span class="block-arrow">
+                                <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                <i class="fa fa-angle-up" aria-hidden="true" hidden></i>
+                            </span>
+                        </div>
 
-                        <hr class="style-four">
+                        <div class="report-product-list" hidden>
 
-                        <nav>
-                            <ul class="report-product-list-title">
-                                <li>
-                                    <div class="text-comment">Producto</div>
-                                </li>
-                                <li>
-                                    <div class="text-comment">Precio</div>
-                                </li>
+                            <hr class="style-four">
+
+                            <nav>
+                                <ul class="report-product-list-title">
+                                    <li>
+                                        <div class="text-comment">Producto</div>
+                                    </li>
+                                    <li>
+                                        <div class="text-comment">Precio</div>
+                                    </li>
+                                </ul>
+                            </nav>
+
+
+                            <ul class="report-list-product-section">
+                                @foreach (var register in productList)
+                                {
+                                    <li class="report-list-block-products">
+                                        <span id="product-name" value="@register.ProductName">
+                                            @Html.DisplayFor(modelItem => register.ProductName)
+                                        </span>
+                                        <span class="align-right" id="product-price" value="@register.Price">
+                                            ₡ @register.Price.ToString("N0")
+                                        </span>
+                                    </li>
+                                }
                             </ul>
-                        </nav>
-
-
-                        <ul class="report-list-product-section">
-                            @foreach (var register in productList)
-                            {
-                                <li class="report-list-block-products">
-                                    <span id="product-name" value="@register.ProductName">
-                                        @Html.DisplayFor(modelItem => register.ProductName)
-                                    </span>
-                                    <span class="align-right" id="product-price" value="@register.Price">
-                                        ₡ @Html.DisplayFor(modelItem => register.Price)
-                                    </span>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                </li>
-                ++reportIndex;
-            }
-        </ul>
-    </div>
-    <div class="product-pagination">
-        @await Html.PartialAsync("_Pagination")
-    </div>
-    <script src="~/js/pagination.js"></script>
+                        </div>
+                    </li>
+                    ++reportIndex;
+                }
+            </ul>
+        </div>
+        <div class="product-pagination">
+            @await Html.PartialAsync("_Pagination")
+        </div>
+        <script src="~/js/pagination.js"></script>
+    }
 </div>

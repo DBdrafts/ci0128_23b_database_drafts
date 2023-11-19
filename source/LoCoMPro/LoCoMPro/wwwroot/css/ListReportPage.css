@@ -184,3 +184,13 @@
 .report-product-list hr {
     margin: 0px !important;
 }
+
+/* Style for the empty section */
+.empty-section {
+    margin: 25px 15px;
+}
+
+/* Style for the empty section image */
+.empty-section img {
+    margin: -140px;
+}

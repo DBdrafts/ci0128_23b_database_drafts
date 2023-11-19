@@ -63,10 +63,13 @@ namespace LoCoMPro.Pages
         /// GET HTTP request, initializes page values.
         /// </summary>
         /// <returns></returns>
-        public async void OnGetAsync()
+        public void OnGet()
         {
             // Obtains the list of stores that sells the products the list has
             ObtainStoresListWithProducts();
+
+            // Filters the stores from the report list following several criteria
+            FilterStoreFromReport();
         }
 
         /// <summary>
@@ -111,27 +114,73 @@ namespace LoCoMPro.Pages
             // For each stores that sells the product
             foreach(var store in Stores)
             {
-                var register = from r in _context.Registers select r;
+                var register = from r in _context.Registers
+                               where r.Reports.All(report => report.ReportState != 2)
+                               select r;
 
                 // Gets a register from the product
                 Register registerFromStore = register.Where(x => x.Product == product
                                                             && x.Store == store).FirstOrDefault()!;
 
-                // If the store was already stored
-                if(StoreProducts.ContainsKey(store))
+                if (registerFromStore != null)
                 {
-                    // Only add the product
-                    StoreProducts[store].Add(registerFromStore);
-                }
-                // If wasn´t stored already
-                else
-                {
-                    // Add the store and add the product to the list
-                    StoreProducts.Add(store, new List<Register> { registerFromStore });
+                    // If the store was already stored
+                    if(StoreProducts.ContainsKey(store))
+                    {
+                        // Only add the product
+                        StoreProducts[store].Add(registerFromStore);
+                    }
+                    // If wasn't stored already
+                    else
+                    {
+                        // Add the store and add the product to the list
+                        StoreProducts.Add(store, new List<Register> { registerFromStore });
+                    }
                 }
             }
         }
 
+        /// <summary>
+        /// Filters the stores from the report list following several criteria
+        /// </summary>
+        /// <returns></returns>
+        internal void FilterStoreFromReport()
+        {
+            // Filters based on the amount of products
+            FilterStoreByProductAmount();
+        }
+
+        /// <summary>
+        /// Filters the stores from the report list base on the amount of product the store have
+        /// </summary>
+        /// <returns></returns>
+        internal void FilterStoreByProductAmount()
+        {
+            // Gets the minimal amount of products
+            int minimunProductAmount = CalculateMinimalProductAmount(StoreProducts.Count);
+
+            // For each store in the report
+            foreach (var store in StoreProducts)
+            {
+                // Remove the store from the report if does not have the enough amount of products
+                if (store.Value.Count < minimunProductAmount)
+                {
+                    StoreProducts.Remove(store.Key);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns the minimal amount of products the list of the report can have
+        /// </summary>
+        /// <param name="amountOfProduct"> Total amount of product of the list
+        /// <returns></returns>
+        internal int CalculateMinimalProductAmount(int amountOfProduct)
+        {
+            // Returns the minimal amount of products the list of the report can have
+            // In this case, is the (30% + 1) of the total of products of the list
+            return (int)((StoreProducts.Count * 0.3) + 1);
+        }
     }
 
 }
