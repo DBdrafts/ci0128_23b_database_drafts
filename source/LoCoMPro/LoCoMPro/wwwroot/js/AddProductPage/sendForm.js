@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', function () {
         addRemoveLinks: true,
         dictRemoveFile: "Eliminar",
         dictDefaultMessage: "Haz clic o arrastra y suelta aquí las imágenes del producto",
-        dictFileTooMany: "Ha excedido el límite de imágenes permitidas (" + maxImages + " máx).",
+        dictMaxFilesExceeded: "El límite de imágenes permitidas son " + maxImages + " máximo.",
+        dictInvalidFileType: "Solo se permiten archivos de imagen.",
         autoProcessQueue: false,
         init: function () {
             this.on("success", function (file, response) {
@@ -73,17 +74,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (fieldValue === '') {
                 isValid = false;
-                displayErrorMessage(fieldElement, field.message);
+                displayErrorMessage(field.message);
                 break;
             }
+        }
+        var nonImageFiles = myDropzone.files.filter(function (file) {
+            return !file.type.startsWith('image/');
+        });
+
+        if (nonImageFiles.length > 0) {
+            isValid = false;
+            displayErrorMessage('Por favor, seleccione solo archivos de imagen');
         }
 
         return isValid;
     }
 
-    function displayErrorMessage(element, message) {
+    function displayErrorMessage(message) {
         showFeedbackMessage(message, 'feedbackMessage');
     }
-
 
 });
