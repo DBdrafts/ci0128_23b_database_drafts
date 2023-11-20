@@ -196,6 +196,7 @@ namespace LoCoMPro.Pages
 
             // Get the average of the registers within last month.
             // If just one, set the average price as that
+
             if (registers.Any())
             {
                 AvgPrice = GetNumberOfRegisters(registers) > 1
