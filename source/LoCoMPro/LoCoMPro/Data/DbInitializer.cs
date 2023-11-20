@@ -232,6 +232,17 @@ namespace LoCoMPro.Data
                 , SecurityStamp = "ff950c9e-55f0-4dd9-9926-d48dba8ae4cb"
                 , ConcurrencyStamp = "0eb293cc-8be8-4a72-a51e-d352f6a6ef28"
                 , Location = cantones[0]});
+            users.Add(new User
+            {
+                Id = "277a7be2-a41d-4d22-bb4c-849a020e64d3", Role = "Moderator", UserName = "Moderador2",
+                NormalizedUserName = "MODERADOR2", Email = "pewito1505@bixolabs.com",
+                NormalizedEmail = "PEWITO1505@BIXOLABS.COM",
+                PasswordHash = "AQAAAAIAAYagAAAAEOq+uiEvKE+ipHtTvEFoP41PNOy16Ki2oZ3GxhS4BU6O6fbXRMtqqXET1XpxE3l6NA=="
+                , EmailConfirmed = true
+                , SecurityStamp = "HYECKV7GQKTJY2KI77YXSIH3UNR6A7HX"
+                , ConcurrencyStamp = "b6618b62-5e84-4d15-a293-f0b157cbbd5b"
+                , Location = cantones[0]
+            });
             context.Users.AddRange(users);
             context.SaveChanges();
         }
