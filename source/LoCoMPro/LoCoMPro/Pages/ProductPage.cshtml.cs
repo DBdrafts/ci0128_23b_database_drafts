@@ -438,14 +438,7 @@ namespace LoCoMPro.Pages
         {
             CultureInfo culture = CultureInfo.InvariantCulture;
             float.TryParse(reviewedValue, NumberStyles.Float, culture, out float reviewedValueF);
-            string[] values = SplitString(registerKeys, '\x1F');
-            string submitionDate = values[0], contributorId = values[1], productName = values[2], storeName = values[3];
-            
-            DateTime registSubmitDate = DateTime.Parse(submitionDate);
-            var user = _context.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
-            DateTime interactionDate = TruncateSubSeconds(DateTime.Now);
-
-            var registerToUpdate = GetRegisterToUpdate(contributorId, productName, storeName, registSubmitDate);
+            var (user, registerToUpdate, interactionDate) = getInteractionValues(registerKeys);
 
             if (reportChanged)
             {
@@ -462,6 +455,23 @@ namespace LoCoMPro.Pages
             return new JsonResult("OK");
         }
 
+        /// <summary>
+        /// Process the keys and gets the values to handle the interaction.
+        /// </summary>
+        /// <param name="registerKeys">Foreign keys for identification the specific register.</param>
+        /// <returns>The register to update, the DateTime interaction and the user that made the interaction.</returns>
+        private (User?, Register, DateTime) getInteractionValues(string registerKeys)
+        {
+            string[] values = SplitString(registerKeys, '\x1F');
+            string submitionDate = values[0], contributorId = values[1], productName = values[2], storeName = values[3];
+
+            DateTime registSubmitDate = DateTime.Parse(submitionDate);
+            var user = _context.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
+            DateTime interactionDate = TruncateSubSeconds(DateTime.Now);
+
+            var registerToUpdate = GetRegisterToUpdate(contributorId, productName, storeName, registSubmitDate);
+            return (user, registerToUpdate, interactionDate);
+        }
 
         /// <summary>
         /// Gets the register on which an interaction was performed.
@@ -569,6 +579,21 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
+        /// returns the previous report if the user had already made one for that register
+        /// <param name="register">Register to  check if the user has already made a report </param>
+        /// <param name="user">User to check if they have already made a report to the register</param>
+        /// <returns>The report of the register or null if the user has not already made a report for the register.</returns>
+        /// </summary>
+        private Report? PreviousReport(User user, Register register)
+        {
+            return _context.Reports.FirstOrDefault(r => r.ReporterId == user!.Id
+                && r.ProductName == register.ProductName
+                && r.StoreName == register.StoreName
+                && r.SubmitionDate == register.SubmitionDate
+                && r.ContributorId == register.ContributorId);
+        }
+
+        /// <summary>
         /// Get the amount of images of one registers
         /// </summary>
         /// <param name="registerToCheck">Register to check the images count.</param>
@@ -608,7 +633,6 @@ namespace LoCoMPro.Pages
             // Return the boolean indicating whether the register has images.
             return hasImages;
         }
-
 
         /// <summary>
         /// Get the Max status of report of a register
@@ -651,40 +675,19 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
-        /// returns the previous report if the user had already made one for that register
-        /// <param name="register">Register to  check if the user has already made a report </param>
-        /// <param name="user">User to check if they have already made a report to the register</param>
-        /// <returns>The report of the register or null if the user has not already made a report for the register.</returns>
-        /// </summary>
-        private Report? PreviousReport(User user, Register register)
-        {
-            return _context.Reports.FirstOrDefault(r => r.ReporterId == user!.Id
-                && r.ProductName == register.ProductName
-                && r.StoreName == register.StoreName
-                && r.SubmitionDate == register.SubmitionDate
-                && r.ContributorId == register.ContributorId);
-        }
-
-
-        /// <summary>
         /// Check if the user had already made a report for the register
         /// <param name="registerKeys">Keys to identificate the register to check </param>
         /// <returns> a JsonResult with the boolean result.</returns>
         /// </summary>
         public JsonResult OnGetCheckReportStatus(string registerKeys)
         {
-            CultureInfo culture = CultureInfo.InvariantCulture;
-            string[] values = SplitString(registerKeys, '\x1F');
-            string submitionDate = values[0], contributorId = values[1], productName = values[2], storeName = values[3];
-
-            DateTime registSubmitDate = DateTime.Parse(submitionDate);
-            var user = _context.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
-            DateTime interactionDate = TruncateSubSeconds(DateTime.Now);
-
-            var registerToUpdate = GetRegisterToUpdate(contributorId, productName, storeName, registSubmitDate);
-
-            bool hasReported = PreviousReport(user!, registerToUpdate) != null ? true : false;
-            return new JsonResult(new { hasReported = hasReported });
+            var (user, registerToUpdate, _) = getInteractionValues(registerKeys);
+            bool hasReported = false;
+            if (user != null)
+            {
+               hasReported = PreviousReport(user!, registerToUpdate) != null ? true : false;
+            }
+            return new JsonResult(new { hasReported });
         }
     }
 }

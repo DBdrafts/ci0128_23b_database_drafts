@@ -9,14 +9,16 @@ function openInteractionsPopup(openButton) {
     reportIcon = document.getElementById('reportIcon');
     registerKeys = openButton.getAttribute('data-register-id');
 
+    reportCommentInput.value = "";
     // Gets the register data
     var [submitionDate, userID, productName, storeName, price, date,
-        userName, comment, lastReviewValue, lastReportState, registerNumber] = registerKeys.split(String.fromCharCode(31));
+        userName, comment, lastReviewValue, lastReportState,
+        registerNumber] = registerKeys.split(String.fromCharCode(31));
 
     // Sets the register data
     document.getElementById('popup-submitionDate').textContent = date;
     document.getElementById('popup-price').textContent = '₡' + price;
-    //document.getElementById('popup-userName').textContent = userName;
+    document.getElementById('popup-userName').textContent = userName;
     document.getElementById('popup-comment').textContent = (comment !== null && comment !== '') ? comment : "N/A";
 
 
@@ -43,10 +45,10 @@ function openInteractionsPopupMod(openButton) {
 
     // Gets the register data
     var [ReporterId, ContributorId, ProductName, StoreName, SubmitionDate, CantonName,
-        ProvinceName, ReportDate, ReportState, reporterName, contributorName, price, registerNumber, comment] = reportData.split(String.fromCharCode(31));
+        ProvinceName, ReportDate, ReportState, reporterName, contributorName,
+        price, registerNumber, comment] = reportData.split(String.fromCharCode(31));
 
-    
-
+ 
     // Sets the register data
     document.getElementById('popup-contributorName').textContent = contributorName;
     document.getElementById('popup-submitionDate').textContent = SubmitionDate;
