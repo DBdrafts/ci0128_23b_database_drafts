@@ -629,6 +629,7 @@ namespace LoCoMPro.Pages
             // Return the highest report state
             return highestReportState;
         }
+
         /// <summary>
         /// Checks if the reporter is the owner of the register
         /// </summary>
@@ -649,6 +650,12 @@ namespace LoCoMPro.Pages
             return result;
         }
 
+        /// <summary>
+        /// returns the previous report if the user had already made one for that register
+        /// <param name="register">Register to  check if the user has already made a report </param>
+        /// <param name="user">User to check if they have already made a report to the register</param>
+        /// <returns>The report of the register or null if the user has not already made a report for the register.</returns>
+        /// </summary>
         private Report? PreviousReport(User user, Register register)
         {
             return _context.Reports.FirstOrDefault(r => r.ReporterId == user!.Id
@@ -656,6 +663,28 @@ namespace LoCoMPro.Pages
                 && r.StoreName == register.StoreName
                 && r.SubmitionDate == register.SubmitionDate
                 && r.ContributorId == register.ContributorId);
+        }
+
+
+        /// <summary>
+        /// Check if the user had already made a report for the register
+        /// <param name="registerKeys">Keys to identificate the register to check </param>
+        /// <returns> a JsonResult with the boolean result.</returns>
+        /// </summary>
+        public JsonResult OnGetCheckReportStatus(string registerKeys)
+        {
+            CultureInfo culture = CultureInfo.InvariantCulture;
+            string[] values = SplitString(registerKeys, '\x1F');
+            string submitionDate = values[0], contributorId = values[1], productName = values[2], storeName = values[3];
+
+            DateTime registSubmitDate = DateTime.Parse(submitionDate);
+            var user = _context.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
+            DateTime interactionDate = TruncateSubSeconds(DateTime.Now);
+
+            var registerToUpdate = GetRegisterToUpdate(contributorId, productName, storeName, registSubmitDate);
+
+            bool hasReported = PreviousReport(user!, registerToUpdate) != null ? true : false;
+            return new JsonResult(new { hasReported = hasReported });
         }
     }
 }

@@ -6,6 +6,7 @@ function openInteractionsPopup(openButton) {
     reportCommentInput = document.getElementById('reportComment');
     reportLabel = document.getElementById('reportLabel');
     interactionsPopup.style.display = 'block';
+    reportIcon = document.getElementById('reportIcon');
     registerKeys = openButton.getAttribute('data-register-id');
 
     // Gets the register data
@@ -15,7 +16,7 @@ function openInteractionsPopup(openButton) {
     // Sets the register data
     document.getElementById('popup-submitionDate').textContent = date;
     document.getElementById('popup-price').textContent = '₡' + price;
-    document.getElementById('popup-userName').textContent = userName;
+    //document.getElementById('popup-userName').textContent = userName;
     document.getElementById('popup-comment').textContent = (comment !== null && comment !== '') ? comment : "N/A";
 
 
@@ -29,11 +30,9 @@ function openInteractionsPopup(openButton) {
     copyRegisterValidation(registerNumber);
 
     // Set the information of the report button
-    document.getElementById('reportIcon').src = '/img/DesactiveReportIcon.svg';
-
+    setReportedValue();
     // Sets the information for the review function and report
     setReviewedValue(lastReviewValue);   
-    setReportedValue(lastReportState);   
 }
 
 function openInteractionsPopupMod(openButton) {
@@ -336,14 +335,24 @@ function setReviewedValue(lastReviewValue) {
 /// <summary>
 /// Establish the initial state of the values for report
 /// </summary>
-function setReportedValue(lastReportedValue) {
-    // If the user has already made a report
-    reportActivated = false;
-    if (lastReportedValue != -1) {
-        reportActivated = true;
-        reportIcon.src = '/img/ActiveReportIcon.svg';
-    }
-    reportChanged = false;
+function setReportedValue() {
+    $.ajax({
+        url: '/ProductPage/1?handler=CheckReportStatus',
+        type: 'GET',
+        data: { registerKeys: registerKeys },
+        success: function (data) {
+            reportActivated = data.hasReported;
+            if (reportActivated) {
+                reportIcon.src = '/img/ActiveReportIcon.svg';
+            } else {
+                reportIcon.src = '/img/DesactiveReportIcon.svg';
+            }
+            reportChanged = false;
+        },
+        error: function (error) {
+            console.error('Error report status verification: ' + error);
+        }
+    });
 }
 
 /// <summary>
