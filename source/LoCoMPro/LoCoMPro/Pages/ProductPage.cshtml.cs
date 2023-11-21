@@ -449,14 +449,12 @@ namespace LoCoMPro.Pages
 
             if (reportChanged)
             {
-                HandleReport(user!, registerToUpdate, interactionDate, contributorId,
-                    productName, storeName, registSubmitDate, reportComment);
+                HandleReport(user!, registerToUpdate, interactionDate, reportComment);
             }
 
             if (reviewedValueF > 0)
             {
-                HandleReview(user!, registerToUpdate, interactionDate, contributorId,
-                    productName, storeName, registSubmitDate, reviewedValueF);
+                HandleReview(user!, registerToUpdate, interactionDate, reviewedValueF);
             }
 
             _context.SaveChanges();
@@ -517,21 +515,11 @@ namespace LoCoMPro.Pages
         /// </summary>
         /// <param name="user">User that made the report.</param>
         /// <param name="registerToUpdate">Register to which the report was made.</param>
-        /// <param name="registSubmitDate"><See cref="GetRegisterToUpdate"/>).</param>
         /// <param name="reportComment">Reason of the report</param>
         /// <param name="interactionDate">Date and time the report is made.</param>
-        /// <param name="contributorId"><See cref="GetRegisterToUpdate"/>).</param>
-        /// <param name="productName"><See cref="GetRegisterToUpdate"/>).</param>
-        /// <param name="storeName"><See cref="GetRegisterToUpdate"/>).</param>
-        private void HandleReport(User user, Register registerToUpdate, DateTime interactionDate,
-           string contributorId, string productName, string storeName, DateTime registSubmitDate, string reportComment)
+        private void HandleReport(User user, Register registerToUpdate, DateTime interactionDate, string reportComment)
         {
-            var lastReport = _context.Reports.FirstOrDefault(r => r.ReporterId == user!.Id
-                && r.ProductName == productName
-                && r.StoreName == storeName
-                && r.SubmitionDate == registSubmitDate
-                && r.ContributorId == contributorId);
-
+            var lastReport = PreviousReport(user, registerToUpdate);
             if (lastReport == null)
             {
                 _context.Reports.Add(new Report
@@ -556,20 +544,15 @@ namespace LoCoMPro.Pages
         /// </summary>
         /// <param name="user">User that made the review.</param>
         /// <param name="registerToUpdate">Register to which the review was made.</param>
-        /// <param name="registSubmitDate"><See cref="GetRegisterToUpdate"/>).</param>
         /// <param name="interactionDate">Date and time the review is made.</param>
-        /// <param name="contributorId"><See cref="GetRegisterToUpdate"/>).</param>
-        /// <param name="productName"><See cref="GetRegisterToUpdate"/>).</param>
-        /// <param name="storeName"><See cref="GetRegisterToUpdate"/>).</param>
         /// <param name="reviewedValue"><See cref="OnPostHandleInteraction"/>).</param>
-        private void HandleReview(User user, Register registerToUpdate, DateTime interactionDate, 
-            string contributorId, string productName, string storeName, DateTime registSubmitDate, float reviewedValue)
+        private void HandleReview(User user, Register registerToUpdate, DateTime interactionDate, float reviewedValue)
         {
             var lastReview = _context.Reviews.FirstOrDefault(r => r.ReviewerId == user.Id
-                && r.ProductName == productName
-                && r.StoreName == storeName
-                && r.SubmitionDate == registSubmitDate
-                && r.ContributorId == contributorId);
+                && r.ProductName == registerToUpdate.ProductName
+                && r.StoreName == registerToUpdate.StoreName
+                && r.SubmitionDate == registerToUpdate.SubmitionDate
+                && r.ContributorId == registerToUpdate.ContributorId);
 
             if (lastReview == null)
             {
@@ -665,6 +648,14 @@ namespace LoCoMPro.Pages
             }
             return result;
         }
-    }
 
+        private Report? PreviousReport(User user, Register register)
+        {
+            return _context.Reports.FirstOrDefault(r => r.ReporterId == user!.Id
+                && r.ProductName == register.ProductName
+                && r.StoreName == register.StoreName
+                && r.SubmitionDate == register.SubmitionDate
+                && r.ContributorId == register.ContributorId);
+        }
+    }
 }
