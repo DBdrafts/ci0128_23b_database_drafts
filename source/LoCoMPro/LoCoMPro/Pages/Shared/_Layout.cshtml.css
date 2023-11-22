@@ -136,3 +136,43 @@ button.accept-policy {
     width: auto;
 }
 
+.popup-moderator {
+    display: none;
+    position: fixed;
+    right: 120px;
+    top: 80px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    padding: 15px;
+    min-width: 175px;
+    text-align:center;
+}
+
+.pop-up-form {
+    text-align:center;
+}
+
+.popup-moderator button {
+    cursor: pointer;
+    display: block;
+    border-radius: 15px;
+    padding: 10px;
+    width: 250px;
+}
+
+#most-repts-generated-button {
+    margin-top: 5px;
+}
+
+#moderate-button, #most-repts-generated-button {
+    border: 1px #BABAB8 solid;
+    background-color: white;
+}
+
+/* Style for the logout button when the cursor is on the button */
+#moderate-button:hover, #most-repts-generated-button:hover {
+    background-color: #e5e5e5;
+}
