@@ -14,6 +14,7 @@ let queryTotalResults = resultBlocks.length;
 let currentPage = 1;
 
 let activeButton = null;
+let displayInlineBlock = false;
 
 function getOppositeOrder(order) {
     return order === "desc" ? "asc" : "desc";
@@ -25,6 +26,12 @@ document.addEventListener("DOMContentLoaded", function () {
         if ($(field).length === 0) {
             field = "#register-date";
         }
+
+        if (resultBlocks[0].querySelector(field) == null) {
+            field = "#report-product-amount";
+            displayInlineBlock = true;
+        }
+
         // Implement your sorting logic here
         resultBlocks.sort((a, b) => {
             const valueA = parseFloat(a.querySelector(field).getAttribute("value"));
@@ -44,7 +51,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const startIndex = (page - 1) * pageSize;
         const endIndex = startIndex + pageSize;
         resultBlocks.forEach((block, index) => {
-            block.style.display = index >= startIndex && index < endIndex ? 'block' : 'none';
+            if (displayInlineBlock) {
+                block.style.display = index >= startIndex && index < endIndex ? 'inline-block' : 'none';
+            }
+            else {
+                block.style.display = index >= startIndex && index < endIndex ? 'block' : 'none';
+            }
         });
 
         // Range of results of the current page
