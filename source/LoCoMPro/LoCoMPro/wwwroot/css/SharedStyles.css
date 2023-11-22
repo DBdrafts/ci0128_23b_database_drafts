@@ -1,5 +1,19 @@
 ﻿/* Style shared by several pages */
 
+/* General colors of the page */
+:root {
+    --locompro-light-gray: #E2E3E3;
+    --locompro-dark-gray: #BABAB8;
+    --locompro-light-blue: #88C8F8;
+    --locompro-light-blue-hover: #39A4F4;
+    --locompro-blue: #39A4F4;
+    --locompro-blue-hover: #88C8F8;
+    --locompro-yellow: #F5AA38;
+    --locompro-yellow-hover: #F6A01D;
+    --locompro-red: #F87474;
+    --locompro-red-hover: #E25A5A;
+}
+
 /* General style for the button */
 .button-general {
     color: black;
@@ -25,10 +39,11 @@
 /* Style for the layout buttons */
 .layout-button {
     background: none;
-    margin: 0px 10px -15px 0px;
+    margin: 0px 10px -15px 5px;
     display: inline-block;
     text-align: center;
     text-decoration: none;
+    min-width: 55px;
 }
 
 /* Style for the paragraph in the layout button */
@@ -55,4 +70,11 @@
 .logo-link img {
     height: 40px;
     width: 120px;
+}
+
+/* Style for the search section */
+.product-pagination {
+    height: 100%;
+    text-align: center;
+    align-items: center;
 }

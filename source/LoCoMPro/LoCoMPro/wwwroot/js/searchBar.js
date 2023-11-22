@@ -1,9 +1,5 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
     // Get location button and location popup
-    const popupProvince = document.getElementById("province");
-    const popupCanton = document.getElementById("canton");
-    const selectButtonProvince = document.getElementById("chosenProvince");
-    const selectButtonCanton = document.getElementById("chosenCanton");
     const span = document.getElementById("buttonSpan");
     // Get current URL
     const currentPageUrl = window.location.href;
@@ -17,21 +13,14 @@
     // Get the value of a specific parameter (e.g., 'param1')
     // Get the current page's URL
     if (currentPageUrl.includes("/SearchPage")) {
-        document.getElementById("type-search-selector").value = searchType;
-        document.getElementById("search-input").value = searchString;
+        $("#type-search-selector").val(searchType);
+        $("#search-input").val(searchString);
         if (selectedProvince && selectedProvince !== "") {
-            span.textContent = selectedProvince;
-            popupProvince.textContent = selectedProvince;
-            popupProvince.value = selectedProvince;
-            selectButtonProvince.textContent = selectedProvince;
-            var text = span.textContent;
+            var text = selectedProvince;
             if (selectedCanton && selectedCanton !== "") {
-                span.textContent = span.textContent + ", " + selectedCanton;
-                locationPopup.lastChild.value = selectedCanton;
-                popupCanton.textContent = selectedCanton;
-                popupCanton.value = selectedCanton;
-                selectButtonCanton.textContent = selectedCanton;
+                text = text + ", " + selectedCanton;
             }
+            span.textContent = text;
         }
     }
 });

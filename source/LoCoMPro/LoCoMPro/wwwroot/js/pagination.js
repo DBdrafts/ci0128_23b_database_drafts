@@ -14,13 +14,24 @@ let queryTotalResults = resultBlocks.length;
 let currentPage = 1;
 
 let activeButton = null;
+let displayInlineBlock = false;
 
 function getOppositeOrder(order) {
     return order === "desc" ? "asc" : "desc";
 }
 document.addEventListener("DOMContentLoaded", function () {
     // Sort the result blocks based on the selected sorting criteria
-    window.sortResultBlocks = function (order, field = "#register-price") {
+    window.sortResultBlocks = function (order, field = "#register-distance") {
+
+        if ($(field).length === 0) {
+            field = "#register-date";
+        }
+
+        if (resultBlocks[0].querySelector(field) == null) {
+            field = "#report-product-amount";
+            displayInlineBlock = true;
+        }
+
         // Implement your sorting logic here
         resultBlocks.sort((a, b) => {
             const valueA = parseFloat(a.querySelector(field).getAttribute("value"));
@@ -40,11 +51,27 @@ document.addEventListener("DOMContentLoaded", function () {
         const startIndex = (page - 1) * pageSize;
         const endIndex = startIndex + pageSize;
         resultBlocks.forEach((block, index) => {
-            block.style.display = index >= startIndex && index < endIndex ? 'block' : 'none';
+            if (displayInlineBlock) {
+                block.style.display = index >= startIndex && index < endIndex ? 'inline-block' : 'none';
+            }
+            else {
+                block.style.display = index >= startIndex && index < endIndex ? 'block' : 'none';
+            }
         });
 
-        total.textContent = `Página ${currentPage} de ${totalPages}`;
+        // Range of results of the current page
+        const firstResultCurrentPage = (currentPage - 1) * pageSize + 1;
+        const lastResultCurrentPage = Math.min(currentPage * pageSize, resultBlocks.length);
 
+
+        let resultsRangeMsg = `${firstResultCurrentPage}-${lastResultCurrentPage} de ${resultBlocks.length} elementos`;
+
+        if (firstResultCurrentPage === resultBlocks.length) {
+            resultsRangeMsg = `Elemento ${lastResultCurrentPage} de ${resultBlocks.length}`
+        }
+
+        document.getElementById("results-count").textContent = resultsRangeMsg;
+        total.textContent = `Página ${currentPage} de ${totalPages}`;
     }
  
 

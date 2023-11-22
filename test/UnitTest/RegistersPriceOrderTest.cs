@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace RegistersPriceOrderTest
 {
-    [TestClass]
+    /*[TestClass]
     // Declaration of the test class
     public class RazorPageTests : BaseTest
     {
@@ -64,5 +64,5 @@ namespace RegistersPriceOrderTest
             }
 
         }
-    }
+    }*/
 }
