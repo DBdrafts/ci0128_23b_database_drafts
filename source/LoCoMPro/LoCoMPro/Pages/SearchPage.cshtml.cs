@@ -143,7 +143,7 @@ namespace LoCoMPro.Pages
             {
                 SearchResults = _context.GetSearchResults(SearchType ?? "Nombre", SearchString!, geolocation);
 
-                SearchResults = SearchResults.GroupBy(r => new { r.ProductName, r.StoreName })
+                SearchResults = SearchResults.GroupBy(r => new { r.ProductName, r.StoreName, r.CantonName, r.ProvinciaName })
                             .Select(grouped => grouped.OrderByDescending(r => r.SubmitionDate).First());
             } catch (Exception ex)
             {
@@ -234,7 +234,7 @@ namespace LoCoMPro.Pages
                     break;
             }
 
-            resultQuery = resultQuery.GroupBy(r => new { r.ProductName, r.StoreName })
+            resultQuery = resultQuery.GroupBy(r => new { r.ProductName, r.StoreName, r.CantonName, r.ProvinciaName})
                         .Select(grouped => grouped.OrderByDescending(r => r.SubmitionDate).First());
 
             return resultQuery;
