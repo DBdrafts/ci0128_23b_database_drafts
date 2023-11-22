@@ -30,7 +30,13 @@ namespace functional_tests
             testPage.ChangeUrl("https://localhost:7119/AddProductPage");
 
             driver.FindElement(By.Id("form-submit-button")).Click();
-            string reportFeedbackMessage = driver.FindElement(By.Id("feedbackMessage")).Text;
+
+            var feedbackMessageElement = driver.FindElement(By.Id("feedbackMessage"));
+
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            wait.Until(driver => feedbackMessageElement.Displayed);
+
+            string reportFeedbackMessage = feedbackMessageElement.Text;
 
             // Assert
             Assert.That(reportFeedbackMessage.Contains("Por favor, seleccione una ubicación."));
@@ -53,20 +59,29 @@ namespace functional_tests
             testPage.SingIn(email, password);
             testPage.ChangeUrl("https://localhost:7119/AddProductPage");
             
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+
             driver.FindElement(By.Id("showPopupButton")).Click();
 
-            IWebElement selectProvince= driver.FindElement(By.Id("province"));
+            IWebElement selectProvince = driver.FindElement(By.Id("province"));
             selectProvince.Click();
             selectProvince.FindElement(By.XPath("//option[@value='Alajuela']")).Click();
 
             IWebElement selectCanton = driver.FindElement(By.Id("canton"));
             selectCanton.Click();
+            wait.Until(driver => selectCanton.Displayed);
+
             selectCanton.FindElement(By.XPath("//option[@value='Atenas']")).Click();
 
             driver.FindElement(By.Id("saveLocationMap-button")).Click();
 
             driver.FindElement(By.Id("form-submit-button")).Click();
-            string reportFeedbackMessage = driver.FindElement(By.Id("feedbackMessage")).Text;
+
+            var feedbackMessageElement = driver.FindElement(By.Id("feedbackMessage"));
+
+            wait.Until(driver => feedbackMessageElement.Displayed);
+
+            string reportFeedbackMessage = feedbackMessageElement.Text;
 
             // Assert
             Assert.That(reportFeedbackMessage.Contains("Por favor, ingrese el nombre del establecimiento."));

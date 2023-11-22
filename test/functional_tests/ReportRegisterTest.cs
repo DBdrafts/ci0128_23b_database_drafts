@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using functional_tests.Shared;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using OpenQA.Selenium.Support.UI;
 
 namespace functional_tests
 {
@@ -32,7 +33,12 @@ namespace functional_tests
             driver.FindElement(By.Id("reportIcon")).Click();
             driver.FindElement(By.Id("saveButton")).Click();
 
-            string reportFeedbackMessage = driver.FindElement(By.Id("feedbackMessage")).Text;
+            var feedbackMessageElement = driver.FindElement(By.Id("feedbackMessage"));
+
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            wait.Until(driver => feedbackMessageElement.Displayed);
+
+            string reportFeedbackMessage = feedbackMessageElement.Text;
 
             // Assert
             Assert.That(reportFeedbackMessage.Contains("Su reporte se ha realizado correctamente!") ||
