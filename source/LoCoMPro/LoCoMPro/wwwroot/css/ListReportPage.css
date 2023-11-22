@@ -14,7 +14,7 @@
     padding: 0px 10px;
     display: inline-flex;
     height: auto;
-    width: 99%;
+    width: 98%;
     justify-content: space-between;
     list-style: none;
     margin: 15px 0px;
@@ -24,10 +24,10 @@
 /* Style for list title columns */
 .report-list-column-title li {
     font-size: x-large;
-    flex: 0 0 20%;
+    flex: 0 0 23%;
     width: auto;
     text-align: center;
-    margin: 0px 25px;
+    margin: 0px 15px;
 }
 
 /* Style for columns */
