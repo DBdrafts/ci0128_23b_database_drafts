@@ -42,7 +42,12 @@
                         <div class="text-comment">Establecimiento</div>
                     </li>
                     <li>
-                        <div class="text-comment">Ubicación</div>
+                        @if(Model.UserInPage.Geolocation == null)
+                        {
+                            <span style="color: var(--locompro-red)">*</span>
+                        }
+                        @{ViewBag.SortTipe = "#report-location";}
+                        @await Html.PartialAsync("_OrderButton", "Ubicación")
                     </li>
                     <li>
                         @{ViewBag.SortTipe = "#report-price";}
@@ -74,7 +79,7 @@
                             <span id="report-store-name" value="@store.Name">
                                 @Html.DisplayFor(modelItem => store.Name)
                             </span>
-                            <span id="report-location-name" value="@store.ProvinciaName + , + @store.CantonName">
+                            <span id="report-location" value="@Model.StoreDistances[store]">
                                 @store.ProvinciaName, @store.CantonName
                             </span>
                             <span class="align-right" id="report-price" value="@totalPrice">

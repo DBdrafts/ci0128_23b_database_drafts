@@ -13,6 +13,7 @@ namespace LoCoMPro.Pages
     /// </summary>
     public class ProductListPageModel : LoCoMProPageModel
     {
+        private readonly UserManager<User> _userManager;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -37,13 +38,18 @@ namespace LoCoMPro.Pages
         public int TotalPrice { get; set; }
 
         /// <summary>
+        /// Flag if the user has choose a location
+        /// </summary>
+        public bool HasUserLocation { get; set; } = false;
+
+        /// <summary>
         /// Creates a new ProductListPageModel.
         /// </summary>
         /// <param name="context">DB Context to pull data from.</param>
         /// <param name="configuration">Configuration for page.</param>
         /// <param name="httpContextAccessor">Allow access to the http context
         public ProductListPageModel(LoCoMProContext context, IConfiguration configuration
-            , IHttpContextAccessor? httpContextAccessor)
+            , IHttpContextAccessor? httpContextAccessor, UserManager<User> userManager)
             : base(context, configuration)
         {
             _httpContextAccessor = httpContextAccessor;
@@ -59,6 +65,7 @@ namespace LoCoMPro.Pages
             {
                 UserProductList = new List<UserProductListElement>();
             }
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -69,6 +76,13 @@ namespace LoCoMPro.Pages
         {
             // Calculates the total amount between all the products
             CalculateTotalPrice();
+
+            // Set the flag if the user has choose a location
+            User actualUser = await _userManager.GetUserAsync(User);
+            if (actualUser != null)
+            {
+                HasUserLocation = actualUser.Geolocation != null;
+            }
         }
 
         /// <summary>

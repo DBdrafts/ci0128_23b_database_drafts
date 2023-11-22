@@ -26,13 +26,22 @@
 }
 
 
-/* Style for the information button section*/
+/* Style for the information button section */
 .information-button-section {
     display: inline-block;
     width: 19%;
     height: 100%;
     min-width: 200px;
     text-align: right;
+}
+
+/* Style for the location message text */
+.location-message {
+    color: var(--locompro-red);
+    width: 100%;
+    display:inline-block;
+    text-align: right;
+    margin: 10px 0px;
 }
 
 /* Style for the generate report button */
@@ -194,3 +203,7 @@
     margin: -70px
 }
 
+/* Style for the line of the list block */
+.information-section hr {
+    margin: 10px !important;
+}

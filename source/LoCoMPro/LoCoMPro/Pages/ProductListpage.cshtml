@@ -33,16 +33,28 @@
             </div>
         </div>
 
-        <a style='display: @(Model.UserProductList.Count != 0 ? "inline-block" : "none")'
-                class="information-button-section" method="get"  asp-page="/ListReportPage">
-            <button type="button" class="button-general" id="generate-report-button">
-                Generar reporte
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </button>
-        </a>
+        @if (Model.HasUserLocation)
+        {
+            <a style='display: @(Model.UserProductList.Count != 0 ? "inline-block" : "none")'
+                    class="information-button-section" method="get" asp-page="/ListReportPage">
+                <button type="button" class="button-general" id="generate-report-button">
+                    Generar reporte
+                    <i class="fa fa-list" aria-hidden="true"></i>
+                </button>
+            </a>
+        }
+        else
+        {
+            <div class="location-message" id="location-message-text" 
+                    style='display: @(Model.UserProductList.Count != 0 ? "inline-block" : "none")'>
+                <span>
+                    * Escoja una ubicación de preferencia para poder crear un reporte
+                </span>
+            </div>
+        }
+        <hr class="style-four">
     </div>
 
-    <hr class="style-four">
 
     <div class="empty-section text-center" id="empty-list"
             style='display: @(Model.UserProductList.Count == 0 ? "inline-block" : "none")'>

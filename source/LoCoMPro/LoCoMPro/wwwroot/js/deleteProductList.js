@@ -82,5 +82,6 @@ function updateListData(avgPriceString) {
         document.getElementById("empty-list").style.display = 'inline-block';
         document.getElementById("no-empty-list").style.display = 'none';
         document.getElementById("generate-report-button").style.display = 'none';
+        document.getElementById("location-message-text").style.display = 'none';
     }
 }

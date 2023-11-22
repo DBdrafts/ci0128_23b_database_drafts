@@ -1,6 +1,7 @@
 using LoCoMPro.Data;
 using LoCoMPro.Models;
 using LoCoMPro.Utils;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -11,6 +12,7 @@ namespace LoCoMPro.Pages
     /// </summary>
     public class ListReportPageModel : LoCoMProPageModel
     {
+        private readonly UserManager<User> _userManager;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -35,13 +37,23 @@ namespace LoCoMPro.Pages
         public Dictionary<Store, List<Register>> StoreProducts { get; set; } = new Dictionary<Store, List<Register>>();
 
         /// <summary>
+        /// Structure that bind the stores with the distance to the user
+        /// </summary>
+        public Dictionary<Store, double> StoreDistances { get; set; } = new Dictionary<Store, double>();
+
+        /// <summary>
+        /// User in the page
+        /// </summary>
+        public User UserInPage;
+
+        /// <summary>
         /// Creates a new ListReportPageModel.
         /// </summary>
         /// <param name="context">DB Context to pull data from.</param>
         /// <param name="configuration">Configuration for page.</param>
         /// <param name="httpContextAccessor">Allow access to the http context
         public ListReportPageModel(LoCoMProContext context, IConfiguration configuration
-            , IHttpContextAccessor? httpContextAccessor)
+            , IHttpContextAccessor? httpContextAccessor, UserManager<User> userManager)
             : base(context, configuration)
         {
             _httpContextAccessor = httpContextAccessor;
@@ -57,16 +69,23 @@ namespace LoCoMPro.Pages
             {
                 UserProductList = new List<UserProductListElement>();
             }
+            _userManager = userManager;
         }
 
         /// <summary>
         /// GET HTTP request, initializes page values.
         /// </summary>
         /// <returns></returns>
-        public void OnGet()
+        public async Task OnGetAsync()
         {
+            // Get the user in the page
+            UserInPage = await _userManager.GetUserAsync(User);
+
             // Obtains the list of stores that sells the products the list has
             ObtainStoresListWithProducts();
+
+            // Gets the distance between the user and the stores
+            ObtainDistances();
 
             // Filters the stores from the report list following several criteria
             FilterStoreFromReport();
@@ -148,10 +167,13 @@ namespace LoCoMPro.Pages
         {
             // Filters based on the amount of products
             FilterStoreByProductAmount();
+
+            // Filters based on the distance of the store
+            FilterStoreByDistance();
         }
 
         /// <summary>
-        /// Filters the stores from the report list base on the amount of product the store have
+        /// Filters the stores from the report list based on the amount of product the store have
         /// </summary>
         /// <returns></returns>
         internal void FilterStoreByProductAmount()
@@ -179,7 +201,78 @@ namespace LoCoMPro.Pages
         {
             // Returns the minimal amount of products the list of the report can have
             // In this case, is the (30% + 1) of the total of products of the list
-            return (int)((StoreProducts.Count * 0.3) + 1);
+            return (int)(StoreProducts.Count * 0.3);
+        }
+
+        /// <summary>
+        /// Filters the stores from the report list based on the distances between the user and the store
+        /// </summary>
+        /// <returns></returns>
+        internal void FilterStoreByDistance()
+        {
+            // For each store in the report
+            foreach (var store in StoreProducts)
+            {
+                // Remove the store from the report if the distance between the user and the store
+                // is bigger than approximately 50 kilometers
+                if (StoreDistances[store.Key] > 0.45)
+                {
+                    StoreProducts.Remove(store.Key);
+                    StoreDistances.Remove(store.Key);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Obtains the distance between the user and the stores
+        /// </summary>
+        /// <returns></returns>
+        internal void ObtainDistances()
+        {
+            // If the user has choose a location
+            if(UserHasLocation(UserInPage))
+            {
+                SetRealDistances();
+            }
+            else
+            // If the user does not has a location
+            {
+                SetStandardDistances();
+            }
+        }
+
+        /// <summary>
+        /// Sets the distances as the real distances between the user and the store
+        /// </summary>
+        /// <returns></returns>
+        internal void SetRealDistances()
+        {
+            // Gets the distance between the user and each store
+            foreach (var store in StoreProducts)
+            {
+                // If the store has geolocation, add the real distance
+                if (store.Key.Geolocation != null)
+                {
+                    StoreDistances.Add(store.Key, UserInPage.Geolocation!.Distance(store.Key.Geolocation));
+                }
+                else
+                {
+                    StoreDistances.Add(store.Key, 0);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets all distances as a default value
+        /// </summary>
+        /// <returns></returns>
+        internal void SetStandardDistances()
+        {
+            // Sets all the distance to 0
+            foreach (var store in StoreProducts)
+            {
+                StoreDistances.Add(store.Key, 0);
+            }
         }
     }
 
