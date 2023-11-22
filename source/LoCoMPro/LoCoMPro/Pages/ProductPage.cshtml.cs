@@ -175,7 +175,6 @@ namespace LoCoMPro.Pages
 
             // Initial request for all the registers in the database if the reportState is not 2
             var registers = from r in _context.Registers
-                            where r.Reports.All(report => report.ReportState != 2)
                             select r;
 
             // add the images from every register
@@ -197,6 +196,7 @@ namespace LoCoMPro.Pages
 
             // Get the average of the registers within last month.
             // If just one, set the average price as that
+
             if (registers.Any())
             {
                 AvgPrice = GetNumberOfRegisters(registers) > 1
@@ -540,7 +540,7 @@ namespace LoCoMPro.Pages
                     ReportDate = interactionDate,
                     CantonName = registerToUpdate.CantonName!,
                     ProvinceName = registerToUpdate.ProvinciaName!,
-                    ReportState = User.IsInRole("Moderator") ? 2 : 1
+                    ReportState = 1
                 });
             }
             else

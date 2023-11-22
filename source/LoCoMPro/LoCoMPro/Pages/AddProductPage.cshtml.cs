@@ -87,20 +87,29 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
-        /// Adds the product to the DB, and redirects to Main Page.
+        /// Handle the submition request and redirect to /Index on success.
         /// </summary>
-        /// <returns>Redirect to Same page if the product is not valid, and to /Index was added successfully.</returns>
-        public async Task<IActionResult> OnPostAsync()
+        /// <returns>Success Protocol Message.</returns>
+        public IActionResult OnPostHandleFormSubmission()
         {
-            if (!ModelState.IsValid)
+            string? storeName = Request.Form["store"];
+            if (!string.IsNullOrEmpty(storeName))
             {
-                return Page();
+                _ = StoreFormDataAsync(storeName);
+                TempData["FeedbackMessage"] = "Su aporte fue agregado correctamente!";
             }
+            return new JsonResult("OK");
 
-            // Get the information of the form
+        }
+
+        /// <summary>
+        /// Adds the product data to the DB.
+        /// <param name="storeName">Store name where the product is sold.</param>
+        /// </summary>
+        private async Task StoreFormDataAsync(string storeName)
+        {
             string provinciaName = Request.Form["province"]!;
             string cantonName = Request.Form["canton"]!;
-            string storeName = Request.Form["store"]!;
             string productName = Request.Form["productName"]!;
             float price = Convert.ToSingle(Request.Form["price"]);
             string? chosenCategory = Request.Form["category"];
@@ -153,10 +162,6 @@ namespace LoCoMPro.Pages
 
             // Save all changes in the contextDB
             await _context.SaveChangesAsync();
-
-            TempData["FeedbackMessage"] = "Su registro fue agregado correctamente!";
-
-            return RedirectToPage("/Index");
         }
 
         /// <summary>
@@ -269,8 +274,9 @@ namespace LoCoMPro.Pages
             List<Image> newImagesList = new List<Image>();
             if (ProductImages != null && ProductImages.Any())
             {
-                foreach (var image in ProductImages)
+                for (int i = 0; i < Math.Min(5, ProductImages.Count); ++i)
                 {
+                    var image = ProductImages[i];
                     if (image != null && image.Length > 0)
                     {
                         using (var stream = image.OpenReadStream())
