@@ -179,13 +179,13 @@ namespace LoCoMPro.Pages
         internal void FilterStoreByProductAmount()
         {
             // Gets the minimal amount of products
-            int minimunProductAmount = CalculateMinimalProductAmount(StoreProducts.Count);
+            int minimunProductAmount = CalculateMinimalProductAmount(WantedProducts.Count);
 
             // For each store in the report
             foreach (var store in StoreProducts)
             {
                 // Remove the store from the report if does not have the enough amount of products
-                if (store.Value.Count < minimunProductAmount)
+                if (store.Value.Count < minimunProductAmount || store.Value.Count == 0 || store.Value.Count > WantedProducts.Count)
                 {
                     StoreProducts.Remove(store.Key);
                 }
@@ -193,15 +193,17 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
-        /// Returns the minimal amount of products the list of the report can have
+        /// Returns the minimal amount of products the list of the report can have, rounding to the lower
         /// </summary>
         /// <param name="amountOfProduct"> Total amount of product of the list
         /// <returns></returns>
         internal int CalculateMinimalProductAmount(int amountOfProduct)
         {
-            // Returns the minimal amount of products the list of the report can have
-            // In this case, is the (30% + 1) of the total of products of the list
-            return (int)(StoreProducts.Count * 0.3);
+            // Checks that the number is not negative
+            amountOfProduct = amountOfProduct < 0 ? 0 : amountOfProduct;
+            // Returns the minimal amount of products the list of the report can have, rounding to the lower
+            // In this case, is the 30% of the total of products of the list
+            return (int)(amountOfProduct * 0.3);
         }
 
         /// <summary>
