@@ -30,4 +30,37 @@
     </div>
     <hr class="style-four">
 
+    <div class="empty-section text-center" id="empty-list"
+         style='display: @(Model.Reports.Count == 0 ? "inline-block" : "none")'>
+        <h1>¡No hay reportes que revisar!</h1>
+        <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
+    </div>
+
+    <div class="reports-section" id="no-empty-list">
+        <div class="results-cont-msg" span id="results-count"></div>
+
+        <nav>
+            <ul class="container-List-Report-Columns" style='display: @(Model.Reports.Count != 0 ? "flex" : "none")'>
+                <li id="product-col">
+                    <div class="text-Comment">Producto</div>
+                </li>
+                <li id="contributor-col">
+                    <div class="text-Comment">Contribuidor</div>
+                </li>
+                <li id="reporter-col">
+                    <div class="text-Comment">Fecha del Registro</div>
+                </li>
+                <li id="date-col">
+                    <div class="text-Comment">Precio</div>
+                </li>
+                <li id="date-col">
+                    <div class="text-Comment">Precio Promedio</div>
+                </li>
+            </ul>
+        </nav>
+
+
+    </div>
+
+
 </div>
