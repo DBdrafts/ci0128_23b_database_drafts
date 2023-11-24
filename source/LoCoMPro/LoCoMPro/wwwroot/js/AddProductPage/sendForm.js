@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (fieldValue === '') {
                 isValid = false;
-                displayErrorMessage(field.message);
+                showFeedbackMessage(field.message, 'feedbackMessage');
                 break;
             }
         }
@@ -84,14 +84,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (nonImageFiles.length > 0) {
             isValid = false;
-            displayErrorMessage('Por favor, seleccione solo archivos de imagen');
+            showFeedbackMessage('Por favor, seleccione solo archivos de imagen', 'feedbackMessage');
         }
 
         return isValid;
     }
 
-    function displayErrorMessage(message) {
-        showFeedbackMessage(message, 'feedbackMessage');
-    }
-
+    module.exports = { validateForm };
 });

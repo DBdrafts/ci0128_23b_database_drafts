@@ -141,7 +141,6 @@ function toggleReport() {
 
 }
 
-
 /// <summary>
 /// Save the interaction made by the user
 /// </summary>
@@ -182,6 +181,7 @@ function saveInteractions() {
     }
     closeInteractionsPopup();
 }
+
 /// <summary>
 /// The moderator accepts the report, hiding the report and setting its ReportState to 2
 /// </summary>
@@ -219,6 +219,7 @@ function hideReport(reportNumber) {
         reportItem.style.display = "none";
     }
 }
+
 /// <summary>
 /// The moderator rejects the report, hiding the report and setting its ReportState to 0
 /// </summary>
@@ -268,34 +269,35 @@ function updateReportList() {
 /// <summary>
 /// Stabling the default values of the page
 /// </summary>
-jQuery(document).ready(function ($) {
-    //  Review section when hover
-    $('.rating_stars span.r').hover(function () {
-        // get hovered value
-        var rating = $(this).data('rating');
-        var value = $(this).data('value');
-        $(this).parent().attr('class', '').addClass('rating_stars').addClass('rating_' + rating);
-        highlight_star(value);
-    }, function () {
-        // Review section when not hover
-        // get hidden field value
-        var rating = $("#rating").val();
-        var value = $("#rating_val").val();
-        $(this).parent().attr('class', '').addClass('rating_stars').addClass('rating_' + rating);
-        highlight_star(0);
-    }).click(function () {
-        // Review section when clicked
-        // Set hidden field value
-        var value = $(this).data('value');
-        $("#rating_val").val(value);
+if (typeof jQuery !== 'undefined') {
+    jQuery(document).ready(function ($) {
+        // Partes del código que dependen de jQuery
+        $('.rating_stars span.r').hover(function () {
+            // get hovered value
+            var rating = $(this).data('rating');
+            var value = $(this).data('value');
+            $(this).parent().attr('class', '').addClass('rating_stars').addClass('rating_' + rating);
+            highlight_star(value);
+        }, function () {
+            // Review section when not hover
+            // get hidden field value
+            var rating = $("#rating").val();
+            var value = $("#rating_val").val();
+            $(this).parent().attr('class', '').addClass('rating_stars').addClass('rating_' + rating);
+            highlight_star(0);
+        }).click(function () {
+            // Review section when clicked
+            // Set hidden field value
+            var value = $(this).data('value');
+            $("#rating_val").val(value);
 
-        var rating = $(this).data('rating');
-        $("#rating").val(rating);
+            var rating = $(this).data('rating');
+            $("#rating").val(rating);
 
-        save_reviewed_state(value)
+            save_reviewed_state(value)
+        });
     });
-
-});
+}
 
 /// <summary>
 /// Set the amount of stars highlighted 
@@ -368,3 +370,9 @@ function copyRegisterValidation(registerNumber) {
     // Change the actual representation of the veracity
     $("#popup-veracity").html(veracityContent);
 }
+
+// export functions for tests
+module.exports = {
+    toggleReport,
+    closeInteractionsPopup
+};

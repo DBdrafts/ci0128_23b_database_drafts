@@ -1,6 +1,7 @@
 ﻿const { showFeedbackMessage } = require('../feedbackMessage');
 
 describe('showFeedbackMessage', () => {
+
     // Test by Geancarlo Rivera Hernández C06516 | Sprint 3
     test('should log an error when the feedback message is null', () => {
         // Arrange
