@@ -104,6 +104,32 @@ namespace LoCoMPro.Pages
             return new JsonResult("OK");
         }
 
+        /// <summary>
+        /// Gets the report on which an interaction was performed.
+        /// </summary>
+        /// <param name="reporterId">ID of the user that reported the register.</param>
+        /// <param name="contributorId">ID of the user that made the contribution.</param>
+        /// <param name="productName">Name of the product.</param>
+        /// <param name="storeName">Name of the store.</param>
+        /// <param name="submitionDate">Date and time the register was made.</param>
+        /// <param name="cantonName">Name of the canton.</param>
+        /// <param name="provinceName">Province name.</param>
+        /// <param name="reportDate">Date and time the report was made.</param>
+        /// <returns>Report to update.</returns>
+        public Report getReportToUpdate(string reporterId, string contributorId,
+            string productName, string storeName, DateTime submitionDate, string cantonName,
+                string provinceName, DateTime reportDate)
+        {
+            var reports = from r in _context.Reports select r;
+            return reports.First(r => r.ReporterId == reporterId
+                && r.ContributorId == contributorId
+                && r.ProductName == productName
+                && r.StoreName == storeName
+                && r.CantonName == cantonName
+                && r.ProvinceName == provinceName
+                && r.ReportDate == reportDate
+                );
+        }
 
         /// <summary>
         /// Obtains the averages review values of the registers
@@ -117,6 +143,23 @@ namespace LoCoMPro.Pages
                 registerAverageReview.Add(_context.GetAverageReviewValue(register.ContributorId
                     , register.ProductName, register.StoreName, register.SubmitionDate));
             }
+        }
+
+
+        /// <summary>
+        /// Splits a string into an array of substrings based on the specified delimiter character.
+        /// </summary>
+        /// <param name="input">The input string to split.</param>
+        /// <param name="delimiter">The character used as the delimiter.</param>
+        /// <returns>An array of substrings created by splitting the input string.</returns>
+        internal static string[] SplitString(string input, char delimiter)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                throw new ArgumentException("Input string cannot be empty or null.");
+            }
+
+            return input.Split(delimiter);
         }
 
     }
