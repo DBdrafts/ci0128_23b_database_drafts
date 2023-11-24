@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Win32;
 
 namespace LoCoMPro.Pages
 {
@@ -24,6 +25,11 @@ namespace LoCoMPro.Pages
         public IList<User> UsersWhoMadeReports { get; set; } = new List<User>();
 
         /// <summary>
+        /// The rating of the users.
+        /// </summary>
+        public IList<float> UserRatings { get; set; }
+
+        /// <summary>
         /// List of reports.
         /// </summary>
         public IList<Report>? Reports { get; set; } = new List<Report>();
@@ -39,6 +45,7 @@ namespace LoCoMPro.Pages
         {
             getUsersWhoReportedRegisters();
             orderListByNumberOfReports(UsersWhoMadeReports);
+            getUserRatings();
         }
 
         public int getUsersWhoReportedRegisters()
@@ -61,6 +68,10 @@ namespace LoCoMPro.Pages
                 return err;
             }
 
+            Users = users.ToList();
+
+            Reports = reports.ToList();
+
             var usersWhoMadeReports = new List<User>();
             foreach (var report in reports) { 
                 var reporter = getReporter(report);
@@ -76,6 +87,11 @@ namespace LoCoMPro.Pages
             return err;
         }
 
+        public void orderListByNumberOfReports(IList<User> usersWhoMadeReports)
+        {
+            UsersWhoMadeReports = usersWhoMadeReports.OrderBy(o => numberOfReports(o)).ToList();
+        }
+
         public User getReporter(Report report)
         {   
             if (report != null)
@@ -89,9 +105,7 @@ namespace LoCoMPro.Pages
         {
             int numReports = 0;
 
-            var reports = from r in _context.Reports
-                          where r.Reporter == user
-                          select r;
+            var reports = Reports.Where(r => r.Reporter == user);
 
             if (reports.Any())
             {
@@ -101,9 +115,29 @@ namespace LoCoMPro.Pages
             return numReports;
         }
 
-        public void orderListByNumberOfReports (IList<User> usersWhoMadeReports)
+        public int numberOfApprovedReports(User user)
         {
-            UsersWhoMadeReports = usersWhoMadeReports.OrderBy(o => numberOfReports(o)).ToList();
+            int numApprovedReports = 0;
+
+            var reports = from r in _context.Reports
+                          where r.ReportState == 2 && r.Reporter == user
+                          select r;
+            if (reports.Any())
+            {
+                numApprovedReports = reports.Count();
+            }
+            return numApprovedReports;
         }
+
+        public void getUserRatings()
+        {
+            UserRatings = new List<float>();
+
+            foreach (User user in UsersWhoMadeReports)
+            {
+                UserRatings.Add(_context.GetUserRating(user.Id));
+            }
+        }
+        
     }
 }
