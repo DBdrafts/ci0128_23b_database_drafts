@@ -332,6 +332,23 @@ namespace LoCoMPro.Data
         }
 
         /// <summary>
+        /// Gets the user rating by averaging the review values on their registers.
+        /// </summary>
+        /// <param name="UserId">The Id of the user.</param>
+        public float GetUserRating(string UserId)
+        {
+            string sqlQuery = "SELECT dbo.GetAverageReviewValueOnUserRegisters(@UserId)";
+
+            var contributorIdParam = new SqlParameter("@UserId", UserId);
+
+            float? result = Database.SqlQueryRaw<float?>(sqlQuery, contributorIdParam).AsEnumerable().SingleOrDefault();
+
+            float roundResult = RoundToCloserReal(result);
+
+            return roundResult;
+        }
+
+        /// <summary>
         /// Round a real number to the closer real number multiple of 0.5
         /// </summary>
         /// <param name="value">Real number to round.</param>
