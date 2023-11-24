@@ -7,8 +7,12 @@
     <script src="~/js/orderButton.js" defer></script>
 </head>
 
+@{
+    string sortOrder = ViewBag.SortOrder == "asc" ? ViewBag.SortOrder : "desc";
+}
+
 <!-- Order button -->
-<button class="sort-button" data-sort-order="desc" target=@ViewBag.SortTipe>
+<button class="sort-button" data-sort-order="@sortOrder" target=@ViewBag.SortTipe>
     <span class="textComment">@Model</span>
     <img class="hidden-image asc" src="~/img/ArrowDownIcon.svg" alt="order">
     <img class="hidden-image desc rotate-img" src="~/img/ArrowDownIcon.svg" alt="order">

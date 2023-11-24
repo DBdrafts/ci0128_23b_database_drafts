@@ -41,20 +41,23 @@
                     <li>
                         <div class="text-comment">Establecimiento</div>
                     </li>
-                    <li>
+                    <li id="sort-button-distance">
                         @if(Model.UserInPage.Geolocation == null)
                         {
                             <span style="color: var(--locompro-red)">*</span>
                         }
                         @{ViewBag.SortTipe = "#report-location";}
+                        @{ViewBag.SortOrder = "asc";}
                         @await Html.PartialAsync("_OrderButton", "Ubicación")
                     </li>
-                    <li>
+                    <li id="sort-button-price">
                         @{ViewBag.SortTipe = "#report-price";}
+                        @{ViewBag.SortOrder = "asc";}
                         @await Html.PartialAsync("_OrderButton", "Precio total")
                     </li>
-                    <li>
+                    <li id="sort-button-product-amount">
                         @{ViewBag.SortTipe = "#report-product-amount";}
+                        @{ViewBag.SortOrder = "desc";}
                         @await Html.PartialAsync("_OrderButton", "Cantidad de productos")
                     </li>
                 </ul>
