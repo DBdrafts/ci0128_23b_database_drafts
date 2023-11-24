@@ -10,9 +10,12 @@ using System.Globalization;
 
 namespace LoCoMPro.Pages
 {
+    /// <summary>
+    /// Page model for Moderate weird prices Page, accesess database to show registers.
+    /// </summary>
+    [Authorize(Roles = "Moderator")]
     public class ModerateAnomaliesPageModel : LoCoMProPageModel
     {
-
         private readonly UserManager<User> _userManager;
 
         /// <summary>
@@ -98,6 +101,31 @@ namespace LoCoMPro.Pages
                 cantonName, provinceName, reportSubmitDate);
 
             report.ReportState = 2;
+
+            _context.SaveChanges();
+
+            return new JsonResult("OK");
+        }
+
+        /// <summary>
+        /// POST HTTP request. Makes the report invalid, sets its status to 0 and returns the register to its original state.
+        /// </summary>
+        public IActionResult OnPostRejectReport(string reportData)
+        {
+            CultureInfo culture = CultureInfo.InvariantCulture;
+            string[] values = SplitString(reportData, '\x1F');
+            string reporterId = values[0], contributorId = values[1], productName = values[2],
+                storeName = values[3], submitionDate = values[4], cantonName = values[5],
+                provinceName = values[6], reportDate = values[7];
+            int reportState = int.Parse(values[8]);
+
+            DateTime reportSubmitDate = DateTime.Parse(reportDate);
+            DateTime contributionDate = DateTime.Parse(submitionDate);
+
+            var report = getReportToUpdate(reporterId, contributorId, productName, storeName, contributionDate,
+                cantonName, provinceName, reportSubmitDate);
+
+            report.ReportState = 0;
 
             _context.SaveChanges();
 
