@@ -1,0 +1,24 @@
+﻿@page
+@model LoCoMPro.Pages.ModerateAnomaliesPageModel
+@{
+    ViewData["Title"] = "Registros anomalos";
+    Layout = "_Layout";
+    ViewBag.ShowSearchBar = true;
+    ViewBag.ShowLogoLink = true;
+    char s = (char)31; // ASCII Control Unit Separator
+}
+@using Microsoft.AspNetCore.Identity
+@using LoCoMPro.Data;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+
+<head>
+    <link rel="stylesheet" href="~/css/ModerateAnomaliesPage.css" />
+    <script src="~/js/interactionsPopUp.js"></script>
+    <script src="~/js/productListButton.js"></script>
+    <link rel="stylesheet" href="~/css/RateRegister.css" />
+    <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
+</head>
+
+
