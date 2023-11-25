@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
 
 
@@ -38,6 +39,17 @@ namespace LoCoMPro.Pages
         /// </summary>
         public IList<float> registerAverageReview { get; set; }
 
+
+        /// <summary>
+        /// User of metauristica
+        /// </summary>
+        public User userMeta;
+
+        /// <summary>
+        /// liste of anormal registers
+        /// </summary>
+        public IList<Register> anormalRegisters { get; set; } = new List<Register>();
+
         /// <summary>
         /// Creates a new ModerateAnomaliesPageModel.
         /// </summary>
@@ -58,29 +70,41 @@ namespace LoCoMPro.Pages
         /// </summary>
         public async Task OnGetAsync(int? pageIndex)
         {
-            var currentUserId = _userManager.GetUserId(User);
+            var users = from r in _context.Users
+                        select r;
 
+            Users = users.ToList();
+
+
+            userMeta = Users.FirstOrDefault(user => user.Id == "7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4");
+
+      
             var registers = from r in _context.Registers
+                            where r.MetahuristicState == 0 || r.MetahuristicState == 1
                             select r;
 
             registers = registers.Include(r => r.Images);
 
             var reports = from r in _context.Reports
-                          where r.ReportState == 1
+                          where r.ReportState == 4 
                           select r;
 
-            var users = _context.Users
-                .Where(user => reports.Any(report => report.ContributorId == user.Id || report.ReporterId == user.Id))
-                .ToList();
-            Users = users;
 
-            Registers = await registers.ToListAsync();
             // Gets the Data From data base 
-            Reports = await reports.ToListAsync();
+            Registers = await registers.ToListAsync();
+            
+            if (!reports.IsNullOrEmpty())
+            {
+                Reports = await reports.ToListAsync();
+
+            }
 
             // Gets the average review value of the registers
             ObtainAverageReviewValues();
 
+            meta();
+
+            generateReports();
 
         }
 
@@ -157,7 +181,6 @@ namespace LoCoMPro.Pages
                 && r.StoreName == storeName
                 && r.CantonName == cantonName
                 && r.ProvinceName == provinceName
-                && r.ReportDate == reportDate
                 );
         }
 
@@ -191,6 +214,56 @@ namespace LoCoMPro.Pages
 
             return input.Split(delimiter);
         }
+
+        
+        public int meta()
+        {
+            int amountRegisters = 0;
+
+            // register to apply meta
+            foreach (var r in Registers)
+            {
+               if (r.Price > 1500000)
+               {
+                    anormalRegisters.Add(r);
+               }
+            }
+
+            amountRegisters = anormalRegisters.Count();
+
+            return amountRegisters;
+            
+        }
+
+        public int generateReports()
+        {
+            int amountRoports = 0;
+
+            foreach(var r in anormalRegisters)
+            {
+                if (r.MetahuristicState == 0) {
+
+                    var report = new Report
+                    {
+                        ReportedRegister = r,
+                        Reporter = userMeta,
+                        ReportDate = DateTime.Now,
+                        CantonName = r.CantonName!,
+                        ProvinceName = r.ProvinciaName!,
+                        ReportState = 4
+                    };
+
+                    r.MetahuristicState = 1;
+                    _context.Reports.Add(report);
+                    Reports.Add(report);
+                    _context.SaveChanges();
+                }
+               
+                
+            }
+            return amountRoports;
+        }
+        
 
     }
 }

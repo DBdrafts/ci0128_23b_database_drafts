@@ -243,6 +243,20 @@ namespace LoCoMPro.Data
                 , ConcurrencyStamp = "b6618b62-5e84-4d15-a293-f0b157cbbd5b"
                 , Location = cantones[0]
             });
+            users.Add(new User
+            {
+                Id = "7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4",
+                Role = "Moderator",
+                UserName = "Automatic",
+                NormalizedUserName = "AUTOMATIC",
+                Email = "locometa@gmail.com",
+                NormalizedEmail = "LOCOMETA@GMAIL.COM",
+                PasswordHash = "AQAAAAIAAYagAAAAEFBCH4szX4/jE5UMTHOj48Mo2yvxEYPqgb1DA2sMx3ViG/D/PIzk72IrEA4tNP+oZQ==",
+                EmailConfirmed = true,
+                SecurityStamp = "M6DI7G54S6NMNZOHIYEGRQ7TRPBH2SPC",
+                ConcurrencyStamp = "f6a611e8-3328-4c65-99ed-5107a120e2b4",
+                Location = cantones[0]
+            });
             context.Users.AddRange(users);
             context.SaveChanges();
         }
