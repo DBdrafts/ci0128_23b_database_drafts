@@ -117,7 +117,6 @@ namespace LoCoMPro.Pages
 
             // Prepare the query to retrieve data from the database
             var registers = from r in _context.Registers
-                            where r.Reports.All(report => report.ReportState != 2)
                             select r;
 
             // Get the coordenades dots to search

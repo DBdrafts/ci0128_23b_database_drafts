@@ -31,7 +31,6 @@ namespace LoCoMPro.Pages
         /// <param name="configuration">Configuration for page.</param>
         /// <param name="userManager">User manager to handle user permissions.</param>
         /// <param name="httpContextAccessor">Allow access to the http context
-        // Product Page constructor 
         public ProductPageModel(LoCoMProContext context, IConfiguration configuration
             , UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
             : base(context, configuration)
@@ -173,7 +172,6 @@ namespace LoCoMPro.Pages
 
             // Initial request for all the registers in the database if the reportState is not 2
             var registers = from r in _context.Registers
-                            where r.Reports.All(report => report.ReportState != 2)
                             select r;
 
             // add the images from every register
@@ -195,12 +193,12 @@ namespace LoCoMPro.Pages
 
             // Get the average of the registers within last month.
             // If just one, set the average price as that
+
             if (registers.Any())
             {
                 AvgPrice = GetNumberOfRegisters(registers) > 1
                 ? GetAveragePrice(registers, DateTime.Now.AddYears(-1).Date, DateTime.Now)
                 : Convert.ToDecimal(registers.First().Price);
-
             }
             else
             {
@@ -542,8 +540,7 @@ namespace LoCoMPro.Pages
                     ReportDate = interactionDate,
                     CantonName = registerToUpdate.CantonName!,
                     ProvinceName = registerToUpdate.ProvinciaName!,
-                    ReportState = User.IsInRole("Moderator") ? 2 : 1,
-                    Reason = reportComment
+                    ReportState = 1
                 });
             }
             else

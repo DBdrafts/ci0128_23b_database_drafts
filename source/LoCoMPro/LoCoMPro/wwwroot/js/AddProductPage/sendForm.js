@@ -103,12 +103,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (nonImageFiles.length > 0) {
             isValid = false;
-            showFeedbackMessage('Please select only image files', 'feedbackMessage');
+            showFeedbackMessage('Por favor, seleccione solo archivos de imagen', 'feedbackMessage');
         }
 
         return isValid;
     }
-
-    // Export the validateForm function as a module
-    module.exports = { validateForm };
 });

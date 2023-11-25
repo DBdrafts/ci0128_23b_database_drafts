@@ -21,15 +21,25 @@
     <div id="feedbackMessage" class="feedback-message"></div>
 
     <div class="information-section">
-        <div class="list-page-title">
-            <h2>Lista de productos de interés</h2>
+        <div class="information-text-section">
+            <div class="list-page-title">
+                <h2>Lista de productos de interés</h2>
+            </div>
+
+            <div class="list-page-subtitle">
+                <h4>Cantidad de productos: <span id="product-count">@Model.UserProductList.Count</span></h4>
+
+                <h4>Precio aproximado: ₡ <span id="total-price">@Model.TotalPrice.ToString("N0")</span></h4>
+            </div>
         </div>
 
-        <div class="list-page-subtitle">
-            <h4>Cantidad de productos: <span id="product-count">@Model.UserProductList.Count</span></h4>
-
-            <h4>Precio aproximado: ₡ <span id="total-price">@Model.TotalPrice.ToString("N0")</span></h4>
-        </div>
+        <a style='display: @(Model.UserProductList.Count != 0 ? "inline-block" : "none")'
+                class="information-button-section" method="get"  asp-page="/ListReportPage">
+            <button type="button" class="button-general" id="generate-report-button">
+                Generar reporte
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </button>
+        </a>
     </div>
 
     <hr class="style-four">

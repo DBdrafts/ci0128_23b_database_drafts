@@ -6,6 +6,7 @@
     width: 100%;
     height: auto;
     color: black;
+    min-width: 1100px;
 }
 
 /* Style for the title of the page */
@@ -16,6 +17,41 @@
 /* Style for the subtitle of the page */
 .list-page-subtitle {
     text-align: left;
+}
+
+/* Style for the information text section*/
+.information-text-section {
+    display: inline-block;
+    width: 80%;
+}
+
+
+/* Style for the information button section*/
+.information-button-section {
+    display: inline-block;
+    width: 19%;
+    height: 100%;
+    min-width: 200px;
+    text-align: right;
+}
+
+/* Style for the generate report button */
+#generate-report-button {
+    background-color: var(--locompro-blue);
+    padding: 10px;
+    font-size: larger;
+}
+
+/* Style for the generate report button when hover */
+#generate-report-button:hover {
+    background-color: var(--locompro-blue-hover);
+}
+
+/* Style for the generate report button icon */
+.fa-list {
+    font-size: 20px !important;
+    text-align: center;
+    margin: 5px;
 }
 
 /* Style for the title of the columns */
@@ -139,8 +175,8 @@
 
 /* Style for the feedback message of the Pop Up when active */
 .feedback-message.active {
-    display: block; /* Mostrar el mensaje */
-    opacity: 1; /* Hacerlo visible */
+    display: block;
+    opacity: 1;
     z-index: 10;
 }
 
@@ -157,3 +193,4 @@
     height: 40%;
     margin: -70px
 }
+
