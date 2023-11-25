@@ -3,13 +3,12 @@
 /// </summary>
 function openInteractionsPopup(openButton) {
     var interactionsPopup = document.querySelector('.interactions-popup');
-    reportCommentInput = document.getElementById('reportComment');
-    reportLabel = document.getElementById('reportLabel');
+    reportCommentInput = document.getElementById('report-comment');
+    reportLabel = document.getElementById('report-label');
     interactionsPopup.style.display = 'block';
     reportIcon = document.getElementById('reportIcon');
     registerKeys = openButton.getAttribute('data-register-id');
 
-    reportCommentInput.value = "";
     // Gets the register data
     var [submitionDate, userID, productName, storeName, price, date,
         userName, comment, lastReviewValue, lastReportState,
@@ -20,7 +19,6 @@ function openInteractionsPopup(openButton) {
     document.getElementById('popup-price').textContent = '₡' + price;
     document.getElementById('popup-userName').textContent = userName;
     document.getElementById('popup-comment').textContent = (comment !== null && comment !== '') ? comment : "N/A";
-
 
     // Set the images data
     var imagesData = openButton.getAttribute('images-register-id').split(String.fromCharCode(31));
@@ -147,7 +145,7 @@ function toggleReport() {
 function saveInteractions() {
     // If the user made a change
     if (reportChanged || registerReviewed) {
-        var reportComment = document.getElementById('reportComment').value;
+        var reportComment = document.getElementById('report-comment').value;
         $.ajax({
             type: 'POST',
             url: '/ProductPage/1?handler=HandleInteraction', // Specify the handler
@@ -340,6 +338,7 @@ function setReviewedValue(lastReviewValue) {
 /// Establish the initial state of the values for report
 /// </summary>
 function setReportedValue() {
+    reportCommentInput.value = "";
     $.ajax({
         url: '/ProductPage/1?handler=CheckReportStatus',
         type: 'GET',

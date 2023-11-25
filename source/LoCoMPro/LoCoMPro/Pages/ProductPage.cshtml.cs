@@ -24,14 +24,6 @@ namespace LoCoMPro.Pages
     /// </summary>
     public class ProductPageModel : LoCoMProPageModel
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        /// <summary>
-        /// Reference to the user product list
-        /// </summary>
-        public UserProductList _userProductList { get; set; }
-
         /// <summary>
         /// Creates a new ProductPageModel.
         /// </summary>
@@ -48,6 +40,13 @@ namespace LoCoMPro.Pages
             _httpContextAccessor = httpContextAccessor;
             _userProductList = new UserProductList(_httpContextAccessor);
         }
+        private readonly UserManager<User> _userManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        /// <summary>
+        /// Reference to the user product list
+        /// </summary>
+        public UserProductList _userProductList { get; set; }
 
         /// <summary>
         /// List of the product that exist in the database.
@@ -135,7 +134,6 @@ namespace LoCoMPro.Pages
         /// <param name="searchStoreName">Store where the product is sold.</param>
         /// <param name="searchProvinceName">Province where the store is located.</param>
         /// <param name="searchCantonName">Canton where the store is located.</param>
-        /// <returns></returns>
         public async Task OnGetAsync(string searchProductName, string searchStoreName, string searchProvinceName, 
             string searchCantonName)
         {
@@ -438,7 +436,7 @@ namespace LoCoMPro.Pages
         {
             CultureInfo culture = CultureInfo.InvariantCulture;
             float.TryParse(reviewedValue, NumberStyles.Float, culture, out float reviewedValueF);
-            var (user, registerToUpdate, interactionDate) = getInteractionValues(registerKeys);
+            var (user, registerToUpdate, interactionDate) = GetInteractionValues(registerKeys);
 
             if (reportChanged)
             {
@@ -460,48 +458,22 @@ namespace LoCoMPro.Pages
         /// </summary>
         /// <param name="registerKeys">Foreign keys for identification the specific register.</param>
         /// <returns>The register to update, the DateTime interaction and the user that made the interaction.</returns>
-        private (User?, Register, DateTime) getInteractionValues(string registerKeys)
+        private (User?, Register, DateTime) GetInteractionValues(string registerKeys)
         {
+            // Get the keys to indeficade the register by splitting the keys string
             string[] values = SplitString(registerKeys, '\x1F');
             string submitionDate = values[0], contributorId = values[1], productName = values[2], storeName = values[3];
 
+            // Convert the string submitionDate type to a dateTime type
             DateTime registSubmitDate = DateTime.Parse(submitionDate);
+            // Get the user in the actual sesion
             var user = _context.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
+
+            // Get the actual interaction time
             DateTime interactionDate = TruncateSubSeconds(DateTime.Now);
 
             var registerToUpdate = GetRegisterToUpdate(contributorId, productName, storeName, registSubmitDate);
             return (user, registerToUpdate, interactionDate);
-        }
-
-        /// <summary>
-        /// Gets the register on which an interaction was performed.
-        /// </summary>
-        /// <param name="contributorId">ID of the user associated with the register.</param>
-        /// <param name="productName">Product associated with the register.</param>
-        /// <param name="storeName">Store associated with the register.</param>
-        /// <param name="registSubmitDate">Date and time the registration was made.</param>
-        /// <returns>Register to update.</returns>
-        private Register GetRegisterToUpdate(string contributorId, string productName,
-            string storeName, DateTime registSubmitDate)
-        {
-            return _context.Registers.Include(r => r.Contributor).First(r => r.ContributorId == contributorId
-                && r.ProductName == productName && r.StoreName == storeName && r.SubmitionDate == registSubmitDate);
-        }
-
-        /// <summary>
-        /// Returns a dateTime variable without mili, micro and nanoseconds.
-        /// </summary>
-        /// <returns>Current dateTime formatted.</returns>
-        internal static DateTime TruncateSubSeconds(DateTime dateTime)
-        {
-            if (dateTime <= DateTime.MinValue)
-            {
-                throw new ArgumentException("Invalid dateTimeValue");
-            }
-            
-            dateTime = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day,
-                dateTime.Hour, dateTime.Minute, dateTime.Second, 0);
-            return dateTime;
         }
 
         /// <summary>
@@ -518,6 +490,37 @@ namespace LoCoMPro.Pages
             }
 
             return input.Split(delimiter);
+        }
+
+        /// <summary>
+        /// Returns a dateTime variable without mili, micro and nanoseconds.
+        /// </summary>
+        /// <returns>Current dateTime formatted.</returns>
+        internal static DateTime TruncateSubSeconds(DateTime dateTime)
+        {
+            if (dateTime <= DateTime.MinValue)
+            {
+                throw new ArgumentException("Invalid dateTimeValue");
+            }
+
+            dateTime = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day,
+                dateTime.Hour, dateTime.Minute, dateTime.Second, 0);
+            return dateTime;
+        }
+
+        /// <summary>
+        /// Gets the register on which an interaction was performed.
+        /// </summary>
+        /// <param name="contributorId">ID of the user associated with the register.</param>
+        /// <param name="productName">Product associated with the register.</param>
+        /// <param name="storeName">Store associated with the register.</param>
+        /// <param name="registSubmitDate">Date and time the registration was made.</param>
+        /// <returns>Register to update.</returns>
+        private Register GetRegisterToUpdate(string contributorId, string productName,
+            string storeName, DateTime registSubmitDate)
+        {
+            return _context.Registers.Include(r => r.Contributor).First(r => r.ContributorId == contributorId
+                && r.ProductName == productName && r.StoreName == storeName && r.SubmitionDate == registSubmitDate);
         }
 
         /// <summary>
@@ -550,6 +553,21 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
+        /// returns the previous report if the user had already made one for that register
+        /// <param name="register">Register to  check if the user has already made a report </param>
+        /// <param name="user">User to check if they have already made a report to the register</param>
+        /// <returns>The report of the register or null if the user has not already made a report for the register.</returns>
+        /// </summary>
+        private Report? PreviousReport(User user, Register register)
+        {
+            return _context.Reports.FirstOrDefault(r => r.ReporterId == user!.Id
+                && r.ProductName == register.ProductName
+                && r.StoreName == register.StoreName
+                && r.SubmitionDate == register.SubmitionDate
+                && r.ContributorId == register.ContributorId);
+        }
+
+        /// <summary>
         /// Handle a review made by a user about a register.
         /// </summary>
         /// <param name="user">User that made the review.</param>
@@ -576,21 +594,6 @@ namespace LoCoMPro.Pages
                 lastReview.ReviewValue = reviewedValue;
                 lastReview.ReviewDate = interactionDate;
             }
-        }
-
-        /// <summary>
-        /// returns the previous report if the user had already made one for that register
-        /// <param name="register">Register to  check if the user has already made a report </param>
-        /// <param name="user">User to check if they have already made a report to the register</param>
-        /// <returns>The report of the register or null if the user has not already made a report for the register.</returns>
-        /// </summary>
-        private Report? PreviousReport(User user, Register register)
-        {
-            return _context.Reports.FirstOrDefault(r => r.ReporterId == user!.Id
-                && r.ProductName == register.ProductName
-                && r.StoreName == register.StoreName
-                && r.SubmitionDate == register.SubmitionDate
-                && r.ContributorId == register.ContributorId);
         }
 
         /// <summary>
@@ -681,7 +684,7 @@ namespace LoCoMPro.Pages
         /// </summary>
         public JsonResult OnGetCheckReportStatus(string registerKeys)
         {
-            var (user, registerToUpdate, _) = getInteractionValues(registerKeys);
+            var (user, registerToUpdate, _) = GetInteractionValues(registerKeys);
             bool hasReported = false;
             if (user != null)
             {

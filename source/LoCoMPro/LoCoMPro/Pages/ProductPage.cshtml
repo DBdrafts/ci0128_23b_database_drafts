@@ -6,7 +6,7 @@
     ViewBag.ShowSearchBar = true;
     ViewBag.ShowLogoLink = true;
     @Html.AntiForgeryToken();
-    char s = (char)31; // ASCII Control Unit Separator
+    char s = (char)31;
 }
 @using Microsoft.AspNetCore.Identity
 @using LoCoMPro.Data;
@@ -29,12 +29,10 @@
     <div id="feedbackMessage" class="feedback-message"></div>
     <div class="product-information">
         @{
-            // select the first matches
             var firstNonNullProduct = Model.Product.FirstOrDefault(r => r.Name != null);
             var firstNonNullStore = Model.Store.FirstOrDefault(r => r.Name != null);
             if (firstNonNullProduct!.Brand == null) firstNonNullProduct.Brand = "N/A";
             if (firstNonNullProduct!.Model == null) firstNonNullProduct.Model = "N/A";
-            // create a var for amount of images
             int imagesAmount = 0;
         }
       
@@ -43,14 +41,13 @@
                 <div class="img-carousel">
                     
                     @foreach (var register in Model.Registers)
-                    { // in each register done
+                    {
                         @if (Model.RegisterHasImages(register))
-                        { // if images is not null
+                        {
                             @foreach (var image in register.Images)
-                            { // for each image in register
+                            {
                                 if (imagesAmount < 5)
-                                { // limit the amount of images to show
-                                    // add the image
+                                {
                                     <div class="small-img-space">
                                         <img src="data:image/jpeg;base64,@Convert.ToBase64String(image.ImageData)" 
                                         alt="Imagen" class="small-image" 
@@ -71,7 +68,6 @@
                     var firstRegisterWithImages = Model.Registers.FirstOrDefault(r => r.Images != null && r.Images.Any());
                     if (firstRegisterWithImages != null)
                     {
-                        // Show the first image of first register with image
                         <div class="main-img-space">
                             <img id="mainImage" src="data:image/jpeg;base64,
                             @Convert.ToBase64String(firstRegisterWithImages.Images.First().ImageData)" 
@@ -81,7 +77,6 @@
                     }
                     else
                     {
-                        // If no register with images, show no images found
                         <div class="main-img-space">
                             <img src="~/img/No_image_found.svg" alt="No se encontraron imágenes" 
                             style="width:348.5px;height:323.5px;border-radius: 30px; object-fit: fill;">
@@ -90,7 +85,6 @@
                 }
                 else
                 {
-                    // Weird case there is no register for the product 
                     <div class="main-img-space">
                         <img src="~/img/No_image_found.svg" 
                         alt="No se encontraron imágenes" 
@@ -107,7 +101,6 @@
             </div>
             <div class="caracteristcs-section">
                 @{
-                    // Get the information of producto and store
                     if (firstNonNullProduct != null)
                     {
                         <p>Marca: @firstNonNullProduct.Brand</p>
@@ -174,7 +167,6 @@
                 <div class="textComment">Comentarios</div>
             </li>
             <li>
-                <!-- Button to sort by the veracity -->
                 @{ViewBag.SortTipe = "#register-veracity";}
                 @await Html.PartialAsync("_OrderButton", "Veracidad")
             </li>
@@ -182,14 +174,10 @@
 	</nav>
 
     <ul class="register-section">
-        <!-- Individual registers -->
         @for (int i = 0; i < Model.Registers.Count(); i++)
         {
             var register = Model.Registers.ElementAt(i);
 
-
-            <!-- Search result section -->
-            <!-- Individual registers -->
             var user = Model.Users.FirstOrDefault(u => u.Id == register.ContributorId)?.UserName;
             var reviewValue = Model.UserReviews.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReviewValue;
             var reportState = Model.UserReports.FirstOrDefault(r => r.ContributorId == register.ContributorId)?.ReportState;
@@ -198,23 +186,20 @@
             $"{s}{register.StoreName}{s}{register.Price.ToString("N0")}{s}{register.SubmitionDate.ToShortDateString()}" +
             $"{s}{user}{s}{register.Comment}{s}{reviewValue}{s}{reportState}{s}{@i}";
 
-            // images in registers
             int imagecount = 0;
             var registerImages = "";
             if (register.Images != null && register.Images.Any())
-            { // In case registers has images
+            {
                 foreach (var image in register.Images)
-                { // For each image in register
+                {
                     if (image.ImageData != null)
                     {   
-                        // Cover the bytes of images to string
                         registerImages += $"{s}ImageData{imagecount}: {Convert.ToBase64String(image.ImageData)}";
                         imagecount++;
                     }
                 }
             }
 
-            // Veracity values
             float veracityValue = Model.registerAverageReview[i];
 
             <li class="register-block register-block-pagination">
@@ -245,7 +230,6 @@
         }
     </ul>
 
-    
     <div class="interactive-popup-section">
         <div class="interactions-popup">
             <div class="interactions-popup-content">
@@ -267,7 +251,6 @@
 
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <!-- Interactive rating code-->
                     <h5><strong>Valora el registro</strong></h5>
                     @*
                     Note: This code was adapted from the page "codepen.io" to satisfies the needs of the project. All the credit go to this page.
@@ -300,8 +283,8 @@
                             <input type="text" name="rating" id="rating_val" value="0" />
                         </div>
                     </div>
-                    <div id="reportLabel" style="display:none;">Motivo del Reporte</div>
-                    <textarea id="reportComment" placeholder="Escribe tu motivo aquí" style="display:none;"></textarea>
+                    <div id="report-label" style="display:none;">Motivo del Reporte</div>
+                    <textarea id="report-comment" placeholder="Escribe tu motivo aquí" style="display:none;"></textarea>
                 }
                 
                 <div class="buttons-container">

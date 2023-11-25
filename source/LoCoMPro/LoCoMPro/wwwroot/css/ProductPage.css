@@ -420,7 +420,7 @@
 }
 
 /* Style for report input field*/
-#reportComment {
+#report-comment {
     display: none;
     width: 100%;
     padding: 15px;
@@ -432,7 +432,7 @@
 }
 
 /* Style for reportComment label*/
-#reportLabel {
+#report-label {
     display: none;
     font-size:large;
     margin-top: 20px;
