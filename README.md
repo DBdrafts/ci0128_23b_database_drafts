@@ -301,7 +301,7 @@ npm install -g jest
 
 Este comando instalará el framework `Jest.js` necesario para las pruebas.
 
-Luego de que la instación del comando anterior finalice, ejecute el siguiente comando:
+Luego de que la instalación del comando anterior finalice, ejecute el siguiente comando:
 
 ~~~
 npm install --save-dev jest-environment-jsdom --no-save
@@ -310,9 +310,11 @@ npm install --save-dev jest-environment-jsdom --no-save
 Este comando instalará el ambiente `JSDOM` que es necesario para simular algunos elementos y configuraciones mock para la realización de algunos de los tests.
 
 Con todos estos pasos ya se deberían tener todas las dependencias necesarias para poder ejecutar las pruebas, para esto simplemente ejecute en la terminal y en la misma ruta mencionada el siguiente comando:
+
 ~~~
 npm test
 ~~~
 
 Este comando comenzará a ejecutar todas las pruebas de javaScript implementadas, la siguiente imagen muestra el caso en donde todas las pruebas corrieron exitosamente:
+
 ![Imagen Tests7](./img/tests/jsTests/EjecutarJsTest_2.PNG)
