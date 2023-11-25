@@ -80,6 +80,8 @@ namespace LoCoMPro.Pages
 
             // Gets the average review value of the registers
             ObtainAverageReviewValues();
+
+
         }
 
         /// <summary>
@@ -188,6 +190,16 @@ namespace LoCoMPro.Pages
             }
 
             return input.Split(delimiter);
+        }
+
+        public decimal GetAveragePrice(IQueryable<Register> registers, DateTime? from, DateTime? to)
+        {
+            if (from != null && to != null)
+            {
+                registers = registers.Where(r => (r.SubmitionDate >= from) && (r.SubmitionDate <= to));
+            }
+            double avgPrice = (registers is not null) ? registers.Average(r => r.Price) : 0.0;
+            return Convert.ToDecimal(avgPrice);
         }
 
     }

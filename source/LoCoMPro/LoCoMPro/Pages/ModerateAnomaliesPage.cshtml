@@ -47,18 +47,93 @@
                 <li id="contributor-col">
                     <div class="text-Comment">Contribuidor</div>
                 </li>
-                <li id="reporter-col">
+                <li id="date-col">
                     <div class="text-Comment">Fecha del Registro</div>
                 </li>
-                <li id="date-col">
+                <li id="price-col">
                     <div class="text-Comment">Precio</div>
                 </li>
-                <li id="date-col">
+                <li id="avg-price-col">
                     <div class="text-Comment">Precio Promedio</div>
                 </li>
             </ul>
         </nav>
 
+        <ul class="reports-section">
+            @for (int reportNum = 0; reportNum < Model.Reports.Count; reportNum++)
+            {
+                var report = Model.Reports[reportNum];
+
+                var register = Model.Registers.FirstOrDefault(register =>
+                register.ContributorId == report.ContributorId &&
+                register.ProductName == report.ProductName &&
+                register.StoreName == report.StoreName &&
+                register.CantonName == report.CantonName &&
+                register.ProvinciaName == report.ProvinceName &&
+                register.SubmitionDate == report.SubmitionDate
+                );
+
+                string contributorName = Model.Users
+                    .First(u => u.Id == report.ContributorId).ToString();
+
+                string reporterName = Model.Users
+                    .First(u => u.Id == report.ReporterId).ToString();
+
+                var reportData = $"{report.ReporterId}{s}{report.ContributorId}" +
+                    $"{s}{report.ProductName}{s}{report.StoreName}" +
+                    $"{s}{report.SubmitionDate.ToShortDateString()}{s}{report.CantonName}" +
+                    $"{s}{report.ProvinceName}{s}{report.ReportDate}" +
+                    $"{s}{report.ReportState}{s}{reporterName}" +
+                    $"{s}{contributorName}{s}{register.Price}{s}{@reportNum}" +
+                    $"{s}{register.Comment}";
+                
+                int imagecount = 0;
+                var registerImages = "";
+                if (register.Images != null && register.Images.Any())
+                {
+                    foreach (var image in register.Images)
+                    {
+                        if (image.ImageData != null)
+                        {
+                            registerImages += $"{s}ImageData{imagecount}: {Convert.ToBase64String(image.ImageData)}";
+                            imagecount++;
+                        }
+                    }
+                }
+
+                float veracityValue = Model.registerAverageReview[reportNum];
+
+                <li class="result-block register-block-pagination" id="report-item-@reportNum">
+                    <a>
+                        <span id="register-product-name" value="@report.ProductName">
+                            @report.ProductName
+                        </span>
+                        <span id="register-user" value="@contributorName">
+                            @contributorName
+                        </span>
+                        <span id="register-date" value="@register.SubmitionDate">
+                            @register.SubmitionDate.ToShortDateString()
+                        </span>
+                        <span id="register-price" value="@register.Price">
+                            @register.Price
+                        </span>
+                        <span  id="register-avg-price" value="@register.Price">
+                            @register.Price
+                        </span>
+
+
+                        <div class="text-center align">
+                            <button class="open-interactions-button" report-data="@reportData" report-number="@reportNum"
+                                images-register-id="@registerImages" onclick="openInteractionsPopupMod(this)">
+                                <img src="~/img/MoreIcon.svg" alt="Más opciones">
+                            </button>
+                        </div>
+
+                     
+                    </a>
+                </li>
+            }
+        </ul>
 
     </div>
 
