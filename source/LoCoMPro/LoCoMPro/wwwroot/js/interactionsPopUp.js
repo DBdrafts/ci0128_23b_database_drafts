@@ -346,3 +346,56 @@ function copyRegisterValidation(registerNumber) {
     // Change the actual representation of the veracity
     $("#popup-veracity").html(veracityContent);
 }
+
+/// <summary>
+/// The moderator accepts the report, hiding the report and setting its ReportState to 2
+/// </summary>
+function acceptRegisterAnormal() {
+
+    $.ajax({
+        type: 'POST',
+        url: '/ModerateAnomaliesPage?handler=acceptReport',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+        },
+        data: { reportData: reportData },
+        success: function (data) {
+            hideReport(reportNumber);
+            console.log('Report updated successfully' + data);
+            showFeedbackMessage('El reporte ha sido aprobado exitosamente', 'feedbackMessage');
+            updateReportList();
+        },
+        error: function (error) {
+            console.error('Error saving report: ' + error);
+            showFeedbackMessage('Error al aceptar el reporte ', 'feedbackMessage');
+        }
+    });
+    closeInteractionsPopup();
+}
+
+/// <summary>
+/// The moderator rejects the report, hiding the report and setting its ReportState to 0
+/// </summary>
+function rejectRegisterAnormal() {
+    $.ajax({
+        type: 'POST',
+        url: '/ModerateAnomaliesPage?handler=rejectReport',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+        },
+        data: { reportData: reportData },
+        success: function (data) {
+            hideReport(reportNumber);
+            console.log('Report updated successfully' + data);
+            showFeedbackMessage('El reporte ha sido rechazado exitosamente', 'feedbackMessage');
+            updateReportList();
+        },
+        error: function (error) {
+            console.error('Error saving report: ' + error);
+            showFeedbackMessage('Error al rechazar el reporte ', 'feedbackMessage');
+        }
+    });
+    closeInteractionsPopup();
+} 

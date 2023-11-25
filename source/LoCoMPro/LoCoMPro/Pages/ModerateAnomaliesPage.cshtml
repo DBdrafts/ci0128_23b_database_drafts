@@ -129,13 +129,59 @@
                             </button>
                         </div>
 
-                     
+                        <div class="register-section-stars" style="display:none">
+                            <div class="veracity-stars register-column" id="register-veracity" value="@veracityValue">
+                                <span id="register_veracity_@reportNum">
+                                    @{
+                                        ViewBag.VeracityValue = veracityValue;
+                                    }
+                                    @await Html.PartialAsync("_VeracityStars")
+                                </span>
+                            </div>
+                        </div>
+
                     </a>
                 </li>
             }
         </ul>
 
+        <div class="interactive-popup-section">
+            <div class="interactions-popup">
+                <div class="interactions-popup-content">
+                    <p><b>Aporte de:</b> <span id="popup-contributorName"></span></p>
+                    <p><b>Fecha de Contribución:</b> <span id="popup-submitionDate"></span></p>
+                    <p><b>Producto:</b> <span id="popup-prodName"></span></p>
+                    <p><b>Tienda:</b> <span id="popup-store"></span></p>
+                    <p><b>Precio:</b> <span id="popup-price"></span></p>
+                    <p><b>Comentario:</b> <span id="popup-comment"></span></p>
+                    <p><b>Veracidad:</b> <span class="veracity-stars" id="popup-veracity"></span></p>
+                    <p><b>Reportado por:</b> <span id="popup-reporterName"></span></p>
+
+                    <div class="carousel-section-pop-up">
+                        <div class="img-carousel-pop-up">
+                        </div>
+                    </div>
+
+                    <div class="buttons-container">
+
+                        <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>
+                        <button id="acceptReport" onclick="acceptRegisterAnormal()" style="visibility: hidden;">Aceptar</button>
+                        <button id="rejectReport" onclick="rejectRegisterAnormal()" style="visibility: hidden;">Rechazar</button>
+
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <script>
+                                document.getElementById("rejectReport").style.visibility = "visible";
+                                document.getElementById("acceptReport").style.visibility = "visible";
+                            </script>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-
-
+    <script src="~/js/ProductPage/imageChanger.js"></script>
+    <script src="~/js/feedbackMessage.js"></script>
 </div>
