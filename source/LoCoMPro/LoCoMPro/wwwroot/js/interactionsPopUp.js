@@ -5,13 +5,17 @@ function openInteractionsPopup(openButton) {
     var interactionsPopup = document.querySelector('.interactions-popup');
     reportCommentInput = document.getElementById('report-comment');
     reportLabel = document.getElementById('report-label');
+    undoReportLabel = document.getElementById('undo-report-label');
+
+    lastReportLabel = document.getElementById('last-report-label');
+    lastReportCommentInput= document.getElementById('last-report-comment');
+
     interactionsPopup.style.display = 'block';
     reportIcon = document.getElementById('reportIcon');
     registerKeys = openButton.getAttribute('data-register-id');
 
     // Gets the register data
-    var [submitionDate, userID, productName, storeName, price, date,
-        userName, comment, lastReviewValue, lastReportState,
+    var [_, _, _, _, price, date, userName, comment, lastReviewValue, _,
         registerNumber] = registerKeys.split(String.fromCharCode(31));
 
     // Sets the register data
@@ -35,6 +39,7 @@ function openInteractionsPopup(openButton) {
     setReviewedValue(lastReviewValue);   
 }
 
+
 function openInteractionsPopupMod(openButton) {
     var interactionsPopup = document.querySelector('.interactions-popup');
     interactionsPopup.style.display = 'block';
@@ -42,8 +47,7 @@ function openInteractionsPopupMod(openButton) {
     reportNumber = openButton.getAttribute('report-number');
 
     // Gets the register data
-    var [ReporterId, ContributorId, ProductName, StoreName, SubmitionDate, CantonName,
-        ProvinceName, ReportDate, ReportState, reporterName, contributorName,
+    var [_, _, ProductName, StoreName, SubmitionDate, _, _, _, _, reporterName, contributorName,
         price, registerNumber, comment] = reportData.split(String.fromCharCode(31));
 
  
@@ -115,6 +119,9 @@ function closeInteractionsPopup() {
         reportCommentInput.style.display = 'none';
         reportLabel.style.display = 'none';
     }
+    if (undoReportLabel) {
+        undoReportLabel.style.display = 'none';
+    }
     popup.style.display = 'none';
 }
 
@@ -122,21 +129,54 @@ function closeInteractionsPopup() {
 /// Toggle the report button between active and deactivate to show reason input field
 /// </summary>
 function toggleReport() {
-    if (reportIcon.src.endsWith('DesactiveReportIcon.svg')) {
-        // Active
-        reportIcon.src = '/img/ActiveReportIcon.svg';
-        reportActivated = true;
-        reportLabel.style.display = 'block';
-        reportCommentInput.style.display = 'block';
+    const isActivated = reportIcon.src.endsWith('DesactiveReportIcon.svg');
+    reportIcon.src = isActivated ? '/img/ActiveReportIcon.svg' : '/img/DesactiveReportIcon.svg';
+    reportActivated = isActivated;
+    const displayStyle = isActivated ? 'block' : 'none';
+    const undoDisplayStyle = isActivated ? 'none' : 'block';
+    if (!hasReported) {
+        setElementDisplay(reportLabel, displayStyle);
+        setElementDisplay(reportCommentInput, displayStyle);
     } else {
-        // Deactivate
-        reportIcon.src = '/img/DesactiveReportIcon.svg';
-        reportActivated = false;
-        reportLabel.style.display = 'none';
-        reportCommentInput.style.display = 'none';
+        setElementDisplay(lastReportLabel, displayStyle);
+        setElementDisplay(lastReportCommentInput, displayStyle);
+        setElementDisplay(undoReportLabel, undoDisplayStyle);
     }
     reportChanged = !reportChanged;
+}
 
+function setElementDisplay(element, displayStyle) {
+    element.style.display = displayStyle;
+}
+
+
+/// <summary>
+/// Establish the initial state of the values for report
+/// </summary>
+function setReportedValue() {
+    reportCommentInput.value = "";
+    $.ajax({
+        url: '/ProductPage/1?handler=CheckReportStatus',
+        type: 'GET',
+        data: { registerKeys: registerKeys },
+        success: function (data) {
+            hasReported = data.hasReported;
+            if (hasReported) {
+                reportIcon.src = '/img/ActiveReportIcon.svg';
+                lastReportCommentInput.innerHTML = data.previousReportComment !== null ? data.previousReportComment : '-No especificado-';
+                lastReportLabel.style.display = 'block';
+                lastReportCommentInput.style.display = 'block';
+            } else {
+                reportIcon.src = '/img/DesactiveReportIcon.svg';
+                lastReportLabel.style.display = 'none';
+                lastReportCommentInput.style.display = 'none';
+            }
+            reportChanged = false;
+        },
+        error: function (error) {
+            console.error('Error report status verification: ' + error);
+        }
+    });
 }
 
 /// <summary>
@@ -334,29 +374,6 @@ function setReviewedValue(lastReviewValue) {
     highlight_star(reviewedValue);
 }
 
-/// <summary>
-/// Establish the initial state of the values for report
-/// </summary>
-function setReportedValue() {
-    reportCommentInput.value = "";
-    $.ajax({
-        url: '/ProductPage/1?handler=CheckReportStatus',
-        type: 'GET',
-        data: { registerKeys: registerKeys },
-        success: function (data) {
-            reportActivated = data.hasReported;
-            if (reportActivated) {
-                reportIcon.src = '/img/ActiveReportIcon.svg';
-            } else {
-                reportIcon.src = '/img/DesactiveReportIcon.svg';
-            }
-            reportChanged = false;
-        },
-        error: function (error) {
-            console.error('Error report status verification: ' + error);
-        }
-    });
-}
 
 /// <summary>
 /// Copies the representation of the register stars
@@ -373,5 +390,6 @@ function copyRegisterValidation(registerNumber) {
 // export functions for tests
 module.exports = {
     toggleReport,
-    closeInteractionsPopup
+    closeInteractionsPopup,
+    setElementDisplay
 };

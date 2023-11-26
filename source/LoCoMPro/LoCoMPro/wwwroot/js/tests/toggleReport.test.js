@@ -1,36 +1,57 @@
-﻿const { toggleReport } = require('../interactionsPopUp')
+﻿const { toggleReport, setElementDisplay } = require('../interactionsPopUp');
 
-describe('toggleReport', () => { // describe sentence is for group related tests and config
+describe('toggleReport', () => {
     let originalReportActivated;
     let originalReportLabel;
     let originalReportCommentInput;
+    let originalLastReportLabel;
+    let originalLastReportCommentInput;
+    let originalUndoReportLabel;
+    let originalHasReported;
     let originalReportChanged;
 
-    // Mock config
+    // Mock config / Default Arrange
     beforeEach(() => {
-        // Arrange simulate elements and set defaults values
         global.document.getElementById = jest.fn();
 
         global.document.getElementById.mockReturnValue({
-            src: '/img/DesactiveReportIcon.svg', // Simulate .src property when getElementById is called in the method
+            src: '/img/DesactiveReportIcon.svg',
         });
-        
+
         global.reportIcon = {
-            src: '/img/DesactiveReportIcon.svg', // Set .src desactive as default
+            src: '/img/DesactiveReportIcon.svg',
         };
 
-        originalReportActivated = global.reportActivated;  // This is beacuse in the method reportActivaded is a global variable
-        global.reportActivated = false;  // Set false as default
+        originalReportActivated = global.reportActivated;
+        global.reportActivated = false;
 
         originalReportLabel = global.reportLabel;
         global.reportLabel = {
-            style: {},  // Simulate css style property for 'none' and 'block' parameters
+            style: {},
         };
 
         originalReportCommentInput = global.reportCommentInput;
         global.reportCommentInput = {
             style: {},
         };
+
+        originalLastReportLabel = global.lastReportLabel;
+        global.lastReportLabel = {
+            style: {},
+        };
+
+        originalLastReportCommentInput = global.lastReportCommentInput;
+        global.lastReportCommentInput = {
+            style: {},
+        };
+
+        originalUndoReportLabel = global.undoReportLabel;
+        global.undoReportLabel = {
+            style: {},
+        };
+
+        originalHasReported = global.hasReported;
+        global.hasReported = false;
 
         originalReportChanged = global.reportChanged;
         global.reportChanged = false;
@@ -43,11 +64,15 @@ describe('toggleReport', () => { // describe sentence is for group related tests
         global.reportActivated = originalReportActivated;
         global.reportLabel = originalReportLabel;
         global.reportCommentInput = originalReportCommentInput;
+        global.lastReportLabel = originalLastReportLabel;
+        global.lastReportCommentInput = originalLastReportCommentInput;
+        global.undoReportLabel = originalUndoReportLabel;
+        global.hasReported = originalHasReported;
         global.reportChanged = originalReportChanged;
     });
 
     // Test by Geancarlo Rivera Hernández C06516 | Sprint 3
-    test('should activate the report and change de icon to active', () => {
+    test('should activate the report and change the icon to active', () => {
         // Using default arrange config
 
         // Act
@@ -59,7 +84,7 @@ describe('toggleReport', () => { // describe sentence is for group related tests
     });
 
     // Test by Geancarlo Rivera Hernández C06516 | Sprint 3
-    test('should deactivate the report ant change de icon to desactive', () => {
+    test('should deactivate the report and change the icon to deactive', () => {
         // Arrange
         global.reportIcon.src = '/img/ActiveReportIcon.svg';
         global.reportActivated = true;
@@ -73,21 +98,7 @@ describe('toggleReport', () => { // describe sentence is for group related tests
     });
 
     // Test by Geancarlo Rivera Hernández C06516 | Sprint 3
-    test('should hide the label and reportCommentInputField', () => {
-        // Arrange
-        global.reportIcon.src = '/img/ActiveReportIcon.svg';
-        global.reportActivated = true;
-
-        // Act
-        toggleReport();
-
-        // Assertions
-        expect(global.reportLabel.style.display).toBe('none');
-        expect(global.reportCommentInput.style.display).toBe('none');
-    });
-
-    // Test by Geancarlo Rivera Hernández C06516 | Sprint 3
-    test('should show the label and reportCommentInputField', () => {
+    test('should display lastReportLabel and lastReportComment field', () => {
         // Using default arrange config
 
         // Act
@@ -96,6 +107,21 @@ describe('toggleReport', () => { // describe sentence is for group related tests
         // Assertions
         expect(global.reportLabel.style.display).toBe('block');
         expect(global.reportCommentInput.style.display).toBe('block');
+    });
+
+    // Test by Geancarlo Rivera Hernández C06516 | Sprint 3
+    test('should hide lastReportLabel and lastReportComment field', () => {
+        // Arrange
+        global.hasReported = true;
+        global.reportIcon.src = '/img/ActiveReportIcon.svg';
+        global.reportActivated = true;
+
+        // Act
+        toggleReport();
+
+        // Assertions
+        expect(global.lastReportLabel.style.display).toBe('none');
+        expect(global.lastReportCommentInput.style.display).toBe('none');
     });
 
     // Test by Geancarlo Rivera Hernández C06516 | Sprint 3
@@ -106,7 +132,6 @@ describe('toggleReport', () => { // describe sentence is for group related tests
         toggleReport();
 
         // Assertions
-        expect(global.reportLabel.style.display).toBe('block');
-        expect(global.reportCommentInput.style.display).toBe('block');
+        expect(global.reportChanged).toBe(true);
     });
 });

@@ -283,8 +283,13 @@
                             <input type="text" name="rating" id="rating_val" value="0" />
                         </div>
                     </div>
-                    <div id="report-label" style="display:none;">Motivo del Reporte</div>
-                    <textarea id="report-comment" placeholder="Escribe tu motivo aquí" style="display:none;"></textarea>
+                    <div id="report-label" style="display:none;" class="report-labels">Motivo del Reporte</div>
+                    <textarea id="report-comment" class="report-comments" placeholder="Escribe tu motivo aquí" style="display:none;"></textarea>
+
+                    <div id="last-report-label" class="report-labels" style="display:none;">Ya reportaste este registro, tu motivo:</div>
+                    <div id="last-report-comment" class="report-comments" style="display:none"></div>
+
+                    <div id="undo-report-label" class="report-labels" style="display:none;">*Si presionas guardar se eliminará tu reporte</div>
                 }
                 
                 <div class="buttons-container">

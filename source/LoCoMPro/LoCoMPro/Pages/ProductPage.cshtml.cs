@@ -540,6 +540,7 @@ namespace LoCoMPro.Pages
                     ReportDate = interactionDate,
                     CantonName = registerToUpdate.CantonName!,
                     ProvinceName = registerToUpdate.ProvinciaName!,
+                    Reason = reportComment,
                     ReportState = 1
                 });
             }
@@ -683,11 +684,17 @@ namespace LoCoMPro.Pages
         {
             var (user, registerToUpdate, _) = GetInteractionValues(registerKeys);
             bool hasReported = false;
+            string? previousReportComment = null;
             if (user != null)
             {
-               hasReported = PreviousReport(user!, registerToUpdate) != null ? true : false;
+                var report = PreviousReport(user!, registerToUpdate);
+                if (report != null)
+                {
+                    hasReported = true;
+                    previousReportComment = report.Reason;
+                }
             }
-            return new JsonResult(new { hasReported });
+            return new JsonResult(new { hasReported, previousReportComment });
         }
     }
 }
