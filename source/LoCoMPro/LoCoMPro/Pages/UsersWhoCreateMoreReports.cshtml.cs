@@ -89,7 +89,12 @@ namespace LoCoMPro.Pages
 
         public void orderListByNumberOfReports(IList<User> usersWhoMadeReports)
         {
-            UsersWhoMadeReports = usersWhoMadeReports.OrderBy(o => numberOfReports(o)).ToList();
+            UsersWhoMadeReports = usersWhoMadeReports
+                .OrderByDescending(user =>
+                {
+                    int numReports = numberOfReports(user);
+                    return numReports;
+                }).ThenByDescending(user => user.UserName).ToList();
         }
 
         public User getReporter(Report report)

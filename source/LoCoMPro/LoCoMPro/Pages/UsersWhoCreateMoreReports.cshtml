@@ -11,13 +11,12 @@
 <head>
     <link rel="stylesheet" href="~/css/UsersWhoCreateMoreReports.css" />
     <script src="~/js/interactionsPopUp.js"></script>
-    <script src="~/js/productListButton.js"></script>
     <link rel="stylesheet" href="~/css/RateRegister.css" />
     <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
 </head>
 
-<div class="reported-page-body">
-    <h2 class="text-center">Usuario que más reportan</h2>
+<div class="most-reports-page-body">
+    <h2 class="text-center">Usuarios que más reportan registros</h2>
     <hr class="style-four">
     @* <div class="empty-section text-center" id="empty-list"
          style='display: @(Model.Reports.Count == 0 ? "inline-block" : "none")'>
@@ -29,7 +28,7 @@
 
     <div class="users-section" id="no-empty-list">
         <nav>
-            <ul class="container-List-Report-Columns" @* style='display: @(Model.Reports.Count != 0 ? "flex" : "none")' *@>
+            <ul class="container-List-User-Columns"  style='display: flex'>
                 <li id="user-col">
                     <div class="text-Comment">Usuario</div>
                 </li>

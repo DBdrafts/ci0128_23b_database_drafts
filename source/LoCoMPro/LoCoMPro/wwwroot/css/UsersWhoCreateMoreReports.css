@@ -1,0 +1,102 @@
+﻿.most-reports-page-body {
+    width: 100%;
+    min-width: 1200px;
+    height: auto;
+}
+
+.users-section {
+    height: 100%;
+    display: inline-block;
+    width: 100%;
+    min-width: 950px;
+}
+
+.container-List-User-Columns {
+    display: inline-flex;
+    flex-direction: row;
+    height: auto;
+    width: 100%;
+    justify-content: space-around;
+    list-style: none;
+    margin: 10px 0px;
+    min-width: 950px;
+}
+
+/* Style for search title columns */
+.container-List-User-Columns li {
+    font-size: x-large;
+    text-align: center;
+}
+
+/* Style for columns */
+.container-List-User-Columns ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+#user-col {
+    margin-right: 60px;
+}
+#stars-col {
+    margin-right: 30px;
+}
+#reports-col {
+    margin-right: -10px;
+}
+
+/* Style for the result register block */
+.result-block {
+    display: inline-block;
+    height: auto;
+    width: 100%;
+    text-decoration: none;
+    color: #000000;
+    margin: 5px 0px;
+    min-height: 4em;
+    border-radius: 15px;
+    text-align: left;
+    min-width: 950px;
+    font-size: large;
+}
+
+/* Style for the result register block text*/
+.result-block a span {
+    display: inline-flex;
+    width: 16%;
+    margin: 0px 10px;
+    overflow: clip;
+    text-overflow: ellipsis;
+}
+
+/* Style for the result register block text */
+.result-block a {
+    display: flex;
+    height: 4em;
+    width: 100%;
+    background-color: #E2E3E3;
+    justify-content: space-around;
+    border-radius: 15px;
+    padding: 10px 15px;
+    max-height: 3.9em;
+    text-decoration: none;
+    color: #000000;
+}
+
+#acc-reports {
+    width: 120px;
+}
+
+/* Style for the veracity stars */
+.veracity-stars {
+    width: auto;
+    display: inline-block;
+    font-size: 30px;
+    color: #F5AA38;
+    text-align: center;
+}
+
+/* Style for the veracity stars in the register section*/
+.register-section-stars {
+    width: 20%;
+    display: inline-block;
+}
