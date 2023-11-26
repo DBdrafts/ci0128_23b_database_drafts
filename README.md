@@ -63,6 +63,7 @@ al mismo tiempo beneficiarse de esta información para sus propias compras.
 |               +---css
 |               +---img
 |               +---js
+|               |   \---tests
 |               \---lib
 |   \---doc
 |       +---docgen
@@ -78,7 +79,8 @@ al mismo tiempo beneficiarse de esta información para sus propias compras.
 - El directorio ["./design/sprint1/avance2/uml/"](./design/sprint1/uml/avance2/) contiene los diagramas del modelo del sistema
 - El directorio ["./source/"](./source/) contiene el código e archivos importantes
 - El directorio ["./source/LoCoMPro/LoCoMPro/"](./source/LoCoMPro/LoCoMPro/) contiene los archivos con el código del sistema
-- El directorio ["./test/"](./test/) contiene los test unitarios del proyecto
+- El directorio ["./test/"](./test/) contiene los test unitarios del proyecto relacionados a archivos modelo c#
+- El directorio ["./source/LoCoMPro/LoCoMPro/wwwroot/js/tests/"](./source/LoCoMPro/LoCoMPro/wwwroot/js/tests/) contiene los test unitarios del proyecto relacionados a archivos javaScript
 
 # Manual de usuario 
 
@@ -257,24 +259,62 @@ Si aplicó todos estos pasos, entonces se abrirá en su navegador la aplicación
 
 
 ## Ejecutar Tests
+
+### Tests unitarios de los modelos c# y tests funcionales
 Para ejecutar los tests, primero que nada, debe correr la aplicación al menos una vez sin estar en modo debug y utilizando Google Chrome, el cuál fue el navegador estándar que se definió para poder ejecutar pruebas funcionales, por lo que debe tenerlo instalado en su computadora para poder realizar las pruebas, puede correr la aplicación sin estar en modo debug presionando el botón de la flecha verde de Visual Studio como se muestra en la siguiente imagen:
 
 ![Imagen Tests1](./img/tests/EjecutarTests_0.01.png)
-
-
 
 Luego de ejecutar la aplicación, en la barra de opciones, en la sección Test seleccione Test Explorer como se muestra en la siguiente imagen:
 
 ![Imagen Tests2](./img/tests/EjecutarTests_1.png)
 
-El paso anterior abrirá una ventana emergente donde puede ver el detalle de los tests disponibles, para ejecutar los test unitarios simplemente de click derecho a `UnitTest` y seleccione la opción Run como se muestra en la siguiente imagen:
+El paso anterior abrirá una ventana emergente donde puede ver el detalle de los tests disponibles, para ejecutar los test unitarios simplemente de click derecho a `UnitTest` y seleccione la opción `Run` como se muestra en la siguiente imagen:
 
 ![Imagen Tests3](./img/tests/EjecutarTests_1.2.PNG)
 
-Si quiere probar los test funcionales repita el paso anterior pero dando click derecho a `functional_tests` y seleccionando Run:
+Si quiere probar los test funcionales repita el paso anterior pero dando click derecho a `functional_tests` y seleccionando nuevamente `Run`:
 
 ![Imagen Tests4](./img/tests/EjecutarTests_1.3.PNG)
 
 Una vez ejecutado los tests, podrá ver y explorar los resultados de cada uno, la siguiente imagen muestra el caso en el que todos los tests disponibles pasaron satisfactoriamente:
 
 ![Imagen Tests5](./img/tests/EjecutarTests_3.1.PNG)
+
+### Tests unitarios de javaScript
+Para realizar pruebas de las funciones implementadas en JavaScript, hemos elegido utilizar Jest.js, un framework que simplifica la creación de pruebas para este lenguaje. Para comenzar, es necesario instalar Jest.js, pero antes de hacerlo, debemos instalar Node.js, que es un gestor de paquetes sobre el cual Jest se ejecuta. Para instalar Node.js, visite el sitio oficial: [Notejs.org](https://nodejs.org/en/download) y siga las instrucciones proporcionadas. Durante la instalación, se le preguntará si desea instalar algunas herramientas adicionales; se recomienda que las instale. 
+
+Una vez haya instalado Node.js siga los siguientes pasos:
+
+
+Abra una terminal o linea de comandos en la siguiente ruta del proyecto: [./source/LoCoMPro/LoCoMPro/wwwroot/js/](./source/LoCoMPro/LoCoMPro/wwwroot/js/).
+
+Para simplificar, puede hacerlo desde el solution explorer de Visual Studio dando click derecho a la carpeta js y seleccionando `Open in Terminal` como se muesta en la siguiente imagen:
+
+![Imagen Tests6](./img/tests/jsTests/EjecutarJsTest_1.PNG)
+
+Una vez abierta la terminal ejecute el siguiente comando:
+
+~~~
+npm install -g jest
+~~~
+
+Este comando instalará el framework `Jest.js` necesario para las pruebas.
+
+Luego de que la instalación del comando anterior finalice, ejecute el siguiente comando:
+
+~~~
+npm install --save-dev jest-environment-jsdom --no-save
+~~~
+
+Este comando instalará el ambiente `JSDOM` que es necesario para simular algunos elementos y configuraciones mock para la realización de algunos de los tests.
+
+Con todos estos pasos ya se deberían tener todas las dependencias necesarias para poder ejecutar las pruebas, para esto simplemente ejecute en la terminal y en la misma ruta mencionada el siguiente comando:
+
+~~~
+npm test
+~~~
+
+Este comando comenzará a ejecutar todas las pruebas de javaScript implementadas, la siguiente imagen muestra el caso en donde todas las pruebas corrieron exitosamente:
+
+![Imagen Tests7](./img/tests/jsTests/EjecutarJsTest_2.PNG)
