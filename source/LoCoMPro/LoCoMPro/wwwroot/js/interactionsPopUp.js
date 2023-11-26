@@ -363,7 +363,7 @@ function acceptRegisterAnormal() {
         success: function (data) {
             hideReport(reportNumber);
             console.log('Report updated successfully' + data);
-            showFeedbackMessage('El reporte ha sido aprobado exitosamente', 'feedbackMessage');
+            showFeedbackMessage('El reporte anómalo ha sido aprobado exitosamente', 'feedbackMessage');
             updateReportList();
         },
         error: function (error) {
@@ -389,7 +389,7 @@ function rejectRegisterAnormal() {
         success: function (data) {
             hideReport(reportNumber);
             console.log('Report updated successfully' + data);
-            showFeedbackMessage('El reporte ha sido rechazado exitosamente', 'feedbackMessage');
+            showFeedbackMessage('El reporte anómalo ha sido rechazado exitosamente', 'feedbackMessage');
             updateReportList();
         },
         error: function (error) {

@@ -39,6 +39,10 @@ namespace LoCoMPro.Pages
         /// </summary>
         public IList<float> registerAverageReview { get; set; }
 
+        /// <summary>
+        /// Average price price of the registers
+        /// </summary>
+        public IList<float> registerAveragePrice { get; set; }
 
         /// <summary>
         /// User of metauristica
@@ -70,41 +74,51 @@ namespace LoCoMPro.Pages
         /// </summary>
         public async Task OnGetAsync(int? pageIndex)
         {
+            // Get the users
             var users = from r in _context.Users
                         select r;
-
+            // Convert the user to list
             Users = users.ToList();
-
-
+            
+            // Get the autimatic user to create the reports
             userMeta = Users.FirstOrDefault(user => user.Id == "7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4");
 
-      
+            // Get the registers no checked or check and anormal
             var registers = from r in _context.Registers
                             where r.MetahuristicState == 0 || r.MetahuristicState == 1
                             select r;
 
+            // Include his images
             registers = registers.Include(r => r.Images);
 
+            // Get the reports to anormal price
             var reports = from r in _context.Reports
                           where r.ReportState == 4 
                           select r;
 
-
             // Gets the Data From data base 
             Registers = await registers.ToListAsync();
             
+            // If have reports
             if (!reports.IsNullOrEmpty())
             {
                 Reports = await reports.ToListAsync();
-
             }
+
+            // Apply Metahuristic to get weird prices
+            var amountAnormalRegisters = priceMetahuristics();
 
             // Gets the average review value of the registers
             ObtainAverageReviewValues();
 
-            meta();
+            // Gets the average Price value of the registers
+            ObtainAveragePriceValues();
 
-            generateReports();
+            // Generate the reports for anormal prices
+            if (amountAnormalRegisters > 0)
+            {
+                generateReports();
+            }
 
         }
 
@@ -198,6 +212,22 @@ namespace LoCoMPro.Pages
             }
         }
 
+        /// <summary>
+        /// Obtains the averages price values of the registers
+        /// </summary>
+        public void ObtainAveragePriceValues()
+        {
+            registerAveragePrice = new List<float>();
+    
+            // Gets the average value for each register
+            foreach (Register register in anormalRegisters)
+            {
+                registerAveragePrice.Add(_context.GetProductValue(register.ProductName
+                    , register.StoreName, register.CantonName, register.ProvinciaName));
+                
+            }
+        }
+
 
         /// <summary>
         /// Splits a string into an array of substrings based on the specified delimiter character.
@@ -215,34 +245,44 @@ namespace LoCoMPro.Pages
             return input.Split(delimiter);
         }
 
-        
-        public int meta()
+        /// <summary>
+        /// Apply the metahuristic in the registers
+        /// </summary>
+        public int priceMetahuristics()
         {
-            int amountRegisters = 0;
+            //  Define a amosunt of registers var
+            int amountRegisters;
 
             // register to apply meta
             foreach (var r in Registers)
             {
-               if (r.Price > 1500000)
+                // Metahuristic Price
+               if (r.Price < 2500)
                {
                     anormalRegisters.Add(r);
                }
             }
 
+            // get the amount of register
             amountRegisters = anormalRegisters.Count();
 
+            // Return the count of registers
             return amountRegisters;
             
         }
 
-        public int generateReports()
+        /// <summary>
+        /// Apply the metahuristic in the registers
+        /// </summary>
+        public void generateReports()
         {
-            int amountRoports = 0;
-
-            foreach(var r in anormalRegisters)
+            // Iterate through each normal register in the collection
+            foreach (var r in anormalRegisters)
             {
+                // Check if the MetahuristicState of the register is 0
                 if (r.MetahuristicState == 0) {
 
+                    // Create a new report using information from the register
                     var report = new Report
                     {
                         ReportedRegister = r,
@@ -252,18 +292,34 @@ namespace LoCoMPro.Pages
                         ProvinceName = r.ProvinciaName!,
                         ReportState = 4
                     };
-
+                    // Update the MetahuristicState of the register to 1
                     r.MetahuristicState = 1;
+
+                    // Add the report to the context and save changes
                     _context.Reports.Add(report);
                     Reports.Add(report);
+
+                    // Add the report to the Reports collection
                     _context.SaveChanges();
                 }
-               
-                
             }
-            return amountRoports;
         }
-        
 
+        /// <summary>
+        /// Gets the average price of the registers within the given time frame.
+        /// </summary>
+        /// <param name="registers">Registers to use for calculation.</param>
+        /// <param name="from">Starting date to take registers from for calculation.</param>
+        /// <param name="to">Ending date to take the registers from for calculation.</param>
+        /// <returns>Average price of the registers within the given time frame.</returns>
+        public decimal GetAveragePrice(IQueryable<Register> registers, DateTime? from, DateTime? to)
+        {
+            if (from != null && to != null)
+            {
+                registers = registers.Where(r => (r.SubmitionDate >= from) && (r.SubmitionDate <= to));
+            }
+            double avgPrice = (registers is not null) ? registers.Average(r => r.Price) : 0.0;
+            return Convert.ToDecimal(avgPrice);
+        }
     }
 }

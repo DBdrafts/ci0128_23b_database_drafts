@@ -30,6 +30,7 @@ namespace LoCoMPro.Data
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetAverageReviewValueOnUserRegisters.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/UpdateUserRoleOnRegister.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/UpdateUserRoleOnReview.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/GetAveragePriceValue.sql");
 
             List<Provincia> provincias = new();
             List<Canton> cantones = new();

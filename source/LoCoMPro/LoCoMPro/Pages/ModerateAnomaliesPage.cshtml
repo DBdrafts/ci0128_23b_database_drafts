@@ -117,8 +117,8 @@
                         <span id="register-price" value="@register.Price">
                             @register.Price
                         </span>
-                        <span  id="register-avg-price" value="@register.Price">
-                            @register.Price
+                        <span id="register-avg-price" data-value="@Model.registerAveragePrice.ElementAtOrDefault(reportNum)">
+                            @(Model.registerAveragePrice.ElementAtOrDefault(reportNum).ToString() ?? "N/A")
                         </span>
 
 

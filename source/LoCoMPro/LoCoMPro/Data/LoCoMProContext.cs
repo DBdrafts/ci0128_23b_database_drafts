@@ -331,6 +331,28 @@ namespace LoCoMPro.Data
             return roundResult;
         }
 
+
+
+        public float GetProductValue(string productName
+            , string storeName, string cantonName, string provinciaName)
+        {
+            // Creates the SQL Query use to get the average product values
+            string sqlQuery = "SELECT dbo.GetAveragePriceValue(@ProductName, @StoreName, @CantonName, @ProvinciaName)";
+
+            // Link the parameters with the register value
+            var productNameParam = new SqlParameter("@ProductName", productName);
+            var storeNameParam = new SqlParameter("@StoreName", storeName);
+            var cantonNameParam = new SqlParameter("@CantonName", cantonName);
+            var provinciaNameParam = new SqlParameter("@ProvinciaName", provinciaName);
+
+            // Gets the average review value of the register
+            float result = Database.SqlQueryRaw<float>(sqlQuery, productNameParam, storeNameParam, cantonNameParam, provinciaNameParam)
+                .AsEnumerable().SingleOrDefault();
+
+            // Return the value or 0 if the value was 0
+            return result;
+        }
+
         /// <summary>
         /// Gets the user rating by averaging the review values on their registers.
         /// </summary>
