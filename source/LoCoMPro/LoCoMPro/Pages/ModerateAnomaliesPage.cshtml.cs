@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Win32;
+using NetTopologySuite.Algorithm;
+using System.Diagnostics;
 using System.Globalization;
 
 
@@ -85,7 +88,7 @@ namespace LoCoMPro.Pages
 
             // Get the registers no checked or check and anormal
             var registers = from r in _context.Registers
-                            where r.MetahuristicState == 0 || r.MetahuristicState == 1
+                            where r.MetahuristicState == 0 || r.MetahuristicState == 1 
                             select r;
 
             // Include his images
@@ -142,6 +145,9 @@ namespace LoCoMPro.Pages
 
             report.ReportState = 2;
 
+            var register = getRegisterToUpdate(productName, storeName, cantonName, provinceName);
+            register.MetahuristicState = 4;
+
             _context.SaveChanges();
 
             return new JsonResult("OK");
@@ -166,6 +172,9 @@ namespace LoCoMPro.Pages
                 cantonName, provinceName, reportSubmitDate);
 
             report.ReportState = 0;
+
+            var register = getRegisterToUpdate(productName, storeName, cantonName, provinceName);
+            register.MetahuristicState = 4;
 
             _context.SaveChanges();
 
@@ -199,6 +208,26 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
+        /// Gets the register on which an interaction was performed.
+        /// </summary>
+        /// <param name="productName">Name of the product.</param>
+        /// <param name="storeName">Name of the store.</param>
+        /// <param name="submitionDate">Date and time the register was made.</param>
+        /// <param name="cantonName">Name of the canton.</param>
+        /// <param name="provinceName">Province name.</param>
+        /// <returns>Register to update.</returns>
+        public Register getRegisterToUpdate(string productName, string storeName,
+            string cantonName, string provinceName)
+        {
+            var registers = from r in _context.Registers select r;
+            return registers.First(r => r.ProductName == productName
+                && r.StoreName == storeName
+                && r.CantonName == cantonName
+                && r.ProvinciaName == provinceName
+                );
+        }
+
+        /// <summary>
         /// Obtains the averages review values of the registers
         /// </summary>
         public void ObtainAverageReviewValues()
@@ -224,7 +253,6 @@ namespace LoCoMPro.Pages
             {
                 registerAveragePrice.Add(_context.GetProductValue(register.ProductName
                     , register.StoreName, register.CantonName, register.ProvinciaName));
-                
             }
         }
 
@@ -257,10 +285,22 @@ namespace LoCoMPro.Pages
             foreach (var r in Registers)
             {
                 // Metahuristic Price
-               if (r.Price < 2500)
-               {
-                    anormalRegisters.Add(r);
-               }
+                if (r.MetahuristicState != 4)
+                {
+                    // Get the average price for the product
+                    double averagePrice = _context.GetProductValue(r.ProductName, r.StoreName, r.CantonName, r.ProvinciaName);
+
+                    // Set a threshold for abnormal prices
+                    double threshold = 1.5; // prices that are 2 times higher or lower than the average as abnormal
+
+                    // Check if the price is abnormally low or high
+                    if (r.Price < averagePrice / threshold || r.Price > averagePrice * threshold)
+                    {
+                        // Add the register to the list of abnormal registers
+                        anormalRegisters.Add(r);
+                    }
+                }
+
             }
 
             // get the amount of register
