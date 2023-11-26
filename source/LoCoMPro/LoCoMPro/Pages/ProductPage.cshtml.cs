@@ -540,8 +540,8 @@ namespace LoCoMPro.Pages
                     ReportDate = interactionDate,
                     CantonName = registerToUpdate.CantonName!,
                     ProvinceName = registerToUpdate.ProvinciaName!,
-                    Reason = reportComment,
-                    ReportState = 1
+                    ReportState = 1,
+                    Reason = reportComment
                 });
             }
             else
