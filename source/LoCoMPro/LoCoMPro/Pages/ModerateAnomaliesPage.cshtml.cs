@@ -83,9 +83,8 @@ namespace LoCoMPro.Pages
 
             // Convert the user to list
             Users = users.ToList();
-            
-            // Get the autimatic user to create the reports
-            userMeta = GetUserAutomatic("7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4");
+
+            userMeta = Users.FirstOrDefault(user => user.Id == "7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4");
 
             // Get the registers no checked or check and anormal
             var registers = from r in _context.Registers
@@ -109,8 +108,13 @@ namespace LoCoMPro.Pages
                 Reports = await reports.ToListAsync();
             }
 
+            var MetahuristicDone = false;
             // Apply Metahuristic to get weird prices
-            var MetahuristicDone = priceMetahuristics();
+            if (checkUserAutomatic(userMeta, "7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4") == true)
+            {
+                MetahuristicDone = priceMetahuristics();
+
+            }
 
             // Gets the average Price value of the registers
             ObtainAveragePriceValues();
@@ -198,12 +202,14 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
-        /// Gets the user of the metahusritic
+        /// Check the user of the metahusritic
         /// </summary>
-        public User GetUserAutomatic(string userId)
+        /// <param name="user">User to check.</param>
+        /// <param name="SpecificId">ID of the user automatic that compare .</param>
+        public bool checkUserAutomatic(User user, String SpecificId)
         {
-            // Get the user with the specified ID
-            return _context.Users.FirstOrDefault(user => user.Id == userId);
+            // Check if the user has the specified ID
+            return user != null && user.Id == SpecificId;
         }
 
         /// <summary>
