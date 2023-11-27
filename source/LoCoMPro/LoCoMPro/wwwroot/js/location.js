@@ -1,4 +1,4 @@
-let changeFromMap = false;
+let changeFromMap = true;
 let markers = [];
 // Google services
 let map = null;
@@ -10,7 +10,7 @@ var selectedCanton = null;
 var selectedLocation = null;
 var selectedMarker = null;
 var selectedStore = null;
-
+// mapping for loacalities to cantons
 let cantonMapping = {}
 
 $(document).ready(function () {
@@ -34,8 +34,7 @@ $(document).ready(function () {
     });
 
     $("#saveLocationMap-button").on("click", function () {
-        saveLocation();
-        $("#mapPopup").hide();
+        if (saveLocation()) $("#mapPopup").hide();
     });
 
     // Call the function to populate provinceSelect only once
@@ -54,7 +53,7 @@ $(document).ready(function () {
             
         } else {
             $("#canton").attr("disabled", "disabled"); // Disable the canton select if no province is selected
-            $("#canton").html('<option value="" disabled selected hidden>Select a canton</option>'); // Restore the default value
+            $("#canton").html(`<option value="" disabled selected hidden>Seleccione un cant\u00F3n</option>`); // Restore the default value
         }
     });
 
@@ -67,11 +66,28 @@ $(document).ready(function () {
     });
 
     fillCantonMapping();
+    // Retrieve variable
+    const savedlocation = sessionStorage.getItem('selectedLocation');
+    if (savedlocation != null && savedlocation !== "") {
+        loadLocation(savedlocation);
+    }
+    
 });
+
+async function loadLocation(savedlocation) {
+    const parsedValue = JSON.parse(savedlocation);
+    selectedLocation = new google.maps.LatLng({
+        lat: parsedValue.lat,
+        lng: parsedValue.lng
+    });
+    $("#latitude").val(selectedLocation.lat);
+    $("#longitude").val(selectedLocation.lng);
+    reverseGeocodeLocation(selectedLocation);
+}
 
 // Google Maps initialization function
 function initializeMap() {
-    const startingLocation = { lat: 9.9280694, lng: -84.0907246 };
+    const startingLocation = (selectedLocation != null)? selectedLocation : { lat: 9.9280694, lng: -84.0907246 };
 
     if (map !== null) return;
 
@@ -108,6 +124,11 @@ function initializeMap() {
     // Initialize Search bar if in product page.
     if (window.location.href.includes("/AddProductPage")) {
         initializeSearchBar();
+    }
+    if (selectedLocation != null) {
+        setTimeout(() => {
+            updateMarkerPosition(selectedLocation);
+        }, 3000);
     }
 }
 
@@ -237,6 +258,7 @@ function reverseGeocodeLocation(location) {
 
                 selectedCanton = (provinceName in cantonMapping && cantonName in cantonMapping[provinceName]) ? cantonMapping[provinceName][cantonName] : cantonName;
                 $("#province").val(provinceName).trigger('change');
+/*                $("#canton").val(cantonName);*/
 
             } else {
                 console.log('No results found');
@@ -249,12 +271,20 @@ function reverseGeocodeLocation(location) {
 
 
 function saveLocation() {
+    sessionStorage.removeItem('selectedLocation');
     var text = getLocationButtonText(selectedProvince, selectedCanton);
     $("#buttonSpan").text(text);
 
-    $("#latitude").val(selectedLocation.lat);
-    $("#longitude").val(selectedLocation.lng);
-
+    if (selectedProvince !== "" || selectedProvince == null) {
+        sessionStorage.setItem('selectedLocation', JSON.stringify(selectedLocation));
+        $("#latitude").val(selectedLocation.lat);
+        $("#longitude").val(selectedLocation.lng);
+    } else {
+        if (window.location.href.includes("/AddProductPage")) return false;
+        if (selectedMarker) selectedMarker.setMap(null);
+        selectedLocation = null;
+    }
+    // Save variable
     if (window.location.href.includes("/AddProductPage")) {
         $("#locationInfo").text(`Ubicaci\u00F3n elegida: ${text}`);
         $("#locationInfo").show();
@@ -277,7 +307,7 @@ function saveLocation() {
         $("#chosenProvince").text(selectedProvince);
         $("#chosenCanton").text(selectedCanton);
     }
-
+    return true;
 }
 
 function getLocationButtonText(province, canton) {
@@ -314,7 +344,7 @@ function populateProvinceSelect(hasPopulatedProvinceSelect) {
                     const option = document.createElement("option");
                     option.value = province.value;
                     option.text = province.text;
-                    if (province.value == "") option.hidden = true;
+                    //if (province.value == "") option.hidden = true;
                     // Append the option to the provinceSelect
                     $("#province").append(option);
                 }
@@ -329,10 +359,11 @@ function populateProvinceSelect(hasPopulatedProvinceSelect) {
     });
 }
 
-function populateCantonSelect(canton) {
-    fetch(`/Index?handler=Cantones&provincia=${selectedProvince}`)
+function populateCantonSelect(province) {
+    fetch(`/Index?handler=Cantones&provincia=${province}`)
         .then(response => response.json()) // Convert the response to JSON
         .then(data => {
+            /*$('#canton').removeAttr('disabled');*/
             $("#canton").html(""); // Clear the canton select
             data.forEach(canton => {
                 // Create options for each canton and add them to the select
@@ -349,6 +380,8 @@ function populateCantonSelect(canton) {
                 const cantonName = found ? selectedCanton : "";
                 $("#canton").val(cantonName);
                 $("#chosenCanton").text(cantonName);
+                var text = getLocationButtonText(province, cantonName);
+                $("#buttonSpan").text(text);
             }
         })
         .catch(error => {
