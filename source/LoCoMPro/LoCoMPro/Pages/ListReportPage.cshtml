@@ -45,10 +45,12 @@
                         <div class="text-comment">Ubicación</div>
                     </li>
                     <li>
-                        <div class="text-comment">Precio total</div>
+                        @{ViewBag.SortTipe = "#report-price";}
+                        @await Html.PartialAsync("_OrderButton", "Precio total")
                     </li>
                     <li>
-                        <div class="text-comment">Cantidad de productos</div>
+                        @{ViewBag.SortTipe = "#report-product-amount";}
+                        @await Html.PartialAsync("_OrderButton", "Cantidad de productos")
                     </li>
                 </ul>
             </nav>
@@ -75,7 +77,7 @@
                             <span id="report-location-name" value="@store.ProvinciaName + , + @store.CantonName">
                                 @store.ProvinciaName, @store.CantonName
                             </span>
-                            <span class="align-right" id="report-price" value="totalPrice">
+                            <span class="align-right" id="report-price" value="@totalPrice">
                                 ₡ @totalPrice.ToString("N0")
                             </span>
                             <span class="align-center" id="report-product-amount" value="@productList.Count">
