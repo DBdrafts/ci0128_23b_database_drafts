@@ -82,7 +82,7 @@
                     $"{s}{report.ProvinceName}{s}{report.ReportDate}" +
                     $"{s}{report.ReportState}{s}{reporterName}" +
                     $"{s}{contributorName}{s}{register.Price}{s}{@reportNum}" +
-                    $"{s}{register.Comment}";
+                    $"{s}{register.Comment}{s}{report.Reason}";
                 
                 int imagecount = 0;
                 var registerImages = "";
@@ -148,7 +148,8 @@
                     <p><b>Comentario:</b> <span id="popup-comment"></span></p>
                     <p><b>Veracidad:</b> <span class="veracity-stars" id="popup-veracity"></span></p>
                     <p><b>Reportado por:</b> <span id="popup-reporterName"></span></p>
-                    
+                    <p><b>Motivo del reporte:</b>
+                    <div id="popup-report-comment"></div>
 
                     <div class="carousel-section-pop-up">
                         <div class="img-carousel-pop-up">
@@ -156,8 +157,8 @@
                     </div>
 
                     <div class="buttons-container">
-                        
-                        <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>
+
+                            <button class="interactions-close-button" onclick="closeInteractionsPopupMod()">Cerrar</button>
                         <button id="acceptReport" onclick="acceptReport()" style="visibility: hidden;">Aceptar</button>
                         <button id="rejectReport" onclick="rejectReport()" style="visibility: hidden;">Rechazar</button>
                         

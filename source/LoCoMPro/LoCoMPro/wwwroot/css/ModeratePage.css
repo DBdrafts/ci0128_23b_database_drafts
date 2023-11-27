@@ -347,3 +347,17 @@
     width: 20%;
     display: inline-block;
 }
+
+#popup-report-comment {
+    max-height: 100px;
+    width: 100%;
+    padding: 15px;
+    margin-top: 5px;
+    border: 1px solid #9F9F9F;
+    border-radius: 15px;
+    box-sizing: border-box;
+    resize: vertical;
+    overflow-y: auto;
+    overflow-x: hidden;
+    word-wrap: break-word;
+}
