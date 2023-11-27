@@ -82,7 +82,7 @@
                     $"{s}{report.ProvinceName}{s}{report.ReportDate}" +
                     $"{s}{report.ReportState}{s}{reporterName}" +
                     $"{s}{contributorName}{s}{register.Price}{s}{@reportNum}" +
-                    $"{s}{register.Comment}";
+                    $"{s}{register.Comment}{s}{report.Reason}";
                 
                 int imagecount = 0;
                 var registerImages = "";
@@ -155,9 +155,12 @@
                         </div>
                     </div>
 
+                    <p><b>Motivo del reporte:</b></p>
+                    <div id="popup-report-comment"></div>
+
                     <div class="buttons-container">
-                        
-                        <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>
+
+                        <button class="interactions-close-button" onclick="closeInteractionsPopupMod()">Cerrar</button>
                         <button id="acceptReport" onclick="acceptReport()" style="visibility: hidden;">Aceptar</button>
                         <button id="rejectReport" onclick="rejectReport()" style="visibility: hidden;">Rechazar</button>
                         

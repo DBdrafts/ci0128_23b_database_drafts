@@ -50,10 +50,21 @@
                         {
                             <!-- Moderate button of the layout -->
                             <!-- Only displayed when the user is a moderator -->
-                            <a href="/ModeratePage" class="layout-button button-general">
+                            <a class="layout-button button-general" id="moderator-button">
                                 <img src="~/img/ModerateIcon.svg" alt="Moderar">
                                 <p>Moderar</p>
                             </a>
+                            <div class="popup-moderator" id="popup-moderator">
+                                
+                                <h5 id="mod-menu-title">Moderar</h5>
+                                
+                                <a class="pop-up-form"  asp-page="/ModeratePage" style="text-decoration:none">
+                                    <button class="button-general" id="moderate-button">Moderar Reportes</button>
+                                </a>
+                                <a class="pop-up-form" asp-page="/UsersWhoCreateMoreReports" style="text-decoration:none">
+                                    <button class="button-general" id="most-repts-generated-button">Usuarios que más reportan</button>
+                                </a>
+                            </div>
                         }
 
                         <!-- Add user product list button of the layout -->
@@ -144,6 +155,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/userPopUp.js"></script>
+    <script src="~/js/moderatorPopUp.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

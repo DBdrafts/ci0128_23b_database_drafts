@@ -1,0 +1,84 @@
+﻿@page
+@model LoCoMPro.Pages.UsersWhoCreateMoreReportsModel
+@{
+}
+@using Microsoft.AspNetCore.Identity
+@using LoCoMPro.Data;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+
+<head>
+    <link rel="stylesheet" href="~/css/UsersWhoCreateMoreReports.css" />
+    <script src="~/js/interactionsPopUp.js"></script>
+    <link rel="stylesheet" href="~/css/RateRegister.css" />
+    <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
+</head>
+
+<div class="most-reports-page-body">
+    <h2 class="text-center">Usuarios que más reportan registros</h2>
+    <hr class="style-four">
+    @* <div class="empty-section text-center" id="empty-list"
+         style='display: @(Model.Reports.Count == 0 ? "inline-block" : "none")'>
+        <h1>¡No hay reportes que revisar!</h1>
+        <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
+    </div> *@
+
+
+
+    <div class="users-section" id="no-empty-list">
+        <nav>
+            <ul class="container-List-User-Columns"  style='display: flex'>
+                <li id="user-col">
+                    <div class="text-Comment">Usuario</div>
+                </li>
+                <li id="stars-col">
+                    <div class="text-Comment">Puntuación</div>
+                </li>
+                <li id="reports-col">
+                    <div class="text-Comment">Reportes realizados</div>
+                </li>
+                <li id="acc-reports-col">
+                    <div class="text-Comment">Reportes aceptados</div>
+                </li>
+            </ul>
+        </nav>
+
+        <ul class="users-result-section">
+            @for (int userNum = 0; userNum < Model.UsersWhoMadeReports.Count; userNum++)
+            {
+                var user = Model.UsersWhoMadeReports[userNum];
+
+                string userName = user.ToString(); @* Model.Users.First(u => u.Id == user.Id).ToString(); *@
+
+                float userRating = Model.UserRatings[userNum];
+
+                int reportsMade = Model.numberOfReports(user);
+
+                int reportsApproved = Model.numberOfApprovedReports(user);
+
+                <li class="register-block register-block-pagination">
+                    <div class="register-column short-column" id="user-name" value="@userName">
+                        @userName
+                    </div>
+                    <div class="register-section-stars">
+                        <div class="veracity-stars register-column short-column" id="register-veracity" value="@userRating">
+                            <span id="register_veracity_@userNum">
+                                @{
+                                    ViewBag.VeracityValue = userRating;
+                                }
+                                @await Html.PartialAsync("_VeracityStars")
+                            </span>
+                        </div>
+                    </div>
+                    <div class="register-column short-column" id="reports-made" value="@reportsMade">
+                        @reportsMade
+                    </div>
+                    <div class="register-column short-column" id="acc-reports" value="@reportsApproved">
+                        @reportsApproved
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
