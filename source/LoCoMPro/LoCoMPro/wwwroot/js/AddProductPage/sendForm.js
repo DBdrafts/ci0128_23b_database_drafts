@@ -1,7 +1,13 @@
-﻿Dropzone.autoDiscover = false;
+﻿// Disable automatic Dropzone discovery
+Dropzone.autoDiscover = false;
+
+// Declare variables
 var myDropzone;
-maxImages = 5;
+var maxImages = 5;
+
+// Initialize Dropzone when the DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
+    // Create a new instance of Dropzone
     myDropzone = new Dropzone("#dragDropZone", {
         url: "/AddProductPage/?handler=HandleFormSubmission",
         paramName: "productImages",
@@ -10,40 +16,51 @@ document.addEventListener('DOMContentLoaded', function () {
         addRemoveLinks: true,
         dictRemoveFile: "Eliminar",
         dictDefaultMessage: "Haz clic o arrastra y suelta aquí las imágenes del producto",
-        dictFileTooMany: "Ha excedido el límite de imágenes permitidas (" + maxImages + " máx).",
+        dictMaxFilesExceeded: "El límite de imágenes permitidas son " + maxImages + " máximo.",
+        dictInvalidFileType: "Solo se permiten archivos de imagen.",
         autoProcessQueue: false,
         init: function () {
+            // Event handlers for Dropzone
             this.on("success", function (file, response) {
                 console.log('Success:', response);
             });
 
             this.on("sending", function (file, xhr, formData) {
+                // Set XSRF token for the request
                 var csrfToken = $('input:hidden[name="__RequestVerificationToken"]').val();
                 xhr.setRequestHeader("XSRF-TOKEN", csrfToken);
             });
         }
     });
 
+    // Event listener for the form submission button
     document.getElementById('form-submit-button').addEventListener('click', function (e) {
         e.preventDefault();
 
+        // Validate the form before proceeding
         if (!validateForm()) {
             return;
         }
 
+        // Process the Dropzone queue
         myDropzone.processQueue();
+
+        // Create a FormData object from the form
         var formData = new FormData(document.getElementById('addProductForm'));
 
+        // Append uploaded files to the FormData object
         if (myDropzone.files.length > 0) {
             myDropzone.files.forEach(function (file, index) {
                 formData.append('productImages', file);
             });
         }
 
+        // Create a new XMLHttpRequest for form submission
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/AddProductPage?handler=HandleFormSubmission', true);
         xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
 
+        // Define the onload callback for the XMLHttpRequest
         xhr.onload = function () {
             if (xhr.status === 200) {
                 console.log('Success:', xhr.responseText);
@@ -53,9 +70,11 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
 
+        // Send the FormData with the XMLHttpRequest
         xhr.send(formData);
     });
 
+    // Function to validate the form fields
     function validateForm() {
         var requiredFields = [
             { id: 'province', message: 'Por favor, seleccione una ubicación.' },
@@ -73,17 +92,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (fieldValue === '') {
                 isValid = false;
-                displayErrorMessage(fieldElement, field.message);
+                showFeedbackMessage(field.message, 'feedbackMessage');
                 break;
             }
         }
 
+        var nonImageFiles = myDropzone.files.filter(function (file) {
+            return !file.type.startsWith('image/');
+        });
+
+        if (nonImageFiles.length > 0) {
+            isValid = false;
+            showFeedbackMessage('Por favor, seleccione solo archivos de imagen', 'feedbackMessage');
+        }
+
         return isValid;
     }
-
-    function displayErrorMessage(element, message) {
-        showFeedbackMessage(message, 'feedbackMessage');
-    }
-
-
 });
