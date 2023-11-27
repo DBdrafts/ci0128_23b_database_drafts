@@ -168,6 +168,7 @@ button.accept-policy {
 }
 
 #moderate-button, #most-repts-generated-button {
+    margin-top: 5px;
     border: 1px #BABAB8 solid;
     background-color: white;
 }
