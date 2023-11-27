@@ -80,11 +80,12 @@ namespace LoCoMPro.Pages
             // Get the users
             var users = from r in _context.Users
                         select r;
+
             // Convert the user to list
             Users = users.ToList();
             
             // Get the autimatic user to create the reports
-            userMeta = Users.FirstOrDefault(user => user.Id == "7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4");
+            userMeta = GetUserAutomatic("7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4");
 
             // Get the registers no checked or check and anormal
             var registers = from r in _context.Registers
@@ -109,7 +110,7 @@ namespace LoCoMPro.Pages
             }
 
             // Apply Metahuristic to get weird prices
-            var amountAnormalRegisters = priceMetahuristics();
+            var MetahuristicDone = priceMetahuristics();
 
             // Gets the average Price value of the registers
             ObtainAveragePriceValues();
@@ -118,12 +119,13 @@ namespace LoCoMPro.Pages
             ObtainAverageReviewValues();
 
             // Generate the reports for anormal prices
-            if (amountAnormalRegisters > 0)
+            if (MetahuristicDone == true)
             {
                 generateReports();
             }
 
         }
+
 
         /// <summary>
         /// POST HTTP request. Makes the report valid, sets its status to 2 and hides it from everyone.
@@ -179,6 +181,15 @@ namespace LoCoMPro.Pages
             _context.SaveChanges();
 
             return new JsonResult("OK");
+        }
+
+        /// <summary>
+        /// Gets the user of the metahusritic
+        /// </summary>
+        public User GetUserAutomatic(string userId)
+        {
+            // Get the user with the specified ID
+            return _context.Users.FirstOrDefault(user => user.Id == userId);
         }
 
         /// <summary>
@@ -277,10 +288,13 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Apply the metahuristic in the registers
         /// </summary>
-        public int priceMetahuristics()
+        public bool priceMetahuristics()
         {
             //  Define a amosunt of registers var
             int amountRegisters;
+
+            //  Define a amosunt of registers var
+            bool metahuristicDone = false;
 
             // register to apply meta
             foreach (var r in Registers)
@@ -306,8 +320,13 @@ namespace LoCoMPro.Pages
             // get the amount of register
             amountRegisters = anormalRegisters.Count();
 
+            if (amountRegisters > 0)
+            {
+                metahuristicDone = true;
+            }
+
             // Return the count of registers
-            return amountRegisters;
+            return metahuristicDone;
         }
 
         /// <summary>
