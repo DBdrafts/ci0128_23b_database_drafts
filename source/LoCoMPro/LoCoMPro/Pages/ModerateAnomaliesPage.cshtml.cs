@@ -132,26 +132,33 @@ namespace LoCoMPro.Pages
         /// </summary>
         public IActionResult OnPostAcceptReport(string reportData)
         {
+            // Create a CultureInfo object with the InvariantCulture.
             CultureInfo culture = CultureInfo.InvariantCulture;
+
+            // Split the reportData string using the custom delimiter '\x1F' and store the values in an array.
             string[] values = SplitString(reportData, '\x1F');
             string reporterId = values[0], contributorId = values[1], productName = values[2],
                 storeName = values[3], submitionDate = values[4], cantonName = values[5],
                 provinceName = values[6], reportDate = values[7];
             int reportState = int.Parse(values[8]);
 
+            // Parse date strings into DateTime objects.
             DateTime reportSubmitDate = DateTime.Parse(reportDate);
             DateTime contributionDate = DateTime.Parse(submitionDate);
 
+            // Call the getReportToUpdate method to retrieve the relevant report entity from the database.
             var report = getReportToUpdate(reporterId, contributorId, productName, storeName, contributionDate,
                 cantonName, provinceName, reportSubmitDate);
-
             report.ReportState = 2;
 
+            // Call the getRegisterToUpdate method to retrieve the relevant register entity from the database.
             var register = getRegisterToUpdate(productName, storeName, cantonName, provinceName, contributorId);
             register.MetahuristicState = 4;
 
+            // Save changes to the database.
             _context.SaveChanges();
 
+            // Return a JsonResult with the string "OK".
             return new JsonResult("OK");
         }
 
@@ -160,26 +167,33 @@ namespace LoCoMPro.Pages
         /// </summary>
         public IActionResult OnPostRejectReport(string reportData)
         {
+            // Create a CultureInfo object with the InvariantCulture.
             CultureInfo culture = CultureInfo.InvariantCulture;
+
+            // Split the reportData string using the custom delimiter '\x1F' and store the values in an array.
             string[] values = SplitString(reportData, '\x1F');
             string reporterId = values[0], contributorId = values[1], productName = values[2],
                 storeName = values[3], submitionDate = values[4], cantonName = values[5],
                 provinceName = values[6], reportDate = values[7];
             int reportState = int.Parse(values[8]);
 
+            // Parse date strings into DateTime objects.
             DateTime reportSubmitDate = DateTime.Parse(reportDate);
             DateTime contributionDate = DateTime.Parse(submitionDate);
 
+            // Call the getReportToUpdate method to retrieve the relevant report entity from the database.
             var report = getReportToUpdate(reporterId, contributorId, productName, storeName, contributionDate,
                 cantonName, provinceName, reportSubmitDate);
-
             report.ReportState = 0;
 
+            // Call the getRegisterToUpdate method to retrieve the relevant register entity from the database.
             var register = getRegisterToUpdate(productName, storeName, cantonName, provinceName, contributorId);
             register.MetahuristicState = 4;
 
+            // Save changes to the database.
             _context.SaveChanges();
 
+            // Return a JsonResult with the string "OK" indicating successful rejection.
             return new JsonResult("OK");
         }
 
@@ -225,7 +239,7 @@ namespace LoCoMPro.Pages
         /// <param name="storeName">Name of the store.</param>
         /// <param name="cantonName">Name of the canton.</param>
         /// <param name="provinceName">Province name.</param>
-        /// <param name="contributorId">Province name.</param>
+        /// <param name="contributorId">Contributor ID.</param>
         /// <returns>Register to update.</returns>
         public Register getRegisterToUpdate(string productName, string storeName,
             string cantonName, string provinceName, string contributorId)
@@ -306,7 +320,7 @@ namespace LoCoMPro.Pages
                     double averagePrice = _context.GetProductValue(r.ProductName, r.StoreName, r.CantonName, r.ProvinciaName);
 
                     // Set a threshold for abnormal prices
-                    double threshold = 1.25; // prices that are 2 times higher or lower than the average as abnormal
+                    double threshold = 1.25; // prices that are 1.25 times higher or lower than the average as abnormal
 
                     // Check if the price is abnormally low or high
                     if (r.Price < averagePrice / threshold || r.Price > averagePrice * threshold)
@@ -320,6 +334,7 @@ namespace LoCoMPro.Pages
             // get the amount of register
             amountRegisters = anormalRegisters.Count();
 
+            // var to return if the metahuritic is Apply
             if (amountRegisters > 0)
             {
                 metahuristicDone = true;
@@ -363,21 +378,5 @@ namespace LoCoMPro.Pages
             }
         }
 
-        /// <summary>
-        /// Gets the average price of the registers within the given time frame.
-        /// </summary>
-        /// <param name="registers">Registers to use for calculation.</param>
-        /// <param name="from">Starting date to take registers from for calculation.</param>
-        /// <param name="to">Ending date to take the registers from for calculation.</param>
-        /// <returns>Average price of the registers within the given time frame.</returns>
-        public decimal GetAveragePrice(IQueryable<Register> registers, DateTime? from, DateTime? to)
-        {
-            if (from != null && to != null)
-            {
-                registers = registers.Where(r => (r.SubmitionDate >= from) && (r.SubmitionDate <= to));
-            }
-            double avgPrice = (registers is not null) ? registers.Average(r => r.Price) : 0.0;
-            return Convert.ToDecimal(avgPrice);
-        }
     }
 }
