@@ -354,7 +354,8 @@ function acceptRegisterAnormal() {
 
     $.ajax({
         type: 'POST',
-        url: '/ModerateAnomaliesPage?handler=acceptReport',
+        url: '/ModerateAnomaliesPage?handler=AcceptReport',
+        
         beforeSend: function (xhr) {
             xhr.setRequestHeader("XSRF-TOKEN",
                 $('input:hidden[name="__RequestVerificationToken"]').val());
@@ -380,7 +381,7 @@ function acceptRegisterAnormal() {
 function rejectRegisterAnormal() {
     $.ajax({
         type: 'POST',
-        url: '/ModerateAnomaliesPage?handler=rejectReport',
+        url: '/ModerateAnomaliesPage?handler=RejectReport',
         beforeSend: function (xhr) {
             xhr.setRequestHeader("XSRF-TOKEN",
                 $('input:hidden[name="__RequestVerificationToken"]').val());

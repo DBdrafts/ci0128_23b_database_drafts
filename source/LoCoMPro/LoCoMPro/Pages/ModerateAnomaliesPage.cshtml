@@ -64,7 +64,7 @@
             {
                 var report = Model.Reports[reportNum];
 
-                var register = Model.Registers.FirstOrDefault(register =>
+                var register = Model.anormalRegisters.FirstOrDefault(register =>
                 register.ContributorId == report.ContributorId &&
                 register.ProductName == report.ProductName &&
                 register.StoreName == report.StoreName &&

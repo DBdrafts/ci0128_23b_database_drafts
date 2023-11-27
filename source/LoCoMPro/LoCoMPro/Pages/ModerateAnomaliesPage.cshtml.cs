@@ -88,7 +88,7 @@ namespace LoCoMPro.Pages
 
             // Get the registers no checked or check and anormal
             var registers = from r in _context.Registers
-                            where r.MetahuristicState == 0 || r.MetahuristicState == 1 
+                            where r.MetahuristicState == 0 || r.MetahuristicState == 1
                             select r;
 
             // Include his images
@@ -111,11 +111,11 @@ namespace LoCoMPro.Pages
             // Apply Metahuristic to get weird prices
             var amountAnormalRegisters = priceMetahuristics();
 
-            // Gets the average review value of the registers
-            ObtainAverageReviewValues();
-
             // Gets the average Price value of the registers
             ObtainAveragePriceValues();
+
+            // Gets the average review value of the registers
+            ObtainAverageReviewValues();
 
             // Generate the reports for anormal prices
             if (amountAnormalRegisters > 0)
@@ -145,7 +145,7 @@ namespace LoCoMPro.Pages
 
             report.ReportState = 2;
 
-            var register = getRegisterToUpdate(productName, storeName, cantonName, provinceName);
+            var register = getRegisterToUpdate(productName, storeName, cantonName, provinceName, contributorId);
             register.MetahuristicState = 4;
 
             _context.SaveChanges();
@@ -173,7 +173,7 @@ namespace LoCoMPro.Pages
 
             report.ReportState = 0;
 
-            var register = getRegisterToUpdate(productName, storeName, cantonName, provinceName);
+            var register = getRegisterToUpdate(productName, storeName, cantonName, provinceName, contributorId);
             register.MetahuristicState = 4;
 
             _context.SaveChanges();
@@ -212,15 +212,16 @@ namespace LoCoMPro.Pages
         /// </summary>
         /// <param name="productName">Name of the product.</param>
         /// <param name="storeName">Name of the store.</param>
-        /// <param name="submitionDate">Date and time the register was made.</param>
         /// <param name="cantonName">Name of the canton.</param>
         /// <param name="provinceName">Province name.</param>
+        /// <param name="contributorId">Province name.</param>
         /// <returns>Register to update.</returns>
         public Register getRegisterToUpdate(string productName, string storeName,
-            string cantonName, string provinceName)
+            string cantonName, string provinceName, string contributorId)
         {
             var registers = from r in _context.Registers select r;
-            return registers.First(r => r.ProductName == productName
+            return registers.First(r => r.ContributorId == contributorId
+                && r.ProductName == productName
                 && r.StoreName == storeName
                 && r.CantonName == cantonName
                 && r.ProvinciaName == provinceName
@@ -230,7 +231,7 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Obtains the averages review values of the registers
         /// </summary>
-        public void ObtainAverageReviewValues()
+        public void ObtainAverageReviewValues() 
         {
             registerAverageReview = new List<float>();
             // Gets the average value for each register
