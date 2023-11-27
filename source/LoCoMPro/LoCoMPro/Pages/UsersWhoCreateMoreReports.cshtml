@@ -57,32 +57,28 @@
 
                 int reportsApproved = Model.numberOfApprovedReports(user);
 
-                <li class="result-block register-block-pagination" id="report-item-@userNum">
-                    <a>
-                        <span id="user-name" value="@userName">
-                            @userName
-                        </span>
-                        <span id="user-rating" value="@userRating">
-                            @userRating
-                        </span>
-                        <span id="reports-made" value="@reportsMade">
-                            @reportsMade
-                        </span>
-                        <span id="acc-reports" value="@reportsApproved">
-                            @reportsApproved
-                        </span>
-                        <div class="register-section-stars" style="display:none">
-                            <div class="veracity-stars register-column" id="register-veracity" value="@userRating">
-                                <span id="register_veracity_@userNum">
-                                    @*register_veracity_@reportNum*@
-                                    @{
-                                        ViewBag.VeracityValue = userRating;
-                                    }
-                                    @await Html.PartialAsync("_VeracityStars")
-                                </span>
-                            </div>
+                <li class="register-block register-block-pagination">
+                    <div class="register-column short-column" id="user-name" value="@userName">
+                        @userName
+                    </div>
+                    <div class="register-section-stars">
+                        <div class="veracity-stars register-column short-column" id="register-veracity" value="@userRating">
+                            <span id="register_veracity_@userNum">
+                                @{
+                                    ViewBag.VeracityValue = userRating;
+                                }
+                                @await Html.PartialAsync("_VeracityStars")
+                            </span>
                         </div>
-                    </a>
+                    </div>
+                    <div class="register-column short-column" id="reports-made" value="@reportsMade">
+                        @reportsMade
+                    </div>
+                    <div class="register-column short-column" id="acc-reports" value="@reportsApproved">
+                        @reportsApproved
+                    </div>
                 </li>
             }
         </ul>
+    </div>
+</div>
