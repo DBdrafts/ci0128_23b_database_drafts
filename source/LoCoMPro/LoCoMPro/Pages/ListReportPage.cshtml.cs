@@ -17,9 +17,9 @@ namespace LoCoMPro.Pages
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
-        /// Reference to the user product list
+        /// Reference that give access to the user product list
         /// </summary>
-        public UserProductList _userProductList { get; set; }
+        public UserProductList userProductListAccessor { get; set; }
 
         /// <summary>
         /// List with products of the user product list
@@ -60,10 +60,10 @@ namespace LoCoMPro.Pages
 
             if (httpContextAccessor != null)
             {
-                _userProductList = new UserProductList(_httpContextAccessor);
+                userProductListAccessor = new UserProductList(_httpContextAccessor);
 
                 // Gets the user product list
-                UserProductList = _userProductList.GetUserProductList();
+                UserProductList = userProductListAccessor.GetUserProductList();
             }
             else
             {
@@ -75,32 +75,26 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// GET HTTP request, initializes page values.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Task</returns>
         public async Task OnGetAsync()
         {
             // Get the user in the page
             UserInPage = await _userManager.GetUserAsync(User);
 
-            // Obtains the list of stores that sells the products the list has
             ObtainStoresListWithProducts();
 
-            // Gets the distance between the user and the stores
-            ObtainDistances();
+            ObtainDistancesFromStores();
 
-            // Filters the stores from the report list following several criteria
             FilterStoreFromReport();
         }
 
         /// <summary>
         /// Obtains the list of stores that sells the products the list has with the list of products the store has
         /// </summary>
-        /// <returns></returns>
         internal void ObtainStoresListWithProducts()
         {
-            // Obtains the product that are in the list
             WantedProducts = ObtainProductsFromList();
             
-            // For each product the add it to the list of the store
             foreach(var product in WantedProducts)
             {
                 var stores = from s in _context.Stores select s;
@@ -113,12 +107,11 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Obtains the product that are in the list of the user
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of products that are in the list</returns>
         internal IList<Product> ObtainProductsFromList()
         {
             var productNames = UserProductList.Select(element => element.ProductName).ToList();
 
-            // Returns the list of products that are in the list
             return _context.Products.Where(p => productNames.Contains(p.Name)).ToList();
         }
 
@@ -137,7 +130,6 @@ namespace LoCoMPro.Pages
                                where r.Reports.All(report => report.ReportState != 2)
                                select r;
 
-                // Gets a register from the product
                 Register registerFromStore = register.Where(x => x.Product == product
                                                             && x.Store == store).FirstOrDefault()!;
 
@@ -149,7 +141,6 @@ namespace LoCoMPro.Pages
                         // Only add the product
                         StoreProducts[store].Add(registerFromStore);
                     }
-                    // If wasn't stored already
                     else
                     {
                         // Add the store and add the product to the list
@@ -162,26 +153,20 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Filters the stores from the report list following several criteria
         /// </summary>
-        /// <returns></returns>
         internal void FilterStoreFromReport()
         {
-            // Filters based on the amount of products
             FilterStoreByProductAmount();
 
-            // Filters based on the distance of the store
             FilterStoreByDistance();
         }
 
         /// <summary>
         /// Filters the stores from the report list based on the amount of product the store have
         /// </summary>
-        /// <returns></returns>
         internal void FilterStoreByProductAmount()
         {
-            // Gets the minimal amount of products
             int minimunProductAmount = CalculateMinimalProductAmount(WantedProducts.Count);
 
-            // For each store in the report
             foreach (var store in StoreProducts)
             {
                 // Remove the store from the report if does not have the enough amount of products
@@ -196,20 +181,17 @@ namespace LoCoMPro.Pages
         /// Returns the minimal amount of products the list of the report can have, rounding to the lower
         /// </summary>
         /// <param name="amountOfProduct"> Total amount of product of the list
-        /// <returns></returns>
+        /// <returns>Minimal amount of product</returns>
         internal int CalculateMinimalProductAmount(int amountOfProduct)
         {
             // Checks that the number is not negative
             amountOfProduct = amountOfProduct < 0 ? 0 : amountOfProduct;
-            // Returns the minimal amount of products the list of the report can have, rounding to the lower
-            // In this case, is the 30% of the total of products of the list
             return (int)(amountOfProduct * 0.3);
         }
 
         /// <summary>
         /// Filters the stores from the report list based on the distances between the user and the store
         /// </summary>
-        /// <returns></returns>
         internal void FilterStoreByDistance()
         {
             // For each store in the report
@@ -228,26 +210,22 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Obtains the distance between the user and the stores
         /// </summary>
-        /// <returns></returns>
-        internal void ObtainDistances()
+        internal void ObtainDistancesFromStores()
         {
-            // If the user has choose a location
             if(UserHasLocation(UserInPage))
             {
-                SetRealDistances();
+                SetActualDistancesFromStores();
             }
             else
-            // If the user does not has a location
             {
-                SetStandardDistances();
+                SetDefaultDistancesFromStores();
             }
         }
 
         /// <summary>
         /// Sets the distances as the real distances between the user and the store
         /// </summary>
-        /// <returns></returns>
-        internal void SetRealDistances()
+        internal void SetActualDistancesFromStores()
         {
             // Gets the distance between the user and each store
             foreach (var store in StoreProducts)
@@ -267,8 +245,7 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Sets all distances as a default value
         /// </summary>
-        /// <returns></returns>
-        internal void SetStandardDistances()
+        internal void SetDefaultDistancesFromStores()
         {
             // Sets all the distance to 0
             foreach (var store in StoreProducts)
