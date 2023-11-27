@@ -163,12 +163,12 @@ namespace LoCoMPro.Data
             for (int i = 0; i < randomLocations.Count(); i += 3)
             {
                 // Add the stores
-                stores.Add(new Store() { Name = "Super San Agustin", Location = cantones[randomLocations[i]],Geolocation = cantones[randomLocations[i]].Geolocation
+                stores.Add(new Store() { Name = "Super San Agustin", Location = cantones[randomLocations[i]]
                     , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }
                 });
-                stores.Add(new Store() { Name = "Pali", Location = cantones[randomLocations[i + 1]], Geolocation = cantones[randomLocations[i + 1]].Geolocation
+                stores.Add(new Store() { Name = "Pali", Location = cantones[randomLocations[i + 1]]
                     , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }});
-                stores.Add(new Store() { Name = "MasXMenos", Location = cantones[randomLocations[i + 2]], Geolocation = cantones[randomLocations[i + 2]].Geolocation
+                stores.Add(new Store() { Name = "MasXMenos", Location = cantones[randomLocations[i + 2]]
                     , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }});
             }
             context.Stores.AddRange(stores);

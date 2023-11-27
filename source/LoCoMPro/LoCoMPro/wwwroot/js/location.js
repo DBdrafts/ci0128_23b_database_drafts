@@ -74,7 +74,7 @@ $(document).ready(function () {
     
 });
 
-async function loadLocation(savedlocation) {
+function loadLocation(savedlocation) {
     const parsedValue = JSON.parse(savedlocation);
     selectedLocation = new google.maps.LatLng({
         lat: parsedValue.lat,
@@ -121,14 +121,15 @@ function initializeMap() {
         handleMapClick(event.latLng);
     });
 
+    //if (selectedLocation != null) {
+    //    setTimeout(() => {
+            
+    //    }, 300);
+    //}
+    updateMarkerPosition(selectedLocation);
     // Initialize Search bar if in product page.
     if (window.location.href.includes("/AddProductPage")) {
         initializeSearchBar();
-    }
-    if (selectedLocation != null) {
-        setTimeout(() => {
-            updateMarkerPosition(selectedLocation);
-        }, 3000);
     }
 }
 
@@ -528,3 +529,7 @@ function setNullToUser() {
 
 }
 
+// export functions for tests
+module.exports = {
+    loadLocation
+};
