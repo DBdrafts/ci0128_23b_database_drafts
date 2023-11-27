@@ -291,7 +291,7 @@ namespace LoCoMPro.Pages
                     double averagePrice = _context.GetProductValue(r.ProductName, r.StoreName, r.CantonName, r.ProvinciaName);
 
                     // Set a threshold for abnormal prices
-                    double threshold = 1.5; // prices that are 2 times higher or lower than the average as abnormal
+                    double threshold = 1.25; // prices that are 2 times higher or lower than the average as abnormal
 
                     // Check if the price is abnormally low or high
                     if (r.Price < averagePrice / threshold || r.Price > averagePrice * threshold)
@@ -300,7 +300,6 @@ namespace LoCoMPro.Pages
                         anormalRegisters.Add(r);
                     }
                 }
-
             }
 
             // get the amount of register
@@ -308,7 +307,6 @@ namespace LoCoMPro.Pages
 
             // Return the count of registers
             return amountRegisters;
-            
         }
 
         /// <summary>

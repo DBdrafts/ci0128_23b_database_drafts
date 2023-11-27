@@ -167,12 +167,19 @@ button.accept-policy {
     margin-top: 5px;
 }
 
-#moderate-button, #most-repts-generated-button {
+#moderate-anomalies-button {
+    margin-top: 5px;
+}
+
+#moderate-button, #most-repts-generated-button, #moderate-anomalies-button {
     border: 1px #BABAB8 solid;
     background-color: white;
 }
 
 /* Style for the logout button when the cursor is on the button */
-#moderate-button:hover, #most-repts-generated-button:hover {
-    background-color: #e5e5e5;
-}
+    #moderate-button:hover, #most-repts-generated-button:hover, #moderate-anomalies-button:hover {
+        background-color: #e5e5e5;
+    }
+
+
+
