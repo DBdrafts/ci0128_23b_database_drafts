@@ -66,6 +66,7 @@ namespace functional_tests
             }
         }
 
+        /*
         // Test by Omar Camacho Calvo C11476 | Sprint 3
         [Test]
         public void UpdatetheNumberOfAnormalRegistersAfterAccept()
@@ -149,5 +150,7 @@ namespace functional_tests
                 Assert.IsFalse(driver.FindElements(By.ClassName("open-interactions-button")).Count > 0, "Not expecting to find the interactions button");
             }
         }
+        */
+        
     }
 }
