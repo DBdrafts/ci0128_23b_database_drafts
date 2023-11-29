@@ -61,9 +61,6 @@ namespace LoCoMPro.Pages
             if (httpContextAccessor != null)
             {
                 userProductListAccessor = new UserProductList(_httpContextAccessor);
-
-                // Gets the user product list
-                UserProductList = userProductListAccessor.GetUserProductList();
             }
             else
             {
@@ -80,6 +77,13 @@ namespace LoCoMPro.Pages
         {
             // Get the user in the page
             UserInPage = await _userManager.GetUserAsync(User);
+
+            if (UserInPage != null) {
+                userProductListAccessor.SetListName(UserInPage.Id);
+
+                // Gets the user product list
+                UserProductList = userProductListAccessor.GetUserProductList();
+            }
 
             ObtainStoresListWithProducts();
 

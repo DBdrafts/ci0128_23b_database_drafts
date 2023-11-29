@@ -27,15 +27,6 @@ namespace LoCoMPro.Pages
         /// </summary>
         public IList<UserProductListElement> UserProductList { get; set; }
 
-        /// <summary>
-        /// Total amount of products
-        /// </summary>
-        public int TotalAmountProduct { get; set; }
-
-        /// <summary>
-        /// Total amount that all products cost
-        /// </summary>
-        public int TotalPrice { get; set; }
 
         /// <summary>
         /// Flag if the user has choose a location
@@ -57,9 +48,6 @@ namespace LoCoMPro.Pages
             if (httpContextAccessor != null)
             {
                 _userProductList = new UserProductList(_httpContextAccessor);
-
-                // Gets the user product list
-                UserProductList = _userProductList.GetUserProductList();
             }
             else
             {
@@ -74,30 +62,16 @@ namespace LoCoMPro.Pages
         /// <returns></returns>
         public async Task OnGetAsync()
         {
-            // Calculates the total amount between all the products
-            CalculateTotalPrice();
-
             // Set the flag if the user has choose a location
             User actualUser = await _userManager.GetUserAsync(User);
             if (actualUser != null)
             {
+                _userProductList.SetListName(actualUser.Id);
+
+                // Gets the user product list
+                UserProductList = _userProductList.GetUserProductList();
+
                 HasUserLocation = actualUser.Geolocation != null;
-            }
-        }
-
-        /// <summary>
-        /// Calculates the total amount between all the products in the list
-        /// </summary>
-        /// <returns></returns>
-        public void CalculateTotalPrice()
-        {
-            // Establish the standard culture info
-            CultureInfo culture = CultureInfo.InvariantCulture;
-
-            // Gets the average price of the product and add it to the total amount
-            foreach (var product in UserProductList)
-            {
-                TotalPrice += ConvertIntFromString(culture, product.AvgPrice);
             }
         }
 
@@ -106,6 +80,8 @@ namespace LoCoMPro.Pages
         /// </summary>
         public IActionResult OnPostRemoveFromProductList(string productData)
         {
+            _userProductList.SetListName(_userManager.GetUserId(User));
+
             // Gets and split the data
             string[] values = SplitString(productData, '\x1F');
 

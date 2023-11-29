@@ -89,7 +89,7 @@
                                 ₡ @totalPrice.ToString("N0")
                             </span>
                             <span class="align-center" id="report-product-amount" value="@productList.Count">
-                                @productList.Count de @Model.WantedProducts.Count
+                                @productList.Count de @Model.WantedProducts.Count (@((@productList.Count*100)/@Model.WantedProducts.Count)%)
                             </span>
                             <span class="block-arrow">
                                 <i class="fa fa-angle-down" aria-hidden="true"></i>

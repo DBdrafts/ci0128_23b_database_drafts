@@ -138,6 +138,8 @@ namespace LoCoMPro.Pages
         {
             UserInPage = await _userManager.GetUserAsync(User);
 
+            _userProductList.SetListName(UserInPage.Id);
+
             // Attr of the product from the params of method
             SearchProductName = searchProductName;
             SearchStoreName = searchStoreName;
@@ -362,6 +364,9 @@ namespace LoCoMPro.Pages
         /// </summary>
         public IActionResult OnPostAddToProductList(string productData)
         {
+            
+            _userProductList.SetListName(_userManager.GetUserId(User));
+
             // Gets and split the data
             string[] values = SplitString(productData, '\x1F');
 

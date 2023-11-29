@@ -25,12 +25,6 @@
             <div class="list-page-title">
                 <h2>Lista de productos de interés</h2>
             </div>
-
-            <div class="list-page-subtitle">
-                <h4>Cantidad de productos: <span id="product-count">@Model.UserProductList.Count</span></h4>
-
-                <h4>Precio aproximado: ₡ <span id="total-price">@Model.TotalPrice.ToString("N0")</span></h4>
-            </div>
         </div>
 
         @if (Model.HasUserLocation)
@@ -77,15 +71,6 @@
                 <li>
                     <div class="text-comment">Modelo</div>
                 </li>
-                <li>
-                    <div class="text-comment">Tienda</div>
-                </li>
-                <li>
-                    <div class="text-comment">Ubicación</div>
-                </li>
-                <li>
-                    <div class="text-comment">Precio Promedio</div>
-                </li>
             </ul>
         </nav>
 
@@ -108,15 +93,6 @@
                         </span>
                         <span id="register-product-model" value="@product.ProductModel">
                             @Html.DisplayFor(modelItem => product.ProductModel)
-                        </span>
-                        <span id="register-store-name" value="@product.StoreName">
-                            @Html.DisplayFor(modelItem => product.StoreName)
-                        </span>
-                        <span id="register-location-name" value="@product.Province + , + @product.Canton">
-                            @product.Province, @product.Canton
-                        </span>
-                        <span class="align-right" id="register-price" value="@product.AvgPrice">
-                            ₡ @Html.DisplayFor(modelItem => product.AvgPrice)
                         </span>
                         <button class="remove-button button-general" type="button"
                                 data-product-data="@productData" onclick="removeProductFromList(this, @i)">
