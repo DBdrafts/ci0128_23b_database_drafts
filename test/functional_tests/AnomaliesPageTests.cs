@@ -58,7 +58,6 @@ namespace functional_tests
             if (anormalRegisterAmount > 0)
             {
                 Assert.IsTrue(driver.FindElements(By.ClassName("open-interactions-button")).Count > 0, "Expected to find the interactions button");
-
             }
             else if(anormalRegisterAmount == 0)
             {
@@ -66,13 +65,18 @@ namespace functional_tests
             }
         }
 
-        /*
+        
         // Test by Omar Camacho Calvo C11476 | Sprint 3
         [Test]
         public void UpdatetheNumberOfAnormalRegistersAfterAccept()
         {
             // Arrange
-            var driver = new ChromeDriver();
+            var chromeOptions = new ChromeOptions();
+
+            chromeOptions.AddArgument("start-maximized");
+            chromeOptions.AddArgument("window-size=1920,1080");
+
+            var driver = new ChromeDriver(chromeOptions);
             driver.Navigate().GoToUrl("https://localhost:7119/Identity/Account/Login");
             var login = new Login(driver);
 
@@ -91,7 +95,7 @@ namespace functional_tests
             if (FirstAnormalRegisterAmount > 0)
             {
 
-                driver.FindElement(By.ClassName("open-interactions-button")).Click();
+                driver.FindElement(By.Id("button-open-moderate-popup")).Click();
                 driver.FindElement(By.Id("acceptReport")).Click();
 
                 IWebElement cantReportesElementUpdate = driver.FindElement(By.Id("report-count"));
@@ -114,7 +118,12 @@ namespace functional_tests
         public void UpdatetheNumberOfAnormalRegistersAfterReject()
         {
             // Arrange
-            var driver = new ChromeDriver();
+            var chromeOptions = new ChromeOptions();
+
+            chromeOptions.AddArgument("start-maximized");
+            chromeOptions.AddArgument("window-size=1920,1080");
+
+            var driver = new ChromeDriver(chromeOptions);
             driver.Navigate().GoToUrl("https://localhost:7119/Identity/Account/Login");
             var login = new Login(driver);
 
@@ -133,7 +142,7 @@ namespace functional_tests
             if (FirstAnormalRegisterAmount > 0)
             {
 
-                driver.FindElement(By.ClassName("open-interactions-button")).Click();
+                driver.FindElement(By.Id("button-open-moderate-popup")).Click();
                 driver.FindElement(By.Id("rejectReport")).Click();
 
                 IWebElement cantReportesElementUpdate = driver.FindElement(By.Id("report-count"));
@@ -150,7 +159,7 @@ namespace functional_tests
                 Assert.IsFalse(driver.FindElements(By.ClassName("open-interactions-button")).Count > 0, "Not expecting to find the interactions button");
             }
         }
-        */
+        
         
     }
 }
