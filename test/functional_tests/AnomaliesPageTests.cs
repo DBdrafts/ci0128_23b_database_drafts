@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using functional_tests.Shared;
+using OpenQA.Selenium.Support.UI;
 
 namespace functional_tests
 {
@@ -101,8 +102,16 @@ namespace functional_tests
                 IWebElement cantReportesElementUpdate = driver.FindElement(By.Id("report-count"));
                 int SecondAnormalRegisterAmount = int.Parse(cantReportesElementUpdate.Text);
 
+                var feedbackMessageElement = driver.FindElement(By.Id("feedbackMessage"));
+
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+                wait.Until(driver => feedbackMessageElement.Displayed);
+
+                string reportFeedbackMessage = feedbackMessageElement.Text;
+
                 // Assert
-                Assert.IsTrue(FirstAnormalRegisterAmount>SecondAnormalRegisterAmount);
+                Assert.That(reportFeedbackMessage.Contains("El reporte anómalo ha sido aprobado exitosamente"));
+
 
 
             }
@@ -145,11 +154,15 @@ namespace functional_tests
                 driver.FindElement(By.Id("button-open-moderate-popup")).Click();
                 driver.FindElement(By.Id("rejectReport")).Click();
 
-                IWebElement cantReportesElementUpdate = driver.FindElement(By.Id("report-count"));
-                int SecondAnormalRegisterAmount = int.Parse(cantReportesElementUpdate.Text);
+                var feedbackMessageElement = driver.FindElement(By.Id("feedbackMessage"));
+
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+                wait.Until(driver => feedbackMessageElement.Displayed);
+
+                string reportFeedbackMessage = feedbackMessageElement.Text;
 
                 // Assert
-                Assert.IsTrue(FirstAnormalRegisterAmount > SecondAnormalRegisterAmount);
+                Assert.That(reportFeedbackMessage.Contains("El reporte anómalo ha sido rechazado exitosamente"));
 
 
             }
