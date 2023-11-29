@@ -106,6 +106,31 @@ document.addEventListener('DOMContentLoaded', function () {
             showFeedbackMessage('Por favor, seleccione solo archivos de imagen', 'feedbackMessage');
         }
 
+        var duplicateFileNames = findDuplicateFileNames(myDropzone.files);
+
+        if (duplicateFileNames.length > 0) {
+            isValid = false;
+            var message = 'No se permite enviar imágenes con el mismo nombre: ' + duplicateFileNames.join(', ');
+            showFeedbackMessage(message, 'feedbackMessage');
+        }
+
         return isValid;
+    }
+
+    // Find duplicate image names
+    function findDuplicateFileNames(files) {
+        var fileNames = {};
+        var duplicateFileNames = [];
+
+        files.forEach(function (file) {
+            var fileName = file.name;
+            if (fileNames[fileName]) {
+                duplicateFileNames.push(fileName);
+            } else {
+                fileNames[fileName] = true;
+            }
+        });
+
+        return duplicateFileNames;
     }
 });
