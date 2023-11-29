@@ -48,6 +48,16 @@ namespace LoCoMPro.Pages
         public IList<float> registerAveragePrice { get; set; }
 
         /// <summary>
+        /// Min prices of the registers
+        /// </summary>
+        public IList<float> registerMinPrice { get; set; }
+
+        /// <summary>
+        /// Max prices of the registers
+        /// </summary>
+        public IList<float> registerMaxPrice { get; set; }
+
+        /// <summary>
         /// User of metauristica
         /// </summary>
         public User userMeta;
@@ -122,6 +132,12 @@ namespace LoCoMPro.Pages
             // Gets the average review value of the registers
             ObtainAverageReviewValues();
 
+            // Gets the minimal prices of the regiters
+            ObtainMinPriceValues();
+
+            // Gets the max prices of the regiters
+            ObtainMaxPriceValues();
+
             // Generate the reports for anormal prices
             if (MetahuristicDone == true)
             {
@@ -129,7 +145,6 @@ namespace LoCoMPro.Pages
             }
 
         }
-
 
         /// <summary>
         /// POST HTTP request. Makes the report valid, sets its status to 2 and hides it from everyone.
@@ -284,6 +299,37 @@ namespace LoCoMPro.Pages
             foreach (Register register in anormalRegisters)
             {
                 registerAveragePrice.Add(_context.GetProductValue(register.ProductName
+                    , register.StoreName, register.CantonName, register.ProvinciaName));
+            }
+        }
+
+        /// <summary>
+        /// Obtains the min price values of the registers
+        /// </summary>
+        public void ObtainMinPriceValues()
+        {
+            registerMinPrice = new List<float>();
+
+            // Gets the average value for each register
+            foreach (Register register in anormalRegisters)
+            {
+                registerMinPrice.Add(_context.GetMinProductValue(register.ProductName
+                    , register.StoreName, register.CantonName, register.ProvinciaName));
+            }
+        }
+
+
+        /// <summary>
+        /// Obtains the max price values of the registers
+        /// </summary>
+        public void ObtainMaxPriceValues()
+        {
+            registerMaxPrice = new List<float>();
+
+            // Gets the average value for each register
+            foreach (Register register in anormalRegisters)
+            {
+                registerMaxPrice.Add(_context.GetMaxProductValue(register.ProductName
                     , register.StoreName, register.CantonName, register.ProvinciaName));
             }
         }

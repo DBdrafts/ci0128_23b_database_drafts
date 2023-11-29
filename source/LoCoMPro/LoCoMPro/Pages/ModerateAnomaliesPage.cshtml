@@ -40,21 +40,27 @@
         <div class="results-cont-msg" span id="results-count"></div>
 
         <nav>
-            <ul class="container-List-Report-Columns" style='display: @(Model.Reports.Count != 0 ? "flex" : "none")'>
+            <ul class="container-List-Report-Columns" style='display: @(Model.Reports.Count != 0 ? "flex;padding: 0px;justify-content: space-between;" : "none")'>
                 <li id="product-col">
                     <div class="text-Comment">Producto</div>
                 </li>
                 <li id="contributor-col">
-                    <div class="text-Comment">Contribuidor</div>
-                </li>
-                <li id="date-col">
-                    <div class="text-Comment">Fecha del Registro</div>
+                    <div class="text-Comment">Usuario</div>
                 </li>
                 <li id="price-col">
                     <div class="text-Comment">Precio</div>
                 </li>
-                <li id="avg-price-col">
-                    <div class="text-Comment">Precio Promedio</div>
+                <li id="prom-col">
+                    <div class="text-Comment">Promedio</div>
+                </li>
+                <li id="min-col">
+                    <div class="text-Comment">Minimo</div>
+                </li>
+                <li id="max-col">
+                    <div class="text-Comment">Maximo</div>
+                </li>
+                <li id="max-col">
+                    <div class="text-Comment">Maximo</div>
                 </li>
             </ul>
         </nav>
@@ -111,15 +117,22 @@
                         <span id="register-user" value="@contributorName">
                             @contributorName
                         </span>
-                        <span id="register-date" value="@register.SubmitionDate">
-                            @register.SubmitionDate.ToShortDateString()
-                        </span>
                         <span id="register-price" value="@register.Price">
                             @register.Price
                         </span>
-                        <span id="register-avg-price" data-value="@Model.registerAveragePrice.ElementAtOrDefault(reportNum)">
+                        <span  data-value="@Model.registerAveragePrice.ElementAtOrDefault(reportNum)">
                             @(Model.registerAveragePrice.ElementAtOrDefault(reportNum).ToString() ?? "N/A")
                         </span>
+                        <span id="register-min-price" data-value="@Model.registerMinPrice.ElementAtOrDefault(reportNum)">
+                            @(Model.registerMinPrice.ElementAtOrDefault(reportNum).ToString() ?? "N/A")
+                        </span>
+                        <span id="register-max-price" style="align-items: left;" data-value="@Model.registerMaxPrice.ElementAtOrDefault(reportNum)">
+                            @(Model.registerMaxPrice.ElementAtOrDefault(reportNum).ToString() ?? "N/A")
+                        </span>
+                        <span id="register-max-price" style="align-items: left;" data-value="@Model.registerMaxPrice.ElementAtOrDefault(reportNum)">
+                            @(Model.registerMaxPrice.ElementAtOrDefault(reportNum).ToString() ?? "N/A")
+                        </span>
+                       
 
                         <div class="text-center align">
                             <button class="open-interactions-button" id="button-open-moderate-popup" report-data="@reportData" report-number="@reportNum"
