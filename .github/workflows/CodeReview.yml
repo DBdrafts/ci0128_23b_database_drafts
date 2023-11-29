@@ -50,6 +50,6 @@ jobs:
         shell: powershell
         run: |
          .\.sonar\scanner\dotnet-sonarscanner begin /k:"DBdrafts_ci0128_23b_database_drafts" /o:"dbdrafts" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.branch.name="${{ github.ref_name }}"  /d:sonar.cs.dotcover.reportsPaths=dotCover.Output.html 
-         dotnet build 
+         dotnet build .\source\LoCoMPro\LoCoMPro.sln
          dotnet dotcover test .\test\UnitTest\UnitTest.csproj --dcReportType=HTML
          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
