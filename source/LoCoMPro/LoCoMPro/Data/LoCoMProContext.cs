@@ -331,8 +331,14 @@ namespace LoCoMPro.Data
             return roundResult;
         }
 
-
-
+        /// <summary>
+        /// Gets the average price value of a register
+        /// </summary>
+        /// <param name="productName">Name of the product.</param>
+        /// <param name="storeName">Name of the store.</param>
+        /// <param name="cantonName">Name of the canton</param>
+        /// <param name="provinciaName">Name of the provinciaName</param>
+        /// <returns>Average price value of the register.</returns>
         public float GetProductValue(string productName
             , string storeName, string cantonName, string provinciaName)
         {
@@ -352,6 +358,60 @@ namespace LoCoMPro.Data
             // Return the value or 0 if the value was 0
             return result;
         }
+
+        /// <summary>
+        /// Gets the min price value of a register
+        /// </summary>
+        /// <param name="productName">Name of the product.</param>
+        /// <param name="storeName">Name of the store.</param>
+        /// <param name="cantonName">Name of the canton</param>
+        /// <param name="provinciaName">Name of the provinciaName</param>
+        /// <returns>Average price value of the register.</returns>
+        public float GetMinProductValue(string productName, string storeName, string cantonName, string provinciaName)
+        {
+            // Creates the SQL Query used to get the minimum product value
+            string sqlQuery = "SELECT dbo.GetMinPriceValue(@ProductName, @StoreName, @CantonName, @ProvinciaName)";
+
+            // Link the parameters with the register value
+            var productNameParam = new SqlParameter("@ProductName", productName);
+            var storeNameParam = new SqlParameter("@StoreName", storeName);
+            var cantonNameParam = new SqlParameter("@CantonName", cantonName);
+            var provinciaNameParam = new SqlParameter("@ProvinciaName", provinciaName);
+
+            // Gets the minimum product value of the register
+            float result = Database.SqlQueryRaw<float>(sqlQuery, productNameParam, storeNameParam, cantonNameParam, provinciaNameParam)
+                .AsEnumerable().SingleOrDefault();
+
+            // Return the value or 0 if the value was 0
+            return result;
+        }
+
+        /// Gets the max price value of a register
+        /// </summary>
+        /// <param name="productName">Name of the product.</param>
+        /// <param name="storeName">Name of the store.</param>
+        /// <param name="cantonName">Name of the canton</param>
+        /// <param name="provinciaName">Name of the provinciaName</param>
+        /// <returns>Average price value of the register.</returns>
+        public float GetMaxProductValue(string productName, string storeName, string cantonName, string provinciaName)
+        {
+            // Creates the SQL Query used to get the maximum product value
+            string sqlQuery = "SELECT dbo.GetMaxPriceValue(@ProductName, @StoreName, @CantonName, @ProvinciaName)";
+
+            // Link the parameters with the register value
+            var productNameParam = new SqlParameter("@ProductName", productName);
+            var storeNameParam = new SqlParameter("@StoreName", storeName);
+            var cantonNameParam = new SqlParameter("@CantonName", cantonName);
+            var provinciaNameParam = new SqlParameter("@ProvinciaName", provinciaName);
+
+            // Gets the maximum product value of the register
+            float result = Database.SqlQueryRaw<float>(sqlQuery, productNameParam, storeNameParam, cantonNameParam, provinciaNameParam)
+                .AsEnumerable().SingleOrDefault();
+
+            // Return the value or 0 if the value was 0
+            return result;
+        }
+
 
         /// <summary>
         /// Gets the user rating by averaging the review values on their registers.
