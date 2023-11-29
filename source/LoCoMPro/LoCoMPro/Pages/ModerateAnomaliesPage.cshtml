@@ -44,9 +44,6 @@
                 <li id="product-col">
                     <div class="text-Comment">Producto</div>
                 </li>
-                <li id="contributor-col">
-                    <div class="text-Comment">Usuario</div>
-                </li>
                 <li id="price-col">
                     <div class="text-Comment">Precio</div>
                 </li>
@@ -59,8 +56,8 @@
                 <li id="max-col">
                     <div class="text-Comment">Maximo</div>
                 </li>
-                <li id="max-col">
-                    <div class="text-Comment">Maximo</div>
+                <li id="desv-col">
+                    <div class="text-Comment">Desv. Estandar</div>
                 </li>
             </ul>
         </nav>
@@ -86,7 +83,7 @@
                     .First(u => u.Id == report.ReporterId).ToString();
 
                 var reportData = $"{report.ReporterId}{s}{report.ContributorId}" +
-                    $"{s}{report.ProductName}{s}{report.StoreName}" +
+                    $"{s}{report.ProductName}{s}{register.StoreName}" +
                     $"{s}{report.SubmitionDate.ToShortDateString()}{s}{report.CantonName}" +
                     $"{s}{report.ProvinceName}{s}{report.ReportDate}" +
                     $"{s}{report.ReportState}{s}{reporterName}" +
@@ -114,9 +111,6 @@
                         <span id="register-product-name" value="@report.ProductName">
                             @report.ProductName
                         </span>
-                        <span id="register-user" value="@contributorName">
-                            @contributorName
-                        </span>
                         <span id="register-price" value="@register.Price">
                             @register.Price
                         </span>
@@ -126,11 +120,11 @@
                         <span id="register-min-price" data-value="@Model.registerMinPrice.ElementAtOrDefault(reportNum)">
                             @(Model.registerMinPrice.ElementAtOrDefault(reportNum).ToString() ?? "N/A")
                         </span>
-                        <span id="register-max-price" style="align-items: left;" data-value="@Model.registerMaxPrice.ElementAtOrDefault(reportNum)">
+                        <span id="register-max-price" data-value="@Model.registerMaxPrice.ElementAtOrDefault(reportNum)">
                             @(Model.registerMaxPrice.ElementAtOrDefault(reportNum).ToString() ?? "N/A")
                         </span>
-                        <span id="register-max-price" style="align-items: left;" data-value="@Model.registerMaxPrice.ElementAtOrDefault(reportNum)">
-                            @(Model.registerMaxPrice.ElementAtOrDefault(reportNum).ToString() ?? "N/A")
+                        <span id="register-std-dev-price" data-value="@Model.registerStdDevPrice.ElementAtOrDefault(reportNum)">
+                            @(Model.registerStdDevPrice.ElementAtOrDefault(reportNum).ToString("0.00") ?? "N/A")
                         </span>
                        
 

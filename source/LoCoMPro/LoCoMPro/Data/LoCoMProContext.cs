@@ -412,6 +412,34 @@ namespace LoCoMPro.Data
             return result;
         }
 
+        /// <summary>
+        /// Gets the standard deviation of prices for a specific product and location.
+        /// </summary>
+        /// <param name="productName">Name of the product.</param>
+        /// <param name="storeName">Name of the store.</param>
+        /// <param name="cantonName">Name of the canton</param>
+        /// <param name="provinciaName">Name of the provinciaName</param>
+        /// <returns>Standard deviation of prices for the specified product and location.</returns>
+        public float GetStdDevProductValue(string productName, string storeName, string cantonName, string provinciaName)
+        {
+            // Creates the SQL Query used to get the standard deviation of product values
+            string sqlQuery = "SELECT dbo.GetStdDevPriceValue(@ProductName, @StoreName, @CantonName, @ProvinciaName)";
+
+            // Link the parameters with the register value
+            var productNameParam = new SqlParameter("@ProductName", productName);
+            var storeNameParam = new SqlParameter("@StoreName", storeName);
+            var cantonNameParam = new SqlParameter("@CantonName", cantonName);
+            var provinciaNameParam = new SqlParameter("@ProvinciaName", provinciaName);
+
+            // Gets the standard deviation of product values for the register
+            float result = Database.SqlQueryRaw<float>(sqlQuery, productNameParam, storeNameParam, cantonNameParam, provinciaNameParam)
+                .AsEnumerable().SingleOrDefault();
+
+            // Return the value or 0 if the value was 0
+            return result;
+        }
+
+
 
         /// <summary>
         /// Gets the user rating by averaging the review values on their registers.

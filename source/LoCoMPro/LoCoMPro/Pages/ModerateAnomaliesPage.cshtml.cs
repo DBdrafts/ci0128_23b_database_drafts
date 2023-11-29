@@ -58,6 +58,11 @@ namespace LoCoMPro.Pages
         public IList<float> registerMaxPrice { get; set; }
 
         /// <summary>
+        /// Std Desv prices of the registers
+        /// </summary>
+        public IList<float> registerStdDevPrice { get; set; }
+
+        /// <summary>
         /// User of metauristica
         /// </summary>
         public User userMeta;
@@ -137,6 +142,9 @@ namespace LoCoMPro.Pages
 
             // Gets the max prices of the regiters
             ObtainMaxPriceValues();
+
+            // Gets the Std Dev prices of the regiters
+            ObtainStdDevPriceValues();
 
             // Generate the reports for anormal prices
             if (MetahuristicDone == true)
@@ -331,6 +339,25 @@ namespace LoCoMPro.Pages
             {
                 registerMaxPrice.Add(_context.GetMaxProductValue(register.ProductName
                     , register.StoreName, register.CantonName, register.ProvinciaName));
+            }
+        }
+
+        /// <summary>
+        /// Obtains the max price values of the registers
+        /// </summary>
+        public void ObtainStdDevPriceValues()
+        {
+            registerStdDevPrice = new List<float>();
+
+            // Gets the average value for each register
+            foreach (Register register in anormalRegisters)
+            {
+                float stdDevValue = _context.GetStdDevProductValue(register.ProductName, register.StoreName, register.CantonName, register.ProvinciaName);
+
+                // Round the value to 2 decimal places
+                float roundedValue = (float)Math.Round(stdDevValue, 2);
+
+                registerStdDevPrice.Add(roundedValue);
             }
         }
 

@@ -33,6 +33,8 @@ namespace LoCoMPro.Data
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetAveragePriceValue.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetMaxPriceValue.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetMinPriceValue.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/GetStdDevPriceValue.sql");
+
 
             List<Provincia> provincias = new();
             List<Canton> cantones = new();
