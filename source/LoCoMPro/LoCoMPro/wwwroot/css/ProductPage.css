@@ -395,7 +395,7 @@
 /* Style for the interaction Pop Up content */
 .interactions-popup-content {
     background-color: #fff;
-    margin: 11% auto;
+    margin: 7% auto;
     padding: 20px;
     height: auto;
     min-width: 400px;
@@ -417,6 +417,38 @@
     cursor: pointer;
     background-color: transparent;
     border: none;
+}
+
+/* Style for report input field*/
+.report-comments {
+    display: none;
+    max-height: 100px;
+    width: 100%;
+    padding: 15px;
+    margin-top: 5px;
+    border: 1px solid #9F9F9F;
+    border-radius: 15px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+/* Style for report input field*/
+#last-report-comment {
+    overflow-y: auto;
+    overflow-x: hidden;
+    word-wrap: break-word;
+}
+
+/* Style for reportComment label*/
+.report-labels {
+    display: none;
+    font-size:large;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+#undo-report-label {
+    color: #f53636;
 }
 
 /* Style for the save button of the pop up */
