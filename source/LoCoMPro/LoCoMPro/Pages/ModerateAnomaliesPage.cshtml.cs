@@ -127,7 +127,7 @@ namespace LoCoMPro.Pages
             // Apply Metahuristic to get weird prices
             if (checkUserAutomatic(userMeta, "7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4") == true)
             {
-                MetahuristicDone = priceMetahuristics();
+                MetahuristicDone = priceMetahuristics(1.25);
 
             }
 
@@ -378,8 +378,9 @@ namespace LoCoMPro.Pages
 
         /// <summary>
         /// Apply the metahuristic in the registers
+        /// <param name="threshold">Threshold for abnormal prices.</param>
         /// </summary>
-        public bool priceMetahuristics()
+        public bool priceMetahuristics(double threshold)
         {
             //  Define a amosunt of registers var
             int amountRegisters;
@@ -397,7 +398,7 @@ namespace LoCoMPro.Pages
                     double averagePrice = _context.GetProductValue(r.ProductName, r.StoreName, r.CantonName, r.ProvinciaName);
 
                     // Set a threshold for abnormal prices
-                    double threshold = 1.25; // prices that are 1.25 times higher or lower than the average as abnormal
+                    double thresholdgiven = threshold; // prices that are 1.25 times higher or lower than the average as abnormal
 
                     // Check if the price is abnormally low or high
                     if (r.Price < averagePrice / threshold || r.Price > averagePrice * threshold)
