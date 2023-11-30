@@ -24,7 +24,6 @@ namespace functional_tests
             var email = "prueba123@gmail.com";
             var password = "Prueba123!";
             test.SingIn(email, password);
-            test.ChangeUrl("https://localhost:7119");
 
             driver.FindElement(By.Id("usr-logged")).Click();
             driver.FindElement(By.Id("perfil-button")).Click();
