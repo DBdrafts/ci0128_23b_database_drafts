@@ -25,6 +25,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('Success:', response);
             });
 
+            this.on("addedfile", function (file) {
+
+                var validFiles = myDropzone.files.filter(function (f) {
+                    return f.status !== 'error';
+                });
+
+                if (validFiles.length > maxImages) {
+                    showFeedbackMessage('El límite de imágenes permitidas es ' + maxImages + ' máximo.', 'feedbackMessage');
+                    this.removeFile(file);
+                }
+            });
+
             this.on("sending", function (file, xhr, formData) {
                 // Set XSRF token for the request
                 var csrfToken = $('input:hidden[name="__RequestVerificationToken"]').val();
