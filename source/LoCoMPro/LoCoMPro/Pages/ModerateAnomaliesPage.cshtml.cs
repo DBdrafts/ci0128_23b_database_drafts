@@ -167,7 +167,6 @@ namespace LoCoMPro.Pages
             string reporterId = values[0], contributorId = values[1], productName = values[2],
                 storeName = values[3], submitionDate = values[4], cantonName = values[5],
                 provinceName = values[6], reportDate = values[7];
-            int reportState = int.Parse(values[8]);
 
             // Parse date strings into DateTime objects.
             DateTime reportSubmitDate = DateTime.Parse(reportDate);
@@ -202,7 +201,6 @@ namespace LoCoMPro.Pages
             string reporterId = values[0], contributorId = values[1], productName = values[2],
                 storeName = values[3], submitionDate = values[4], cantonName = values[5],
                 provinceName = values[6], reportDate = values[7];
-            int reportState = int.Parse(values[8]);
 
             // Parse date strings into DateTime objects.
             DateTime reportSubmitDate = DateTime.Parse(reportDate);

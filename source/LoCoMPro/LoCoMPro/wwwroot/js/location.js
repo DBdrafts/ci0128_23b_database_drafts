@@ -265,7 +265,6 @@ function saveLocation() {
         }
     } else if (window.location.href.includes("/UserInfoPage")) {
         $("#ubicacion-change").html(`<strong>${selectedProvince}, ${selectedCanton}<strong>`);
-        //showFeedbackMessage('Su lugar de preferencia se ha guardado!', 'feedbackMessage');
         try {
             const response = updateProvinciaToUser(selectedProvince);
             console.log('Province Updated: ', response.message);
@@ -472,7 +471,6 @@ function updateProvinciaToUser(province) {
 }
 
 function setNullToUser() {
-    //showFeedbackMessage('Su lugar de preferencia se ha guardado!', 'feedbackMessage');
     $("#ubicacion-change").html(`<strong>No agregada</strong>`);
     $.ajax({
         type: 'POST',
