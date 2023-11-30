@@ -8,7 +8,7 @@ function openInteractionsPopup(openButton) {
     undoReportLabel = document.getElementById('undo-report-label');
 
     lastReportLabel = document.getElementById('last-report-label');
-    lastReportCommentInput= document.getElementById('last-report-comment');
+    lastReportCommentInput = document.getElementById('last-report-comment');
 
     interactionsPopup.style.display = 'block';
     reportIcon = document.getElementById('reportIcon');
@@ -24,9 +24,10 @@ function openInteractionsPopup(openButton) {
     document.getElementById('popup-userName').textContent = userName;
     document.getElementById('popup-comment').textContent = (comment !== null && comment !== '') ? comment : "N/A";
 
+    
     // Set the images data
     var imagesData = openButton.getAttribute('images-register-id').split(String.fromCharCode(31));
-
+    var
     // Load the images in the pop up
     loadRegisterImages(imagesData)
 
@@ -35,6 +36,7 @@ function openInteractionsPopup(openButton) {
 
     // Set the information of the report button
     setReportedValue();
+
     // Sets the information for the review function and report
     setReviewedValue(lastReviewValue);   
 }
@@ -376,8 +378,22 @@ function save_reviewed_state(value) {
 function setReviewedValue(lastReviewValue) {
     // If the user has already made a review
     reviewedValue = lastReviewValue == null ? 0 : lastReviewValue;
-    registerReviewed = false;
-    highlight_star(reviewedValue);
+    $.ajax({
+        url: '/ProductPage/1?handler=CheckLastRaiting',
+        type: 'GET',
+        data: { registerKeys: registerKeys },
+        success: function (data) {
+            hasReviewd = data.hasReviewed;
+            if (hasReviewd) {
+                reviewedValue = data.previousReview;
+              }
+            registerReviewed = false;
+            highlight_star(reviewedValue);
+        },
+        error: function (error) {
+            console.error('Error report status verification: ' + error);
+        }
+    });
 }
 
 
@@ -394,8 +410,8 @@ function copyRegisterValidation(registerNumber) {
 }
 
 // export functions for tests
-module.exports = {
-    toggleReport,
-    closeInteractionsPopup,
-    setElementDisplay
-};
+//module.exports = {
+//    toggleReport,
+//    closeInteractionsPopup,
+//    setElementDisplay
+//};

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Win32;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -120,6 +121,11 @@ namespace LoCoMPro.Pages
         /// Average review value of the registers
         /// </summary>
         public IList<float> registerAverageReview { get; set; }
+
+        /// <summary>
+        /// Number of reviews a register has
+        /// </summary>
+        public IList<int> registerReviewCount {  get; set; }
 
         /// <summary>
         /// Number of results.
@@ -291,10 +297,15 @@ namespace LoCoMPro.Pages
         public void ObtainAverageReviewValues()
         {
             registerAverageReview = new List<float>();
+            registerReviewCount = new List<int>();
             // Gets the average value for each register
             foreach (Register register in Registers) {
                 registerAverageReview.Add(_context.GetAverageReviewValue(register.ContributorId
                     , register.ProductName, register.StoreName, register.SubmitionDate));
+                registerReviewCount.Add(_context.Reviews.Count(r => r.ContributorId == register.ContributorId
+                    && r.ProductName == register.ProductName
+                    && r.StoreName == register.StoreName
+                    && r.SubmitionDate == register.SubmitionDate));
             }
         }
 
@@ -566,6 +577,21 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
+        /// Returns the previous review if the user has already made one for that register.
+        /// </summary>
+        /// <param name="user">User to check if they have already made a report to the register.</param>
+        /// <param name="register">Register to check if the user has already made a report.</param>
+        /// <returns>The review that the user made or null if the user has not made one.</returns>
+        private Review? PreviousReview(User user, Register register)
+        {
+            return _context.Reviews.FirstOrDefault(r => r.ReviewerId == user!.Id
+                && r.ProductName == register.ProductName
+                && r.StoreName == register.StoreName
+                && r.ReviewedRegister.SubmitionDate == register.SubmitionDate
+                && r.ContributorId == register.ContributorId);
+        }
+
+        /// <summary>
         /// Handle a review made by a user about a register.
         /// </summary>
         /// <param name="user">User that made the review.</param>
@@ -695,6 +721,34 @@ namespace LoCoMPro.Pages
                 }
             }
             return new JsonResult(new { hasReported, previousReportComment });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="registerKeys"></param>
+        /// <returns></returns>
+        public JsonResult OnGetCheckLastRaiting(string registerKeys)
+        {
+            var (user, registerToUpdate, _) = GetInteractionValues(registerKeys);
+            bool hasReviewed = false;
+            float? previousReview = null;
+            int reviewCount = 0;
+            if (user != null)
+            {
+                var review = PreviousReview(user!, registerToUpdate);
+                if (review != null)
+                {
+                    hasReviewed = true;
+                    previousReview = review.ReviewValue;
+                    reviewCount = _context.Reviews.Count(r => r.ReviewerId == review.ReviewerId
+                        && r.ProductName == review.ProductName
+                        && r.StoreName == review.StoreName
+                        && r.SubmitionDate == review.SubmitionDate
+                        && r.ContributorId == review.ContributorId);
+                }
+            }
+            return new JsonResult(new { hasReviewed, previousReview, reviewCount });
         }
     }
 }
