@@ -292,6 +292,12 @@
     font-size: medium;
 }
 
+.veracity-star-count {
+    color: black;
+    font-size: 26px;
+    display: inline-block;
+}
+
 /* Style for the register block text*/
 .register-column {
     display: inline-block;
@@ -579,7 +585,7 @@
 
 /* Style for the veracity stars */
 .veracity-stars {
-    width: auto;
+    width: 100%;
     display: inline-block;
     font-size: 30px;
     color: #F5AA38;

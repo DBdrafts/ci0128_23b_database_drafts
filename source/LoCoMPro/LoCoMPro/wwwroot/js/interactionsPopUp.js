@@ -245,7 +245,7 @@ function updateRegisterRating(registerNumber, registerKeys) {
             var reviewCount = data.reviewCount;
 
             highlight_star(rating, register_veracity);
-            $("#register_review_count_" + registerNumber).val(reviewCount).text(reviewCount);
+            $("#register_review_count_" + registerNumber).val(reviewCount).text(`(${reviewCount})`);
         },
         error: function (error) {
             console.error('Error report status verification: ' + error);
