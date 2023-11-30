@@ -8,7 +8,7 @@ function openInteractionsPopup(openButton) {
     undoReportLabel = document.getElementById('undo-report-label');
 
     lastReportLabel = document.getElementById('last-report-label');
-    lastReportCommentInput= document.getElementById('last-report-comment');
+    lastReportCommentInput = document.getElementById('last-report-comment');
 
     interactionsPopup.style.display = 'block';
     reportIcon = document.getElementById('reportIcon');
@@ -36,7 +36,7 @@ function openInteractionsPopup(openButton) {
     // Set the information of the report button
     setReportedValue();
     // Sets the information for the review function and report
-    setReviewedValue(lastReviewValue);   
+    setReviewedValue(lastReviewValue);
 }
 
 
@@ -268,7 +268,7 @@ function hideReport(reportNumber) {
 /// The moderator rejects the report, hiding the report and setting its ReportState to 0
 /// </summary>
 function rejectReport() {
-    
+
     $.ajax({
         type: 'POST',
         url: '/ModeratePage?handler=RejectReport',
@@ -289,7 +289,7 @@ function rejectReport() {
         }
     });
     closeInteractionsPopupMod();
-} 
+}
 
 function updateReportList() {
     var reportCount = parseInt(document.getElementById("report-count").textContent);
@@ -401,7 +401,7 @@ function acceptRegisterAnormal() {
     $.ajax({
         type: 'POST',
         url: '/ModerateAnomaliesPage?handler=AcceptReport',
-        
+
         beforeSend: function (xhr) {
             xhr.setRequestHeader("XSRF-TOKEN",
                 $('input:hidden[name="__RequestVerificationToken"]').val());
@@ -418,7 +418,7 @@ function acceptRegisterAnormal() {
             showFeedbackMessage('Error al aceptar el reporte ', 'feedbackMessage');
         }
     });
-    closeInteractionsPopup();
+    closeInteractionsPopupMod();
 }
 
 /// <summary>
@@ -444,9 +444,8 @@ function rejectRegisterAnormal() {
             showFeedbackMessage('Error al rechazar el reporte ', 'feedbackMessage');
         }
     });
-    closeInteractionsPopup();
+    closeInteractionsPopupMod();
 } 
-}
 
 // export functions for tests
 module.exports = {
