@@ -15,7 +15,7 @@ namespace LoCoMPro.Pages
     {
         private readonly UserManager<User> _userManager;
 
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor? _httpContextAccessor;
 
         /// <summary>
         /// Reference to the user product list
@@ -39,13 +39,14 @@ namespace LoCoMPro.Pages
         /// <param name="context">DB Context to pull data from.</param>
         /// <param name="configuration">Configuration for page.</param>
         /// <param name="httpContextAccessor">Allow access to the http context
+        /// <param name="userManager">User manager to handle user permissions.</param>
         public ProductListPageModel(LoCoMProContext context, IConfiguration configuration
             , IHttpContextAccessor? httpContextAccessor, UserManager<User> userManager)
             : base(context, configuration)
         {
             _httpContextAccessor = httpContextAccessor;
 
-            if (httpContextAccessor != null)
+            if (_httpContextAccessor != null)
             {
                 _userProductList = new UserProductList(_httpContextAccessor);
             }
@@ -62,8 +63,11 @@ namespace LoCoMPro.Pages
         /// <returns></returns>
         public async Task OnGetAsync()
         {
-            // Set the flag if the user has choose a location
-            User actualUser = await _userManager.GetUserAsync(User);
+            User? actualUser = null;
+            if (User != null && _userManager != null)
+            {
+                actualUser = (await _userManager.GetUserAsync(User))!;
+            }
             if (actualUser != null)
             {
                 _userProductList.SetListName(actualUser.Id);
@@ -80,7 +84,10 @@ namespace LoCoMPro.Pages
         /// </summary>
         public IActionResult OnPostRemoveFromProductList(string productData)
         {
-            _userProductList.SetListName(_userManager.GetUserId(User));
+            if (User != null && _userManager != null)
+            {
+                _userProductList.SetListName(_userManager.GetUserId(User)!);
+            }
 
             // Gets and split the data
             string[] values = SplitString(productData, '\x1F');
@@ -96,28 +103,6 @@ namespace LoCoMPro.Pages
             }
 
             return new JsonResult("OK");
-        }
-
-        /// <summary>
-        /// Convert a string that contains a int to a int
-        /// </summary>
-        /// <param name="culture">The culture rules that are going to be use.</param>
-        /// <param name="stringToNormalize">String to convert to int.</param>
-        /// <returns>The int converted from the string.</returns>
-        internal int ConvertIntFromString(CultureInfo culture, string stringToNormalize)
-        {
-            // Standardize the string that contains a int  
-            string normalizedString = Regex.Replace(stringToNormalize, @"[^\d]", "");
-
-            int intFromString = 0;
-
-            // Tries to parse to int
-            if (int.TryParse(normalizedString, NumberStyles.Number, culture, out int avgPrice))
-            {
-                intFromString = avgPrice;
-            }
-
-            return intFromString;
         }
 
         /// <summary>

@@ -16,32 +16,6 @@ namespace UserProductListTest
     // Declaration of the test class
     public class RazorPageTests : BaseTest
     {
-        /*[Test]
-        public void CompareElementsInList()
-        {
-            var httpContextAccessor = new Mock<IHttpContextAccessor>();
-            //var mockHttpContext = new Mock<HttpContext>();
-            //var mockSession = new Mock<ISession>();
-
-            //mockHttpContext.SetupGet(c => c.Session).Returns(mockSession.Object);
-            //mockHttpContextAccessor.SetupGet(a => a.HttpContext).Returns(mockHttpContext.Object);
-
-            //httpContextAccessor.Setup(x => x.HttpContext).Returns(context);
-
-            //httpContextAccessor.Setup(x => x.HttpContext.Session).Returns(session.Object);
-            //session.Setup(x => x.GetString("UserProductList")).Returns("serializedList");
-
-
-            var userProductList = new UserProductList(httpContextAccessor.Object);
-
-            userProductList.AddProductToList(CreateElementTest());
-
-            var testProductList = userProductList.GetUserProductList();
-
-            Assert.IsNotNull(testProductList);
-            Assert.AreEqual(1, testProductList.Count);
-
-        }*/
 
         // Test by Julio Alejandro Rodríguez Salguera C16717 | Sprint 2
         [Test]

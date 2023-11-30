@@ -14,7 +14,7 @@ namespace LoCoMPro.Pages
     {
         private readonly UserManager<User> _userManager;
 
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor? _httpContextAccessor;
 
         /// <summary>
         /// Reference that give access to the user product list
@@ -29,7 +29,7 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// List with products in the list of the user
         /// </summary>
-        public IList<Product> WantedProducts { get; set; }
+        public IList<Product> WantedProducts { get; set; } = new List<Product>();
 
         /// <summary>
         /// Structure that bind the stores with the products that sells
@@ -52,13 +52,14 @@ namespace LoCoMPro.Pages
         /// <param name="context">DB Context to pull data from.</param>
         /// <param name="configuration">Configuration for page.</param>
         /// <param name="httpContextAccessor">Allow access to the http context
+        /// <param name="userManager">User manager to handle user permissions.</param>
         public ListReportPageModel(LoCoMProContext context, IConfiguration configuration
             , IHttpContextAccessor? httpContextAccessor, UserManager<User> userManager)
             : base(context, configuration)
         {
             _httpContextAccessor = httpContextAccessor;
 
-            if (httpContextAccessor != null)
+            if (_httpContextAccessor != null)
             {
                 userProductListAccessor = new UserProductList(_httpContextAccessor);
             }
@@ -75,8 +76,11 @@ namespace LoCoMPro.Pages
         /// <returns>Task</returns>
         public async Task OnGetAsync()
         {
-            // Get the user in the page
-            UserInPage = await _userManager.GetUserAsync(User);
+            if (User != null && _userManager != null)
+            {
+                // Get the user in the page
+                UserInPage = (await _userManager.GetUserAsync(User))!;
+            }
 
             if (UserInPage != null) {
                 userProductListAccessor.SetListName(UserInPage.Id);
@@ -104,7 +108,7 @@ namespace LoCoMPro.Pages
                 var stores = from s in _context.Stores select s;
 
                 // Adds a product to the list of the stores that sells it
-                AddToProductStores(product, stores.Where(x => x.Products.Contains(product)).ToList());
+                AddToProductStores(product, stores.Where(x => x.Products!.Contains(product)).ToList());
             }
         }
 
@@ -131,7 +135,7 @@ namespace LoCoMPro.Pages
             foreach(var store in Stores)
             {
                 var register = from r in _context.Registers
-                               where r.Reports.All(report => report.ReportState != 2)
+                               where r.Reports!.All(report => report.ReportState != 2)
                                select r;
 
                 Register registerFromStore = register.Where(x => x.Product == product
@@ -139,17 +143,17 @@ namespace LoCoMPro.Pages
 
                 if (registerFromStore != null)
                 {
-                    // If the store was already stored
-                    if(StoreProducts.ContainsKey(store))
+                    if (StoreProducts.TryGetValue(store, out var productList))
                     {
-                        // Only add the product
-                        StoreProducts[store].Add(registerFromStore);
+                        // Store already exists, add the product to the existing list
+                        productList.Add(registerFromStore);
                     }
                     else
                     {
-                        // Add the store and add the product to the list
+                        // Store doesn't exist, add the store and the product to a new list
                         StoreProducts.Add(store, new List<Register> { registerFromStore });
                     }
+
                 }
             }
         }

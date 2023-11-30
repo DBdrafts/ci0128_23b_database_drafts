@@ -27,17 +27,14 @@
             </div>
         </div>
 
-        @if (Model.HasUserLocation)
-        {
-            <a style='display: @(Model.UserProductList.Count != 0 ? "inline-block" : "none")'
-                    class="information-button-section" method="get" asp-page="/ListReportPage">
-                <button type="button" class="button-general" id="generate-report-button">
-                    Generar reporte
-                    <i class="fa fa-list" aria-hidden="true"></i>
-                </button>
-            </a>
-        }
-        else
+        <a style='display: @(Model.UserProductList.Count != 0 ? "inline-block" : "none")'
+                class="information-button-section" method="get" asp-page="/ListReportPage">
+            <button type="button" class="button-general" id="generate-report-button">
+                Generar reporte
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </button>
+        </a>
+        @if (!Model.HasUserLocation)
         {
             <div class="location-message" id="location-message-text" 
                     style='display: @(Model.UserProductList.Count != 0 ? "inline-block" : "none")'>
@@ -73,6 +70,8 @@
                 </li>
             </ul>
         </nav>
+
+        <div id="product-count" hidden>@Model.UserProductList.Count</div>
 
         <ul class="product-list-section">
             @for (int i = 0; i < Model.UserProductList.Count; i++)
