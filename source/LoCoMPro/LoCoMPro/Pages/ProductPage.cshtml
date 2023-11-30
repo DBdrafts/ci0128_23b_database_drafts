@@ -217,9 +217,9 @@
                         <span id="register_veracity_@i">
                             @{ViewBag.VeracityValue = veracityValue;}
                             @await Html.PartialAsync("_VeracityStars") 
-                            <span class="veracity-star-count" id="register_review_count_@i" value="@Model.registerReviewCount[i]">(@Model.registerReviewCount[i])</span>
                         </span>
                     </div>
+                    <span class="veracity-star-count" id="register_review_count_@i" value="@Model.registerReviewCount[i]">(@Model.registerReviewCount[i])</span>
                 </div>
                 <div class="interaction-button">
                     <button class="open-interactions-button" id="open-popup-button-@i" data-register-id="@registerKeys"
