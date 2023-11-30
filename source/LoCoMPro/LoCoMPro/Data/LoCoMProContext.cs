@@ -332,6 +332,20 @@ namespace LoCoMPro.Data
         }
 
         /// <summary>
+        /// Gets the Review count for a register.
+        /// </summary>
+        /// <param name="register"></param>
+        /// <returns></returns>
+        public int GetReviewCount(Register register)
+        {
+            return this.Reviews.Count(r => r.ReviewedRegister.ContributorId == register.ContributorId
+                        && r.ReviewedRegister.ProductName == register.ProductName
+                        && r.ReviewedRegister.StoreName == register.StoreName
+                        && r.ReviewedRegister.SubmitionDate == register.SubmitionDate
+                        && r.ReviewedRegister.ContributorId == register.ContributorId);
+        }
+
+        /// <summary>
         /// Gets the user rating by averaging the review values on their registers.
         /// </summary>
         /// <param name="UserId">The Id of the user.</param>

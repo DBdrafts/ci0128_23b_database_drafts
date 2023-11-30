@@ -23,13 +23,13 @@ function openInteractionsPopup(openButton) {
     document.getElementById('popup-price').textContent = '₡' + price;
     document.getElementById('popup-userName').textContent = userName;
     document.getElementById('popup-comment').textContent = (comment !== null && comment !== '') ? comment : "N/A";
-
+    document.getElementById('saveButton').value = registerNumber;
     
     // Set the images data
     var imagesData = openButton.getAttribute('images-register-id').split(String.fromCharCode(31));
-    var
+
     // Load the images in the pop up
-    loadRegisterImages(imagesData)
+    loadRegisterImages(imagesData);
 
     // Copies the validation star of the register
     copyRegisterValidation(registerNumber);
@@ -217,6 +217,9 @@ function saveInteractions() {
                         showFeedbackMessage('Su valoración se ha realizado correctamente!', 'feedbackMessage');
                     }
                 }
+                if (registerReviewed) {
+                    updateRegisterRating($("#saveButton").val(), registerKeys);
+                }
             },
             error: function (error) {
                 console.error('Error saving report: ' + error);
@@ -226,6 +229,28 @@ function saveInteractions() {
         });
     }
     closeInteractionsPopup();
+}
+
+///<summary>
+/// This methods updates the register rating if the user just rated a register.
+///</summary
+function updateRegisterRating(registerNumber, registerKeys) {
+    var register_veracity = $("#register_veracity_" + registerNumber).find('.veracity-stars-section');
+    $.ajax({
+        url: '/ProductPage/1?handler=AverageRegisterRating',
+        type: 'GET',
+        data: { registerKeys: registerKeys },
+        success: function (data) {
+            var rating = data.rating;
+            var reviewCount = data.reviewCount;
+
+            highlight_star(rating, register_veracity);
+            $("#register_review_count_" + registerNumber).val(reviewCount).text(reviewCount);
+        },
+        error: function (error) {
+            console.error('Error report status verification: ' + error);
+        }
+    });
 }
 
 /// <summary>
@@ -345,21 +370,59 @@ if (typeof jQuery !== 'undefined') {
     });
 }
 
+
+//function highlight_star(rating, rating_stars = '.rating_stars span.s') {
+//    // If the user has already made a review
+//    if (rating == 0 && reviewedValue != 0) {
+//        rating = reviewedValue;
+//    }
+//    $(rating_stars).each(function () {
+//        var low = $(this).data('low');
+//        var high = $(this).data('high');
+//        $(this).removeClass('active-high').removeClass('active-low');
+//        if (rating >= high) $(this).addClass('active-high');
+//        else if (rating == low) $(this).addClass('active-low');
+//    });
+//}
+
 /// <summary>
-/// Set the amount of stars highlighted 
+/// Highlights the stars with corresponding rating.
 /// </summary>
-function highlight_star(rating) {
+function highlight_star(rating, rating_stars = '.rating_stars span.s') {
     // If the user has already made a review
     if (rating == 0 && reviewedValue != 0) {
         rating = reviewedValue;
     }
-    $('.rating_stars span.s').each(function () {
-        var low = $(this).data('low');
-        var high = $(this).data('high');
-        $(this).removeClass('active-high').removeClass('active-low');
-        if (rating >= high) $(this).addClass('active-high');
-        else if (rating == low) $(this).addClass('active-low');
-    });
+
+    // Check if the rating_stars container has the class 'rating_stars'
+    var isOldStructure = (rating_stars.valueOf() === '.rating_stars span.s');
+
+    if (isOldStructure) {
+        // Handle the original structure
+        $(rating_stars).each(function () {
+            var low = $(this).data('low');
+            var high = $(this).data('high');
+            $(this).removeClass('active-high').removeClass('active-low');
+            if (rating >= high) $(this).addClass('active-high');
+            else if (rating == low) $(this).addClass('active-low');
+        });
+    } else {
+        // Handle the new structure
+        // You may need to adjust this based on the specific structure of your new HTML
+        // Iterate through each star icon
+        rating_stars.find('i').each(function (index) {
+            var currentStarIndex = index + 1; // Adjust index to start from 1
+
+            // Determine the appropriate classes based on the rating
+            if (currentStarIndex <= rating) {
+                $(this).removeClass('fa-star-o fa-star-half-o').addClass('fa-star');
+            } else if (currentStarIndex - 0.5 == rating) {
+                $(this).removeClass('fa-star-o fa-star').addClass('fa-star-half-o');
+            } else {
+                $(this).removeClass('fa-star fa-star-half-o').addClass('fa-star-o');
+            }
+        });
+    }
 }
 
 /// <summary>
@@ -409,9 +472,9 @@ function copyRegisterValidation(registerNumber) {
     $("#popup-veracity").html(veracityContent);
 }
 
-// export functions for tests
-//module.exports = {
-//    toggleReport,
-//    closeInteractionsPopup,
-//    setElementDisplay
-//};
+//export functions for tests
+module.exports = {
+    toggleReport,
+    closeInteractionsPopup,
+    setElementDisplay
+};

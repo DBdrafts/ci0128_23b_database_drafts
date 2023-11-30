@@ -299,13 +299,11 @@ namespace LoCoMPro.Pages
             registerAverageReview = new List<float>();
             registerReviewCount = new List<int>();
             // Gets the average value for each register
-            foreach (Register register in Registers) {
+            foreach (Register register in Registers!)
+            {
                 registerAverageReview.Add(_context.GetAverageReviewValue(register.ContributorId
                     , register.ProductName, register.StoreName, register.SubmitionDate));
-                registerReviewCount.Add(_context.Reviews.Count(r => r.ContributorId == register.ContributorId
-                    && r.ProductName == register.ProductName
-                    && r.StoreName == register.StoreName
-                    && r.SubmitionDate == register.SubmitionDate));
+                registerReviewCount.Add(_context.GetReviewCount(register));
             }
         }
 
@@ -702,28 +700,6 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
-        /// Check if the user had already made a report for the register
-        /// <param name="registerKeys">Keys to identificate the register to check </param>
-        /// <returns> a JsonResult with the boolean result.</returns>
-        /// </summary>
-        public JsonResult OnGetCheckReportStatus(string registerKeys)
-        {
-            var (user, registerToUpdate, _) = GetInteractionValues(registerKeys);
-            bool hasReported = false;
-            string? previousReportComment = null;
-            if (user != null)
-            {
-                var report = PreviousReport(user!, registerToUpdate);
-                if (report != null)
-                {
-                    hasReported = true;
-                    previousReportComment = report.Reason;
-                }
-            }
-            return new JsonResult(new { hasReported, previousReportComment });
-        }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="registerKeys"></param>
@@ -733,7 +709,6 @@ namespace LoCoMPro.Pages
             var (user, registerToUpdate, _) = GetInteractionValues(registerKeys);
             bool hasReviewed = false;
             float? previousReview = null;
-            int reviewCount = 0;
             if (user != null)
             {
                 var review = PreviousReview(user!, registerToUpdate);
@@ -741,14 +716,27 @@ namespace LoCoMPro.Pages
                 {
                     hasReviewed = true;
                     previousReview = review.ReviewValue;
-                    reviewCount = _context.Reviews.Count(r => r.ReviewerId == review.ReviewerId
-                        && r.ProductName == review.ProductName
-                        && r.StoreName == review.StoreName
-                        && r.SubmitionDate == review.SubmitionDate
-                        && r.ContributorId == review.ContributorId);
                 }
             }
-            return new JsonResult(new { hasReviewed, previousReview, reviewCount });
+            return new JsonResult(new { hasReviewed, previousReview });
+        }
+
+        /// <summary>
+        /// DD
+        /// </summary>
+        /// <param name="registerKeys"></param>
+        /// <returns></returns>
+        public JsonResult OnGetAverageRegisterRating(string registerKeys)
+        {
+            var (_, register, _) = GetInteractionValues(registerKeys);
+            float rating = 0.0f;
+            int reviewCount = 0;
+            if (register != null)
+            {
+                rating = _context.GetAverageReviewValue(register.ContributorId!, register.ProductName!, register.StoreName!, register.SubmitionDate);
+                reviewCount = _context.GetReviewCount(register);
+            }
+            return new JsonResult(new { rating, reviewCount });
         }
     }
 }
