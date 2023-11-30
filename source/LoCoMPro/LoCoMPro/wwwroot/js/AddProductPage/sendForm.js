@@ -25,6 +25,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('Success:', response);
             });
 
+            this.on("addedfile", function (file) {
+
+                var validFiles = myDropzone.files.filter(function (f) {
+                    return f.status !== 'error';
+                });
+
+                if (validFiles.length > maxImages) {
+                    showFeedbackMessage('El límite de imágenes permitidas es ' + maxImages + ' máximo.', 'feedbackMessage');
+                    this.removeFile(file);
+                }
+            });
+
             this.on("sending", function (file, xhr, formData) {
                 // Set XSRF token for the request
                 var csrfToken = $('input:hidden[name="__RequestVerificationToken"]').val();
@@ -106,6 +118,31 @@ document.addEventListener('DOMContentLoaded', function () {
             showFeedbackMessage('Por favor, seleccione solo archivos de imagen', 'feedbackMessage');
         }
 
+        var duplicateFileNames = findDuplicateFileNames(myDropzone.files);
+
+        if (duplicateFileNames.length > 0) {
+            isValid = false;
+            var message = 'No se permite enviar imágenes con el mismo nombre: ' + duplicateFileNames.join(', ');
+            showFeedbackMessage(message, 'feedbackMessage');
+        }
+
         return isValid;
+    }
+
+    // Find duplicate image names
+    function findDuplicateFileNames(files) {
+        var fileNames = {};
+        var duplicateFileNames = [];
+
+        files.forEach(function (file) {
+            var fileName = file.name;
+            if (fileNames[fileName]) {
+                duplicateFileNames.push(fileName);
+            } else {
+                fileNames[fileName] = true;
+            }
+        });
+
+        return duplicateFileNames;
     }
 });
