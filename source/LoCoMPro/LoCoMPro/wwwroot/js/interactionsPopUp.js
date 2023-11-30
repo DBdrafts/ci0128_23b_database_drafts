@@ -48,9 +48,9 @@ function openInteractionsPopupMod(openButton) {
 
     // Gets the register data
     var [_, _, ProductName, StoreName, SubmitionDate, _, _, _, _, reporterName, contributorName,
-        price, registerNumber, comment] = reportData.split(String.fromCharCode(31));
+        price, registerNumber, comment, reportReason] = reportData.split(String.fromCharCode(31));
 
- 
+
     // Sets the register data
     document.getElementById('popup-contributorName').textContent = contributorName;
     document.getElementById('popup-submitionDate').textContent = SubmitionDate;
@@ -59,7 +59,7 @@ function openInteractionsPopupMod(openButton) {
     document.getElementById('popup-price').textContent = '₡' + price;
     document.getElementById('popup-comment').textContent = comment;
     document.getElementById('popup-reporterName').textContent = reporterName;
-
+    document.getElementById('popup-report-comment').innerHTML = reportReason !== '' ? reportReason : '-No especificado-';
     // Set the images data
     var imagesData = openButton.getAttribute('images-register-id').split(String.fromCharCode(31));
 
@@ -69,6 +69,12 @@ function openInteractionsPopupMod(openButton) {
     // Load the images in the pop up
     loadRegisterImages(imagesData)
 }
+
+function closeInteractionsPopupMod() {
+    var popup = document.querySelector('.interactions-popup');
+    popup.style.display = 'none';
+}
+
 
 /// <summary>
 /// Add the images to the Pop Up
@@ -244,7 +250,7 @@ function acceptReport() {
             showFeedbackMessage('Error al aceptar el reporte ', 'feedbackMessage');
         }
     });
-    closeInteractionsPopup();
+    closeInteractionsPopupMod();
 }
 
 /// <summary>
@@ -282,7 +288,7 @@ function rejectReport() {
             showFeedbackMessage('Error al rechazar el reporte ', 'feedbackMessage');
         }
     });
-    closeInteractionsPopup();
+    closeInteractionsPopupMod();
 } 
 
 function updateReportList() {
