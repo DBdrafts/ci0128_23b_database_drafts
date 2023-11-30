@@ -68,13 +68,18 @@ $(document).ready(function () {
     fillCantonMapping();
     // Retrieve variable
     const savedlocation = sessionStorage.getItem('selectedLocation');
-    if (savedlocation != null && savedlocation !== "") {
-        loadLocation(savedlocation);
+    const locationButtonText = sessionStorage.getItem('locationButtonText');
+    if (!currentPageUrl.includes("/AddProductPage") && validateSessionData(savedlocation, locationButtonText)) {
+        loadLocation(savedlocation, locationButtonText);
     }
     
 });
 
-function loadLocation(savedlocation) {
+function validateSessionData(savedlocation, locationButtonText) {
+    return (savedlocation != null && savedlocation !== "" && locationButtonText != null && locationButtonText !== "");
+}
+
+function loadLocation(savedlocation, locationButtonText) {
     const parsedValue = JSON.parse(savedlocation);
     selectedLocation = new google.maps.LatLng({
         lat: parsedValue.lat,
@@ -82,6 +87,7 @@ function loadLocation(savedlocation) {
     });
     $("#latitude").val(selectedLocation.lat);
     $("#longitude").val(selectedLocation.lng);
+    $("#buttonSpan").text(locationButtonText);
     reverseGeocodeLocation(selectedLocation);
 }
 
@@ -273,11 +279,13 @@ function reverseGeocodeLocation(location) {
 
 function saveLocation() {
     sessionStorage.removeItem('selectedLocation');
+    sessionStorage.removeItem('locationButtonText');
     var text = getLocationButtonText(selectedProvince, selectedCanton);
     $("#buttonSpan").text(text);
 
     if (selectedProvince !== "" || selectedProvince == null) {
         sessionStorage.setItem('selectedLocation', JSON.stringify(selectedLocation));
+        sessionStorage.setItem('locationButtonText', text);
         $("#latitude").val(selectedLocation.lat);
         $("#longitude").val(selectedLocation.lng);
     } else {
@@ -381,8 +389,6 @@ function populateCantonSelect(province) {
                 const cantonName = found ? selectedCanton : "";
                 $("#canton").val(cantonName);
                 $("#chosenCanton").text(cantonName);
-                var text = getLocationButtonText(province, cantonName);
-                $("#buttonSpan").text(text);
             }
         })
         .catch(error => {
@@ -528,8 +534,3 @@ function setNullToUser() {
     });
 
 }
-
-// export functions for tests
-module.exports = {
-    loadLocation
-};
