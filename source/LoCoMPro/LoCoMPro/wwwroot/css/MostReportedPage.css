@@ -1,4 +1,4 @@
-﻿.most-reports-page-body {
+﻿.most-reported-page-body {
     width: 100%;
     min-width: 1200px;
     height: auto;
@@ -22,17 +22,17 @@
     min-width: 950px;
 }
 
-    /* Style for search title columns */
-    .container-List-User-Columns li {
-        font-size: x-large;
-        text-align: center;
-    }
+/* Style for search title columns */
+.container-List-User-Columns li {
+    font-size: x-large;
+    text-align: center;
+}
 
-    /* Style for columns */
-    .container-List-User-Columns ul {
-        margin: 0px;
-        padding: 0px;
-    }
+/* Style for columns */
+.container-List-User-Columns ul {
+    margin: 0px;
+    padding: 0px;
+}
 
 #user-col {
     width: 200px;

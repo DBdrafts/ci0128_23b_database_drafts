@@ -15,16 +15,14 @@
     <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
 </head>
 
-<div class="most-reports-page-body">
-    <h2 class="text-center">Usuarios que más reportan registros</h2>
+<div class="most-reported-page-body">
+    <h2 class="text-center">Usuarios más reportados</h2>
     <hr class="style-four">
     @* <div class="empty-section text-center" id="empty-list"
     style='display: @(Model.Reports.Count == 0 ? "inline-block" : "none")'>
     <h1>¡No hay reportes que revisar!</h1>
     <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
     </div> *@
-
-
 
     <div class="users-section" id="no-empty-list">
         <nav>
@@ -36,10 +34,13 @@
                     <div class="text-Comment">Puntuación</div>
                 </li>
                 <li id="reports-col">
-                    <div class="text-Comment">Reportes realizados</div>
+                    <div class="text-Comment">Aportes realizados</div>
                 </li>
                 <li id="acc-reports-col">
-                    <div class="text-Comment">Reportes aceptados</div>
+                    <div class="text-Comment">Reportes recibidosN</div>
+                </li>
+                <li id="reports-col">
+                    <div class="text-Comment">Aportes ocultosN</div>
                 </li>
             </ul>
         </nav>
@@ -53,16 +54,16 @@
 
                 float userRating = Model.UserRatings[userNum];
 
-                int reportsMade = Model.numberOfReports(user);
+                int reportsMade = Model.numberOfRegisters(user);
 
                 int reportsApproved = Model.numberOfApprovedReports(user);
 
                 <li class="register-block register-block-pagination">
-                    <div class="register-column short-column" id="user-name" value="@userName">
+                    <div class="register-column short-column" id="user-name" value="@userName">  @* Usernames *@
                         @userName
                     </div>
                     <div class="register-section-stars">
-                        <div class="veracity-stars register-column short-column" id="register-veracity" value="@userRating">
+                        <div class="veracity-stars register-column short-column" id="register-veracity" value="@userRating">  @* Rank *@
                             <span id="register_veracity_@userNum">
                                 @{
                                     ViewBag.VeracityValue = userRating;
@@ -71,10 +72,13 @@
                             </span>
                         </div>
                     </div>
-                    <div class="register-column short-column" id="reports-made" value="@reportsMade">
+                    <div class="register-column short-column" id="reports-made" value="@reportsMade"> @* Aports *@
                         @reportsMade
                     </div>
-                    <div class="register-column short-column" id="acc-reports" value="@reportsApproved">
+                    <div class="register-column short-column" id="acc-reports" value="@reportsApproved"> @* Reports *@
+                        @reportsApproved
+                    </div>
+                    <div class="register-column short-column" id="acc-reports" value="@reportsApproved"> @* Hide Aports *@
                         @reportsApproved
                     </div>
                 </li>

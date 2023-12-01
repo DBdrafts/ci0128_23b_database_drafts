@@ -39,6 +39,11 @@ namespace LoCoMPro.Pages
         /// </summary>
         public IList<Report>? Reports { get; set; } = new List<Report>();
 
+        /// <summary>
+        /// List of registers.
+        /// </summary>
+        public IList<Register> Registers { get; set; } = new List<Register>();
+
         public MostReportedPageModel(LoCoMProContext context, IConfiguration configuration,
            UserManager<User> userManager)
            : base(context, configuration)
@@ -51,37 +56,57 @@ namespace LoCoMPro.Pages
         /// </summary>
         public void OnGet()
         {
-            getUsersWhoReportedRegisters();
+            getUsersMoreReported();
             orderListByNumberOfReports(UsersWhoMadeReports);
             getUserRatings();
         }
 
 
-        public int getUsersWhoReportedRegisters()
+        public int getUsersMoreReported()
         {
             int err = -1; // Error getting users who reported
+
+            // Select all users from the _context.Users table
             var users = from u in _context.Users
                         select u;
 
+            // Select all reports from the _context.Reports table
             var reports = from r in _context.Reports
                           select r;
 
+            // Select all registers from the _context.Registers table
+            var registers = from r in _context.Registers
+                            select r;
+
+            // Check if there are no users in the context
             if (!users.Any())
             {
                 System.Diagnostics.Debug.WriteLine("There are no users in this context");
-                return err;
+                return err; // Assuming err is defined somewhere in the code
             }
+
+            // Check if there are no reports in the context
             if (!reports.Any())
             {
                 System.Diagnostics.Debug.WriteLine("There are no reports in this context");
-                return err;
+                return err; // Assuming err is defined somewhere in the code
             }
 
-            Users = users.ToList();
+            // Check if there are no registers in the context
+            if (!registers.Any())
+            {
+                System.Diagnostics.Debug.WriteLine("There are no registers in this context");
+                return err; // Assuming err is defined somewhere in the code
+            }
 
+            // Convert the users, reports and registers query result to a list and assign it to the properties
+            Users = users.ToList();
             Reports = reports.ToList();
+            Registers = registers.ToList();
 
             var usersWhoMadeReports = new List<User>();
+
+
             foreach (var report in reports)
             {
                 var reporter = getReporter(report);
@@ -102,7 +127,7 @@ namespace LoCoMPro.Pages
             UsersWhoMadeReports = usersWhoMadeReports
                 .OrderByDescending(user =>
                 {
-                    int numReports = numberOfReports(user);
+                    int numReports = numberOfRegisters(user);
                     return numReports;
                 }).ThenByDescending(user => user.UserName).ToList();
         }
@@ -160,6 +185,30 @@ namespace LoCoMPro.Pages
             }
             // At this point, UserRatings contains the ratings of all users who made reports
         }
+
+
+        /// <summary>
+        /// Method to calculate the number of registers for a given user  
+        /// </summary>
+        public int numberOfRegisters(User user)
+        {
+            // Initialize the variable to store the number of registers
+            int numRegisters = 0;
+
+            // Filter registers based on the specified user as a contributor
+            var reports = Registers.Where(r => r.Contributor == user);
+
+            // Check if there are any registers for the specified user
+            if (reports.Any())
+            {
+                // If there are, count the number of registers
+                numRegisters = reports.Count();
+            }
+
+            // Return the calculated number of registers
+            return numRegisters;
+        }
+
 
 
 
