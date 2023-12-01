@@ -84,9 +84,21 @@ using (var scope = app.Services.CreateScope())
     DbInitializer.Initialize(context);
 
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = services.GetRequiredService<UserManager<User>>();
+
     if (!await roleManager.RoleExistsAsync("Moderator"))
     {
         await roleManager.CreateAsync(new IdentityRole("Moderator"));
+
+        User moderador = await userManager.FindByIdAsync("498fc1e4-db15-4411-94e3-6511dff4a758");
+        User moderador2 = await userManager.FindByIdAsync("277a7be2-a41d-4d22-bb4c-849a020e64d3");
+        User automatic = await userManager.FindByIdAsync("7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4");
+
+        string role = "Moderator";
+
+        await userManager.AddToRoleAsync(moderador, role);
+        await userManager.AddToRoleAsync(moderador2, role);
+        await userManager.AddToRoleAsync(automatic, role);
     }
 
     var locOptions = services.GetService<IOptions<RequestLocalizationOptions>>();

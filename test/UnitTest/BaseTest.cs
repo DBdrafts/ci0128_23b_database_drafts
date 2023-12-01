@@ -124,6 +124,9 @@ public class BaseTest
             case "product_list":
                 return new ProductListPageModel(dbContext, mockConfiguration.Object, null);
 
+            case "moderate_anormal_registers":
+                return new ModerateAnomaliesPageModel(dbContext, mockConfiguration.Object, mockUserManager.Object);
+
             // Return a base page model
             default:
                 return new LoCoMProPageModel(dbContext, mockConfiguration.Object);

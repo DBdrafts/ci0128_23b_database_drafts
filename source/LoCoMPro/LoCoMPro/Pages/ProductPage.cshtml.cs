@@ -172,6 +172,7 @@ namespace LoCoMPro.Pages
 
             // Initial request for all the registers in the database if the reportState is not 2
             var registers = from r in _context.Registers
+                            where r.Reports.All(report => report.ReportState != 2)
                             select r;
 
             // add the images from every register

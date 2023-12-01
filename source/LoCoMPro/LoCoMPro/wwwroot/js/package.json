@@ -17,5 +17,8 @@
   },
   "jest": {
     "testEnvironment": "jsdom"
+  },
+  "dependencies": {
+    "npm": "^10.2.4"
   }
 }
