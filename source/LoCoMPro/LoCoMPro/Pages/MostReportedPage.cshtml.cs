@@ -57,7 +57,7 @@ namespace LoCoMPro.Pages
         public void OnGet()
         {
             getUsersMoreReported();
-            orderListByNumberOfRegisters(UsersWhoMadeReports);
+            orderListByNumberOfReportsReceived(UsersWhoMadeReports);
             getUserRatings();
         }
 
@@ -125,16 +125,13 @@ namespace LoCoMPro.Pages
             return err;
         }
 
-        public void orderListByNumberOfRegisters(IList<User> usersWhoMadeReports)
+        public void orderListByNumberOfReportsReceived(IList<User> usersWhoMadeReports)
         {
             UsersWhoMadeReports = usersWhoMadeReports
-                .OrderByDescending(user =>
-                {
-                    int numReports = numberOfRegisters(user);
-                    return numReports;
-                }).ThenByDescending(user => user.UserName).ToList();
+                .OrderBy(user => numberOfApprovedReports(user))
+                .ThenBy(user => user.UserName)
+                .ToList();
         }
-
 
 
         public int numberOfReports(User user)
@@ -249,6 +246,25 @@ namespace LoCoMPro.Pages
 
             return numReceivedReports;
         }
+        /// <summary>
+        /// Method to calculate the percentage of rejected records for a given user.
+        /// </summary>
+        public int GetRejectedPercentage(int totalAports, int hiddenAports)
+        {
+            // Check if the denominator (totalAports) is non-zero to avoid division by zero.
+            if (totalAports != 0)
+            {
+                // Calculate the percentage of rejected records.
+                double rejectedPercentage = Math.Round((double)hiddenAports / totalAports * 100);
+                return (int)rejectedPercentage;
+            }
+            else
+            {
+                // If totalAports is zero, the percentage is also zero.
+                return 0;
+            }
+        }
+
 
     }
 }

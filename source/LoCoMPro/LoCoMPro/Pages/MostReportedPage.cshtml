@@ -46,7 +46,7 @@
         </nav>
 
         <ul class="users-result-section">
-            @for (int userNum = 0; userNum < Model.UsersWhoMadeReports.Count; userNum++)
+            @for (int userNum = 0; userNum < Model.UsersWhoMadeReports.Count && userNum <= 4; userNum++)
             {
                 var user = Model.UsersWhoMadeReports[userNum];
 
@@ -56,9 +56,11 @@
 
                 int ApportsMade = Model.numberOfRegisters(user);
 
-                int reportsApproved = Model.numberOfReceivedReports(user);
+                int reportsReceived = Model.numberOfReceivedReports(user);
 
                 int hiddenAports = Model.numberOfHiddenContributions(user);
+
+                int RejectedPercentage = Model.GetRejectedPercentage(ApportsMade, hiddenAports);
 
                 <li class="register-block register-block-pagination">
                     <div class="register-column short-column" id="user-name" value="@userName">  @* Usernames *@
@@ -74,15 +76,15 @@
                             </span>
                         </div>
                     </div>
-                    <div class="register-column short-column" id="acc-reports" value="@reportsApproved"> @* Reports *@
-                        @reportsApproved
+                    <div class="register-column short-column" id="acc-reports" value="@reportsReceived"> @* Reports *@
+                        @reportsReceived
                     </div>
                     <div class="register-column short-column" id="reports-made" value="@ApportsMade">
                         @* Aports *@
                         @ApportsMade
                     </div>
                     <div class="register-column short-column" id="acc-reports" value="@hiddenAports"> @* Hide Aports *@
-                        @hiddenAports
+                        @hiddenAports (@RejectedPercentage %)
                     </div>
                 </li>
             }
