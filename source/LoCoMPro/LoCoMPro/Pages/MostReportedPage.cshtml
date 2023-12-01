@@ -34,13 +34,13 @@
                     <div class="text-Comment">Puntuación</div>
                 </li>
                 <li id="reports-col">
-                    <div class="text-Comment">Aportes realizados</div>
+                    <div class="text-Comment">Reportes recibidos </div>
                 </li>
                 <li id="acc-reports-col">
-                    <div class="text-Comment">Reportes recibidos</div>
+                    <div class="text-Comment">Aportes realizados</div>
                 </li>
                 <li id="reports-col">
-                    <div class="text-Comment">Aportes ocultosN</div>
+                    <div class="text-Comment">Aportes ocultos</div>
                 </li>
             </ul>
         </nav>
@@ -54,9 +54,11 @@
 
                 float userRating = Model.UserRatings[userNum];
 
-                int reportsMade = Model.numberOfRegisters(user);
+                int ApportsMade = Model.numberOfRegisters(user);
 
                 int reportsApproved = Model.numberOfReceivedReports(user);
+
+                int hiddenAports = Model.numberOfHiddenContributions(user);
 
                 <li class="register-block register-block-pagination">
                     <div class="register-column short-column" id="user-name" value="@userName">  @* Usernames *@
@@ -72,14 +74,15 @@
                             </span>
                         </div>
                     </div>
-                    <div class="register-column short-column" id="reports-made" value="@reportsMade"> @* Aports *@
-                        @reportsMade
-                    </div>
                     <div class="register-column short-column" id="acc-reports" value="@reportsApproved"> @* Reports *@
                         @reportsApproved
                     </div>
-                    <div class="register-column short-column" id="acc-reports" value="@reportsApproved"> @* Hide Aports *@
-                        @reportsApproved
+                    <div class="register-column short-column" id="reports-made" value="@ApportsMade">
+                        @* Aports *@
+                        @ApportsMade
+                    </div>
+                    <div class="register-column short-column" id="acc-reports" value="@hiddenAports"> @* Hide Aports *@
+                        @hiddenAports
                     </div>
                 </li>
             }

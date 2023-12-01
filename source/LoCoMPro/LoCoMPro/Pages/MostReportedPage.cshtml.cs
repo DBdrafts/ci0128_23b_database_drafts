@@ -231,5 +231,24 @@ namespace LoCoMPro.Pages
             return users.FirstOrDefault(u => u.Id == report.ContributorId);
         }
 
+        /// <summary>
+        /// Method to calculate the number of registers for a given user  
+        /// </summary>
+        public int numberOfHiddenContributions(User user)
+        {
+            int numReceivedReports = 0;
+
+            var receivedReports = _context.Reports
+                .Where(r => r.ReportedRegister.ContributorId == user.Id)
+                .Where(r => r.ReportState == 2);
+
+            if (receivedReports.Any())
+            {
+                numReceivedReports = receivedReports.Count();
+            }
+
+            return numReceivedReports;
+        }
+
     }
 }
