@@ -159,7 +159,7 @@ namespace functional_tests
         [TearDown]
         public void TearDown()
         {
-            //driver.Quit();
+            driver.Quit();
         }
     }
 }
