@@ -37,7 +37,7 @@
                     <div class="text-Comment">Aportes realizados</div>
                 </li>
                 <li id="acc-reports-col">
-                    <div class="text-Comment">Reportes recibidosN</div>
+                    <div class="text-Comment">Reportes recibidos</div>
                 </li>
                 <li id="reports-col">
                     <div class="text-Comment">Aportes ocultosN</div>
@@ -56,7 +56,7 @@
 
                 int reportsMade = Model.numberOfRegisters(user);
 
-                int reportsApproved = Model.numberOfApprovedReports(user);
+                int reportsApproved = Model.numberOfReceivedReports(user);
 
                 <li class="register-block register-block-pagination">
                     <div class="register-column short-column" id="user-name" value="@userName">  @* Usernames *@

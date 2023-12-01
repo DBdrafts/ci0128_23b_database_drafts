@@ -57,10 +57,9 @@ namespace LoCoMPro.Pages
         public void OnGet()
         {
             getUsersMoreReported();
-            orderListByNumberOfReports(UsersWhoMadeReports);
+            orderListByNumberOfRegisters(UsersWhoMadeReports);
             getUserRatings();
         }
-
 
         public int getUsersMoreReported()
         {
@@ -106,14 +105,18 @@ namespace LoCoMPro.Pages
 
             var usersWhoMadeReports = new List<User>();
 
-
+            // for each report
             foreach (var report in reports)
             {
-                var reporter = getReporter(report);
-                if (reporter != null && !usersWhoMadeReports.Contains(reporter))
+                if (report.ReportState == 1 ||  report.ReportState == 2)
                 {
-                    usersWhoMadeReports.Add(reporter);
+                    var reported = GetReported(report, Users);
+                    if (reported != null && !usersWhoMadeReports.Contains(reported))
+                    {
+                        usersWhoMadeReports.Add(reported);
+                    }
                 }
+
             }
             UsersWhoMadeReports = usersWhoMadeReports;
 
@@ -122,7 +125,7 @@ namespace LoCoMPro.Pages
             return err;
         }
 
-        public void orderListByNumberOfReports(IList<User> usersWhoMadeReports)
+        public void orderListByNumberOfRegisters(IList<User> usersWhoMadeReports)
         {
             UsersWhoMadeReports = usersWhoMadeReports
                 .OrderByDescending(user =>
@@ -132,14 +135,6 @@ namespace LoCoMPro.Pages
                 }).ThenByDescending(user => user.UserName).ToList();
         }
 
-        public User getReporter(Report report)
-        {
-            if (report != null)
-            {
-                return report.Reporter;
-            }
-            return null;
-        }
 
 
         public int numberOfReports(User user)
@@ -209,8 +204,32 @@ namespace LoCoMPro.Pages
             return numRegisters;
         }
 
+        /// <summary>
+        /// Method to calculate the number of registers for a given user  
+        /// </summary>
+        public int numberOfReceivedReports(User user)
+        {
+            int numReceivedReports = 0;
 
+            var receivedReports = _context.Reports
+                .Where(r => r.ReportedRegister.ContributorId == user.Id);
 
+            if (receivedReports.Any())
+            {
+                numReceivedReports = receivedReports.Count();
+            }
+
+            return numReceivedReports;
+        }
+
+        /// <summary>
+        /// Method to get the user reported
+        /// </summary>
+        public User GetReported(Report report, IList<User> users)
+        {
+            // Find the user with the matching Id
+            return users.FirstOrDefault(u => u.Id == report.ContributorId);
+        }
 
     }
 }
