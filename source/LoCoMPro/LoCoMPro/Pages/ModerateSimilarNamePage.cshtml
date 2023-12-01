@@ -1,0 +1,78 @@
+﻿@page "~/ModerateSimilarNamePage"
+@model LoCoMPro.Pages.ModerateSimilarNamePageModel
+@{
+    ViewData["Title"] = "Productos con nombres similares";
+    Layout = "_Layout";
+    ViewBag.ShowSearchBar = true;
+    ViewBag.ShowLogoLink = true;
+    char s = (char)31; // ASCII Control Unit Separator
+}
+@using Microsoft.AspNetCore.Identity
+@using LoCoMPro.Data;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+
+<head>
+    <link rel="stylesheet" href="~/css/ModerateSimilarNamesPage.css" />
+    <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
+
+    <script src="~/js/ModerateSimilarNamePage/toggleReportBlock.js"></script>
+</head>
+
+<div>
+    <div class="information-section">
+        <h2>Moderar productos con nombres similares</h2>
+        <div id="feedbackMessage" class="feedback-message"></div>
+    </div>
+
+    <!-- TODO: An If here -->
+    @if (Model.SimilarNamesList.Count == 0)
+    {
+        <div class="empty-section text-center" id="empty-list">
+            <h1>¡No se encontraron productos con nombres similares!</h1>
+            <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
+        </div>
+    }
+    else
+    {
+        <div class="report-section">
+            <div class="results-cont-msg" span id="results-count"></div>
+            <ul class="report-list-section">
+                @for (int listIndex = 0; listIndex < Model.SimilarNamesList.Count; ++listIndex)
+                {
+                    var reportList = Model.SimilarNamesList[listIndex];
+
+                    <li class="report-list-block register-block-pagination" id="report-block-@listIndex">
+                        <div class="report-list-block-information">
+                            <span id="report-list-title">@(reportList[0].Name)</span>
+                            <span class="block-edit-icon">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            </span>
+                        </div>
+
+                        <div class="report-list-products-section" hidden>
+                            <ul class="report-list-products">
+                                @for(int productIndex = 0; productIndex < reportList.Count; ++productIndex)
+                                {
+                                   <li class="list-products" id="report-product-@listIndex-@productIndex"> 
+                                       <input type="checkbox" name="SelectedProducts" value="@reportList[productIndex].Name"/>
+                                        <span class="product-name">@reportList[productIndex].Name</span>
+                                   </li> 
+                                }
+                            </ul>
+                            <div class="input-product-name">
+                                <input type="text" name="new-product-name" class="product-name-bar" id="product-name-bar-@listIndex"
+                                    maxlength="70" placeholder="Nombre correcto..." required></input>
+                                <button type="submit" class="product-name-button button-general" id="product-name-button-@listIndex">
+                                    Aceptar
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+
+</div>
