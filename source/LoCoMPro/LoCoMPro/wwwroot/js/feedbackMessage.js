@@ -1,7 +1,7 @@
 ﻿// Usage: elementId is de id of the html div that will show the message,
 // Example: showFeedbackMessage('saved successfully!', 'addProductFeedbackMessage');
 function showFeedbackMessage(message, elementId) {
-    var feedbackMessage = document.getElementById(elementId);
+    let feedbackMessage = document.getElementById(elementId);
     if (feedbackMessage) {
         if (!message || message.trim() === '') {
             console.error('Null or empty message.');
@@ -16,12 +16,5 @@ function showFeedbackMessage(message, elementId) {
         console.error('Element with ID ' + elementId + ' not found.');
     }
 }
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    if (feedbackMessageTemp && feedbackMessageTemp.trim() !== "") {
-        showFeedbackMessage(feedbackMessageTemp, 'feedbackMessage');
-    }
-});
 
 module.exports = { showFeedbackMessage };
