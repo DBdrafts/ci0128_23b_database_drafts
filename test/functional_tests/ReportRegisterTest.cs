@@ -29,7 +29,7 @@ namespace functional_tests
             testPage.SingIn(email, password);
             testPage.GoToProductPage("Celular");
 
-            driver.FindElement(By.Id("open-popup-button-2")).Click();
+            driver.FindElement(By.Id("open-popup-button-4")).Click();
             driver.FindElement(By.Id("reportIcon")).Click();
             driver.FindElement(By.Id("saveButton")).Click();
 
