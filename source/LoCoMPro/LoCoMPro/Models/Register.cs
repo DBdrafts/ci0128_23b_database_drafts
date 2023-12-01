@@ -1,6 +1,7 @@
 ﻿using LoCoMPro.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -87,6 +88,11 @@ namespace LoCoMPro.Models
         /// </summary>
         public string? ProvinciaName { get; set; }
 
+        /// <summary>
+        /// Value of the metahiristicState.
+        /// </summary>
+        [DefaultValue(0)]
+        public int MetahuristicState { get; set; }
 
         /// <summary>
         /// Reviews made of this register

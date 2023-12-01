@@ -1,7 +1,7 @@
 ﻿@page
-@model LoCoMPro.Pages.ModeratePageModel
+@model LoCoMPro.Pages.ModerateAnomaliesPageModel
 @{
-    ViewData["Title"] = "Registros reportados";
+    ViewData["Title"] = "Registros anomalos";
     Layout = "_Layout";
     ViewBag.ShowSearchBar = true;
     ViewBag.ShowLogoLink = true;
@@ -14,20 +14,22 @@
 
 
 <head>
-    <link rel="stylesheet" href="~/css/ModeratePage.css" />
+    <link rel="stylesheet" href="~/css/ModerateAnomaliesPage.css" />
     <script src="~/js/interactionsPopUp.js"></script>
     <script src="~/js/productListButton.js"></script>
     <link rel="stylesheet" href="~/css/RateRegister.css" />
     <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
 </head>
 
-<div class="reported-page-body">
-    <h2 class="text-center">Registros reportados</h2>
+
+<div class="register-anomalies-page-body">
+    <h2 class="text-center">Registros Anómalos</h2>
     <div id="feedbackMessage" class="feedback-message"></div>
     <div id="cant-reportes">
-        <h5>Cantidad de reportes: <span id="report-count">@Model.Reports.Count</span></h5>
+        <h5>Cantidad de registros anómalos: <span id="report-count">@Model.Reports.Count</span></h5>
     </div>
     <hr class="style-four">
+
     <div class="empty-section text-center" id="empty-list"
          style='display: @(Model.Reports.Count == 0 ? "inline-block" : "none")'>
         <h1>¡No hay reportes que revisar!</h1>
@@ -38,18 +40,24 @@
         <div class="results-cont-msg" span id="results-count"></div>
 
         <nav>
-            <ul class="container-List-Report-Columns" style='display: @(Model.Reports.Count != 0 ? "flex" : "none")'>
+            <ul class="container-List-Report-Columns" style='display: @(Model.Reports.Count != 0 ? "flex;padding: 0px;justify-content: space-around;" : "none")'>
                 <li id="product-col">
                     <div class="text-Comment">Producto</div>
                 </li>
-                <li id="contributor-col">
-                    <div class="text-Comment">Contribuidor</div>
+                <li id="price-col">
+                    <div class="text-Comment">Precio</div>
                 </li>
-                <li id="reporter-col">
-                    <div class="text-Comment">Reportado por</div>
+                <li id="prom-col">
+                    <div class="text-Comment">Promedio</div>
                 </li>
-                <li id="date-col">
-                    <div class="text-Comment">Fecha de Reporte</div>
+                <li id="min-col">
+                    <div class="text-Comment">Mínimo</div>
+                </li>
+                <li id="max-col">
+                    <div class="text-Comment">Máximo</div>
+                </li>
+                <li id="desv-col">
+                    <div class="text-Comment">Desv. Estándar</div>
                 </li>
             </ul>
         </nav>
@@ -59,7 +67,7 @@
             {
                 var report = Model.Reports[reportNum];
 
-                var register = Model.Registers.FirstOrDefault(register =>
+                var register = Model.anormalRegisters.FirstOrDefault(register =>
                 register.ContributorId == report.ContributorId &&
                 register.ProductName == report.ProductName &&
                 register.StoreName == report.StoreName &&
@@ -75,12 +83,12 @@
                     .First(u => u.Id == report.ReporterId).ToString();
 
                 var reportData = $"{report.ReporterId}{s}{report.ContributorId}" +
-                    $"{s}{report.ProductName}{s}{report.StoreName}" +
+                    $"{s}{report.ProductName}{s}{register.StoreName}" +
                     $"{s}{report.SubmitionDate.ToShortDateString()}{s}{report.CantonName}" +
                     $"{s}{report.ProvinceName}{s}{report.ReportDate}" +
                     $"{s}{report.ReportState}{s}{reporterName}" +
                     $"{s}{contributorName}{s}{register.Price}{s}{@reportNum}" +
-                    $"{s}{register.Comment}{s}{report.Reason}";
+                    $"{s}{register.Comment}";
                 
                 int imagecount = 0;
                 var registerImages = "";
@@ -103,18 +111,25 @@
                         <span id="register-product-name" value="@report.ProductName">
                             @report.ProductName
                         </span>
-                        <span id="register-user" value="@contributorName">
-                            @contributorName
+                        <span id="register-price" value="@register.Price">
+                            @register.Price
                         </span>
-                        <span id="register-reporter" value="@reporterName">
-                            @reporterName
+                        <span  data-value="@Model.registerAveragePrice.ElementAtOrDefault(reportNum)">
+                            @(Model.registerAveragePrice.ElementAtOrDefault(reportNum).ToString() ?? "N/A")
                         </span>
-                        <span class="short-column" id="register-date" value="@report.ReportDate">
-                            @report.ReportDate.ToShortDateString()
+                        <span id="register-min-price" data-value="@Model.registerMinPrice.ElementAtOrDefault(reportNum)">
+                            @(Model.registerMinPrice.ElementAtOrDefault(reportNum).ToString() ?? "N/A")
                         </span>
+                        <span id="register-max-price" data-value="@Model.registerMaxPrice.ElementAtOrDefault(reportNum)">
+                            @(Model.registerMaxPrice.ElementAtOrDefault(reportNum).ToString() ?? "N/A")
+                        </span>
+                        <span id="register-std-dev-price" data-value="@Model.registerStdDevPrice.ElementAtOrDefault(reportNum)">
+                            @(Model.registerStdDevPrice.ElementAtOrDefault(reportNum).ToString("0.00") ?? "N/A")
+                        </span>
+                       
 
                         <div class="text-center align">
-                            <button class="open-interactions-button" report-data="@reportData" report-number="@reportNum"
+                            <button class="open-interactions-button" id="button-open-moderate-popup" report-data="@reportData" report-number="@reportNum"
                                 images-register-id="@registerImages" onclick="openInteractionsPopupMod(this)">
                                 <img src="~/img/MoreIcon.svg" alt="Más opciones">
                             </button>
@@ -130,6 +145,7 @@
                                 </span>
                             </div>
                         </div>
+
                     </a>
                 </li>
             }
@@ -146,22 +162,18 @@
                     <p><b>Comentario:</b> <span id="popup-comment"></span></p>
                     <p><b>Veracidad:</b> <span class="veracity-stars" id="popup-veracity"></span></p>
                     <p><b>Reportado por:</b> <span id="popup-reporterName"></span></p>
-                    
 
                     <div class="carousel-section-pop-up">
                         <div class="img-carousel-pop-up">
                         </div>
                     </div>
 
-                    <p><b>Motivo del reporte:</b></p>
-                    <div id="popup-report-comment"></div>
-
                     <div class="buttons-container">
 
                         <button class="interactions-close-button" onclick="closeInteractionsPopupMod()">Cerrar</button>
-                        <button id="acceptReport" onclick="acceptReport()" style="visibility: hidden;">Aceptar</button>
-                        <button id="rejectReport" onclick="rejectReport()" style="visibility: hidden;">Rechazar</button>
-                        
+                        <button id="acceptReport" onclick="acceptRegisterAnormal()" style="visibility: hidden;">Aceptar</button>
+                        <button id="rejectReport" onclick="rejectRegisterAnormal()" style="visibility: hidden;">Rechazar</button>
+
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <script>
@@ -174,6 +186,7 @@
                 </div>
             </div>
         </div>
+
     </div>
     <script src="~/js/ProductPage/imageChanger.js"></script>
     <script src="~/js/feedbackMessage.js"></script>
