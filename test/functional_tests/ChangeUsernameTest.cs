@@ -43,6 +43,7 @@ namespace functional_tests
 
             // Assert
             Assert.IsTrue(newUserName.Text != prevUserName);
+            driver.Quit();
         }
     }
 }

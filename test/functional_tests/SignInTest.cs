@@ -29,6 +29,7 @@ namespace functional_tests
             // Assert
             IWebElement userLogged = driver.FindElement(By.Id("usr-logged"));
             Assert.IsNotNull(userLogged);
+            driver.Quit();
         }
     }
 }
