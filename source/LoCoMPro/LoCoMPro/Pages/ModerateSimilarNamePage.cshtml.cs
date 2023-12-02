@@ -10,6 +10,9 @@ using System.Globalization;
 using Fastenshtein;
 using System.Text.RegularExpressions;
 using System.Data.Entity;
+using Microsoft.IdentityModel.Tokens;
+using NuGet.RuntimeModel;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 
 namespace LoCoMPro.Pages
 {
@@ -63,6 +66,25 @@ namespace LoCoMPro.Pages
             // You can further process or display these groups as needed
 
 
+        }
+
+        public IActionResult OnPostChangeSelectedProductsName(string productName, Dictionary<string, bool> groupProductNames)
+        {
+            if (productName.IsNullOrEmpty() || groupProductNames.IsNullOrEmpty())
+            {
+                return new JsonResult(new { Message = "Invalid Parameters", StatusCode = 500 });
+            }
+
+            foreach (var product in groupProductNames)
+            {
+                if (product.Value! || product.Key == productName) continue;
+                var productToRemove = _context.Products.Find(product.Key);
+                if (productToRemove != null)
+                {
+                    _context.Products.Remove(productToRemove);
+                }
+            }
+            return new JsonResult("Ok");
         }
 
         static List<List<Product>> GroupProductsByCloseness(List<Product> products, int threshold)

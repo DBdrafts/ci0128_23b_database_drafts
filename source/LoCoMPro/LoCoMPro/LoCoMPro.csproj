@@ -75,7 +75,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="wwwroot\js\ModerateSimilarNamePage\" />
   </ItemGroup>
 
 </Project>
