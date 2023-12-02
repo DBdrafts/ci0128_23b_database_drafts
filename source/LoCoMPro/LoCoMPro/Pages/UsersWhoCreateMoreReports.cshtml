@@ -41,6 +41,9 @@
                 <li id="acc-reports-col">
                     <div class="text-Comment">Reportes aceptados</div>
                 </li>
+                <li id="acc-reports-col">
+                    <div class="text-Comment">Reportes rechazados</div>
+                </li>
             </ul>
         </nav>
 
@@ -56,10 +59,21 @@
                 int reportsMade = Model.numberOfReports(user);
 
                 int reportsApproved = Model.numberOfApprovedReports(user);
+                int approvedPercentage = Model.calculatePercentage(reportsMade, reportsApproved);
+
+                int reportsRejected = Model.numberOfRejectedReports(user);
+                int rejectedPercentage = Model.calculatePercentage(reportsMade, reportsRejected);
+
+
+                string reportsApprovedDisplay = reportsApproved + " (" + approvedPercentage + "%)";
+
+                string reportsRejectedDisplay = reportsRejected + " (" + rejectedPercentage + "%)";
+
+                string userDisplay = (userNum+1) + ". " + userName;
 
                 <li class="register-block register-block-pagination">
-                    <div class="register-column short-column" id="user-name" value="@userName">
-                        @userName
+                    <div class="register-column short-column" id="user-name" value="@userDisplay">
+                       @userDisplay
                     </div>
                     <div class="register-section-stars">
                         <div class="veracity-stars register-column short-column" id="register-veracity" value="@userRating">
@@ -74,8 +88,11 @@
                     <div class="register-column short-column" id="reports-made" value="@reportsMade">
                         @reportsMade
                     </div>
-                    <div class="register-column short-column" id="acc-reports" value="@reportsApproved">
-                        @reportsApproved
+                    <div class="register-column short-column" id="acc-reports" value="@reportsApprovedDisplay">
+                        @reportsApprovedDisplay
+                    </div>
+                    <div class="register-column short-column" id="rej-reports" value="@reportsRejectedDisplay">
+                        @reportsRejectedDisplay
                     </div>
                 </li>
             }

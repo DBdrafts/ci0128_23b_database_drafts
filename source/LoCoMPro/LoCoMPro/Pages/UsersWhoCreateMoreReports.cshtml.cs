@@ -55,11 +55,14 @@ namespace LoCoMPro.Pages
         /// </summary>
         public int getUsersWhoReportedRegisters()
         {
+            string autoID = "7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4";
             int err = -1; // Error getting users who reported
             var users = from u in _context.Users
+                        where u.Id != autoID
                         select u;
 
             var reports = from r in _context.Reports
+                          where r.ReporterId != autoID
                           select r;
 
             if (!users.Any()) 
@@ -145,6 +148,31 @@ namespace LoCoMPro.Pages
                 numApprovedReports = reports.Count();
             }
             return numApprovedReports;
+        }
+        /// <summary>
+        /// Gets the number of reports made by the user that are rejected.
+        /// </summary>
+        public int numberOfRejectedReports(User user)
+        {
+            int numRejectedReports = 0;
+
+            var reports = from r in _context.Reports
+                          where r.ReportState == 0 && r.Reporter == user
+                          select r;
+            if (reports.Any())
+            {
+                numRejectedReports = reports.Count();
+            }
+            return numRejectedReports;
+        }
+        /// <summary>
+        /// Calculates the percentage of register accordingly.
+        /// </summary>
+        public int calculatePercentage(int totalReports, int moderatedReports)
+        {
+            int percentage = (int) Math.Round((double)(moderatedReports * 100) / totalReports);
+
+            return percentage;
         }
         /// <summary>
         /// Initializes the list of ratings with the user ratings.
