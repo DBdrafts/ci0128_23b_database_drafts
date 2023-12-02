@@ -40,7 +40,7 @@ namespace functional_tests
 
             // Assert
             Assert.That(reportFeedbackMessage.Contains("Por favor, seleccione una ubicación."));
-
+            driver.Quit();
         }
 
         // Test by Geancarlo Rivera Hernández C06516 | Sprint 3
@@ -85,7 +85,55 @@ namespace functional_tests
 
             // Assert
             Assert.That(reportFeedbackMessage.Contains("Por favor, ingrese el nombre del establecimiento."));
+            driver.Quit();
+        }
 
+        // Test by Geancarlo Rivera Hernández C06516 | Sprint 3
+        [Test]
+        public void AddProductWithoutEnteringProductName()
+        {
+            // Arrange
+            var driver = new ChromeDriver();
+            driver.Navigate().GoToUrl("https://localhost:7119/Identity/Account/Login");
+            var testPage = new Login(driver);
+
+            var email = "geanca567@hotmail.com";
+            var password = "Geanca567!";
+            string storeName = "MasxMenos";
+
+            // Act
+            testPage.SingIn(email, password);
+            testPage.ChangeUrl("https://localhost:7119/AddProductPage");
+
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+
+            driver.FindElement(By.Id("showPopupButton")).Click();
+
+            IWebElement selectProvince = driver.FindElement(By.Id("province"));
+            selectProvince.Click();
+            selectProvince.FindElement(By.XPath("//option[@value='Alajuela']")).Click();
+
+            IWebElement selectCanton = driver.FindElement(By.Id("canton"));
+            selectCanton.Click();
+            wait.Until(driver => selectCanton.Displayed);
+
+            selectCanton.FindElement(By.XPath("//option[@value='Atenas']")).Click();
+
+            driver.FindElement(By.Id("saveLocationMap-button")).Click();
+
+            driver.FindElement(By.Id("store")).SendKeys(storeName);
+
+            driver.FindElement(By.Id("form-submit-button")).Click();
+
+            var feedbackMessageElement = driver.FindElement(By.Id("feedbackMessage"));
+
+            wait.Until(driver => feedbackMessageElement.Displayed);
+
+            string reportFeedbackMessage = feedbackMessageElement.Text;
+
+            // Assert
+            Assert.That(reportFeedbackMessage.Contains("Por favor, ingrese el nombre del producto."));
+            driver.Quit();
         }
     }
 }

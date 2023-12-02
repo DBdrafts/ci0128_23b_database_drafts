@@ -48,7 +48,7 @@ $(document).ready(function () {
     $("#province").on("change", function () {
         selectedProvince = $("#province").val();
         if (selectedProvince) {
-            if (!currentPageUrl.includes("/AddProductPage") == null) $("#chosenProvince").text(selectedProvince);
+            if (!currentPageUrl.includes("/AddProductPage")) $("#chosenProvince").text(selectedProvince);
             // Make a fetch request to get the cantons of the selected province
             populateCantonSelect(selectedProvince);
             
