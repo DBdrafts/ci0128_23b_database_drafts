@@ -13,7 +13,7 @@ namespace LoCoMPro.Utils
         /// <summary>
         /// Name of the User Product List
         /// </summary>
-        private readonly string productListName = "UserProductList";
+        private string productListName = "UserProductList";
 
         /// <summary>
         /// Creates the list with the Http Context accessor
@@ -135,6 +135,15 @@ namespace LoCoMPro.Utils
         {
             var serializedList = JsonSerializer.Serialize(UserProductList);
             _httpContextAccessor.HttpContext.Session.SetString(productListName, serializedList);
+        }
+
+        /// <summary>
+        /// Sets a new name for the list
+        /// </summary>
+        /// <param name="newName">New name of the list
+        public void SetListName(string newName)
+        {
+            productListName = newName;
         }
     }
 }

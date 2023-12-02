@@ -16,7 +16,7 @@ function removeProductFromList(removeProductButton, index) {
     callRemoveProductFromList(productData);
 
     // Update the data of the page to be actualized
-    updateListData(avgPrice);
+    updateListData();
 }
 
 /// <summary>
@@ -56,31 +56,21 @@ function callRemoveProductFromList(productData) {
 /// <summary>
 /// Update the visual information of the list
 /// </summary>
-function updateListData(avgPriceString) {
+function updateListData() {
     // Gets the amount of products in the actual list
     var productCount = parseInt(document.getElementById("product-count").textContent);
 
-    // Gets the total aprox price of all the product
-    var totalPriceText = document.getElementById("total-price").textContent;
-
-    var totalPrice = parseInt(totalPriceText.replace(/[^\d]/g, ''), 10);
-    totalPrice = isNaN(totalPrice) ? 0 : totalPrice;
-
-    avgPrice = parseInt(avgPriceString.replace(/[^\d]/g, ''), 10);
-    avgPrice = isNaN(avgPrice) ? 0 : avgPrice;
-
     // Decrease the product count and the total price
     --productCount;
-    totalPrice -= avgPrice;
 
     // Actualize the visual data
     document.getElementById("product-count").textContent = productCount;
-    document.getElementById("total-price").textContent = totalPrice.toLocaleString();
 
     // If it was the last product, the show the empty version
     if (productCount == 0) {
         document.getElementById("empty-list").style.display = 'inline-block';
         document.getElementById("no-empty-list").style.display = 'none';
         document.getElementById("generate-report-button").style.display = 'none';
+        document.getElementById("location-message-text").style.display = 'none';
     }
 }

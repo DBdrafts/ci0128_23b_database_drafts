@@ -14,7 +14,7 @@
 
     <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
 
-    <script src="~/js/listReportPage.js"></script>
+    <script src="~/js/ListReportPage/toggleReportResult.js"></script>
 </head>
 
 
@@ -41,15 +41,23 @@
                     <li>
                         <div class="text-comment">Establecimiento</div>
                     </li>
-                    <li>
-                        <div class="text-comment">Ubicación</div>
+                    <li id="sort-button-distance">
+                        @if(Model.UserInPage.Geolocation == null)
+                        {
+                            <span style="color: var(--locompro-red)">*</span>
+                        }
+                        @{ViewBag.SortTipe = "#report-location";}
+                        @{ViewBag.SortOrder = "asc";}
+                        @await Html.PartialAsync("_OrderButton", "Ubicación")
                     </li>
-                    <li>
+                    <li id="sort-button-price">
                         @{ViewBag.SortTipe = "#report-price";}
+                        @{ViewBag.SortOrder = "asc";}
                         @await Html.PartialAsync("_OrderButton", "Precio total")
                     </li>
-                    <li>
+                    <li id="sort-button-product-amount">
                         @{ViewBag.SortTipe = "#report-product-amount";}
+                        @{ViewBag.SortOrder = "desc";}
                         @await Html.PartialAsync("_OrderButton", "Cantidad de productos")
                     </li>
                 </ul>
@@ -74,14 +82,14 @@
                             <span id="report-store-name" value="@store.Name">
                                 @Html.DisplayFor(modelItem => store.Name)
                             </span>
-                            <span id="report-location-name" value="@store.ProvinciaName + , + @store.CantonName">
+                            <span id="report-location" value="@Model.StoreDistances[store]">
                                 @store.ProvinciaName, @store.CantonName
                             </span>
                             <span class="align-right" id="report-price" value="@totalPrice">
                                 ₡ @totalPrice.ToString("N0")
                             </span>
                             <span class="align-center" id="report-product-amount" value="@productList.Count">
-                                @productList.Count de @Model.WantedProducts.Count
+                                @productList.Count de @Model.WantedProducts.Count (@((@productList.Count*100)/@Model.WantedProducts.Count)%)
                             </span>
                             <span class="block-arrow">
                                 <i class="fa fa-angle-down" aria-hidden="true"></i>

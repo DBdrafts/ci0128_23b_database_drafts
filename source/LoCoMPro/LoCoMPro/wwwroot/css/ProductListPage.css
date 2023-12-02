@@ -12,6 +12,8 @@
 /* Style for the title of the page */
 .list-page-title {
     text-align: center;
+    display:inline-block;
+    width: 100%;
 }
 
 /* Style for the subtitle of the page */
@@ -22,17 +24,27 @@
 /* Style for the information text section*/
 .information-text-section {
     display: inline-block;
-    width: 80%;
+    width: 100%;
 }
 
 
-/* Style for the information button section*/
+/* Style for the information button section */
 .information-button-section {
     display: inline-block;
     width: 19%;
     height: 100%;
     min-width: 200px;
     text-align: right;
+    width: 100%;
+}
+
+/* Style for the location message text */
+.location-message {
+    color: var(--locompro-red);
+    width: 100%;
+    display:inline-block;
+    text-align: right;
+    margin: 10px 0px;
 }
 
 /* Style for the generate report button */
@@ -58,17 +70,18 @@
 .list-page-column-title {
     display: inline-flex;
     height: auto;
-    width: 92%;
-    justify-content: space-between;
+    width: 76%;
+    justify-content: space-around;
     list-style: none;
-    margin: 10px 0px;
-    min-width: 950px;
+    margin: 10px 0px 10px 0px;
+    padding: 0px;
+    min-width: 900px;
 }
 
 /* Style for list title columns */
 .list-page-column-title li {
     font-size: x-large;
-    flex: 0 0 0%;
+    flex: 0 0 33%;
     text-align: center;
     margin: 0px 10px;
 }
@@ -194,3 +207,7 @@
     margin: -70px
 }
 
+/* Style for the line of the list block */
+.information-section hr {
+    margin: 10px !important;
+}

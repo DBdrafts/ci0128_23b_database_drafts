@@ -55,11 +55,11 @@
                                 <p>Moderar</p>
                             </a>
                             <div class="popup-moderator" id="popup-moderator">
-                                
-                                <h5 id="mod-menu-title">Moderar</h5>
-                                
-                                <a class="pop-up-form"  asp-page="/ModeratePage" style="text-decoration:none">
+                                <a class="pop-up-form" asp-page="/ModeratePage" style="text-decoration:none">
                                     <button class="button-general" id="moderate-button">Moderar Reportes</button>
+                                </a>
+                                <a class="pop-up-form" asp-page="/ModerateAnomaliesPage" style="text-decoration:none">
+                                    <button class="button-general" id="moderate-anomalies-button">Registros Anómalos</button>
                                 </a>
                                 <a class="pop-up-form" asp-page="/UsersWhoCreateMoreReports" style="text-decoration:none">
                                     <button class="button-general" id="most-repts-generated-button">Usuarios que más reportan</button>
@@ -69,7 +69,7 @@
 
                         <!-- Add user product list button of the layout -->
                         <!-- If user is signed in this button redirects to ProductList page -->
-                        <a href="/ProductListPage" class="layout-button button-general">
+                        <a href="/ProductListPage" id="user-list-button" class="layout-button button-general">
                             <img src="~/img/Favorites.svg" alt="Lista de Productos del usuario">
                             <p>Favoritos</p>
                         </a>

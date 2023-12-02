@@ -57,7 +57,7 @@ namespace UserLocationTests
                        
             // Act
             // Stores the result if the user stores geolocation
-            var result = pageModel.UserhasLocation(user);
+            var result = pageModel.UserHasLocation(user);
 
             // Assert
             // Check if the user has geolocation, so the result should be true
@@ -91,7 +91,7 @@ namespace UserLocationTests
 
             // Act
             // Stores the result if the user stores geolocation
-            var result = pageModel.UserhasLocation(user);
+            var result = pageModel.UserHasLocation(user);
 
             // Assert
             // Check if the user has geolocation, so the result should be true
