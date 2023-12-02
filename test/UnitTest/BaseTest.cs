@@ -133,6 +133,8 @@ public class BaseTest
             case "moderate_anormal_registers":
                 return new ModerateAnomaliesPageModel(dbContext, mockConfiguration.Object, mockUserManager.Object);
 
+            case "most_reported_users":
+                return new MostReportedPageModel(dbContext, mockConfiguration.Object, mockUserManager.Object);
             // Return a base page model
             default:
                 return new LoCoMProPageModel(dbContext, mockConfiguration.Object);

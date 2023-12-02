@@ -252,7 +252,7 @@ namespace LoCoMPro.Pages
         public int GetRejectedPercentage(int totalAports, int hiddenAports)
         {
             // Check if the denominator (totalAports) is non-zero to avoid division by zero.
-            if (totalAports != 0)
+            if (totalAports > 0)
             {
                 // Calculate the percentage of rejected records.
                 double rejectedPercentage = Math.Round((double)hiddenAports / totalAports * 100);
