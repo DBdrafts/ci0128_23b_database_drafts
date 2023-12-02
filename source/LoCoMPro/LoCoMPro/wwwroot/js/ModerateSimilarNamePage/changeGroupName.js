@@ -65,8 +65,6 @@
         resultBlocks = resultBlocks.filter((element) => {
             return !element.id.includes(id);
         });
-        updateNavigationButtons();
-        showPage(currentPage);
 
         if (resultBlocks.length <= 0) {
             showNoResultsImage();
@@ -76,7 +74,12 @@
             for (let i = 0; i < elementsToHide.length; i++) {
                 elementsToHide[i].style.display = 'none';
             }
+        } else if (resultBlocks.length < currentPage * pageSize) {
+            totalPages--;
+            currentPage--;
         }
+        updateNavigationButtons();
+        showPage(currentPage);
     }
     showNoResultsImage();
 });
