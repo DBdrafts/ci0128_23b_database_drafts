@@ -92,13 +92,30 @@ namespace LoCoMPro.Pages
         /// <returns>Success Protocol Message.</returns>
         public IActionResult OnPostHandleFormSubmission()
         {
-            string? storeName = Request.Form["store"];
-            if (!string.IsNullOrEmpty(storeName))
+            using (var transaction = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted))
             {
-                _ = StoreFormDataAsync(storeName);
-                TempData["FeedbackMessage"] = "Su aporte fue agregado correctamente!";
+                try
+                {
+                    string? storeName = Request.Form["store"];
+                    if (!string.IsNullOrEmpty(storeName))
+                    {
+                        _ = StoreFormDataAsync(storeName);
+                        TempData["FeedbackMessage"] = "Su aporte fue agregado correctamente!";
+                    }
+
+                    // If everything is successful, commit the transaction
+                    transaction.Commit();
+                    return new JsonResult("OK");
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions and optionally roll back the transaction
+                    Console.WriteLine($"Error: {ex.Message}");
+                    transaction.Rollback();
+                    return new JsonResult(new { Message = "Error adding products", StatusCode = 500 });
+                }
             }
-            return new JsonResult("OK");
+            
 
         }
 

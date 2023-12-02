@@ -1,18 +1,12 @@
 using LoCoMPro.Data;
 using LoCoMPro.Models;
-using LoCoMPro.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 using Fastenshtein;
-using System.Text.RegularExpressions;
-using System.Data.Entity;
 using Microsoft.IdentityModel.Tokens;
-using NuGet.RuntimeModel;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 
 namespace LoCoMPro.Pages
 {
@@ -49,12 +43,12 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// GET HTTP request, initializes page values.
         /// </summary>
-        public async Task OnGetAsync()
+        public void OnGetAsync()
         {
             var currentUserId = _userManager.GetUserId(User);
 
             // Define a threshold for similarity
-            int threshold = 3;
+            double threshold = 2;
 
             // Retrieve all products from the database
             var allProducts = _context.Products.ToList();
@@ -62,12 +56,14 @@ namespace LoCoMPro.Pages
             // Group products based on Levenshtein distance
             SimilarNamesList = GroupProductsByCloseness(allProducts, threshold);
 
-            // Now productGroups contains groups of products based on closeness
-            // You can further process or display these groups as needed
-
-
         }
 
+        /// <summary>
+        /// Updates the name of every product marked as true in <paramref name="groupProductNames"/> with the name <paramref name="productName"/>.
+        /// </summary>
+        /// <param name="productName">New name that products must have.</param>
+        /// <param name="groupProductNames">Dictionary where the keys are the name of the products to change and the value is set to true if said product must be changed.</param>
+        /// <returns>Response of calling this function.</returns>
         public IActionResult OnPostChangeSelectedProductsName(string productName, Dictionary<string, bool> groupProductNames)
         {
             if (productName.IsNullOrEmpty() || groupProductNames.IsNullOrEmpty())
@@ -80,6 +76,11 @@ namespace LoCoMPro.Pages
             return new JsonResult("Ok");
         }
 
+        /// <summary>
+        /// Changes the name of each product in the database
+        /// </summary>
+        /// <param name="productName">New name that products must have.</param>
+        /// <param name="groupProductNames">Dictionary where the keys are the name of the products to change and the value is set to true if said product must be changed.</param>
         private void ChangeProductNames(string productName, Dictionary<string, bool> groupProductNames)
         {
             using (var transaction = _context.Database.BeginTransaction(System.Data.IsolationLevel.RepeatableRead))
@@ -105,9 +106,16 @@ namespace LoCoMPro.Pages
             }
         }
 
-        static List<List<Product>> GroupProductsByCloseness(List<Product> products, int threshold)
+        /// <summary>
+        /// Groups Products by their coseness to each other using Lavenshtein distance.
+        /// </summary>
+        /// <param name="products">Products to group.</param>
+        /// <param name="threshold">Maximum distance the Product Names must be from each other.</param>
+        /// <returns>Array of groupped products.</returns>
+        static List<List<Product>> GroupProductsByCloseness(List<Product> products, double threshold)
         {
             var productGroups = new List<List<Product>>();
+            if (products.IsNullOrEmpty()) return productGroups;
 
             foreach (var product in products)
             {

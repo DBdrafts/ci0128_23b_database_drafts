@@ -39,10 +39,12 @@
             });
 
             // Reset input value and selected products array for the report block
+            // Reset input value and selected products array for the report block
+            input.value = '';
+            selectedProducts[reportIndex] = {};
             removeResultBlock(reportIndex);
         });
     }
-
 
     // Initialize an array to store selected products for each report block
     const selectedProducts = [];
@@ -59,6 +61,7 @@
         handleProductNameButtonClick(reportIndex);
     });
 
+    // Removes a result block from the list of result blocks.
     function removeResultBlock(reportIndex) {
         const id = `report-block-${reportIndex}`;
         document.getElementById(id).style.display = 'none';
@@ -68,7 +71,7 @@
 
         if (resultBlocks.length <= 0) {
             showNoResultsImage();
-            var elementsToHide = document.getElementsByClassName("group-pagination");
+            var elementsToHide = document.getElementsByClassName("product-pagination");
             document.getElementById('results-count').style.display = 'none';
             //// Loop through the selected elements and hide them
             for (let i = 0; i < elementsToHide.length; i++) {
@@ -76,7 +79,7 @@
             }
         } else if (resultBlocks.length < currentPage * pageSize) {
             totalPages--;
-            currentPage--;
+            if (currentPage > 1) currentPage--;
         }
         updateNavigationButtons();
         showPage(currentPage);
@@ -84,6 +87,7 @@
     showNoResultsImage();
 });
 
+// Shows the no results image
 function showNoResultsImage() {
     if (resultBlocks.length <= 0) {
         document.getElementById("empty-list").hidden = false;

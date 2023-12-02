@@ -1,5 +1,6 @@
 var jq = jQuery.noConflict()
 jq(document).ready(function () {
+    // Cada input hace autocompletado con el nombre del producto..
     $(".product-name-bar").on("input", function () {
         var $this = $(this); // Capture the current field as a jQuery object
         var currentField = "#" + $this.attr("id");

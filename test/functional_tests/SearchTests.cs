@@ -1,13 +1,6 @@
 ﻿using functional_tests.Shared;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenQA.Selenium.Support.UI;
-using System.Windows;
 
 namespace functional_tests
 {
@@ -35,10 +28,28 @@ namespace functional_tests
             Assert.IsTrue(driver!.Url.Contains("searchType=Marca&searchString=apple"));
         }
 
+        [Test]
+        public void LocationMantainsData()
+        {
+            // Arrange
+            driver.Navigate().GoToUrl("https://localhost:7119");
+
+            driver.FindElement(By.Id("showPopupButton"));
+
+
+            // Act
+            driver.FindElement(By.Id("add-to-list")).Click();
+
+
+            // Assert
+            Assert.IsTrue(driver.FindElement(By.Id("add-to-list")).GetCssValue("display") == "none");
+            Assert.IsTrue(driver.FindElement(By.Id("remove-from-list")).GetCssValue("display") == "inline-block");
+        }
+
         [TearDown]
         public void TearDown()
         {
-            driver.Quit();
+            //driver.Quit();
         }
     }
 }
