@@ -4,7 +4,6 @@
     background-color: #FFFFFF;
     padding: 20px;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     width: 100%;
     border: none;
     box-shadow: none;
@@ -139,7 +138,6 @@ textarea {
     color: #000000;
     border: none;
     padding: 6px 15px;
-    border-radius: 5px;
     cursor: pointer;
     border-radius: 15px;
     display: flex;
@@ -327,7 +325,6 @@ textarea {
 .feedback-message {
     background-color: #cb3434;
     margin: 42% auto;
-    color: black;
     padding: 10px;
     text-align: center;
     position: fixed;
@@ -354,7 +351,6 @@ textarea {
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 15px;
-    text-align: left;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     font-weight: 500;
     text-align: left;

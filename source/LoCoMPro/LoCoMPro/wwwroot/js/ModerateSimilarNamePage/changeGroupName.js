@@ -29,7 +29,7 @@
                 data: { productName: productName, groupProductNames: selectedProductsForReport },
                 success: function (data) {
                     console.log('Product names changed successfully' + data);
-                    var message = (data.statusCode == 200) ? 'Los productos se cambiaron correctamente!' : 'No se cambión ningún producto :(!';
+                    var message = (data === "Ok") ? 'Los productos se cambiaron correctamente!' : 'No se cambión ningún producto :(!';
                     showFeedbackMessage(message, 'feedbackMessage');
                     selectedProducts[reportIndex] = {};
                     removeResultBlock(reportIndex);

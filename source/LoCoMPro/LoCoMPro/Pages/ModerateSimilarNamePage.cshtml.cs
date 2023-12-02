@@ -89,31 +89,29 @@ namespace LoCoMPro.Pages
         /// <param name="groupProductNames">Dictionary where the keys are the name of the products to change and the value is set to true if said product must be changed.</param>
         private bool ChangeProductNames(string productName, Dictionary<string, bool> groupProductNames)
         {
-            bool hasAnythinChanged = false;
             using (var transaction = _context.Database.BeginTransaction(System.Data.IsolationLevel.RepeatableRead))
             {
                 try
-                {
-                    
+                {                   
                     foreach (var product in groupProductNames)
                     {
                         if (product.Value == false || product.Key == productName) { continue; }
-                        var changedRows = (_context.UpdateProductName(productName, product.Key) > 0);
-                        if (!hasAnythinChanged) { hasAnythinChanged = changedRows; }
+                        _context.UpdateProductName(productName, product.Key);
 
                     }
 
                     // If everything is successful, commit the transaction
                     transaction.Commit();
+                    return true;
                 }
                 catch (Exception ex)
                 {
                     // Handle exceptions and optionally roll back the transaction
                     Console.WriteLine($"Error: {ex.Message}");
                     transaction.Rollback();
+                    return false;
                 }
             }
-            return hasAnythinChanged;
         }
 
         /// <summary>

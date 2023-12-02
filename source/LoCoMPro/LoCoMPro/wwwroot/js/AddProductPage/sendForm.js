@@ -2,8 +2,8 @@
 Dropzone.autoDiscover = false;
 
 // Declare variables
-var myDropzone;
-var maxImages = 5;
+let myDropzone;
+const maxImages = 5;
 
 // Initialize Dropzone when the DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             this.on("addedfile", function (file) {
 
-                var validFiles = myDropzone.files.filter(function (f) {
+                let validFiles = myDropzone.files.filter(function (f) {
                     return f.status !== 'error';
                 });
 
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             this.on("sending", function (file, xhr, formData) {
                 // Set XSRF token for the request
-                var csrfToken = $('input:hidden[name="__RequestVerificationToken"]').val();
+                const csrfToken = $('input:hidden[name="__RequestVerificationToken"]').val();
                 xhr.setRequestHeader("XSRF-TOKEN", csrfToken);
             });
         }
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
         myDropzone.processQueue();
 
         // Create a FormData object from the form
-        var formData = new FormData(document.getElementById('addProductForm'));
+        let formData = new FormData(document.getElementById('addProductForm'));
 
         // Append uploaded files to the FormData object
         if (myDropzone.files.length > 0) {
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Create a new XMLHttpRequest for form submission
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.open('POST', '/AddProductPage?handler=HandleFormSubmission', true);
         xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
 
@@ -88,19 +88,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to validate the form fields
     function validateForm() {
-        var requiredFields = [
+        const requiredFields = [
             { id: 'province', message: 'Por favor, seleccione una ubicación.' },
             { id: 'store', message: 'Por favor, ingrese el nombre del establecimiento.' },
             { id: 'productName', message: 'Por favor, ingrese el nombre del producto.' },
             { id: 'price', message: 'Por favor, ingrese el precio del producto.' }
         ];
 
-        var isValid = true;
+        let isValid = true;
 
-        for (var i = 0; i < requiredFields.length; i++) {
-            var field = requiredFields[i];
-            var fieldElement = document.getElementById(field.id);
-            var fieldValue = fieldElement.value.trim();
+        for (let i = 0; i < requiredFields.length; i++) {
+            let field = requiredFields[i];
+            let fieldElement = document.getElementById(field.id);
+            let fieldValue = fieldElement.value.trim();
 
             if (fieldValue === '') {
                 isValid = false;
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        var nonImageFiles = myDropzone.files.filter(function (file) {
+        let nonImageFiles = myDropzone.files.filter(function (file) {
             return !file.type.startsWith('image/');
         });
 
@@ -118,11 +118,11 @@ document.addEventListener('DOMContentLoaded', function () {
             showFeedbackMessage('Por favor, seleccione solo archivos de imagen', 'feedbackMessage');
         }
 
-        var duplicateFileNames = findDuplicateFileNames(myDropzone.files);
+        let duplicateFileNames = findDuplicateFileNames(myDropzone.files);
 
         if (duplicateFileNames.length > 0) {
             isValid = false;
-            var message = 'No se permite enviar imágenes con el mismo nombre: ' + duplicateFileNames.join(', ');
+            let message = 'No se permite enviar imágenes con el mismo nombre: ' + duplicateFileNames.join(', ');
             showFeedbackMessage(message, 'feedbackMessage');
         }
 
@@ -131,11 +131,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Find duplicate image names
     function findDuplicateFileNames(files) {
-        var fileNames = {};
-        var duplicateFileNames = [];
+        let fileNames = {};
+        let duplicateFileNames = [];
 
         files.forEach(function (file) {
-            var fileName = file.name;
+            let fileName = file.name;
             if (fileNames[fileName]) {
                 duplicateFileNames.push(fileName);
             } else {
