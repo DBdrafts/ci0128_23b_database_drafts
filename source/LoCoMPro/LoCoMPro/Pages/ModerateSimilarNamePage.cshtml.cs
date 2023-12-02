@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using Fastenshtein;
+using System.Text.RegularExpressions;
+using System.Data.Entity;
 
 namespace LoCoMPro.Pages
 {
@@ -47,24 +50,46 @@ namespace LoCoMPro.Pages
         {
             var currentUserId = _userManager.GetUserId(User);
 
-            Product p1 = new Product() { Name = "Test1"};
-            Product p2 = new Product() { Name = "Test2"};
-            Product p3 = new Product() { Name = "Test3"};
+            // Define a threshold for similarity
+            int threshold = 3;
 
-            // Testing
-            // From where on, be free
-            SimilarNamesList.Add(new List<Product> { });
-            SimilarNamesList[0].Add(p1);
-            SimilarNamesList[0].Add(p2);
-            SimilarNamesList[0].Add(p3);
+            // Retrieve all products from the database
+            var allProducts = _context.Products.ToList();
 
-            SimilarNamesList.Add(new List<Product> { });
-            SimilarNamesList[1].Add(p2);
-            SimilarNamesList[1].Add(p3);
+            // Group products based on Levenshtein distance
+            SimilarNamesList = GroupProductsByCloseness(allProducts, threshold);
 
-            SimilarNamesList.Add(new List<Product> { });
-            SimilarNamesList[2].Add(p3);
+            // Now productGroups contains groups of products based on closeness
+            // You can further process or display these groups as needed
+
 
         }
+
+        static List<List<Product>> GroupProductsByCloseness(List<Product> products, int threshold)
+        {
+            var productGroups = new List<List<Product>>();
+
+            foreach (var product in products)
+            {
+                // Find the group with the closest product names
+                var group = productGroups
+                    .OrderBy(g => g.Min(p => Levenshtein.Distance(product.Name, p.Name)))
+                    .FirstOrDefault(p => p.Any(p => Levenshtein.Distance(product.Name, p.Name) <= threshold));
+
+                if (group != null)
+                {
+                    // Add the product to the existing group
+                    group.Add(product);
+                }
+                else
+                {
+                    // Create a new group with the current product
+                    productGroups.Add(new List<Product> { product });
+                }
+            }
+
+            return productGroups.Where(g => g.Count() > 1).ToList();
+        }
+
     }
 }
