@@ -221,6 +221,12 @@ namespace LoCoMPro.Data
 
                 entity.Navigation(p => p.Categories)
                     .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+                entity.Property(p => p.Brand)
+                    .HasMaxLength(100);
+
+                entity.Property(p => p.Model)
+                    .HasMaxLength(100);
             });
 
             // Building relationships for Canton
@@ -463,13 +469,14 @@ namespace LoCoMPro.Data
         /// </summary>
         /// <param name="newProductName">New name for product in Db.</param>
         /// <param name="oldProductName">Old name of product in DB.</param>
-        public void UpdateProductName(string newProductName, string oldProductName)
+        public int UpdateProductName(string newProductName, string oldProductName)
         {
             string sqlQuery = "EXEC dbo.UpdateProductName @newProductName, @oldProductName";
 
             var x = Database.ExecuteSqlRaw(sqlQuery,
                 new SqlParameter("newProductName", newProductName),
                 new SqlParameter("oldProductName", oldProductName));
+            return x;
         }
 
         /// <summary>

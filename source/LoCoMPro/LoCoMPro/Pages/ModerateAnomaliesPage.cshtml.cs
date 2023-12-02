@@ -6,9 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Win32;
-using NetTopologySuite.Algorithm;
-using System.Diagnostics;
 using System.Globalization;
 
 
