@@ -29,20 +29,21 @@ namespace functional_tests
             driver.FindElement(By.Id("perfil-button")).Click();
             IWebElement previousUserName = driver.FindElement(By.Id("username"));
             string prevUserName = previousUserName.Text;
+            string newUserName = prevUserName + '1';
 
 
             // Act
             driver.FindElement(By.Id("changeUsername")).Click();
             driver.FindElement(By.Id("newUsername")).Clear();
-            driver.FindElement(By.Id("newUsername")).SendKeys("aaa");
+            driver.FindElement(By.Id("newUsername")).SendKeys(newUserName);
             driver.FindElement(By.Id("changePswButton")).Click();
 
             driver.FindElement(By.Id("usr-logged")).Click();
             driver.FindElement(By.Id("perfil-button")).Click();
-            IWebElement newUserName = driver.FindElement(By.Id("username"));
+            IWebElement changedUserName = driver.FindElement(By.Id("username"));
 
             // Assert
-            Assert.IsTrue(newUserName.Text != prevUserName);
+            Assert.IsTrue(changedUserName.Text != prevUserName);
         }
     }
 }
