@@ -75,16 +75,34 @@ namespace LoCoMPro.Pages
                 return new JsonResult(new { Message = "Invalid Parameters", StatusCode = 500 });
             }
 
-            foreach (var product in groupProductNames)
+            ChangeProductNames(productName, groupProductNames);
+            
+            return new JsonResult("Ok");
+        }
+
+        private void ChangeProductNames(string productName, Dictionary<string, bool> groupProductNames)
+        {
+            using (var transaction = _context.Database.BeginTransaction(System.Data.IsolationLevel.RepeatableRead))
             {
-                if (product.Value! || product.Key == productName) continue;
-                var productToRemove = _context.Products.Find(product.Key);
-                if (productToRemove != null)
+                try
                 {
-                    _context.Products.Remove(productToRemove);
+                    foreach (var product in groupProductNames)
+                    {
+                        if (product.Value == false || product.Key == productName) { continue; }
+                        _context.UpdateProductName(productName, product.Key);
+
+                    }
+
+                    // If everything is successful, commit the transaction
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions and optionally roll back the transaction
+                    Console.WriteLine($"Error: {ex.Message}");
+                    transaction.Rollback();
                 }
             }
-            return new JsonResult("Ok");
         }
 
         static List<List<Product>> GroupProductsByCloseness(List<Product> products, int threshold)

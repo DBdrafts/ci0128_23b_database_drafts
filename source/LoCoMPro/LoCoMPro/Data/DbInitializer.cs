@@ -2,7 +2,6 @@
 using LoCoMPro.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
-using NetTopologySuite.Algorithm;
 
 namespace LoCoMPro.Data
 {
@@ -22,6 +21,7 @@ namespace LoCoMPro.Data
                 return;   // DB has been seeded
             }
             var currentDir = Directory.GetCurrentDirectory();
+            context.ExecuteSqlScriptFile(currentDir + "/Data/TableConstraints.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/SearchRegister.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/CalculateDistance.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetSearchResults.sql");
@@ -35,7 +35,7 @@ namespace LoCoMPro.Data
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetMaxPriceValue.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetMinPriceValue.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetStdDevPriceValue.sql");
-
+            context.ExecuteSqlScriptFile(currentDir + "/Data/UpdateProductName.sql");
 
             List<Provincia> provincias = new();
             List<Canton> cantones = new();

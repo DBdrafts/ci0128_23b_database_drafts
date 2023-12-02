@@ -459,6 +459,20 @@ namespace LoCoMPro.Data
         }
 
         /// <summary>
+        /// Changes the name of <paramref name="oldProductName"/> to <paramref name="newProductName"/> including all dependencies.
+        /// </summary>
+        /// <param name="newProductName">New name for product in Db.</param>
+        /// <param name="oldProductName">Old name of product in DB.</param>
+        public void UpdateProductName(string newProductName, string oldProductName)
+        {
+            string sqlQuery = "EXEC dbo.UpdateProductName @newProductName, @oldProductName";
+
+            var x = Database.ExecuteSqlRaw(sqlQuery,
+                new SqlParameter("newProductName", newProductName),
+                new SqlParameter("oldProductName", oldProductName));
+        }
+
+        /// <summary>
         /// Round a real number to the closer real number multiple of 0.5
         /// </summary>
         /// <param name="value">Real number to round.</param>
@@ -474,5 +488,7 @@ namespace LoCoMPro.Data
             }
             return roundResult;
         }
+
+        
     }
 }
