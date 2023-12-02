@@ -318,7 +318,7 @@ namespace FilterStoreFromReportTest
 
                 pageModel.StoreDistances.Add(storeToAdd, distance);
 
-                distance += 0.44;
+                distance += 49;
             }
 
             // Act
@@ -352,7 +352,7 @@ namespace FilterStoreFromReportTest
 
                 pageModel.StoreProducts.Add(storeToAdd, new List<Register>() { });
 
-                pageModel.StoreDistances.Add(storeToAdd, 0.46);
+                pageModel.StoreDistances.Add(storeToAdd, 51);
             }
 
             // Act

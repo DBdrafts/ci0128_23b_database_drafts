@@ -4,6 +4,7 @@ using LoCoMPro.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using NetTopologySuite.Operation.Distance;
 
 namespace LoCoMPro.Pages
 {
@@ -207,7 +208,7 @@ namespace LoCoMPro.Pages
             {
                 // Remove the store from the report if the distance between the user and the store
                 // is bigger than approximately 50 kilometers
-                if (StoreDistances[store.Key] > 0.45)
+                if (StoreDistances[store.Key] > 50)
                 {
                     StoreProducts.Remove(store.Key);
                     StoreDistances.Remove(store.Key);
@@ -241,11 +242,12 @@ namespace LoCoMPro.Pages
                 // If the store has geolocation, add the real distance
                 if (store.Key.Geolocation != null)
                 {
-                    StoreDistances.Add(store.Key, UserInPage.Geolocation!.Distance(store.Key.Geolocation));
+                    StoreDistances.Add(store.Key
+                        , CalculateDistances(UserInPage.Geolocation!.Distance(store.Key.Geolocation)));
                 }
                 else
                 {
-                    StoreDistances.Add(store.Key, 0);
+                    StoreDistances.Add(store.Key, -1);
                 }
             }
         }
@@ -258,8 +260,19 @@ namespace LoCoMPro.Pages
             // Sets all the distance to 0
             foreach (var store in StoreProducts)
             {
-                StoreDistances.Add(store.Key, 0);
+                StoreDistances.Add(store.Key, -1);
             }
+        }
+
+        /// <summary>
+        /// Returns the distance in approximately kilometers between 2 points
+        /// </summary>
+        /// <param name="geographicalDistance"> Geographical distance between 2 points
+        /// <returns>Distance in approximately kilometers between 2 points</returns>
+        internal static double CalculateDistances(double geographicalDistance)
+        {
+            int integerDistance = (int)(geographicalDistance * 97.5 * 2);
+            return ((double)integerDistance / 2);
         }
     }
 

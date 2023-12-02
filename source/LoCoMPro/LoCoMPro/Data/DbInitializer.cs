@@ -2,6 +2,7 @@
 using LoCoMPro.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
+using NetTopologySuite.Algorithm;
 
 namespace LoCoMPro.Data
 {
@@ -30,6 +31,11 @@ namespace LoCoMPro.Data
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetAverageReviewValueOnUserRegisters.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/UpdateUserRoleOnRegister.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/UpdateUserRoleOnReview.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/GetAveragePriceValue.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/GetMaxPriceValue.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/GetMinPriceValue.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/GetStdDevPriceValue.sql");
+
 
             List<Provincia> provincias = new();
             List<Canton> cantones = new();
@@ -161,10 +167,13 @@ namespace LoCoMPro.Data
         {
             // Add the stores
             stores.Add(new Store() { Name = "Super San Agustin", Location = cantones[0]
+                , Geolocation = cantones[0].Geolocation
                 , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }});
             stores.Add(new Store() { Name = "Pali", Location = cantones[1]
+                , Geolocation = cantones[1].Geolocation
                 , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }});
             stores.Add(new Store() { Name = "MasXMenos", Location = cantones[2]
+                , Geolocation = cantones[2].Geolocation
                 , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }});
 
             context.Stores.AddRange(stores);
@@ -213,6 +222,7 @@ namespace LoCoMPro.Data
                 NormalizedUserName = "JULIO444", Email = "julio444@ucr.ac.cr", NormalizedEmail = "JULIO444@UCR.AC.CR"
                 , PasswordHash = "AQAAAAIAAYagAAAAEBSumaRyX1siCcQ3b8TXll5Km5TWXJry6oq6euj1Bj1JaKgVWIat1jxDrhwvSwZJwA=="
                 , EmailConfirmed = true
+                , Geolocation = cantones[0].Geolocation
                 , SecurityStamp = "92355d52-a3d5-41a0-ba79-7e0658846a59"
                 , ConcurrencyStamp = "06661238-1061-4053-beb1-7e9acdb68f9f"
                 , Location = cantones[0]});
@@ -242,6 +252,20 @@ namespace LoCoMPro.Data
                 , SecurityStamp = "HYECKV7GQKTJY2KI77YXSIH3UNR6A7HX"
                 , ConcurrencyStamp = "b6618b62-5e84-4d15-a293-f0b157cbbd5b"
                 , Location = cantones[0]
+            });
+            users.Add(new User
+            {
+                Id = "7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4",
+                Role = "Moderator",
+                UserName = "Automatic",
+                NormalizedUserName = "AUTOMATIC",
+                Email = "locometa@gmail.com",
+                NormalizedEmail = "LOCOMETA@GMAIL.COM",
+                PasswordHash = "AQAAAAIAAYagAAAAEFBCH4szX4/jE5UMTHOj48Mo2yvxEYPqgb1DA2sMx3ViG/D/PIzk72IrEA4tNP+oZQ==",
+                EmailConfirmed = true,
+                SecurityStamp = "M6DI7G54S6NMNZOHIYEGRQ7TRPBH2SPC",
+                ConcurrencyStamp = "f6a611e8-3328-4c65-99ed-5107a120e2b4",
+                Location = cantones[0]
             });
             context.Users.AddRange(users);
             context.SaveChanges();
