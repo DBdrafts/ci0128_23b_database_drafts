@@ -19,10 +19,6 @@
             // Get selected products for the current report block
             const selectedProductsForReport = selectedProducts[reportIndex];
 
-            // Do something with the selected products and the entered product name
-            // For example, send the data to a page handler using AJAX
-
-            // TODO: Add your AJAX request or any other logic here to send data to the server
             $.ajax({
                 type: 'POST',
                 url: '/ModerateSimilarNamePage?handler=ChangeSelectedProductsName', // Specify the handler
@@ -32,21 +28,21 @@
                 },
                 data: { productName: productName, groupProductNames: selectedProductsForReport },
                 success: function (data) {
-                    console.log('Report saved successfully' + data);
+                    console.log('Product names changed successfully' + data);
+                    showFeedbackMessage('Los productos se cambiaron correctamente!', 'feedbackMessage');
                 },
                 error: function (error) {
-                    console.error('Error saving report: ' + error);
-                    //showFeedbackMessage('Error al realizar el reporte!', 'feedbackMessage');
+                    console.error('Error changing product names: ' + error);
+                    showFeedbackMessage('Error al intentar cambiar el nombre de los productos!', 'feedbackMessage');
 
                 }
             });
 
             // Reset input value and selected products array for the report block
-            input.value = '';
-            selectedProducts[reportIndex] = {};
-
+            removeResultBlock(reportIndex);
         });
     }
+
 
     // Initialize an array to store selected products for each report block
     const selectedProducts = [];
@@ -62,4 +58,31 @@
 
         handleProductNameButtonClick(reportIndex);
     });
+
+    function removeResultBlock(reportIndex) {
+        const id = `report-block-${reportIndex}`;
+        document.getElementById(id).style.display = 'none';
+        resultBlocks = resultBlocks.filter((element) => {
+            return !element.id.includes(id);
+        });
+        updateNavigationButtons();
+        showPage(currentPage);
+
+        if (resultBlocks.length <= 0) {
+            showNoResultsImage();
+            var elementsToHide = document.getElementsByClassName("group-pagination");
+            document.getElementById('results-count').style.display = 'none';
+            //// Loop through the selected elements and hide them
+            for (let i = 0; i < elementsToHide.length; i++) {
+                elementsToHide[i].style.display = 'none';
+            }
+        }
+    }
+    showNoResultsImage();
 });
+
+function showNoResultsImage() {
+    if (resultBlocks.length <= 0) {
+        document.getElementById("empty-list").hidden = false;
+    }
+}

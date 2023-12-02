@@ -3,7 +3,7 @@
     @oldProductName NVARCHAR(100)
 AS
 BEGIN
-	IF NOT EXISTS (SELECT 1 FROM Product WHERE Name = @oldProductName)
+	IF NOT EXISTS (SELECT 1 FROM Product WHERE Name = @newProductName) OR NOT EXISTS (SELECT 1 FROM Product WHERE Name = @oldProductName)
     BEGIN
         -- Parameter not found, print a message and exit the procedure
         PRINT 'New product name not found in products.';

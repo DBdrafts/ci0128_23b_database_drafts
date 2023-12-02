@@ -18,7 +18,6 @@
     <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
 
     <script src="~/js/ModerateSimilarNamePage/toggleReportBlock.js"></script>
-    <script src="~/js/ModerateSimilarNamePage/changeGroupName.js"></script>
 </head>
 
 <div>
@@ -28,14 +27,12 @@
     </div>
 
     <!-- TODO: An If here -->
-    @if (Model.SimilarNamesList.Count == 0)
-    {
-        <div class="empty-section text-center" id="empty-list">
-            <h1>¡No se encontraron productos con nombres similares!</h1>
-            <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
-        </div>
-    }
-    else
+    <div class="empty-section text-center" id="empty-list" hidden>
+        <h1>¡No se encontraron productos con nombres similares!</h1>
+        <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
+    </div>
+
+    @if (Model.SimilarNamesList.Count > 0)
     {
         <div class="report-section">
             <div class="results-cont-msg" span id="results-count"></div>
@@ -46,7 +43,7 @@
 
                     <li class="report-list-block register-block-pagination" id="report-block-@listIndex">
                         <div class="report-list-block-information">
-                            <span id="report-list-title">@(reportList[0].Name)</span>
+                            <span id="report-list-title" value="@(reportList[0].Name)">@(reportList[0].Name)</span>
                             <span class="block-edit-icon">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </span>
@@ -76,5 +73,10 @@
             </ul>
         </div>
     }
-
+    <div class="group-pagination">
+        @await Html.PartialAsync("_Pagination")
+    </div>
+    <script src="~/js/feedbackMessage.js"></script>
+    <script src="~/js/pagination.js"></script>
+    <script src="~/js/ModerateSimilarNamePage/changeGroupName.js"></script>
 </div>
