@@ -170,15 +170,15 @@
 }
 
 /*Feedback message*/
-/*.feedback-message {
+.feedback-message {
     background-color: #F5AA38;
-    margin: 26% auto;
+    margin: 37.5% auto;
     color: black;
     padding: 10px;
     text-align: center;
     position: fixed;
     bottom: 14px;
-    right: 5%;
+    right: 30.5%;
     transform: translateX(-50%);
     display: none;
     border-radius: 5px;
@@ -188,4 +188,11 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     font-weight: 500;
     z-index: 10;
-}*/
+}
+
+/*for message display*/
+.feedback-message.active {
+    display: block;
+    opacity: 1;
+    z-index: 10;
+}

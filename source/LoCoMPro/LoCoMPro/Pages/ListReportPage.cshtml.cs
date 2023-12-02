@@ -4,6 +4,7 @@ using LoCoMPro.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Operation.Distance;
 
 namespace LoCoMPro.Pages
@@ -119,9 +120,24 @@ namespace LoCoMPro.Pages
         /// <returns>List of products that are in the list</returns>
         internal IList<Product> ObtainProductsFromList()
         {
-            var productNames = UserProductList.Select(element => element.ProductName).ToList();
+            using (var transaction = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadCommitted))
+            {
+                try
+                {
+                    var productNames = UserProductList.Select(element => element.ProductName).ToList();
 
-            return _context.Products.Where(p => productNames.Contains(p.Name)).ToList();
+                    transaction.Commit();
+                    return _context.Products.Where(p => productNames.Contains(p.Name)).ToList();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex}");
+                    transaction.Rollback();
+                    return new List<Product>();
+                }
+
+            }
+              
         }
 
         /// <summary>

@@ -30,6 +30,8 @@
                 success: function (data) {
                     console.log('Product names changed successfully' + data);
                     showFeedbackMessage('Los productos se cambiaron correctamente!', 'feedbackMessage');
+                    selectedProducts[reportIndex] = {};
+                    removeResultBlock(reportIndex);
                 },
                 error: function (error) {
                     console.error('Error changing product names: ' + error);
@@ -39,10 +41,7 @@
             });
 
             // Reset input value and selected products array for the report block
-            // Reset input value and selected products array for the report block
             input.value = '';
-            selectedProducts[reportIndex] = {};
-            removeResultBlock(reportIndex);
         });
     }
 
@@ -78,7 +77,7 @@
                 elementsToHide[i].style.display = 'none';
             }
         } else if (resultBlocks.length < currentPage * pageSize) {
-            totalPages--;
+            if (totalPages > 1) totalPages--;
             if (currentPage > 1) currentPage--;
         }
         updateNavigationButtons();
