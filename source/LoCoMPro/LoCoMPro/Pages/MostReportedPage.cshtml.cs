@@ -125,43 +125,21 @@ namespace LoCoMPro.Pages
             return err;
         }
 
+        /// <summary>
+        /// Method to order as the number of reports received
+        /// </summary>
         public void orderListByNumberOfReportsReceived(IList<User> usersWhoMadeReports)
         {
             UsersWhoMadeReports = usersWhoMadeReports
-                .OrderBy(user => numberOfApprovedReports(user))
+                .OrderByDescending(user => numberOfReceivedReports(user))
                 .ThenBy(user => user.UserName)
                 .ToList();
         }
 
 
-        public int numberOfReports(User user)
-        {
-            int numReports = 0;
-
-            var reports = Reports.Where(r => r.Reporter == user);
-
-            if (reports.Any())
-            {
-                numReports = reports.Count();
-            }
-
-            return numReports;
-        }
-
-        public int numberOfApprovedReports(User user)
-        {
-            int numApprovedReports = 0;
-
-            var reports = from r in _context.Reports
-                          where r.ReportState == 2 && r.Reporter == user
-                          select r;
-            if (reports.Any())
-            {
-                numApprovedReports = reports.Count();
-            }
-            return numApprovedReports;
-        }
-
+        /// <summary>
+        /// Method to get the ranking of the users 
+        /// </summary>
         public void getUserRatings()
         {
             // Create a new list to store user ratings
