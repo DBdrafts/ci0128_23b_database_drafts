@@ -1,0 +1,99 @@
+﻿@page
+@model LoCoMPro.Pages.ModerateOldRegistersModel
+@{
+    ViewData["Title"] = "Registros Antiguos";
+    Layout = "_Layout";
+    ViewBag.ShowSearchBar = true;
+    ViewBag.ShowLogoLink = true;
+    char s = (char)31; // ASCII Control Unit Separator
+}
+@using Microsoft.AspNetCore.Identity
+@using LoCoMPro.Data;
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+
+<head>
+    <link rel="stylesheet" href="~/css/ModerateAnomaliesPage.css" />
+    <script src="~/js/interactionsPopUp.js"></script>
+    <script src="~/js/productListButton.js"></script>
+    <link rel="stylesheet" href="~/css/RateRegister.css" />
+    <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
+</head>
+
+
+<div class="register-anomalies-page-body">
+    <h2 class="text-center">Registros Antiguos</h2>
+    <div id="feedbackMessage" class="feedback-message"></div>
+    <div id="cant-reportes">
+        <h5>Cantidad de productos con registros antiguos: <span id="report-count">@Model.ProductsWithOldRegisters.Count</span></h5>
+    </div>
+    <hr class="style-four">
+
+    <div class="empty-section text-center" id="empty-list"
+         style='display: @(@Model.ProductsWithOldRegisters.Count == 0 ? "inline-block" : "none")'>
+        <h1>¡No hay registros antiguos que revisar!</h1>
+        <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
+    </div>
+
+    <div class="reports-section" id="no-empty-list">
+        <div class="results-cont-msg" span id="results-count"></div>
+
+        <nav>
+            <ul class="container-List-Report-Columns" style='display: @(Model.ProductsWithOldRegisters.Count != 0 ? "flex;padding: 0px;justify-content: space-around;" : "none")'>
+                <li id="product-col">
+                    <div class="text-Comment">Producto</div>
+                </li>
+                <li id="price-col">
+                    <div class="text-Comment">Tienda</div>
+                </li>
+                <li id="prom-col">
+                    <div class="text-Comment">Fecha de corte</div>
+                </li>
+                <li id="min-col">
+                    <div class="text-Comment">Cant. Registros antiguos</div>
+                </li>
+            </ul>
+        </nav>
+
+        <ul class="reports-section">
+            @for (int productNum = 0; productNum < Model.ProductsWithOldRegisters.Count; productNum++)
+            {
+                string productName = Model.ProductsWithOldRegisters[productNum].Name;
+                string storeName = Model.StoresWithOldRegisters[productNum].Name;
+                int numOldRegisters = Model.NumberOfOldRegisters[productNum];
+                string dateLimit = Model.dateLimits[productNum].ToString();
+
+                var reportData = $"{productName}{s}{storeName}{s}{dateLimit}";
+
+                <li class="result-block register-block-pagination" id="report-item-@productNum">
+                    <a>
+                        <span id="register-product-name" value="productName">
+                            @productName
+                        </span>
+                        <span id="register-price" value="storeName">
+                            storeName
+                        </span>
+                        <span data-value="@numOldRegisters">
+                            @numOldRegisters
+                        </span>
+                        <span id="register-min-price" data-value="@dateLimit">
+                            @dateLimit
+                        </span>
+
+
+
+                        <div class="text-center align">
+                            <button class="open-interactions-button" id="button-open-moderate-popup" report-data="@reportData" report-number="@productNum">
+                                <img src="~/img/MoreIcon.svg" alt="Más opciones">
+                            </button>
+                        </div>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+    <script src="~/js/ProductPage/imageChanger.js"></script>
+    <script src="~/js/feedbackMessage.js"></script>
+</div>
+
