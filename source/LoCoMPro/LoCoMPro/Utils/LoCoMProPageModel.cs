@@ -29,5 +29,25 @@ namespace LoCoMPro.Pages
             _context = context;
             Configuration = configuration;
         }
+
+        /// <summary>
+        /// Get if the user has location
+        /// </summary>
+        /// <param name="userToCheck">Register to directly check if register has images</param>
+        public bool UserHasLocation(User userToCheck)
+        {
+            // Initialize a bool var to indicate whether the register has images.
+            bool hasLocation = false;
+
+            // Check if the input register is not null
+            if (userToCheck.Geolocation != null)
+            {
+                // Set hasLocation to true 
+                hasLocation = true;
+            }
+
+            // Return the boolean indicating whether the register has images.
+            return hasLocation;
+        }
     }
 }

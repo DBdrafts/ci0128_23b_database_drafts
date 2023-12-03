@@ -221,6 +221,12 @@ namespace LoCoMPro.Data
 
                 entity.Navigation(p => p.Categories)
                     .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+                entity.Property(p => p.Brand)
+                    .HasMaxLength(100);
+
+                entity.Property(p => p.Model)
+                    .HasMaxLength(100);
             });
 
             // Building relationships for Canton
@@ -346,6 +352,116 @@ namespace LoCoMPro.Data
         }
 
         /// <summary>
+        /// Gets the average price value of a register
+        /// </summary>
+        /// <param name="productName">Name of the product.</param>
+        /// <param name="storeName">Name of the store.</param>
+        /// <param name="cantonName">Name of the canton</param>
+        /// <param name="provinciaName">Name of the provinciaName</param>
+        /// <returns>Average price value of the register.</returns>
+        public float GetProductValue(string productName
+            , string storeName, string cantonName, string provinciaName)
+        {
+            // Creates the SQL Query use to get the average product values
+            string sqlQuery = "SELECT dbo.GetAveragePriceValue(@ProductName, @StoreName, @CantonName, @ProvinciaName)";
+
+            // Link the parameters with the register value
+            var productNameParam = new SqlParameter("@ProductName", productName);
+            var storeNameParam = new SqlParameter("@StoreName", storeName);
+            var cantonNameParam = new SqlParameter("@CantonName", cantonName);
+            var provinciaNameParam = new SqlParameter("@ProvinciaName", provinciaName);
+
+            // Gets the average review value of the register
+            float result = Database.SqlQueryRaw<float>(sqlQuery, productNameParam, storeNameParam, cantonNameParam, provinciaNameParam)
+                .AsEnumerable().SingleOrDefault();
+
+            // Return the value or 0 if the value was 0
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the min price value of a register
+        /// </summary>
+        /// <param name="productName">Name of the product.</param>
+        /// <param name="storeName">Name of the store.</param>
+        /// <param name="cantonName">Name of the canton</param>
+        /// <param name="provinciaName">Name of the provinciaName</param>
+        /// <returns>Average price value of the register.</returns>
+        public float GetMinProductValue(string productName, string storeName, string cantonName, string provinciaName)
+        {
+            // Creates the SQL Query used to get the minimum product value
+            string sqlQuery = "SELECT dbo.GetMinPriceValue(@ProductName, @StoreName, @CantonName, @ProvinciaName)";
+
+            // Link the parameters with the register value
+            var productNameParam = new SqlParameter("@ProductName", productName);
+            var storeNameParam = new SqlParameter("@StoreName", storeName);
+            var cantonNameParam = new SqlParameter("@CantonName", cantonName);
+            var provinciaNameParam = new SqlParameter("@ProvinciaName", provinciaName);
+
+            // Gets the minimum product value of the register
+            float result = Database.SqlQueryRaw<float>(sqlQuery, productNameParam, storeNameParam, cantonNameParam, provinciaNameParam)
+                .AsEnumerable().SingleOrDefault();
+
+            // Return the value or 0 if the value was 0
+            return result;
+        }
+
+        /// Gets the max price value of a register
+        /// </summary>
+        /// <param name="productName">Name of the product.</param>
+        /// <param name="storeName">Name of the store.</param>
+        /// <param name="cantonName">Name of the canton</param>
+        /// <param name="provinciaName">Name of the provinciaName</param>
+        /// <returns>Average price value of the register.</returns>
+        public float GetMaxProductValue(string productName, string storeName, string cantonName, string provinciaName)
+        {
+            // Creates the SQL Query used to get the maximum product value
+            string sqlQuery = "SELECT dbo.GetMaxPriceValue(@ProductName, @StoreName, @CantonName, @ProvinciaName)";
+
+            // Link the parameters with the register value
+            var productNameParam = new SqlParameter("@ProductName", productName);
+            var storeNameParam = new SqlParameter("@StoreName", storeName);
+            var cantonNameParam = new SqlParameter("@CantonName", cantonName);
+            var provinciaNameParam = new SqlParameter("@ProvinciaName", provinciaName);
+
+            // Gets the maximum product value of the register
+            float result = Database.SqlQueryRaw<float>(sqlQuery, productNameParam, storeNameParam, cantonNameParam, provinciaNameParam)
+                .AsEnumerable().SingleOrDefault();
+
+            // Return the value or 0 if the value was 0
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the standard deviation of prices for a specific product and location.
+        /// </summary>
+        /// <param name="productName">Name of the product.</param>
+        /// <param name="storeName">Name of the store.</param>
+        /// <param name="cantonName">Name of the canton</param>
+        /// <param name="provinciaName">Name of the provinciaName</param>
+        /// <returns>Standard deviation of prices for the specified product and location.</returns>
+        public float GetStdDevProductValue(string productName, string storeName, string cantonName, string provinciaName)
+        {
+            // Creates the SQL Query used to get the standard deviation of product values
+            string sqlQuery = "SELECT dbo.GetStdDevPriceValue(@ProductName, @StoreName, @CantonName, @ProvinciaName)";
+
+            // Link the parameters with the register value
+            var productNameParam = new SqlParameter("@ProductName", productName);
+            var storeNameParam = new SqlParameter("@StoreName", storeName);
+            var cantonNameParam = new SqlParameter("@CantonName", cantonName);
+            var provinciaNameParam = new SqlParameter("@ProvinciaName", provinciaName);
+
+            // Gets the standard deviation of product values for the register
+            float result = Database.SqlQueryRaw<float>(sqlQuery, productNameParam, storeNameParam, cantonNameParam, provinciaNameParam)
+                .AsEnumerable().SingleOrDefault();
+
+            // Return the value or 0 if the value was 0
+            return result;
+        }
+
+
+
+        /// <summary>
         /// Gets the user rating by averaging the review values on their registers.
         /// </summary>
         /// <param name="UserId">The Id of the user.</param>
@@ -360,6 +476,21 @@ namespace LoCoMPro.Data
             float roundResult = RoundToCloserReal(result);
 
             return roundResult;
+        }
+
+        /// <summary>
+        /// Changes the name of <paramref name="oldProductName"/> to <paramref name="newProductName"/> including all dependencies.
+        /// </summary>
+        /// <param name="newProductName">New name for product in Db.</param>
+        /// <param name="oldProductName">Old name of product in DB.</param>
+        public int UpdateProductName(string newProductName, string oldProductName)
+        {
+            string sqlQuery = "EXEC dbo.UpdateProductName @newProductName, @oldProductName";
+
+            var x = Database.ExecuteSqlRaw(sqlQuery,
+                new SqlParameter("newProductName", newProductName),
+                new SqlParameter("oldProductName", oldProductName));
+            return x;
         }
 
         /// <summary>
@@ -378,5 +509,7 @@ namespace LoCoMPro.Data
             }
             return roundResult;
         }
+
+        
     }
 }

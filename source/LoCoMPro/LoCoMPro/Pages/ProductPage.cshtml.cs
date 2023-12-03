@@ -130,7 +130,7 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Number of results.
         /// </summary>
-        public User UserInPage;
+        public User? UserInPage;
 
         /// <summary>
         /// GET HTTP request, initializes page values.
@@ -142,7 +142,14 @@ namespace LoCoMPro.Pages
         public async Task OnGetAsync(string searchProductName, string searchStoreName, string searchProvinceName, 
             string searchCantonName)
         {
-            UserInPage = await _userManager.GetUserAsync(User);
+            if (User != null && _userManager != null)
+            {
+                // Get the user in the page
+                UserInPage = await _userManager.GetUserAsync(User);
+                if (UserInPage != null) {
+                    _userProductList.SetListName(UserInPage.Id);
+                }
+            }
 
             // Attr of the product from the params of method
             SearchProductName = searchProductName;
@@ -178,6 +185,7 @@ namespace LoCoMPro.Pages
 
             // Initial request for all the registers in the database if the reportState is not 2
             var registers = from r in _context.Registers
+                            where r.Reports.All(report => report.ReportState != 2)
                             select r;
 
             // add the images from every register
@@ -371,6 +379,9 @@ namespace LoCoMPro.Pages
         /// </summary>
         public IActionResult OnPostAddToProductList(string productData)
         {
+            
+            _userProductList.SetListName(_userManager.GetUserId(User));
+
             // Gets and split the data
             string[] values = SplitString(productData, '\x1F');
 

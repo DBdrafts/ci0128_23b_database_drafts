@@ -2,8 +2,8 @@
 Dropzone.autoDiscover = false;
 
 // Declare variables
-var myDropzone;
-var maxImages = 5;
+let myDropzone;
+const maxImages = 5;
 
 // Initialize Dropzone when the DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
@@ -25,9 +25,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('Success:', response);
             });
 
+            this.on("addedfile", function (file) {
+
+                let validFiles = myDropzone.files.filter(function (f) {
+                    return f.status !== 'error';
+                });
+
+                if (validFiles.length > maxImages) {
+                    showFeedbackMessage('El límite de imágenes permitidas es ' + maxImages + ' máximo.', 'feedbackMessage');
+                    this.removeFile(file);
+                }
+            });
+
             this.on("sending", function (file, xhr, formData) {
                 // Set XSRF token for the request
-                var csrfToken = $('input:hidden[name="__RequestVerificationToken"]').val();
+                const csrfToken = $('input:hidden[name="__RequestVerificationToken"]').val();
                 xhr.setRequestHeader("XSRF-TOKEN", csrfToken);
             });
         }
@@ -46,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
         myDropzone.processQueue();
 
         // Create a FormData object from the form
-        var formData = new FormData(document.getElementById('addProductForm'));
+        let formData = new FormData(document.getElementById('addProductForm'));
 
         // Append uploaded files to the FormData object
         if (myDropzone.files.length > 0) {
@@ -56,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Create a new XMLHttpRequest for form submission
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.open('POST', '/AddProductPage?handler=HandleFormSubmission', true);
         xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
 
@@ -76,19 +88,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to validate the form fields
     function validateForm() {
-        var requiredFields = [
+        const requiredFields = [
             { id: 'province', message: 'Por favor, seleccione una ubicación.' },
             { id: 'store', message: 'Por favor, ingrese el nombre del establecimiento.' },
             { id: 'productName', message: 'Por favor, ingrese el nombre del producto.' },
             { id: 'price', message: 'Por favor, ingrese el precio del producto.' }
         ];
 
-        var isValid = true;
+        let isValid = true;
 
-        for (var i = 0; i < requiredFields.length; i++) {
-            var field = requiredFields[i];
-            var fieldElement = document.getElementById(field.id);
-            var fieldValue = fieldElement.value.trim();
+        for (let i = 0; i < requiredFields.length; i++) {
+            let field = requiredFields[i];
+            let fieldElement = document.getElementById(field.id);
+            let fieldValue = fieldElement.value.trim();
 
             if (fieldValue === '') {
                 isValid = false;
@@ -97,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        var nonImageFiles = myDropzone.files.filter(function (file) {
+        let nonImageFiles = myDropzone.files.filter(function (file) {
             return !file.type.startsWith('image/');
         });
 
@@ -106,6 +118,31 @@ document.addEventListener('DOMContentLoaded', function () {
             showFeedbackMessage('Por favor, seleccione solo archivos de imagen', 'feedbackMessage');
         }
 
+        let duplicateFileNames = findDuplicateFileNames(myDropzone.files);
+
+        if (duplicateFileNames.length > 0) {
+            isValid = false;
+            let message = 'No se permite enviar imágenes con el mismo nombre: ' + duplicateFileNames.join(', ');
+            showFeedbackMessage(message, 'feedbackMessage');
+        }
+
         return isValid;
+    }
+
+    // Find duplicate image names
+    function findDuplicateFileNames(files) {
+        let fileNames = {};
+        let duplicateFileNames = [];
+
+        files.forEach(function (file) {
+            let fileName = file.name;
+            if (fileNames[fileName]) {
+                duplicateFileNames.push(fileName);
+            } else {
+                fileNames[fileName] = true;
+            }
+        });
+
+        return duplicateFileNames;
     }
 });

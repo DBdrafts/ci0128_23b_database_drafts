@@ -10,6 +10,7 @@
 }
 
 <head>
+    <title>ProductListPage</title>
     <link rel="stylesheet" href="~/css/ProductListPage.css" />
 
     <script src="~/js/deleteProductList.js"></script>
@@ -25,24 +26,27 @@
             <div class="list-page-title">
                 <h2>Lista de productos de interés</h2>
             </div>
-
-            <div class="list-page-subtitle">
-                <h4>Cantidad de productos: <span id="product-count">@Model.UserProductList.Count</span></h4>
-
-                <h4>Precio aproximado: ₡ <span id="total-price">@Model.TotalPrice.ToString("N0")</span></h4>
-            </div>
         </div>
 
         <a style='display: @(Model.UserProductList.Count != 0 ? "inline-block" : "none")'
-                class="information-button-section" method="get"  asp-page="/ListReportPage">
+                class="information-button-section" method="get" asp-page="/ListReportPage">
             <button type="button" class="button-general" id="generate-report-button">
-                Generar reporte
+                Generar informe
                 <i class="fa fa-list" aria-hidden="true"></i>
             </button>
         </a>
+        @if (!Model.HasUserLocation)
+        {
+            <div class="location-message" id="location-message-text" 
+                    style='display: @(Model.UserProductList.Count != 0 ? "inline-block" : "none")'>
+                <span>
+                    * Escoja una ubicación de preferencia para poder crear un informe
+                </span>
+            </div>
+        }
+        <hr class="style-four">
     </div>
 
-    <hr class="style-four">
 
     <div class="empty-section text-center" id="empty-list"
             style='display: @(Model.UserProductList.Count == 0 ? "inline-block" : "none")'>
@@ -65,17 +69,10 @@
                 <li>
                     <div class="text-comment">Modelo</div>
                 </li>
-                <li>
-                    <div class="text-comment">Tienda</div>
-                </li>
-                <li>
-                    <div class="text-comment">Ubicación</div>
-                </li>
-                <li>
-                    <div class="text-comment">Precio Promedio</div>
-                </li>
             </ul>
         </nav>
+
+        <div id="product-count" hidden>@Model.UserProductList.Count</div>
 
         <ul class="product-list-section">
             @for (int i = 0; i < Model.UserProductList.Count; i++)
@@ -96,15 +93,6 @@
                         </span>
                         <span id="register-product-model" value="@product.ProductModel">
                             @Html.DisplayFor(modelItem => product.ProductModel)
-                        </span>
-                        <span id="register-store-name" value="@product.StoreName">
-                            @Html.DisplayFor(modelItem => product.StoreName)
-                        </span>
-                        <span id="register-location-name" value="@product.Province + , + @product.Canton">
-                            @product.Province, @product.Canton
-                        </span>
-                        <span class="align-right" id="register-price" value="@product.AvgPrice">
-                            ₡ @Html.DisplayFor(modelItem => product.AvgPrice)
                         </span>
                         <button class="remove-button button-general" type="button"
                                 data-product-data="@productData" onclick="removeProductFromList(this, @i)">

@@ -14,7 +14,6 @@
 .column {
     flex: 33.33%;
     height: 100px;
-    margin: 5px;
     text-align: center;
     display: inline-block;
     margin: 0px;
@@ -158,7 +157,6 @@
     overflow: hidden;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
 }
 
 .small-img-space:hover {
@@ -515,9 +513,7 @@
     transform: translateX(-50%);
     display: none;
     border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     transition: opacity 0.3s ease;
-    border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     font-weight: 500;
     z-index: 10;

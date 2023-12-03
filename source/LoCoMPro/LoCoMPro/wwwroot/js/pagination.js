@@ -32,6 +32,10 @@ document.addEventListener("DOMContentLoaded", function () {
             displayInlineBlock = true;
         }
 
+        if (resultBlocks[0].querySelector(field) == null) {
+            field = "#report-list-title";
+        }
+
         // Implement your sorting logic here
         resultBlocks.sort((a, b) => {
             const valueA = parseFloat(a.querySelector(field).getAttribute("value"));

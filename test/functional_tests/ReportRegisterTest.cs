@@ -19,6 +19,7 @@ namespace functional_tests
         {
             // Arrange
             var driver = new ChromeDriver();
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
             driver.Navigate().GoToUrl("https://localhost:7119/Identity/Account/Login");
             var testPage = new Login(driver);
 
@@ -28,22 +29,21 @@ namespace functional_tests
             // Act
             testPage.SingIn(email, password);
             testPage.GoToProductPage("Celular");
-
-            driver.FindElement(By.Id("open-popup-button-2")).Click();
+            System.Threading.Thread.Sleep(1500);
+            driver.FindElement(By.Id("open-popup-button-6")).Click();
             driver.FindElement(By.Id("reportIcon")).Click();
             driver.FindElement(By.Id("saveButton")).Click();
 
             var feedbackMessageElement = driver.FindElement(By.Id("feedbackMessage"));
-
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
             wait.Until(driver => feedbackMessageElement.Displayed);
+
 
             string reportFeedbackMessage = feedbackMessageElement.Text;
 
             // Assert
             Assert.That(reportFeedbackMessage.Contains("Su reporte se ha realizado correctamente!") ||
                         reportFeedbackMessage.Contains("Su reporte ha sido revertido correctamente!"));
-
+            driver.Quit();
         }
     }
 }

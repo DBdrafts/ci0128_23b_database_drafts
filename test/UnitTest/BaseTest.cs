@@ -122,8 +122,19 @@ public class BaseTest
 
             // Have to return a Product List page
             case "product_list":
-                return new ProductListPageModel(dbContext, mockConfiguration.Object, null);
+                return new ProductListPageModel(dbContext, mockConfiguration.Object, null
+                    , mockUserManager.Object);
 
+            // Have to return a Report List page
+            case "report_list_page":
+                return new ListReportPageModel(dbContext, mockConfiguration.Object, null
+                    , mockUserManager.Object);
+
+            case "moderate_anormal_registers":
+                return new ModerateAnomaliesPageModel(dbContext, mockConfiguration.Object, mockUserManager.Object);
+
+            case "most_reported_users":
+                return new MostReportedPageModel(dbContext, mockConfiguration.Object, mockUserManager.Object);
             // Return a base page model
             default:
                 return new LoCoMProPageModel(dbContext, mockConfiguration.Object);

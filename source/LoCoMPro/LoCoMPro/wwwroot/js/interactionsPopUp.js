@@ -2,7 +2,7 @@
 /// Obtain the data needed to operate the Pop Up
 /// </summary>
 function openInteractionsPopup(openButton) {
-    var interactionsPopup = document.querySelector('.interactions-popup');
+    let interactionsPopup = document.querySelector('.interactions-popup');
     reportCommentInput = document.getElementById('report-comment');
     reportLabel = document.getElementById('report-label');
     undoReportLabel = document.getElementById('undo-report-label');
@@ -26,7 +26,7 @@ function openInteractionsPopup(openButton) {
     document.getElementById('saveButton').value = registerNumber;
     
     // Set the images data
-    var imagesData = openButton.getAttribute('images-register-id').split(String.fromCharCode(31));
+    let imagesData = openButton.getAttribute('images-register-id').split(String.fromCharCode(31));
 
     // Load the images in the pop up
     loadRegisterImages(imagesData);
@@ -38,12 +38,12 @@ function openInteractionsPopup(openButton) {
     setReportedValue();
 
     // Sets the information for the review function and report
-    setReviewedValue(lastReviewValue);   
+    setReviewedValue(lastReviewValue);
 }
 
 
 function openInteractionsPopupMod(openButton) {
-    var interactionsPopup = document.querySelector('.interactions-popup');
+    let interactionsPopup = document.querySelector('.interactions-popup');
     interactionsPopup.style.display = 'block';
     reportData = openButton.getAttribute('report-data');
     reportNumber = openButton.getAttribute('report-number');
@@ -73,7 +73,7 @@ function openInteractionsPopupMod(openButton) {
 }
 
 function closeInteractionsPopupMod() {
-    var popup = document.querySelector('.interactions-popup');
+    let popup = document.querySelector('.interactions-popup');
     popup.style.display = 'none';
 }
 
@@ -122,7 +122,7 @@ function loadRegisterImages(imagesData) {
 function closeInteractionsPopup() {
     // Returns the values to it´s original form
     reviewedValue = 0;
-    var popup = document.querySelector('.interactions-popup');
+    let popup = document.querySelector('.interactions-popup');
     if (reportCommentInput && reportLabel) {
         reportCommentInput.style.display = 'none';
         reportLabel.style.display = 'none';
@@ -191,44 +191,56 @@ function setReportedValue() {
 /// Save the interaction made by the user
 /// </summary>
 function saveInteractions() {
+
     // If the user made a change
     if (reportChanged || registerReviewed) {
-        var reportComment = document.getElementById('report-comment').value;
+        const reportComment = document.getElementById('report-comment').value;
+        const url = '/ProductPage/1?handler=HandleInteraction';
+        const beforeSendHandler = function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
+        };
+
+        const successHandler = function (data) {
+            console.log('Report saved successfully' + data);
+            const feedbackMessage = getFeedbackMessage();
+            showFeedbackMessage(feedbackMessage, 'feedbackMessage');
+            if (registerReviewed) {
+                updateRegisterRating($("#saveButton").val(), registerKeys);
+            }
+        }
+
+        const errorHandler = function (error) {
+            console.error('Error saving report: ' + error);
+            showFeedbackMessage('Error al realizar la interacción!', 'feedbackMessage');
+        };
+
         $.ajax({
             type: 'POST',
-            url: '/ProductPage/1?handler=HandleInteraction', // Specify the handler
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("XSRF-TOKEN",
-                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            url: url,
+            beforeSend: beforeSendHandler,
+            data: {
+                registerKeys: registerKeys, reportChanged: reportChanged,
+                reviewedValue: reviewedValue, reportComment: reportComment
             },
-            data: { registerKeys: registerKeys, reportChanged: reportChanged, reviewedValue: reviewedValue, reportComment: reportComment },
-            success: function (data) {
-                console.log('Report saved successfully' + data);
-                if (reportChanged && registerReviewed) {
-                    showFeedbackMessage('Su reporte y valoración se han realizado correctamente!', 'feedbackMessage');
-                } else {
-                    if (reportChanged) {
-                        if (reportActivated) {
-                            showFeedbackMessage('Su reporte se ha realizado correctamente!', 'feedbackMessage');
-                        } else {
-                            showFeedbackMessage('Su reporte ha sido revertido correctamente!', 'feedbackMessage');
-                        }
-                    } else {
-                        showFeedbackMessage('Su valoración se ha realizado correctamente!', 'feedbackMessage');
-                    }
-                }
-                if (registerReviewed) {
-                    updateRegisterRating($("#saveButton").val(), registerKeys);
-                }
-            },
-            error: function (error) {
-                console.error('Error saving report: ' + error);
-                showFeedbackMessage('Error al realizar el reporte!', 'feedbackMessage');
-
-            }
+            success: successHandler,
+            error: errorHandler
         });
     }
     closeInteractionsPopup();
+}
+
+function getFeedbackMessage() {
+    if (reportChanged && registerReviewed) {
+        return 'Su reporte y valoración se han realizado correctamente!';
+    } else if (reportChanged) {
+        if (reportActivated) {
+            return 'Su reporte se ha realizado correctamente!';
+        } else {
+            return 'Su reporte ha sido revertido correctamente!';
+        }
+    } else {
+        return 'Su valoración se ha realizado correctamente!';
+    }
 }
 
 ///<summary>
@@ -295,7 +307,7 @@ function hideReport(reportNumber) {
 /// The moderator rejects the report, hiding the report and setting its ReportState to 0
 /// </summary>
 function rejectReport() {
-    
+
     $.ajax({
         type: 'POST',
         url: '/ModeratePage?handler=RejectReport',
@@ -316,7 +328,7 @@ function rejectReport() {
         }
     });
     closeInteractionsPopupMod();
-} 
+}
 
 function updateReportList() {
     var reportCount = parseInt(document.getElementById("report-count").textContent);
@@ -472,7 +484,61 @@ function copyRegisterValidation(registerNumber) {
     $("#popup-veracity").html(veracityContent);
 }
 
-//export functions for tests
+/// <summary>
+/// The moderator accepts the report, hiding the report and setting its ReportState to 2
+/// </summary>
+function acceptRegisterAnormal() {
+
+    $.ajax({
+        type: 'POST',
+        url: '/ModerateAnomaliesPage?handler=AcceptReport',
+
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+        },
+        data: { reportData: reportData },
+        success: function (data) {
+            hideReport(reportNumber);
+            console.log('Report updated successfully' + data);
+            showFeedbackMessage('El reporte anómalo ha sido aprobado exitosamente', 'feedbackMessage');
+            updateReportList();
+        },
+        error: function (error) {
+            console.error('Error saving report: ' + error);
+            showFeedbackMessage('Error al aceptar el reporte ', 'feedbackMessage');
+        }
+    });
+    closeInteractionsPopupMod();
+}
+
+/// <summary>
+/// The moderator rejects the report, hiding the report and setting its ReportState to 0
+/// </summary>
+function rejectRegisterAnormal() {
+    $.ajax({
+        type: 'POST',
+        url: '/ModerateAnomaliesPage?handler=RejectReport',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+        },
+        data: { reportData: reportData },
+        success: function (data) {
+            hideReport(reportNumber);
+            console.log('Report updated successfully' + data);
+            showFeedbackMessage('El reporte anómalo ha sido rechazado exitosamente', 'feedbackMessage');
+            updateReportList();
+        },
+        error: function (error) {
+            console.error('Error saving report: ' + error);
+            showFeedbackMessage('Error al rechazar el reporte ', 'feedbackMessage');
+        }
+    });
+    closeInteractionsPopupMod();
+} 
+
+// export functions for tests
 module.exports = {
     toggleReport,
     closeInteractionsPopup,
