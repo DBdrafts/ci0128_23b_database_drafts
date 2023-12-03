@@ -71,7 +71,7 @@ namespace LoCoMPro.Pages
                 return new JsonResult(new { Message = "Invalid Parameters", StatusCode = 500 });
             }
 
-            if (ChangeProductNames(productName, groupProductNames))
+            if (ChangeProductNames(productName, groupProductNames) > 0)
             {
                 return new JsonResult("Ok");
             } else
@@ -87,20 +87,17 @@ namespace LoCoMPro.Pages
         /// </summary>
         /// <param name="productName">New name that products must have.</param>
         /// <param name="groupProductNames">Dictionary where the keys are the name of the products to change and the value is set to true if said product must be changed.</param>
-        private bool ChangeProductNames(string productName, Dictionary<string, bool> groupProductNames)
+        private int ChangeProductNames(string productName, Dictionary<string, bool> groupProductNames)
         {
             using (var transaction = _context.Database.BeginTransaction(System.Data.IsolationLevel.RepeatableRead))
             {
-                var wereRowsChanged = false;
                 int rowsChangedCount = 0;
                 try
                 {                   
                     foreach (var product in groupProductNames)
                     {
                         if (product.Value == false || product.Key == productName) { continue; }
-                        rowsChangedCount = _context.UpdateProductName(productName, product.Key);
-                        if (!wereRowsChanged) { wereRowsChanged = rowsChangedCount > 0; }
-
+                        rowsChangedCount += _context.UpdateProductName(productName, product.Key);
                     }
 
                     // If everything is successful, commit the transaction
@@ -112,7 +109,7 @@ namespace LoCoMPro.Pages
                     Console.WriteLine($"Error: {ex.Message}");
                     transaction.Rollback();
                 }
-                return wereRowsChanged;
+                return rowsChangedCount;
             }
         }
 
