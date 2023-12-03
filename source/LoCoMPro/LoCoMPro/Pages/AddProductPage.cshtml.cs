@@ -75,7 +75,7 @@ namespace LoCoMPro.Pages
         /// Handle the submition request and redirect to /Index on success.
         /// </summary>
         /// <returns>Success Protocol Message.</returns>
-        public IActionResult OnPostHandleFormSubmission()
+        public async Task<IActionResult> OnPostHandleFormSubmission()
         {
             using (var transaction = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadCommitted))
             {
@@ -84,7 +84,7 @@ namespace LoCoMPro.Pages
                     string? storeName = Request.Form["store"];
                     if (!string.IsNullOrEmpty(storeName))
                     {
-                        _ = StoreFormDataAsync(storeName);
+                        await StoreFormDataAsync(storeName);
                         TempData["FeedbackMessage"] = "Su aporte fue agregado correctamente!";
                     }
 

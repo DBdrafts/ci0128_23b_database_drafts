@@ -91,26 +91,28 @@ namespace LoCoMPro.Pages
         {
             using (var transaction = _context.Database.BeginTransaction(System.Data.IsolationLevel.RepeatableRead))
             {
+                var wereRowsChanged = false;
+                int rowsChangedCount = 0;
                 try
                 {                   
                     foreach (var product in groupProductNames)
                     {
                         if (product.Value == false || product.Key == productName) { continue; }
-                        _context.UpdateProductName(productName, product.Key);
+                        rowsChangedCount = _context.UpdateProductName(productName, product.Key);
+                        if (!wereRowsChanged) { wereRowsChanged = rowsChangedCount > 0; }
 
                     }
 
                     // If everything is successful, commit the transaction
                     transaction.Commit();
-                    return true;
                 }
                 catch (Exception ex)
                 {
                     // Handle exceptions and optionally roll back the transaction
                     Console.WriteLine($"Error: {ex.Message}");
                     transaction.Rollback();
-                    return false;
                 }
+                return wereRowsChanged;
             }
         }
 
