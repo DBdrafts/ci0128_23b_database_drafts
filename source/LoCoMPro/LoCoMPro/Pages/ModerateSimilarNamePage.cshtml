@@ -5,7 +5,6 @@
     Layout = "_Layout";
     ViewBag.ShowSearchBar = true;
     ViewBag.ShowLogoLink = true;
-    char s = (char)31; // ASCII Control Unit Separator
 }
 @using Microsoft.AspNetCore.Identity
 @using LoCoMPro.Data;
@@ -27,7 +26,6 @@
         <div id="feedbackMessage" class="feedback-message"></div>
     </div>
 
-    <!-- TODO: An If here -->
     <div class="empty-section text-center" id="empty-list" hidden>
         <h1>¡No se encontraron productos con nombres similares!</h1>
         <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
@@ -45,7 +43,7 @@
                     <li class="report-list-block register-block-pagination" id="report-block-@listIndex">
                         <div class="report-list-block-information">
                             <span id="report-list-title" value="@(reportList[0].Name)">@(reportList[0].Name)</span>
-                            <span id="report-list-count" value="@(reportList.Count())">cant. @(reportList.Count())</span>
+                            <span id="report-list-count" value="@(reportList.Count)">cant. @(reportList.Count)</span>
                             <span class="block-edit-icon">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </span>

@@ -18,8 +18,6 @@ namespace LoCoMPro.Pages
     {
         private readonly UserManager<User> _userManager;
 
-        private readonly IHttpContextAccessor? _httpContextAccessor;
-
         /// <summary>
         /// Structure that contains list of product with similar names
         /// </summary>
@@ -36,7 +34,7 @@ namespace LoCoMPro.Pages
             , IHttpContextAccessor? httpContextAccessor, UserManager<User> userManager)
             : base(context, configuration)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _ = httpContextAccessor;
             _userManager = userManager;
         }
 
@@ -45,8 +43,6 @@ namespace LoCoMPro.Pages
         /// </summary>
         public void OnGetAsync()
         {
-            var currentUserId = _userManager.GetUserId(User);
-
             // Define a threshold for similarity
             double threshold = 2;
 
@@ -96,7 +92,7 @@ namespace LoCoMPro.Pages
                 {                   
                     foreach (var product in groupProductNames)
                     {
-                        if (product.Value == false || product.Key == productName) { continue; }
+                        if (!product.Value || product.Key == productName) { continue; }
                         rowsChangedCount += _context.UpdateProductName(productName, product.Key);
                     }
 
@@ -129,7 +125,7 @@ namespace LoCoMPro.Pages
                 // Find the group with the closest product names
                 var group = productGroups
                     .OrderBy(g => g.Min(p => Levenshtein.Distance(product.Name, p.Name)))
-                    .FirstOrDefault(p => p.Any(p => Levenshtein.Distance(product.Name, p.Name) <= threshold));
+                    .FirstOrDefault(p => p.Exists(p => Levenshtein.Distance(product.Name, p.Name) <= threshold));
 
                 if (group != null)
                 {
@@ -143,7 +139,7 @@ namespace LoCoMPro.Pages
                 }
             }
 
-            return productGroups.Where(g => g.Count() > 1).ToList();
+            return productGroups.Where(g => g.Count > 1).ToList();
         }
 
     }
