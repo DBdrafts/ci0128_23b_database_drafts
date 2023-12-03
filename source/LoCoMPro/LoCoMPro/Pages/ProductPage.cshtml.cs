@@ -711,6 +711,28 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
+        /// Check if the user had already made a report for the register
+        /// <param name="registerKeys">Keys to identificate the register to check </param>
+        /// <returns> a JsonResult with the boolean result.</returns>
+        /// </summary>
+        public JsonResult OnGetCheckReportStatus(string registerKeys)
+        {
+            var (user, registerToUpdate, _) = GetInteractionValues(registerKeys);
+            bool hasReported = false;
+            string? previousReportComment = null;
+            if (user != null)
+            {
+                var report = PreviousReport(user!, registerToUpdate);
+                if (report != null)
+                {
+                    hasReported = true;
+                    previousReportComment = report.Reason;
+                }
+            }
+            return new JsonResult(new { hasReported, previousReportComment });
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="registerKeys"></param>
