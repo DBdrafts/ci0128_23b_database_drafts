@@ -1,13 +1,6 @@
 ﻿using functional_tests.Shared;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenQA.Selenium.Support.UI;
-using System.Windows;
 
 namespace functional_tests
 {
@@ -26,6 +19,11 @@ namespace functional_tests
 
             // Assert that the searchType and the searchString where selected correctly
             Assert.IsTrue(driver!.Url.Contains("searchType=Marca&searchString=apple"));
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
             driver.Quit();
         }
     }
