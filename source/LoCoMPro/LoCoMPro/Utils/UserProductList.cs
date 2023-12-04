@@ -81,10 +81,7 @@ namespace LoCoMPro.Utils
             var existingElement = UserProductList.FirstOrDefault(item =>
                 item.ProductName == compareElement.ProductName &&
                 item.ProductBrand == compareElement.ProductBrand &&
-                item.ProductModel == compareElement.ProductModel &&
-                item.StoreName == compareElement.StoreName &&
-                item.Province == compareElement.Province &&
-                item.Canton == compareElement.Canton);
+                item.ProductModel == compareElement.ProductModel);
 
             return existingElement;
         }

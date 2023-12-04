@@ -1,7 +1,7 @@
 ﻿@page "~/ListReportPage"
 @model LoCoMPro.Pages.ListReportPageModel
 @{
-    ViewData["Title"] = "Reporte de la Lista";
+    ViewData["Title"] = "Informe de la Lista";
     Layout = "_Layout";
     ViewBag.ShowSearchBar = true;
     ViewBag.ShowLogoLink = true;
@@ -10,6 +10,7 @@
 }
 
 <head>
+    <title>ListReportPage</title>
     <link rel="stylesheet" href="~/css/ListReportPage.css" />
 
     <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
@@ -21,7 +22,7 @@
 <div>
     <div class="information-section">
         <div>
-            <h2>Reporte de lista de compra</h2>
+            <h2>Informe de la lista de compra</h2>
         </div>
     </div>
 
@@ -69,6 +70,7 @@
                 {
                     var store = storeEntry.Key;
                     var productList = storeEntry.Value;
+                    var storeDistance = Model.StoreDistances[store] != -1 ? Model.StoreDistances[store].ToString() + " km" : "*";
 
                     float totalPrice = 0;
                     @foreach(var register in productList)
@@ -83,7 +85,7 @@
                                 @Html.DisplayFor(modelItem => store.Name)
                             </span>
                             <span id="report-location" value="@Model.StoreDistances[store]">
-                                @store.ProvinciaName, @store.CantonName
+                                @store.ProvinciaName, @store.CantonName (@storeDistance)
                             </span>
                             <span class="align-right" id="report-price" value="@totalPrice">
                                 ₡ @totalPrice.ToString("N0")

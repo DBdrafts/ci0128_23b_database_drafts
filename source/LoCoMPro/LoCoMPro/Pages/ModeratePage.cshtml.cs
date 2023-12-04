@@ -100,11 +100,28 @@ namespace LoCoMPro.Pages
             var report = getReportToUpdate(reporterId, contributorId, productName, storeName, contributionDate,
                 cantonName, provinceName, reportSubmitDate);
 
-            report.ReportState = 2;
+            using (var transaction = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadCommitted))
+            {
+                try
+                {
 
-            _context.SaveChanges();
+                    report.ReportState = 2;
 
-            return new JsonResult("OK");
+                    _context.SaveChanges();
+
+                    // If everything is successful, commit the transaction
+                    transaction.Commit();
+
+                    return new JsonResult("OK");
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions and optionally roll back the transaction
+                    Console.WriteLine($"Error: {ex.Message}");
+                    transaction.Rollback();
+                    return new JsonResult(new { Message = "Error changing report state", StatusCode = 500 });
+                }
+            }
         }
 
         /// <summary>

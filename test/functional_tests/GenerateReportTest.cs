@@ -12,19 +12,12 @@ namespace functional_tests
 {
     internal class GenerateReportTest
     {
-        WebDriver driver = new ChromeDriver();
-
-        [SetUp]
-        public void Setup()
-        {
-            driver = new ChromeDriver();
-        }
-
         // Test by Julio Alejandro Rodríguez Salguera
         // Test from the Sprint 3
         [Test]
         public void GenerateReportFromListTest()
         {
+            var driver = new ChromeDriver();
             // Arrange
             driver.Navigate().GoToUrl("https://localhost:7119/Identity/Account/Login");
 
@@ -56,6 +49,7 @@ namespace functional_tests
 
             // Assert
             Assert.IsTrue(driver.Url == "https://localhost:7119/ListReportPage");
+            driver.Quit();
         }
 
         // Test by Julio Alejandro Rodríguez Salguera
@@ -63,6 +57,7 @@ namespace functional_tests
         [Test]
         public void SortReportListByPriceTest()
         {
+            var driver = new ChromeDriver();
             // Arrange
             driver.Navigate().GoToUrl("https://localhost:7119/Identity/Account/Login");
 
@@ -105,6 +100,7 @@ namespace functional_tests
                 Assert.LessOrEqual(reportResult.ElementAt(resultIndex).FindElement(By.Id("report-price")).GetAttribute("Value")
                     , reportResult.ElementAt(resultIndex+1).FindElement(By.Id("report-price")).GetAttribute("Value"));
             }
+            driver.Quit();
         }
 
         // Test by Julio Alejandro Rodríguez Salguera
@@ -112,6 +108,7 @@ namespace functional_tests
         [Test]
         public void SortReportListByDistanceTest()
         {
+            var driver = new ChromeDriver();
             // Arrange
             driver.Navigate().GoToUrl("https://localhost:7119/Identity/Account/Login");
 
@@ -154,12 +151,7 @@ namespace functional_tests
                 Assert.LessOrEqual(reportResult.ElementAt(resultIndex).FindElement(By.Id("report-location")).GetAttribute("Value")
                     , reportResult.ElementAt(resultIndex + 1).FindElement(By.Id("report-location")).GetAttribute("Value"));
             }
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            //driver.Quit();
+            driver.Quit();
         }
     }
 }

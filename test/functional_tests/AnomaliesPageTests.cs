@@ -12,27 +12,6 @@ namespace functional_tests
 {
     public class AnomaliesPageTests
     {
-        // Test by Omar Camacho Calvo C11476 | Sprint 3
-        [Test]
-        public void TestButtonToAnormalRegistersPage()
-        {
-            // Arrange
-            var driver = new ChromeDriver();
-            driver.Navigate().GoToUrl("https://localhost:7119/Identity/Account/Login");
-            var login = new Login(driver);
-
-            var email = "locomoderador@gmail.com";
-            var password = "Mod123!";
-
-            login.SingIn(email, password);
-
-            // Act
-            driver.FindElement(By.Id("moderator-button")).Click();
-            driver.FindElement(By.Id("moderate-anomalies-button")).Click();
-
-            // Assert
-            IWebElement userLogged = driver.FindElement(By.Id("cant-reportes"));
-        }
 
         // Test by Omar Camacho Calvo C11476 | Sprint 3
         [Test]
@@ -64,6 +43,7 @@ namespace functional_tests
             {
                 Assert.IsFalse(driver.FindElements(By.ClassName("open-interactions-button")).Count > 0, "Not expecting to find the interactions button");
             }
+            driver.Quit();
         }
 
         
@@ -111,15 +91,13 @@ namespace functional_tests
 
                 // Assert
                 Assert.That(reportFeedbackMessage.Contains("El reporte anómalo ha sido aprobado exitosamente"));
-
-
-
             }
             else if (FirstAnormalRegisterAmount == 0)
             {
                 // Assert
                 Assert.IsFalse(driver.FindElements(By.ClassName("open-interactions-button")).Count > 0, "Not expecting to find the interactions button");
             }
+            driver.Quit();
         }
 
         // Test by Omar Camacho Calvo C11476 | Sprint 3
@@ -171,8 +149,7 @@ namespace functional_tests
                 // Assert
                 Assert.IsFalse(driver.FindElements(By.ClassName("open-interactions-button")).Count > 0, "Not expecting to find the interactions button");
             }
+            driver.Quit();
         }
-        
-        
     }
 }

@@ -6,9 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Win32;
-using NetTopologySuite.Algorithm;
-using System.Diagnostics;
 using System.Globalization;
 
 
@@ -172,20 +169,34 @@ namespace LoCoMPro.Pages
             DateTime reportSubmitDate = DateTime.Parse(reportDate);
             DateTime contributionDate = DateTime.Parse(submitionDate);
 
-            // Call the getReportToUpdate method to retrieve the relevant report entity from the database.
-            var report = getReportToUpdate(reporterId, contributorId, productName, storeName, contributionDate,
-                cantonName, provinceName, reportSubmitDate);
-            report.ReportState = 2;
+            using (var transaction = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadCommitted))
+            {
+                try
+                {
+                    // Call the getReportToUpdate method to retrieve the relevant report entity from the database.
+                    var report = getReportToUpdate(reporterId, contributorId, productName, storeName, contributionDate,
+                    cantonName, provinceName, reportSubmitDate);
+                    report.ReportState = 2;
 
-            // Call the getRegisterToUpdate method to retrieve the relevant register entity from the database.
-            var register = getRegisterToUpdate(productName, storeName, cantonName, provinceName, contributorId);
-            register.MetahuristicState = 4;
+                    // Call the getRegisterToUpdate method to retrieve the relevant register entity from the database.
+                    var register = getRegisterToUpdate(productName, storeName, cantonName, provinceName, contributorId);
+                    register.MetahuristicState = 4;
 
-            // Save changes to the database.
-            _context.SaveChanges();
+                    // Save changes to the database.
+                    _context.SaveChanges();
 
-            // Return a JsonResult with the string "OK".
-            return new JsonResult("OK");
+                    transaction.Commit();
+                    // Return a JsonResult with the string "OK".
+                    return new JsonResult("OK");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    transaction.Rollback();
+                    return new JsonResult(new { Message = "Error saving report", StatusCode = 500 });
+                }
+
+            }
         }
 
         /// <summary>

@@ -46,9 +46,7 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
-.pop-up-form {
-    width: fit-content;
-}
+
 /* Style for the login button */
 #login-button {
     background-color: #F5AA38;
@@ -152,7 +150,15 @@ button.accept-policy {
 }
 
 .pop-up-form {
-    text-align:center;
+    text-align: center;
+    margin: 10px;
+    border: 1px #BABAB8 solid;
+    background-color: white;
+    width: fit-content;
+}
+
+.pop-up-form:hover {
+    background-color: #e5e5e5;
 }
 
 .popup-moderator button {
@@ -160,6 +166,7 @@ button.accept-policy {
     display: block;
     border-radius: 15px;
     padding: 10px;
+    margin: 8px 0px;
     width: 250px;
 }
 
@@ -167,13 +174,21 @@ button.accept-policy {
     margin-top: 5px;
 }
 
-#moderate-button, #most-repts-generated-button, #moderate-anomalies-button, #moderate-old-button {
+#moderate-anomalies-button {
+    margin-top: 5px;
+}
+
+#most-reported-generated-button {
+    margin-top: 5px;
+}
+
+#moderate-button, #most-repts-generated-button, #moderate-anomalies-button, #most-reported-generated-button, #similar-names-button, #moderate-old-button {
     border: 1px #BABAB8 solid;
     background-color: white;
 }
 
 /* Style for the logout button when the cursor is on the button */
-    #moderate-button:hover, #most-repts-generated-button:hover, #moderate-anomalies-button:hover, #moderate-old-button:hover {
+    #moderate-button:hover, #most-repts-generated-button:hover, #moderate-anomalies-button:hover, #most-reported-generated-button:hover, #similar-names-button:hover, #moderate-old-button:hover {
         background-color: #e5e5e5;
     }
 

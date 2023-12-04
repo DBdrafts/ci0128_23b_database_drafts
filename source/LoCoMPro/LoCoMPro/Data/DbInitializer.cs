@@ -21,6 +21,7 @@ namespace LoCoMPro.Data
                 return;   // DB has been seeded
             }
             var currentDir = Directory.GetCurrentDirectory();
+            context.ExecuteSqlScriptFile(currentDir + "/Data/TableConstraints.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/SearchRegister.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/CalculateDistance.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetSearchResults.sql");
@@ -34,7 +35,7 @@ namespace LoCoMPro.Data
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetMaxPriceValue.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetMinPriceValue.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetStdDevPriceValue.sql");
-
+            context.ExecuteSqlScriptFile(currentDir + "/Data/UpdateProductName.sql");
 
             List<Provincia> provincias = new();
             List<Canton> cantones = new();
@@ -167,10 +168,13 @@ namespace LoCoMPro.Data
         {
             // Add the stores
             stores.Add(new Store() { Name = "Super San Agustin", Location = cantones[0]
+                , Geolocation = cantones[0].Geolocation
                 , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }});
             stores.Add(new Store() { Name = "Pali", Location = cantones[1]
+                , Geolocation = cantones[1].Geolocation
                 , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }});
             stores.Add(new Store() { Name = "MasXMenos", Location = cantones[2]
+                , Geolocation = cantones[2].Geolocation
                 , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }});
 
             context.Stores.AddRange(stores);
@@ -219,6 +223,7 @@ namespace LoCoMPro.Data
                 NormalizedUserName = "JULIO444", Email = "julio444@ucr.ac.cr", NormalizedEmail = "JULIO444@UCR.AC.CR"
                 , PasswordHash = "AQAAAAIAAYagAAAAEBSumaRyX1siCcQ3b8TXll5Km5TWXJry6oq6euj1Bj1JaKgVWIat1jxDrhwvSwZJwA=="
                 , EmailConfirmed = true
+                , Geolocation = cantones[0].Geolocation
                 , SecurityStamp = "92355d52-a3d5-41a0-ba79-7e0658846a59"
                 , ConcurrencyStamp = "06661238-1061-4053-beb1-7e9acdb68f9f"
                 , Location = cantones[0]});

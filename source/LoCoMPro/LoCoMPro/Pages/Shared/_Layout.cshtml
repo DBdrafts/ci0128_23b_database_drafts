@@ -55,14 +55,23 @@
                                 <p>Moderar</p>
                             </a>
                             <div class="popup-moderator" id="popup-moderator">
-                                <a class="pop-up-form" asp-page="/ModeratePage" style="text-decoration:none">
-                                    <button class="button-general" id="moderate-button">Moderar Reportes</button>
+                                
+                                <h5 id="mod-menu-title">Moderar</h5>
+                                
+                                <a class="pop-up-form"  asp-page="/ModeratePage" style="text-decoration:none">
+                                    <button class="button-general" id="moderate-button">Reportes</button>
+                                </a>
+                                <a class="pop-up-form" asp-page="/ModerateSimilarNamePage" style="text-decoration:none">
+                                    <button class="button-general" id="similar-names-button">Nombres similares</button>
                                 </a>
                                 <a class="pop-up-form" asp-page="/ModerateAnomaliesPage" style="text-decoration:none">
                                     <button class="button-general" id="moderate-anomalies-button">Registros Anómalos</button>
                                 </a>
                                 <a class="pop-up-form" asp-page="/ModerateOldRegisters" style="text-decoration:none">
                                     <button class="button-general" id="moderate-old-button">Registros Viejos</button>
+                                </a>
+                                <a class="pop-up-form" asp-page="/MostReportedPage" style="text-decoration:none">
+                                    <button class="button-general" id="most-reported-generated-button">Usuarios más reportados</button>
                                 </a>
                                 <a class="pop-up-form" asp-page="/UsersWhoCreateMoreReports" style="text-decoration:none">
                                     <button class="button-general" id="most-repts-generated-button">Usuarios que más reportan</button>

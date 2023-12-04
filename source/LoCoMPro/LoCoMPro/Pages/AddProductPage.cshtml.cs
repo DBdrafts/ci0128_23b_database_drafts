@@ -1,28 +1,13 @@
-using Azure;
-using Humanizer;
 using LoCoMPro.Data;
 using LoCoMPro.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Build.ObjectModelRemoting;
 using Microsoft.CodeAnalysis;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Win32;
 using NetTopologySuite.Geometries;
-using NetTopologySuite.Index.IntervalRTree;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 
 namespace LoCoMPro.Pages
 {
@@ -90,15 +75,32 @@ namespace LoCoMPro.Pages
         /// Handle the submition request and redirect to /Index on success.
         /// </summary>
         /// <returns>Success Protocol Message.</returns>
-        public IActionResult OnPostHandleFormSubmission()
+        public async Task<IActionResult> OnPostHandleFormSubmission()
         {
-            string? storeName = Request.Form["store"];
-            if (!string.IsNullOrEmpty(storeName))
+            using (var transaction = _context.Database.BeginTransaction(System.Data.IsolationLevel.ReadCommitted))
             {
-                _ = StoreFormDataAsync(storeName);
-                TempData["FeedbackMessage"] = "Su aporte fue agregado correctamente!";
+                try
+                {
+                    string? storeName = Request.Form["store"];
+                    if (!string.IsNullOrEmpty(storeName))
+                    {
+                        await StoreFormDataAsync(storeName);
+                        TempData["FeedbackMessage"] = "Su aporte fue agregado correctamente!";
+                    }
+
+                    // If everything is successful, commit the transaction
+                    transaction.Commit();
+                    return new JsonResult("OK");
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions and optionally roll back the transaction
+                    Console.WriteLine($"Error: {ex.Message}");
+                    transaction.Rollback();
+                    return new JsonResult(new { Message = "Error adding products", StatusCode = 500 });
+                }
             }
-            return new JsonResult("OK");
+            
 
         }
 

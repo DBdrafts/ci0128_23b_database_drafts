@@ -221,6 +221,12 @@ namespace LoCoMPro.Data
 
                 entity.Navigation(p => p.Categories)
                     .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+                entity.Property(p => p.Brand)
+                    .HasMaxLength(100);
+
+                entity.Property(p => p.Model)
+                    .HasMaxLength(100);
             });
 
             // Building relationships for Canton
@@ -329,6 +335,20 @@ namespace LoCoMPro.Data
 
             // Return the value or 0 if the value was 0
             return roundResult;
+        }
+
+        /// <summary>
+        /// Gets the Review count for a register.
+        /// </summary>
+        /// <param name="register"></param>
+        /// <returns></returns>
+        public int GetReviewCount(Register register)
+        {
+            return this.Reviews.Count(r => r.ReviewedRegister.ContributorId == register.ContributorId
+                        && r.ReviewedRegister.ProductName == register.ProductName
+                        && r.ReviewedRegister.StoreName == register.StoreName
+                        && r.ReviewedRegister.SubmitionDate == register.SubmitionDate
+                        && r.ReviewedRegister.ContributorId == register.ContributorId);
         }
 
         /// <summary>
@@ -459,6 +479,21 @@ namespace LoCoMPro.Data
         }
 
         /// <summary>
+        /// Changes the name of <paramref name="oldProductName"/> to <paramref name="newProductName"/> including all dependencies.
+        /// </summary>
+        /// <param name="newProductName">New name for product in Db.</param>
+        /// <param name="oldProductName">Old name of product in DB.</param>
+        public int UpdateProductName(string newProductName, string oldProductName)
+        {
+            string sqlQuery = "EXEC dbo.UpdateProductName @newProductName, @oldProductName";
+
+            var x = Database.ExecuteSqlRaw(sqlQuery,
+                new SqlParameter("newProductName", newProductName),
+                new SqlParameter("oldProductName", oldProductName));
+            return x;
+        }
+
+        /// <summary>
         /// Round a real number to the closer real number multiple of 0.5
         /// </summary>
         /// <param name="value">Real number to round.</param>
@@ -474,5 +509,7 @@ namespace LoCoMPro.Data
             }
             return roundResult;
         }
+
+        
     }
 }

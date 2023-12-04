@@ -2,7 +2,7 @@
 /// Obtain the data needed to operate the Pop Up
 /// </summary>
 function openInteractionsPopup(openButton) {
-    var interactionsPopup = document.querySelector('.interactions-popup');
+    let interactionsPopup = document.querySelector('.interactions-popup');
     reportCommentInput = document.getElementById('report-comment');
     reportLabel = document.getElementById('report-label');
     undoReportLabel = document.getElementById('undo-report-label');
@@ -23,25 +23,27 @@ function openInteractionsPopup(openButton) {
     document.getElementById('popup-price').textContent = '₡' + price;
     document.getElementById('popup-userName').textContent = userName;
     document.getElementById('popup-comment').textContent = (comment !== null && comment !== '') ? comment : "N/A";
-
+    document.getElementById('saveButton').value = registerNumber;
+    
     // Set the images data
-    var imagesData = openButton.getAttribute('images-register-id').split(String.fromCharCode(31));
+    let imagesData = openButton.getAttribute('images-register-id').split(String.fromCharCode(31));
 
     // Load the images in the pop up
-    loadRegisterImages(imagesData)
+    loadRegisterImages(imagesData);
 
     // Copies the validation star of the register
     copyRegisterValidation(registerNumber);
 
     // Set the information of the report button
     setReportedValue();
+
     // Sets the information for the review function and report
     setReviewedValue(lastReviewValue);
 }
 
 
 function openInteractionsPopupMod(openButton) {
-    var interactionsPopup = document.querySelector('.interactions-popup');
+    let interactionsPopup = document.querySelector('.interactions-popup');
     interactionsPopup.style.display = 'block';
     reportData = openButton.getAttribute('report-data');
     reportNumber = openButton.getAttribute('report-number');
@@ -71,7 +73,7 @@ function openInteractionsPopupMod(openButton) {
 }
 
 function closeInteractionsPopupMod() {
-    var popup = document.querySelector('.interactions-popup');
+    let popup = document.querySelector('.interactions-popup');
     popup.style.display = 'none';
 }
 
@@ -120,7 +122,7 @@ function loadRegisterImages(imagesData) {
 function closeInteractionsPopup() {
     // Returns the values to it´s original form
     reviewedValue = 0;
-    var popup = document.querySelector('.interactions-popup');
+    let popup = document.querySelector('.interactions-popup');
     if (reportCommentInput && reportLabel) {
         reportCommentInput.style.display = 'none';
         reportLabel.style.display = 'none';
@@ -189,41 +191,78 @@ function setReportedValue() {
 /// Save the interaction made by the user
 /// </summary>
 function saveInteractions() {
+
     // If the user made a change
     if (reportChanged || registerReviewed) {
-        var reportComment = document.getElementById('report-comment').value;
+        const reportComment = document.getElementById('report-comment').value;
+        const url = '/ProductPage/1?handler=HandleInteraction';
+        const beforeSendHandler = function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
+        };
+
+        const successHandler = function (data) {
+            console.log('Report saved successfully' + data);
+            const feedbackMessage = getFeedbackMessage();
+            showFeedbackMessage(feedbackMessage, 'feedbackMessage');
+            if (registerReviewed) {
+                updateRegisterRating($("#saveButton").val(), registerKeys);
+            }
+        }
+
+        const errorHandler = function (error) {
+            console.error('Error saving report: ' + error);
+            showFeedbackMessage('Error al realizar la interacción!', 'feedbackMessage');
+        };
+
         $.ajax({
             type: 'POST',
-            url: '/ProductPage/1?handler=HandleInteraction', // Specify the handler
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("XSRF-TOKEN",
-                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            url: url,
+            beforeSend: beforeSendHandler,
+            data: {
+                registerKeys: registerKeys, reportChanged: reportChanged,
+                reviewedValue: reviewedValue, reportComment: reportComment
             },
-            data: { registerKeys: registerKeys, reportChanged: reportChanged, reviewedValue: reviewedValue, reportComment: reportComment },
-            success: function (data) {
-                console.log('Report saved successfully' + data);
-                if (reportChanged && registerReviewed) {
-                    showFeedbackMessage('Su reporte y valoración se han realizado correctamente!', 'feedbackMessage');
-                } else {
-                    if (reportChanged) {
-                        if (reportActivated) {
-                            showFeedbackMessage('Su reporte se ha realizado correctamente!', 'feedbackMessage');
-                        } else {
-                            showFeedbackMessage('Su reporte ha sido revertido correctamente!', 'feedbackMessage');
-                        }
-                    } else {
-                        showFeedbackMessage('Su valoración se ha realizado correctamente!', 'feedbackMessage');
-                    }
-                }
-            },
-            error: function (error) {
-                console.error('Error saving report: ' + error);
-                showFeedbackMessage('Error al realizar el reporte!', 'feedbackMessage');
-
-            }
+            success: successHandler,
+            error: errorHandler
         });
     }
     closeInteractionsPopup();
+}
+
+function getFeedbackMessage() {
+    if (reportChanged && registerReviewed) {
+        return 'Su reporte y valoración se han realizado correctamente!';
+    } else if (reportChanged) {
+        if (reportActivated) {
+            return 'Su reporte se ha realizado correctamente!';
+        } else {
+            return 'Su reporte ha sido revertido correctamente!';
+        }
+    } else {
+        return 'Su valoración se ha realizado correctamente!';
+    }
+}
+
+///<summary>
+/// This methods updates the register rating if the user just rated a register.
+///</summary
+function updateRegisterRating(registerNumber, registerKeys) {
+    var register_veracity = $("#register_veracity_" + registerNumber).find('.veracity-stars-section');
+    $.ajax({
+        url: '/ProductPage/1?handler=AverageRegisterRating',
+        type: 'GET',
+        data: { registerKeys: registerKeys },
+        success: function (data) {
+            var rating = data.rating;
+            var reviewCount = data.reviewCount;
+
+            highlight_star(rating, register_veracity);
+            $("#register_review_count_" + registerNumber).val(reviewCount).text(`(${reviewCount})`);
+        },
+        error: function (error) {
+            console.error('Error report status verification: ' + error);
+        }
+    });
 }
 
 /// <summary>
@@ -343,21 +382,59 @@ if (typeof jQuery !== 'undefined') {
     });
 }
 
+
+//function highlight_star(rating, rating_stars = '.rating_stars span.s') {
+//    // If the user has already made a review
+//    if (rating == 0 && reviewedValue != 0) {
+//        rating = reviewedValue;
+//    }
+//    $(rating_stars).each(function () {
+//        var low = $(this).data('low');
+//        var high = $(this).data('high');
+//        $(this).removeClass('active-high').removeClass('active-low');
+//        if (rating >= high) $(this).addClass('active-high');
+//        else if (rating == low) $(this).addClass('active-low');
+//    });
+//}
+
 /// <summary>
-/// Set the amount of stars highlighted 
+/// Highlights the stars with corresponding rating.
 /// </summary>
-function highlight_star(rating) {
+function highlight_star(rating, rating_stars = '.rating_stars span.s') {
     // If the user has already made a review
     if (rating == 0 && reviewedValue != 0) {
         rating = reviewedValue;
     }
-    $('.rating_stars span.s').each(function () {
-        var low = $(this).data('low');
-        var high = $(this).data('high');
-        $(this).removeClass('active-high').removeClass('active-low');
-        if (rating >= high) $(this).addClass('active-high');
-        else if (rating == low) $(this).addClass('active-low');
-    });
+
+    // Check if the rating_stars container has the class 'rating_stars'
+    var isOldStructure = (rating_stars.valueOf() === '.rating_stars span.s');
+
+    if (isOldStructure) {
+        // Handle the original structure
+        $(rating_stars).each(function () {
+            var low = $(this).data('low');
+            var high = $(this).data('high');
+            $(this).removeClass('active-high').removeClass('active-low');
+            if (rating >= high) $(this).addClass('active-high');
+            else if (rating == low) $(this).addClass('active-low');
+        });
+    } else {
+        // Handle the new structure
+        // You may need to adjust this based on the specific structure of your new HTML
+        // Iterate through each star icon
+        rating_stars.find('i').each(function (index) {
+            var currentStarIndex = index + 1; // Adjust index to start from 1
+
+            // Determine the appropriate classes based on the rating
+            if (currentStarIndex <= rating) {
+                $(this).removeClass('fa-star-o fa-star-half-o').addClass('fa-star');
+            } else if (currentStarIndex - 0.5 == rating) {
+                $(this).removeClass('fa-star-o fa-star').addClass('fa-star-half-o');
+            } else {
+                $(this).removeClass('fa-star fa-star-half-o').addClass('fa-star-o');
+            }
+        });
+    }
 }
 
 /// <summary>
@@ -376,8 +453,22 @@ function save_reviewed_state(value) {
 function setReviewedValue(lastReviewValue) {
     // If the user has already made a review
     reviewedValue = lastReviewValue == null ? 0 : lastReviewValue;
-    registerReviewed = false;
-    highlight_star(reviewedValue);
+    $.ajax({
+        url: '/ProductPage/1?handler=CheckLastRaiting',
+        type: 'GET',
+        data: { registerKeys: registerKeys },
+        success: function (data) {
+            hasReviewd = data.hasReviewed;
+            if (hasReviewd) {
+                reviewedValue = data.previousReview;
+              }
+            registerReviewed = false;
+            highlight_star(reviewedValue);
+        },
+        error: function (error) {
+            console.error('Error report status verification: ' + error);
+        }
+    });
 }
 
 

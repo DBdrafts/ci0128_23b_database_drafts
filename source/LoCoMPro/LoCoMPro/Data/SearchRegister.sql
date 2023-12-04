@@ -1,4 +1,4 @@
-﻿CREATE VIEW SearchRegister AS
+﻿CREATE VIEW dbo.SearchRegister WITH SCHEMABINDING AS
 SELECT 
     r.SubmitionDate,
     r.ContributorId,
@@ -13,11 +13,11 @@ SELECT
         WHEN s.Geolocation IS NOT NULL THEN s.Geolocation
         ELSE c.Geolocation
     END AS Geolocation
-FROM Product p
-    INNER JOIN Register r ON p.Name = r.ProductName
-    INNER JOIN Canton c ON c.ProvinciaName = r.ProvinciaName AND c.CantonName = r.CantonName
-    LEFT JOIN Store s ON s.Name = r.StoreName
-    LEFT JOIN Report rp ON 
+FROM dbo.Product p  -- Specify the schema for the Product table
+    INNER JOIN dbo.Register r ON p.Name = r.ProductName
+    INNER JOIN dbo.Canton c ON c.ProvinciaName = r.ProvinciaName AND c.CantonName = r.CantonName
+    LEFT JOIN dbo.Store s ON s.Name = r.StoreName
+    LEFT JOIN dbo.Report rp ON 
         rp.ContributorId = r.ContributorId AND
         rp.ProductName = r.ProductName AND
         rp.StoreName = r.StoreName AND
