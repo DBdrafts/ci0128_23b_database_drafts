@@ -59,7 +59,7 @@ namespace LoCoMPro.Pages
             {
                 System.Diagnostics.Debug.WriteLine("There are no registers");
             } 
-            lookForOldRegisters(1);
+            lookForOldRegisters(2);
             generateReports();
         }
 
@@ -255,7 +255,7 @@ namespace LoCoMPro.Pages
             var registers = from register in _context.Registers
                             where register.ProductName == prodName &&
                                 register.StoreName == storeName &&
-                                register.SubmitionDate.Date == dateLimit.Date
+                                register.SubmitionDate.Date < dateLimit.Date
                             select register;
             return registers.ToList();    
         }
