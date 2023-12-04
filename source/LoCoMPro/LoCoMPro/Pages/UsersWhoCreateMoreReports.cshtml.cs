@@ -140,9 +140,7 @@ namespace LoCoMPro.Pages
         {
             int numApprovedReports = 0;
 
-            var reports = from r in _context.Reports
-                          where r.ReportState == 2 && r.Reporter == user
-                          select r;
+            var reports = Reports.Where(r => r.Reporter == user && r.ReportState == 2);
             if (reports.Any())
             {
                 numApprovedReports = reports.Count();
@@ -156,9 +154,7 @@ namespace LoCoMPro.Pages
         {
             int numRejectedReports = 0;
 
-            var reports = from r in _context.Reports
-                          where r.ReportState == 0 && r.Reporter == user
-                          select r;
+            var reports = Reports.Where(r => r.Reporter == user && r.ReportState == 0);
             if (reports.Any())
             {
                 numRejectedReports = reports.Count();
