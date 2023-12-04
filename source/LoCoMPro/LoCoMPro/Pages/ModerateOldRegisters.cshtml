@@ -15,9 +15,7 @@
 
 <head>
     <link rel="stylesheet" href="~/css/ModerateOldRegisters.css" />
-    <script src="~/js/interactionsPopUp.js"></script>
-    <script src="~/js/productListButton.js"></script>
-    <link rel="stylesheet" href="~/css/RateRegister.css" />
+    <script src="~/js/moderateOldRegisters.js"></script>
     <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
 </head>
 
@@ -36,21 +34,21 @@
         <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
     </div>
 
-    <div class="reports-section" id="no-empty-list">
+    <div class="old-registers-section" id="no-empty-list">
         <div class="results-cont-msg" span id="results-count"></div>
 
         <nav>
-            <ul class="container-List-Report-Columns" style='display: @(Model.ProductsWithOldRegisters.Count != 0 ? "flex;padding: 0px;justify-content: space-around;" : "none")'>
+            <ul class="container-List-Old-Columns" style='display: @(Model.ProductsWithOldRegisters.Count != 0 ? "flex;padding: 0px;justify-content: space-around;" : "none")'>
                 <li id="product-col">
                     <div class="text-Comment">Producto</div>
                 </li>
-                <li id="price-col">
+                <li id="store-col">
                     <div class="text-Comment">Tienda</div>
                 </li>
-                <li id="prom-col">
+                <li id="lim-col">
                     <div class="text-Comment">Fecha de corte</div>
                 </li>
-                <li id="min-col">
+                <li id="old-count-col">
                     <div class="text-Comment">Cant. Registros antiguos</div>
                 </li>
             </ul>
@@ -61,27 +59,29 @@
             {
                 string productName = Model.ProductsWithOldRegisters[productNum].Name;
                 string storeName = Model.StoresWithOldRegisters[productNum].Name;
-                int numOldRegisters = Model.NumberOfOldRegisters[productNum];
                 string dateLimit = Model.dateLimits[productNum].ToShortDateString();
+                int numOldRegisters = Model.NumberOfOldRegisters[productNum];
+                
 
-                var prodData = $"{productName}{s}{storeName}{s}{dateLimit}";
+                var prodData = $"{productName}{s}{storeName}{s}{dateLimit}{s}{numOldRegisters}";
 
                 <li class="result-block register-block-pagination" id="report-item-@productNum">
                     <a>
-                        <span id="register-product-name" value="productName">
+                        <span id="prod-name" value="productName">
                             @productName
                         </span>
-                        <span id="register-price" value="storeName">
+                        <span id="store-name" value="storeName">
                             @storeName
                         </span>
-                        <span id="register-min-price" data-value="@dateLimit">
+                        <span id="date-lim" data-value="@dateLimit">
                             @dateLimit
                         </span>
-                        <span id="register-min-price" data-value="@numOldRegisters">
+                        <span id="old-registers-num" data-value="@numOldRegisters">
                             @numOldRegisters
                         </span>
                         <div class="text-center align">
-                            <button class="open-interactions-button" id="button-open-accept-popup" report-data="@prodData" report-number="@productNum">
+                            <button class="open-interactions-button" id="button-open-accept-popup" report-data="@prodData"
+                                report-number="@productNum" onclick="openInteractionsPopupOldRegister(this)">
                                 <img src="~/img/MoreIcon.svg" alt="Más opciones">
                             </button>
                         </div>
@@ -89,8 +89,34 @@
                 </li>
             }
         </ul>
+
+        <div class="interactive-popup-section">
+            <div class="interactions-popup">
+                <div class="interactions-popup-content">
+                    <p><b>Producto: </b> <span id="popup-productName"></span></p>
+                    <p><b>Tienda:</b> <span id="popup-storeName"></span></p>
+                    <p><b>Fecha de corte: </b> <span id="popup-dateLimit"></span></p>
+                    <p><b>Cantidad de registros antiguos (más allá de la fecha de corte): </b> <span id="popup-old-registers-amount"></span></p>
+
+                    <div class="buttons-container">
+
+                        <button class="interactions-close-button" onclick="closeInteractionsPopupMod()">Cerrar</button>
+                        <button id="hideRegisters" onclick="hideOldRegisters()" style="visibility: hidden;">Ocultar registros antiguos</button>
+                        <button id="keepRegisters" onclick="keepOldRegisters()" style="visibility: hidden;">Conservar registros antiguos</button>
+
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <script>
+                                document.getElementById("hideRegisters").style.visibility = "visible";
+                                document.getElementById("keepRegisters").style.visibility = "visible";
+                            </script>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <script src="~/js/ProductPage/imageChanger.js"></script>
     <script src="~/js/feedbackMessage.js"></script>
 </div>
 

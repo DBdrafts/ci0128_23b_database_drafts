@@ -167,7 +167,7 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// POST HTTP request. Makes the report valid, sets its status to 2 and hides it from everyone.
         /// </summary>
-        public IActionResult OnPostAcceptReport(string registerData)
+        public IActionResult OnPostHideRegisters(string registerData)
         {
             // Create a CultureInfo object with the InvariantCulture.
             CultureInfo culture = CultureInfo.InvariantCulture;
@@ -205,7 +205,7 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// POST HTTP request. Makes the report invalid, sets its status to 0 and returns the register to its original state.
         /// </summary>
-        public IActionResult OnPostRejectReport(string registerData)
+        public IActionResult OnPostKeepRegisters(string registerData)
         {
             // Create a CultureInfo object with the InvariantCulture.
             CultureInfo culture = CultureInfo.InvariantCulture;
