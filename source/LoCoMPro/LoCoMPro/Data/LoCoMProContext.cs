@@ -338,6 +338,20 @@ namespace LoCoMPro.Data
         }
 
         /// <summary>
+        /// Gets the Review count for a register.
+        /// </summary>
+        /// <param name="register"></param>
+        /// <returns></returns>
+        public int GetReviewCount(Register register)
+        {
+            return this.Reviews.Count(r => r.ReviewedRegister.ContributorId == register.ContributorId
+                        && r.ReviewedRegister.ProductName == register.ProductName
+                        && r.ReviewedRegister.StoreName == register.StoreName
+                        && r.ReviewedRegister.SubmitionDate == register.SubmitionDate
+                        && r.ReviewedRegister.ContributorId == register.ContributorId);
+        }
+
+        /// <summary>
         /// Gets the average price value of a register
         /// </summary>
         /// <param name="productName">Name of the product.</param>

@@ -217,9 +217,10 @@
                     <div class="veracity-stars register-column" id="register-veracity" value="@veracityValue">
                         <span id="register_veracity_@i">
                             @{ViewBag.VeracityValue = veracityValue;}
-                            @await Html.PartialAsync("_VeracityStars")
+                            @await Html.PartialAsync("_VeracityStars") 
                         </span>
                     </div>
+                    <span class="veracity-star-count" id="register_review_count_@i" value="@Model.registerReviewCount[i]">(@Model.registerReviewCount[i])</span>
                 </div>
                 <div class="interaction-button">
                     <button class="open-interactions-button" id="open-popup-button-@i" data-register-id="@registerKeys"
@@ -295,7 +296,7 @@
                 
                 <div class="buttons-container">
                     <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>
-                    <button id="saveButton" onclick="saveInteractions()" style="visibility: hidden;">Guardar</button>
+                    <button id="saveButton" onclick="saveInteractions()" style="visibility: hidden;" value="">Guardar</button>
                     @if (SignInManager.IsSignedIn(User))
                     {
                         <script>
