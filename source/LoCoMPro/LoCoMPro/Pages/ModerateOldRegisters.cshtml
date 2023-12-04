@@ -14,7 +14,7 @@
 
 
 <head>
-    <link rel="stylesheet" href="~/css/ModerateAnomaliesPage.css" />
+    <link rel="stylesheet" href="~/css/ModerateOldRegisters.css" />
     <script src="~/js/interactionsPopUp.js"></script>
     <script src="~/js/productListButton.js"></script>
     <link rel="stylesheet" href="~/css/RateRegister.css" />
@@ -62,9 +62,9 @@
                 string productName = Model.ProductsWithOldRegisters[productNum].Name;
                 string storeName = Model.StoresWithOldRegisters[productNum].Name;
                 int numOldRegisters = Model.NumberOfOldRegisters[productNum];
-                string dateLimit = Model.dateLimits[productNum].ToString();
+                string dateLimit = Model.dateLimits[productNum].ToShortDateString();
 
-                var reportData = $"{productName}{s}{storeName}{s}{dateLimit}";
+                var prodData = $"{productName}{s}{storeName}{s}{dateLimit}";
 
                 <li class="result-block register-block-pagination" id="report-item-@productNum">
                     <a>
@@ -72,19 +72,16 @@
                             @productName
                         </span>
                         <span id="register-price" value="storeName">
-                            storeName
-                        </span>
-                        <span data-value="@numOldRegisters">
-                            @numOldRegisters
+                            @storeName
                         </span>
                         <span id="register-min-price" data-value="@dateLimit">
                             @dateLimit
                         </span>
-
-
-
+                        <span id="register-min-price" data-value="@numOldRegisters">
+                            @numOldRegisters
+                        </span>
                         <div class="text-center align">
-                            <button class="open-interactions-button" id="button-open-moderate-popup" report-data="@reportData" report-number="@productNum">
+                            <button class="open-interactions-button" id="button-open-accept-popup" report-data="@prodData" report-number="@productNum">
                                 <img src="~/img/MoreIcon.svg" alt="Más opciones">
                             </button>
                         </div>
