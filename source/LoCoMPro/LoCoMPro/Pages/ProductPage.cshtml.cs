@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Win32;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -122,9 +123,14 @@ namespace LoCoMPro.Pages
         public IList<float> registerAverageReview { get; set; }
 
         /// <summary>
+        /// Number of reviews a register has
+        /// </summary>
+        public IList<int> registerReviewCount {  get; set; }
+
+        /// <summary>
         /// Number of results.
         /// </summary>
-        public User UserInPage;
+        public User? UserInPage;
 
         /// <summary>
         /// GET HTTP request, initializes page values.
@@ -136,7 +142,14 @@ namespace LoCoMPro.Pages
         public async Task OnGetAsync(string searchProductName, string searchStoreName, string searchProvinceName, 
             string searchCantonName)
         {
-            UserInPage = await _userManager.GetUserAsync(User);
+            if (User != null && _userManager != null)
+            {
+                // Get the user in the page
+                UserInPage = await _userManager.GetUserAsync(User);
+                if (UserInPage != null) {
+                    _userProductList.SetListName(UserInPage.Id);
+                }
+            }
 
             // Attr of the product from the params of method
             SearchProductName = searchProductName;
@@ -172,6 +185,7 @@ namespace LoCoMPro.Pages
 
             // Initial request for all the registers in the database if the reportState is not 2
             var registers = from r in _context.Registers
+                            where r.Reports.All(report => report.ReportState != 2)
                             select r;
 
             // add the images from every register
@@ -291,10 +305,13 @@ namespace LoCoMPro.Pages
         public void ObtainAverageReviewValues()
         {
             registerAverageReview = new List<float>();
+            registerReviewCount = new List<int>();
             // Gets the average value for each register
-            foreach (Register register in Registers) {
+            foreach (Register register in Registers!)
+            {
                 registerAverageReview.Add(_context.GetAverageReviewValue(register.ContributorId
                     , register.ProductName, register.StoreName, register.SubmitionDate));
+                registerReviewCount.Add(_context.GetReviewCount(register));
             }
         }
 
@@ -362,6 +379,9 @@ namespace LoCoMPro.Pages
         /// </summary>
         public IActionResult OnPostAddToProductList(string productData)
         {
+            
+            _userProductList.SetListName(_userManager.GetUserId(User));
+
             // Gets and split the data
             string[] values = SplitString(productData, '\x1F');
 
@@ -566,6 +586,21 @@ namespace LoCoMPro.Pages
         }
 
         /// <summary>
+        /// Returns the previous review if the user has already made one for that register.
+        /// </summary>
+        /// <param name="user">User to check if they have already made a report to the register.</param>
+        /// <param name="register">Register to check if the user has already made a report.</param>
+        /// <returns>The review that the user made or null if the user has not made one.</returns>
+        private Review? PreviousReview(User user, Register register)
+        {
+            return _context.Reviews.FirstOrDefault(r => r.ReviewerId == user!.Id
+                && r.ProductName == register.ProductName
+                && r.StoreName == register.StoreName
+                && r.ReviewedRegister.SubmitionDate == register.SubmitionDate
+                && r.ContributorId == register.ContributorId);
+        }
+
+        /// <summary>
         /// Handle a review made by a user about a register.
         /// </summary>
         /// <param name="user">User that made the review.</param>
@@ -695,6 +730,46 @@ namespace LoCoMPro.Pages
                 }
             }
             return new JsonResult(new { hasReported, previousReportComment });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="registerKeys"></param>
+        /// <returns></returns>
+        public JsonResult OnGetCheckLastRaiting(string registerKeys)
+        {
+            var (user, registerToUpdate, _) = GetInteractionValues(registerKeys);
+            bool hasReviewed = false;
+            float? previousReview = null;
+            if (user != null)
+            {
+                var review = PreviousReview(user!, registerToUpdate);
+                if (review != null)
+                {
+                    hasReviewed = true;
+                    previousReview = review.ReviewValue;
+                }
+            }
+            return new JsonResult(new { hasReviewed, previousReview });
+        }
+
+        /// <summary>
+        /// DD
+        /// </summary>
+        /// <param name="registerKeys"></param>
+        /// <returns></returns>
+        public JsonResult OnGetAverageRegisterRating(string registerKeys)
+        {
+            var (_, register, _) = GetInteractionValues(registerKeys);
+            float rating = 0.0f;
+            int reviewCount = 0;
+            if (register != null)
+            {
+                rating = _context.GetAverageReviewValue(register.ContributorId!, register.ProductName!, register.StoreName!, register.SubmitionDate);
+                reviewCount = _context.GetReviewCount(register);
+            }
+            return new JsonResult(new { rating, reviewCount });
         }
     }
 }

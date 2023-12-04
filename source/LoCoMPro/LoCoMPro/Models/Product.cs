@@ -25,20 +25,20 @@ namespace LoCoMPro.Models
         /// </summary>
         public string? Model { get; set; }
 
-        // Navegation attributes
+        // Navigation attributes
         /// <summary>
-        /// Registers asociated with the product.
+        /// Registers associated with the product.
         /// </summary>
         public ICollection<Register>? Registers { get; set; } = new List<Register>();
 
         /// <summary>
-        /// Categories asociated with the product.
+        /// Categories associated with the product.
         /// </summary>
         public ICollection<Category>? Categories { get; set; } = new List<Category>();
 
         /// <summary>
-        /// Stores asociated with the product.
-        /// </summary>d
+        /// Stores associated with the product.
+        /// </summary>
         public virtual ICollection<Store>? Stores { get; set; } = new List<Store>();
     }
 }

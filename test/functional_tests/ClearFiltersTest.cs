@@ -13,18 +13,11 @@ namespace functional_tests
 {
     public class ClearFiltersTest
     {
-        WebDriver driver = new ChromeDriver();
-
-        [SetUp]
-        public void Setup()
-        {
-            driver = new ChromeDriver();
-        }
-
         // Omar Camacho Calvo C11476 | Sprint 2
         [Test]
         public void ClearFiltersInSearchPage()
         {
+            var driver = new ChromeDriver();
             // Arrange
             driver.Navigate().GoToUrl("https://localhost:7119/");
             var MainPage = new MainPage(driver);
@@ -42,13 +35,7 @@ namespace functional_tests
             Assert.IsFalse(driver.FindElement(By.CssSelector("input[type='checkbox'][name='SelectedCategories'][value='Ropa']")).Selected);
             Assert.IsFalse(driver.FindElement(By.CssSelector("input[type='checkbox'][name='SelectedCantons'][value='Escazú']")).Selected);
             Assert.IsTrue(driver.FindElement(By.CssSelector("input[type='checkbox'][name='SelectedCategories'][value='Comida']")).Selected);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
             driver.Quit();
         }
-
     }
 }

@@ -12,19 +12,13 @@ namespace functional_tests
 {
     internal class AddProductToListTest
     {
-        WebDriver driver = new ChromeDriver();
-
-        [SetUp]
-        public void Setup()
-        {
-            driver = new ChromeDriver();
-        }
 
         // Test by Julio Alejandro Rodríguez Salguera
         // Test from the Sprint 2
         [Test]
         public void AddProductToUserListTest()
         {
+            var driver = new ChromeDriver();
             // Arrange
             driver.Navigate().GoToUrl("https://localhost:7119/Identity/Account/Login");
 
@@ -49,12 +43,6 @@ namespace functional_tests
             // Assert
             Assert.IsTrue(driver.FindElement(By.Id("add-to-list")).GetCssValue("display") == "none");
             Assert.IsTrue(driver.FindElement(By.Id("remove-from-list")).GetCssValue("display") == "inline-block");
-
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
             driver.Quit();
         }
     }
