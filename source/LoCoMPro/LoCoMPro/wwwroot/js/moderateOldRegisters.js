@@ -34,12 +34,12 @@ function hideOldRegisters() {
         success: function (data) {
             hideReport(reportNumber);
             console.log('Report updated successfully' + data);
-            showFeedbackMessage('El reporte ha sido aprobado exitosamente', 'feedbackMessage');
+            showFeedbackMessage('Los registros han sido ocultados exitosamente', 'feedbackMessage');
             updateReportList();
         },
         error: function (error) {
             console.error('Error saving report: ' + error);
-            showFeedbackMessage('Error al aceptar el reporte', 'feedbackMessage');
+            showFeedbackMessage('Error al ocultar los registros', 'feedbackMessage');
         }
     });
     closeInteractionsPopupMod();
@@ -61,12 +61,12 @@ function keepOldRegisters() {
         success: function (data) {
             hideReport(reportNumber);
             console.log('Report updated successfully' + data);
-            showFeedbackMessage('El reporte ha sido rechazado exitosamente', 'feedbackMessage');
+            showFeedbackMessage('Se han conservado los registros', 'feedbackMessage');
             updateReportList();
         },
         error: function (error) {
             console.error('Error saving report: ' + error);
-            showFeedbackMessage('Error al rechazar el reporte ', 'feedbackMessage');
+            showFeedbackMessage('Error al conservar los registros', 'feedbackMessage');
         }
     });
     closeInteractionsPopupMod();

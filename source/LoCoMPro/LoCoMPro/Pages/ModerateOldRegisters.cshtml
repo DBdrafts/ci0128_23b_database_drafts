@@ -96,13 +96,13 @@
                     <p><b>Producto: </b> <span id="popup-productName"></span></p>
                     <p><b>Tienda:</b> <span id="popup-storeName"></span></p>
                     <p><b>Fecha de corte: </b> <span id="popup-dateLimit"></span></p>
-                    <p><b>Cantidad de registros antiguos (más allá de la fecha de corte): </b> <span id="popup-old-registers-amount"></span></p>
+                    <p><b>Cantidad de registros antiguos: </b> <span id="popup-old-registers-amount"></span></p>
 
                     <div class="buttons-container">
 
                         <button class="interactions-close-button" onclick="closeInteractionsPopupMod()">Cerrar</button>
-                        <button id="hideRegisters" onclick="hideOldRegisters()" style="visibility: hidden;">Ocultar registros antiguos</button>
-                        <button id="keepRegisters" onclick="keepOldRegisters()" style="visibility: hidden;">Conservar registros antiguos</button>
+                        <button id="hideRegisters" onclick="hideOldRegisters()" style="visibility: hidden;">Ocultar</button>
+                        <button id="keepRegisters" onclick="keepOldRegisters()" style="visibility: hidden;">Conservar</button>
 
                         @if (SignInManager.IsSignedIn(User))
                         {
