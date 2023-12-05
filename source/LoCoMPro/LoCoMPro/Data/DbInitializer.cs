@@ -379,7 +379,7 @@ namespace LoCoMPro.Data
             for(int registerIndex = 0 ; registerIndex < (registers.Count / (users.Count * 3)); registerIndex++) {
                 reports.Add(new Report() { ReportedRegister = registers[registerIndex]
                         , Reporter = users[GenerateRandom(0, users.Count)]
-                        , ReportDate = new DateTime(2024, 2, 15, 12, 0, 0, DateTimeKind.Utc)
+                        , ReportDate = new DateTime(2024, GenerateRandom(0, 12), GenerateRandom(0, 25), 12, 0, 0, DateTimeKind.Utc)
                         , CantonName = registers[registerIndex].CantonName!
                         , ProvinceName = registers[registerIndex].ProvinciaName!, ReportState = 1});
             }

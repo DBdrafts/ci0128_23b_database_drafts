@@ -2,12 +2,14 @@
 
 /* Style for the title of product requested */
 .titleProduct {
-    width: 1152px;
     text-align: left;
     color: black;
     font-size: 30px;
     font-weight: 700;
     word-wrap: break-word;
+    max-height: 650px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Style for the format of specifications of product */
