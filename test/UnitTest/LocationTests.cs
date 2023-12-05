@@ -47,7 +47,7 @@ namespace LocationTests
             // Arrange for the mock configuration
             // Create an instance of the page model (pageModel) using the CreatePageModel()
             var pageModel = (IndexModel)CreatePageModel("index_page");
-            var expected = "{\"Value\":[{\"Disabled\":false,\"Selected\":false,\"Text\":\"Elegir Cantón\",\"Value\":\"\"}]}";
+            var expected = "{\"Value\":[{\"Disabled\":false,\"Selected\":false,\"Text\":\"Seleccionar Cantón\",\"Value\":\"\"}]}";
 
             // Get the Cantons, for Cartago.
             var cantons = pageModel.OnGetCantones("Invalid").ToJson();

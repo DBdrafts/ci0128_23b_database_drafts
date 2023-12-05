@@ -133,6 +133,9 @@ public class BaseTest
             case "moderate_anormal_registers":
                 return new ModerateAnomaliesPageModel(dbContext, mockConfiguration.Object, mockUserManager.Object);
 
+            case "moderate_similar_names_page":
+                return new ModerateSimilarNamePageModel(dbContext, mockConfiguration.Object, mockHttpContextAccessor.Object, mockUserManager.Object);
+
             case "most_reported_users":
                 return new MostReportedPageModel(dbContext, mockConfiguration.Object, mockUserManager.Object);
 
@@ -313,6 +316,7 @@ public class BaseTest
 
         var category = new Category { CategoryName = "Category" };
         var product = new Product { Name = "GenericProduct", Model = "GenericModel", Brand = "GenericBrand" };
+        var product2 = new Product { Name = "Laptop" };
         product.Categories!.Add(category);
         var store1 = new Store
         {
@@ -339,6 +343,7 @@ public class BaseTest
             context.Stores.Add(store1);
             context.Stores.Add(store2);
             context.Products.Add(product);
+            context.Products.Add(product2);
             context.SaveChanges();
         }
     }

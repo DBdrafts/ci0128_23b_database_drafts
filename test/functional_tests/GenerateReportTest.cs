@@ -148,8 +148,21 @@ namespace functional_tests
 
             for (int resultIndex = 0; resultIndex < reportResult.Count - 1; resultIndex++)
             {
-                Assert.LessOrEqual(reportResult.ElementAt(resultIndex).FindElement(By.Id("report-location")).GetAttribute("Value")
-                    , reportResult.ElementAt(resultIndex + 1).FindElement(By.Id("report-location")).GetAttribute("Value"));
+                string firstDistanceString = reportResult.ElementAt(resultIndex).FindElement(By.Id("report-location")).GetAttribute("Value");
+                string secondDistanceString = reportResult.ElementAt(resultIndex + 1).FindElement(By.Id("report-location")).GetAttribute("Value");
+
+                float firstDistance = 0;
+                float secondDistance = 0;
+
+                try
+                {
+                    firstDistance = float.Parse(firstDistanceString);
+                    secondDistance = float.Parse(secondDistanceString);
+                } catch (FormatException) {
+                    Console.WriteLine("Input string is not in the correct format");
+                }
+
+                Assert.LessOrEqual(firstDistance, secondDistance);
             }
             driver.Quit();
         }

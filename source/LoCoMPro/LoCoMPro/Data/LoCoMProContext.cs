@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using System.Collections;
 using System.Data.Entity.Spatial;
 using System.Xml;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace LoCoMPro.Data
 {
@@ -76,6 +77,20 @@ namespace LoCoMPro.Data
         /// </summary>
         public DbSet<Report> Reports { get; set; }
 
+
+        /// <summary>
+        /// Configures the db context to ignore the transaction warning for inmemory storage.
+        /// </summary>
+        /// <param name="optionsBuilder"></param>
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            // Configure your DbContext options here
+
+            optionsBuilder.ConfigureWarnings(warnings =>
+            {
+                warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning);
+            });
+        }
 
         // TODO: May want to create a builder for each class
         /// <summary>
