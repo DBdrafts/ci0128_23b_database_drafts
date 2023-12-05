@@ -56,7 +56,6 @@ namespace LoCoMPro.Pages
         /// </summary>
         public async Task OnGetAsync(int? pageIndex)
         {
-            string autoID = "7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4";
             var currentUserId = _userManager.GetUserId(User);
 
             var registers = from r in _context.Registers
@@ -66,7 +65,7 @@ namespace LoCoMPro.Pages
 
             var reports = from r in _context.Reports
                           where r.ReportState == 1 && 
-                          r.ContributorId != currentUserId && r.ReporterId != currentUserId && r.ReporterId != autoID
+                          (r.ContributorId != currentUserId && r.ReporterId != currentUserId)
                           select r;
 
             var users = _context.Users
