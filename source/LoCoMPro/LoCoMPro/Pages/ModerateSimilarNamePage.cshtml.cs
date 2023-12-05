@@ -83,7 +83,8 @@ namespace LoCoMPro.Pages
         /// </summary>
         /// <param name="productName">New name that products must have.</param>
         /// <param name="groupProductNames">Dictionary where the keys are the name of the products to change and the value is set to true if said product must be changed.</param>
-        private int ChangeProductNames(string productName, Dictionary<string, bool> groupProductNames)
+        /// <returns>Number of rows changed.</returns>
+        internal int ChangeProductNames(string productName, Dictionary<string, bool> groupProductNames)
         {
             using (var transaction = _context.Database.BeginTransaction(System.Data.IsolationLevel.RepeatableRead))
             {
@@ -115,10 +116,11 @@ namespace LoCoMPro.Pages
         /// <param name="products">Products to group.</param>
         /// <param name="threshold">Maximum distance the Product Names must be from each other.</param>
         /// <returns>Array of groupped products.</returns>
-        static List<List<Product>> GroupProductsByCloseness(List<Product> products, double threshold)
+        public static List<List<Product>> GroupProductsByCloseness(List<Product> products, double threshold)
         {
             var productGroups = new List<List<Product>>();
             if (products.IsNullOrEmpty()) return productGroups;
+            if (threshold < 0.0) throw new ArgumentException("Threshold must by a number > 0.");
 
             foreach (var product in products)
             {

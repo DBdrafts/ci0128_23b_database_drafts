@@ -36,6 +36,8 @@ namespace LoCoMPro.Data
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetMinPriceValue.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetStdDevPriceValue.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/UpdateProductName.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/CreateIndexIX_Review_ContributorId.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/CreateIndexIX_SubmitionDate.sql");
 
             List<Provincia> provincias = new();
             List<Canton> cantones = new();
@@ -165,16 +167,43 @@ namespace LoCoMPro.Data
             , ref List<Canton> cantones, ref List<Store> stores
             , ref List<Product> product)
         {
+            var randomLocations = GenerateRandomNumbers(cantones.Count(), 6);
+     
             // Add the stores
-            stores.Add(new Store() { Name = "Super San Agustin", Location = cantones[0]
-                , Geolocation = cantones[0].Geolocation
+            var canton = cantones[randomLocations[0]];
+            stores.Add(new Store() { Name = "Super San Agustin", Location = canton, Geolocation = canton.Geolocation
+                , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }
+            });
+            canton = cantones[randomLocations[1]];
+            stores.Add(new Store() { Name = "Pali", Location = canton, Geolocation = canton.Geolocation
                 , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }});
-            stores.Add(new Store() { Name = "Pali", Location = cantones[1]
-                , Geolocation = cantones[1].Geolocation
+            canton = cantones[randomLocations[2]];
+            stores.Add(new Store() { Name = "MasXMenos", Location = canton, Geolocation = canton.Geolocation
                 , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }});
-            stores.Add(new Store() { Name = "MasXMenos", Location = cantones[2]
-                , Geolocation = cantones[2].Geolocation
-                , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }});
+            canton = cantones[randomLocations[3]];
+            stores.Add(new Store()
+            {
+                Name = "Wallmart",
+                Location = canton,
+                Geolocation = canton.Geolocation,
+                Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }
+            });
+            canton = cantones[randomLocations[4]];
+            stores.Add(new Store()
+            {
+                Name = "Mega Super",
+                Location = canton,
+                Geolocation = canton.Geolocation,
+                Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }
+            });
+            canton = cantones[randomLocations[5]];
+            stores.Add(new Store()
+            {
+                Name = "Perimercado",
+                Location = canton,
+                Geolocation = canton.Geolocation,
+                Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }
+            });
 
             context.Stores.AddRange(stores);
             context.SaveChanges();
@@ -296,7 +325,7 @@ namespace LoCoMPro.Data
                     {
                         registers.Add(new Register() { Product = products[productIndex], Contributor = users[usersIndex], Store = stores[storeIndex]
                         , Price = (basePrice[productIndex] + ((basePrice[productIndex] / 25) * usersIndex * storeIndex))
-                        , SubmitionDate = new DateTime(2023, 1 + usersIndex + storeIndex, 10 + productIndex + usersIndex + storeIndex, 12, 0, 0, DateTimeKind.Utc)
+                        , SubmitionDate = new DateTime(2023, 1 + usersIndex + storeIndex / 3, 10 + productIndex + usersIndex + storeIndex / 3, 12, 0, 0, DateTimeKind.Utc)
                         , Comment = comments[GenerateRandom(0, comments.Count)] });
                     }
                 }
@@ -350,7 +379,7 @@ namespace LoCoMPro.Data
             for(int registerIndex = 0 ; registerIndex < (registers.Count / (users.Count * 3)); registerIndex++) {
                 reports.Add(new Report() { ReportedRegister = registers[registerIndex]
                         , Reporter = users[GenerateRandom(0, users.Count)]
-                        , ReportDate = new DateTime(2024, 2, 15, 12, 0, 0, DateTimeKind.Utc)
+                        , ReportDate = new DateTime(2024, GenerateRandom(0, 12), GenerateRandom(0, 25), 12, 0, 0, DateTimeKind.Utc)
                         , CantonName = registers[registerIndex].CantonName!
                         , ProvinceName = registers[registerIndex].ProvinciaName!, ReportState = 1});
             }
@@ -398,6 +427,45 @@ namespace LoCoMPro.Data
             return random.Next(lower, higher);
         }
 
+        /// <summary>
+        /// Generates an array of <paramref name="desiredCount"/> random numbers between 0 and <paramref name="count"/>.
+        /// </summary>
+        /// <param name="count">High limit of generated numbers.<param>
+        /// <param name="desiredCount">Quantity of random numbers desired.</param>
+        /// <returns>Array of randomly generated numbers.</returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static int[] GenerateRandomNumbers(int count, int desiredCount)
+        {
+            if (desiredCount > count)
+            {
+                throw new ArgumentException("The desired count cannot be greater than the total count.");
+            }
+
+            int[] randomNumbers = new int[count];
+
+            // Populate the array with numbers from 0 to count - 1
+            for (int i = 0; i < count; i++)
+            {
+                randomNumbers[i] = i;
+            }
+
+            // Use Fisher-Yates shuffle algorithm to shuffle the array
+            Random random = new Random();
+            int n = randomNumbers.Length;
+            while (n > desiredCount)
+            {
+                n--;
+                int k = random.Next(n + 1);
+                int value = randomNumbers[k];
+                randomNumbers[k] = randomNumbers[n];
+                randomNumbers[n] = value;
+            }
+
+            // Resize the array to the desired count
+            Array.Resize(ref randomNumbers, desiredCount);
+
+            return randomNumbers;
+        }
     }
 
 }

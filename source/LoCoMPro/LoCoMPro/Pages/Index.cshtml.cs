@@ -73,7 +73,7 @@ namespace LoCoMPro.Pages
                     Text = canton.CantonName
                 })
             .ToList();
-            result!.Insert(0, new SelectListItem { Value = "", Text = "Elegir Cantón" });
+            result!.Insert(0, new SelectListItem { Value = "", Text = "Seleccionar Cantón" });
             return new JsonResult(result);
         }
 
@@ -91,7 +91,7 @@ namespace LoCoMPro.Pages
                     Text = provincia.Name
                 })
                 .ToList();
-            result!.Insert(0, new SelectListItem { Value = "", Text = "Elegir Provincia" });
+            result!.Insert(0, new SelectListItem { Value = "", Text = "Todas" });
             return new JsonResult(result);
 
         }
