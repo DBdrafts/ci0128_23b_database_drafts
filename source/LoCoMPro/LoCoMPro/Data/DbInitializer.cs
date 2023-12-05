@@ -36,6 +36,8 @@ namespace LoCoMPro.Data
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetMinPriceValue.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetStdDevPriceValue.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/UpdateProductName.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/CreateIndexIX_Review_ContributorId.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/CreateIndexIX_SubmitionDate.sql");
 
             List<Provincia> provincias = new();
             List<Canton> cantones = new();
@@ -169,20 +171,21 @@ namespace LoCoMPro.Data
      
             // Add the stores
             var canton = cantones[randomLocations[0]];
-            stores.Add(new Store() { Name = "Super San Agustin", Location = canton
+            stores.Add(new Store() { Name = "Super San Agustin", Location = canton, Geolocation = canton.Geolocation
                 , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }
             });
             canton = cantones[randomLocations[1]];
-            stores.Add(new Store() { Name = "Pali", Location = canton
+            stores.Add(new Store() { Name = "Pali", Location = canton, Geolocation = canton.Geolocation
                 , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }});
             canton = cantones[randomLocations[2]];
-            stores.Add(new Store() { Name = "MasXMenos", Location = canton
+            stores.Add(new Store() { Name = "MasXMenos", Location = canton, Geolocation = canton.Geolocation
                 , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }});
             canton = cantones[randomLocations[3]];
             stores.Add(new Store()
             {
                 Name = "Wallmart",
                 Location = canton,
+                Geolocation = canton.Geolocation,
                 Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }
             });
             canton = cantones[randomLocations[4]];
@@ -190,6 +193,7 @@ namespace LoCoMPro.Data
             {
                 Name = "Mega Super",
                 Location = canton,
+                Geolocation = canton.Geolocation,
                 Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }
             });
             canton = cantones[randomLocations[5]];
@@ -197,6 +201,7 @@ namespace LoCoMPro.Data
             {
                 Name = "Perimercado",
                 Location = canton,
+                Geolocation = canton.Geolocation,
                 Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }
             });
 
