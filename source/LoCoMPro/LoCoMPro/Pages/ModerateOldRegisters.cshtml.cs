@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32;
 using NetTopologySuite.Algorithm;
 using NuGet.Packaging;
+using System.Composition;
 using System.Diagnostics;
 using System.Globalization;
 
@@ -129,7 +130,8 @@ namespace LoCoMPro.Pages
                 {
                     // Get the registers that belong to the product and store
                     var productRegisters = Registers.Where(r => r.ProductName == product.Name
-                        && r.StoreName == store.Name).ToList();
+                        && r.StoreName == store.Name && r.ProvinciaName == store.ProvinciaName
+                        && r.CantonName == store.CantonName).ToList();
 
                     if (productRegisters.Count <= 1) { continue; }
                     // Order registers by date
@@ -210,14 +212,14 @@ namespace LoCoMPro.Pages
 
             // Split the reportsData string using the custom delimiter '\x1F' and store the values in an array.
             string[] values = SplitString(registerData, '\x1F');
-            string prodName = values[0], storeName = values[1], dateLimit = values[2];
+            string prodName = values[0], storeName = values[1], cantonName = values[2], provinceName = values[3], dateLimit = values[4];
                 
 
             // Parse date strings into DateTime objects.
             DateTime registerDateLimit = DateTime.Parse(dateLimit);
 
             // Call the getReportToUpdate method to retrieve the relevant report entity from the database.
-            var reports = getReportsToUpdate(prodName, storeName);
+            var reports = getReportsToUpdate(prodName, storeName, cantonName, provinceName);
 
             foreach (var report in reports)
             {
@@ -225,7 +227,7 @@ namespace LoCoMPro.Pages
             }
 
             // Call the getRegistersToUpdate method to retrieve the relevant register entity from the database.
-            var registers = getRegistersToUpdate(prodName, storeName, registerDateLimit);
+            var registers = getRegistersToUpdate(prodName, storeName, cantonName, provinceName, registerDateLimit);
             foreach (var register in registers)
             {
                 register.MetahuristicState = 4;
@@ -248,14 +250,14 @@ namespace LoCoMPro.Pages
 
             // Split the reportData string using the custom delimiter '\x1F' and store the values in an array.
             string[] values = SplitString(registerData, '\x1F');
-            string prodName = values[0], storeName = values[1], dateLimit = values[2];
+            string prodName = values[0], storeName = values[1], cantonName = values[2], provinceName = values[3], dateLimit = values[4];
 
 
             // Parse date strings into DateTime objects.
             DateTime registerDateLimit = DateTime.Parse(dateLimit);
 
             // Call the getReportsToUpdate method to retrieve the relevant report entity from the database.
-            var reports = getReportsToUpdate(prodName, storeName);
+            var reports = getReportsToUpdate(prodName, storeName, cantonName, provinceName);
 
             foreach (var report in reports)
             {
@@ -263,7 +265,7 @@ namespace LoCoMPro.Pages
             }
 
             // Call the getRegistersToUpdate method to retrieve the relevant register entity from the database.
-            var registers = getRegistersToUpdate(prodName, storeName, registerDateLimit);
+            var registers = getRegistersToUpdate(prodName, storeName, cantonName, provinceName, registerDateLimit);
             foreach (var register in registers)
             {
                 register.MetahuristicState = 4;
@@ -278,11 +280,13 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Gets the report to update from the context.
         /// </summary>
-        public List<Report> getReportsToUpdate(string prodName, string storeName)
+        public List<Report> getReportsToUpdate(string prodName, string storeName, string cantonName, string provinceName)
         {
             var reports = from report in _context.Reports
                           where report.ProductName == prodName && 
-                            report.StoreName == storeName && 
+                            report.StoreName == storeName &&
+                            report.CantonName == cantonName &&
+                            report.ProvinceName == provinceName &&
                             report.ReportState == 6
                           select report;
             return reports.ToList();
@@ -290,12 +294,14 @@ namespace LoCoMPro.Pages
         /// <summary>
         /// Gets the register to update from the context.
         /// </summary>
-        public List<Register> getRegistersToUpdate(string prodName, string storeName, DateTime dateLimit)
+        public List<Register> getRegistersToUpdate(string prodName, string storeName, string cantonName, string provinceName, DateTime dateLimit)
         {
             var registers = from register in _context.Registers
                             where register.ProductName == prodName &&
                                 register.StoreName == storeName &&
-                                register.SubmitionDate.Date < dateLimit.Date
+                                register.CantonName == cantonName &&
+                                register.ProvinciaName == provinceName &&
+                                register.SubmitionDate.Date <= dateLimit.Date
                             select register;
             return registers.ToList();    
         }

@@ -14,7 +14,7 @@
 
 
 <head>
-    <title>Registros Antiguos</title>
+    <title>Registros antiguos</title>
     <link rel="stylesheet" href="~/css/ModerateOldRegisters.css" />
     <script src="~/js/moderateOldRegisters.js"></script>
     <link rel="stylesheet" href="~/ico/font-awesome-4.7.0/css/font-awesome.css">
@@ -22,7 +22,7 @@
 
 
 <div class="register-anomalies-page-body">
-    <h2 class="text-center">Registros Antiguos</h2>
+    <h2 class="text-center">Registros antiguos</h2>
     <div id="feedbackMessage" class="feedback-message"></div>
     <div id="cant-reportes">
         <h5>Cantidad de productos con registros antiguos: <span id="report-count">@Model.ProductsWithOldRegisters.Count</span></h5>
@@ -60,11 +60,12 @@
             {
                 string productName = Model.ProductsWithOldRegisters[productNum].Name;
                 string storeName = Model.StoresWithOldRegisters[productNum].Name;
+                string storeCanton = Model.StoresWithOldRegisters[productNum].CantonName;
+                string storeProvince = Model.StoresWithOldRegisters[productNum].ProvinciaName;
                 string dateLimit = Model.dateLimits[productNum].ToShortDateString();
                 int numOldRegisters = Model.NumberOfOldRegisters[productNum];
-                
 
-                var prodData = $"{productName}{s}{storeName}{s}{dateLimit}{s}{numOldRegisters}";
+                var prodData = $"{productName}{s}{storeName}{s}{storeCanton}{s}{storeProvince}{s}{dateLimit}{s}{numOldRegisters}";
 
                 <li class="result-block register-block-pagination" id="report-item-@productNum">
                     <a>
@@ -96,6 +97,7 @@
                 <div class="interactions-popup-content">
                     <p><b>Producto: </b> <span id="popup-productName"></span></p>
                     <p><b>Tienda:</b> <span id="popup-storeName"></span></p>
+                    <p><b>Ubicación:</b> <span id="popup-location"></span></p>
                     <p><b>Fecha de corte: </b> <span id="popup-dateLimit"></span></p>
                     <p><b>Cantidad de registros antiguos: </b> <span id="popup-old-registers-amount"></span></p>
 
