@@ -170,7 +170,7 @@ button.accept-policy {
     width: 250px;
 }
 
-#most-repts-generated-button {
+#moderate-anomalies-button, #moderate-old-button, #most-repts-generated-button {
     margin-top: 5px;
 }
 
@@ -182,13 +182,13 @@ button.accept-policy {
     margin-top: 5px;
 }
 
-#moderate-button, #most-repts-generated-button, #moderate-anomalies-button, #most-reported-generated-button, #similar-names-button {
+#moderate-button, #most-repts-generated-button, #moderate-anomalies-button, #most-reported-generated-button, #similar-names-button, #moderate-old-button {
     border: 1px #BABAB8 solid;
     background-color: white;
 }
 
 /* Style for the logout button when the cursor is on the button */
-    #moderate-button:hover, #most-repts-generated-button:hover, #moderate-anomalies-button:hover, #most-reported-generated-button:hover, #similar-names-button:hover {
+    #moderate-button:hover, #most-repts-generated-button:hover, #moderate-anomalies-button:hover, #most-reported-generated-button:hover, #similar-names-button:hover, #moderate-old-button:hover {
         background-color: #e5e5e5;
     }
 

@@ -1,5 +1,6 @@
 using LoCoMPro.Data;
 using LoCoMPro.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -10,10 +11,9 @@ using Microsoft.Win32;
 
 namespace LoCoMPro.Pages
 {
+    [Authorize(Roles = "Moderator")]
     public class UsersWhoCreateMoreReportsModel : LoCoMProPageModel
     {
-        private readonly UserManager<User> _userManager;
-
         /// <summary>
         /// List of users.
         /// </summary>
@@ -34,27 +34,38 @@ namespace LoCoMPro.Pages
         /// </summary>
         public IList<Report>? Reports { get; set; } = new List<Report>();
 
-        public UsersWhoCreateMoreReportsModel(LoCoMProContext context, IConfiguration configuration,
-            UserManager<User> userManager)
+        /// <summary>
+        /// Page constructor
+        /// </summary>
+        public UsersWhoCreateMoreReportsModel(LoCoMProContext context, IConfiguration configuration)
             : base(context, configuration)
         {
-            _userManager = userManager;
         }
-
+        /// <summary>
+        /// OnGet Method, fills the class lists with Users who made reports, orders that list based on the number of reports
+        /// and gets the user ratings for display.
+        /// </summary>
         public void OnGet ()
         {
             getUsersWhoReportedRegisters();
             orderListByNumberOfReports(UsersWhoMadeReports);
             getUserRatings();
         }
-
+        /// <summary>
+        /// Initializes the UsersWhoReportedRegister list with users who reported a register. 
+        /// Returns the amount of users in the list.
+        /// </summary>
         public int getUsersWhoReportedRegisters()
         {
+            // ID of the automatic user, used to avoid getting it as a user.
+            string autoID = "7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4";
             int err = -1; // Error getting users who reported
             var users = from u in _context.Users
+                        where u.Id != autoID
                         select u;
 
             var reports = from r in _context.Reports
+                          where r.ReporterId != autoID
                           select r;
 
             if (!users.Any()) 
@@ -86,7 +97,9 @@ namespace LoCoMPro.Pages
 
             return err;
         }
-
+        /// <summary>
+        /// Orders the list of users who made reports by their number of reports decending.
+        /// </summary>
         public void orderListByNumberOfReports(IList<User> usersWhoMadeReports)
         {
             UsersWhoMadeReports = usersWhoMadeReports
@@ -96,7 +109,9 @@ namespace LoCoMPro.Pages
                     return numReports;
                 }).ThenByDescending(user => user.UserName).ToList();
         }
-
+        /// <summary>
+        /// Gets the user who made the report.
+        /// </summary>
         public User getReporter(Report report)
         {   
             if (report != null)
@@ -105,7 +120,9 @@ namespace LoCoMPro.Pages
             }
             return null;
         }
-
+        /// <summary>
+        /// Gets the number of reports made by the user.
+        /// </summary>
         public int numberOfReports(User user)
         {
             int numReports = 0;
@@ -119,21 +136,46 @@ namespace LoCoMPro.Pages
 
             return numReports;
         }
-
+        /// <summary>
+        /// Gets the number of reports made by the user that are approved.
+        /// </summary>
         public int numberOfApprovedReports(User user)
         {
             int numApprovedReports = 0;
 
-            var reports = from r in _context.Reports
-                          where r.ReportState == 2 && r.Reporter == user
-                          select r;
+            var reports = Reports.Where(r => r.Reporter == user && r.ReportState == 2);
             if (reports.Any())
             {
                 numApprovedReports = reports.Count();
             }
             return numApprovedReports;
         }
+        /// <summary>
+        /// Gets the number of reports made by the user that are rejected.
+        /// </summary>
+        public int numberOfRejectedReports(User user)
+        {
+            int numRejectedReports = 0;
 
+            var reports = Reports.Where(r => r.Reporter == user && r.ReportState == 0);
+            if (reports.Any())
+            {
+                numRejectedReports = reports.Count();
+            }
+            return numRejectedReports;
+        }
+        /// <summary>
+        /// Calculates the percentage of register accordingly.
+        /// </summary>
+        public int calculatePercentage(int totalReports, int moderatedReports)
+        {
+            int percentage = (int) Math.Round((double)(moderatedReports * 100) / totalReports);
+
+            return percentage;
+        }
+        /// <summary>
+        /// Initializes the list of ratings with the user ratings.
+        /// </summary>
         public void getUserRatings()
         {
             UserRatings = new List<float>();

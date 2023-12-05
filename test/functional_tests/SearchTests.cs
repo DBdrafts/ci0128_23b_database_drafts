@@ -27,6 +27,7 @@ namespace functional_tests
 
             // Assert that the searchType and the searchString where selected correctly
             Assert.IsTrue(driver!.Url.Contains("searchType=Marca&searchString=apple"));
+            driver.Quit();
         }
 
         // Test by Dwayne Taylor Monterrosa C17827 | Sprint 3
