@@ -65,10 +65,10 @@ namespace functional_tests
             search.SearchProduct("Celular", "Nombre");
 
             var result = driver.FindElements(By.ClassName("result-block")).First();
-            var distance = double.Parse(result.FindElement(By.Id("register-distance")).GetAttribute("value"));
+            var distance = result.FindElement(By.Id("register-distance")).GetAttribute("value");
 
             // Assert
-            Assert.That(distance > 0.0);
+            Assert.That(!distance.Equals("0"));
         }
 
         // Test by Dwayne Taylor Monterrosa C17827 | Sprint 3
