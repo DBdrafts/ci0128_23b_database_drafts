@@ -117,7 +117,6 @@ namespace LoCoMPro.Pages
 
             // Prepare the query to retrieve data from the database
             var registers = from r in _context.Registers
-                            where r.Reports.All(report => report.ReportState != 2)
                             select r;
 
             // Get the coordenades dots to search
@@ -132,7 +131,7 @@ namespace LoCoMPro.Pages
 
             }else if (UserInPage != null)
             { // else if the user has a location in their profile
-                if (UserhasLocation(UserInPage)){
+                if (UserHasLocation(UserInPage)){
                     coordinates = new Coordinate(UserInPage.Geolocation.X, UserInPage.Geolocation.Y);
                     geolocation = new Point(coordinates.X, coordinates.Y) { SRID = 4326 };
                     AreDistancesCalculated = true;
@@ -144,7 +143,7 @@ namespace LoCoMPro.Pages
             {
                 SearchResults = _context.GetSearchResults(SearchType ?? "Nombre", SearchString!, geolocation);
 
-                SearchResults = SearchResults.GroupBy(r => new { r.ProductName, r.StoreName })
+                SearchResults = SearchResults.GroupBy(r => new { r.ProductName, r.StoreName, r.CantonName, r.ProvinciaName })
                             .Select(grouped => grouped.OrderByDescending(r => r.SubmitionDate).First());
             } catch (Exception ex)
             {
@@ -235,30 +234,10 @@ namespace LoCoMPro.Pages
                     break;
             }
 
-            resultQuery = resultQuery.GroupBy(r => new { r.ProductName, r.StoreName })
+            resultQuery = resultQuery.GroupBy(r => new { r.ProductName, r.StoreName, r.CantonName, r.ProvinciaName})
                         .Select(grouped => grouped.OrderByDescending(r => r.SubmitionDate).First());
 
             return resultQuery;
-        }
-
-        /// <summary>
-        /// Get if the user has location
-        /// </summary>
-        /// <param name="userToCheck">Register to directly check if register has images</param>
-        public bool UserhasLocation(User userToCheck)
-        {
-            // Initialize a bool var to indicate whether the register has images.
-            bool hasLocation = false;
-
-            // Check if the input register is not null
-            if (userToCheck.Geolocation != null)
-            {
-                // Set hasLocation to true 
-                hasLocation = true;
-            }
-
-            // Return the boolean indicating whether the register has images.
-            return hasLocation;
         }
     }
 }

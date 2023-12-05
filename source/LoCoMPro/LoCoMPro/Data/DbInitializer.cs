@@ -2,6 +2,7 @@
 using LoCoMPro.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
+using System;
 
 namespace LoCoMPro.Data
 {
@@ -21,6 +22,7 @@ namespace LoCoMPro.Data
                 return;   // DB has been seeded
             }
             var currentDir = Directory.GetCurrentDirectory();
+            context.ExecuteSqlScriptFile(currentDir + "/Data/TableConstraints.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/SearchRegister.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/CalculateDistance.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetSearchResults.sql");
@@ -30,6 +32,13 @@ namespace LoCoMPro.Data
             context.ExecuteSqlScriptFile(currentDir + "/Data/GetAverageReviewValueOnUserRegisters.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/UpdateUserRoleOnRegister.sql");
             context.ExecuteSqlScriptFile(currentDir + "/Data/UpdateUserRoleOnReview.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/GetAveragePriceValue.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/GetMaxPriceValue.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/GetMinPriceValue.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/GetStdDevPriceValue.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/UpdateProductName.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/CreateIndexIX_Review_ContributorId.sql");
+            context.ExecuteSqlScriptFile(currentDir + "/Data/CreateIndexIX_SubmitionDate.sql");
 
             List<Provincia> provincias = new();
             List<Canton> cantones = new();
@@ -50,6 +59,7 @@ namespace LoCoMPro.Data
             InitializeRegisters(context, ref registers, ref users, ref products, ref stores);
             InitializeReviews(context, ref reviews, ref registers, ref users);
             InitializeReports(context, ref reports, ref registers, ref users);
+            GenerateOldRegisters(context, ref registers, ref users, ref products, ref stores);
 
         }
 
@@ -159,13 +169,43 @@ namespace LoCoMPro.Data
             , ref List<Canton> cantones, ref List<Store> stores
             , ref List<Product> product)
         {
+            var randomLocations = GenerateRandomNumbers(cantones.Count(), 6);
+     
             // Add the stores
-            stores.Add(new Store() { Name = "Super San Agustin", Location = cantones[0]
-                , Products = new List<Product>() { product[0], product[2] }});
-            stores.Add(new Store() { Name = "Pali", Location = cantones[1]
-                , Products = new List<Product>() { product[0], product[1] , product[2] }});
-            stores.Add(new Store() { Name = "MasXMenos", Location = cantones[2]
-                , Products = new List<Product>() { product[2] }});
+            var canton = cantones[randomLocations[0]];
+            stores.Add(new Store() { Name = "Super San Agustin", Location = canton, Geolocation = canton.Geolocation
+                , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }
+            });
+            canton = cantones[randomLocations[1]];
+            stores.Add(new Store() { Name = "Pali", Location = canton, Geolocation = canton.Geolocation
+                , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }});
+            canton = cantones[randomLocations[2]];
+            stores.Add(new Store() { Name = "MasXMenos", Location = canton, Geolocation = canton.Geolocation
+                , Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }});
+            canton = cantones[randomLocations[3]];
+            stores.Add(new Store()
+            {
+                Name = "Wallmart",
+                Location = canton,
+                Geolocation = canton.Geolocation,
+                Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }
+            });
+            canton = cantones[randomLocations[4]];
+            stores.Add(new Store()
+            {
+                Name = "Mega Super",
+                Location = canton,
+                Geolocation = canton.Geolocation,
+                Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }
+            });
+            canton = cantones[randomLocations[5]];
+            stores.Add(new Store()
+            {
+                Name = "Perimercado",
+                Location = canton,
+                Geolocation = canton.Geolocation,
+                Products = new List<Product>() { product[0], product[1], product[2], product[3], product[4] }
+            });
 
             context.Stores.AddRange(stores);
             context.SaveChanges();
@@ -213,6 +253,7 @@ namespace LoCoMPro.Data
                 NormalizedUserName = "JULIO444", Email = "julio444@ucr.ac.cr", NormalizedEmail = "JULIO444@UCR.AC.CR"
                 , PasswordHash = "AQAAAAIAAYagAAAAEBSumaRyX1siCcQ3b8TXll5Km5TWXJry6oq6euj1Bj1JaKgVWIat1jxDrhwvSwZJwA=="
                 , EmailConfirmed = true
+                , Geolocation = cantones[0].Geolocation
                 , SecurityStamp = "92355d52-a3d5-41a0-ba79-7e0658846a59"
                 , ConcurrencyStamp = "06661238-1061-4053-beb1-7e9acdb68f9f"
                 , Location = cantones[0]});
@@ -232,6 +273,31 @@ namespace LoCoMPro.Data
                 , SecurityStamp = "ff950c9e-55f0-4dd9-9926-d48dba8ae4cb"
                 , ConcurrencyStamp = "0eb293cc-8be8-4a72-a51e-d352f6a6ef28"
                 , Location = cantones[0]});
+            users.Add(new User
+            {
+                Id = "277a7be2-a41d-4d22-bb4c-849a020e64d3", Role = "Moderator", UserName = "Moderador2",
+                NormalizedUserName = "MODERADOR2", Email = "pewito1505@bixolabs.com",
+                NormalizedEmail = "PEWITO1505@BIXOLABS.COM",
+                PasswordHash = "AQAAAAIAAYagAAAAEOq+uiEvKE+ipHtTvEFoP41PNOy16Ki2oZ3GxhS4BU6O6fbXRMtqqXET1XpxE3l6NA=="
+                , EmailConfirmed = true
+                , SecurityStamp = "HYECKV7GQKTJY2KI77YXSIH3UNR6A7HX"
+                , ConcurrencyStamp = "b6618b62-5e84-4d15-a293-f0b157cbbd5b"
+                , Location = cantones[0]
+            });
+            users.Add(new User
+            {
+                Id = "7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4",
+                Role = "Moderator",
+                UserName = "Automatic",
+                NormalizedUserName = "AUTOMATIC",
+                Email = "locometa@gmail.com",
+                NormalizedEmail = "LOCOMETA@GMAIL.COM",
+                PasswordHash = "AQAAAAIAAYagAAAAEFBCH4szX4/jE5UMTHOj48Mo2yvxEYPqgb1DA2sMx3ViG/D/PIzk72IrEA4tNP+oZQ==",
+                EmailConfirmed = true,
+                SecurityStamp = "M6DI7G54S6NMNZOHIYEGRQ7TRPBH2SPC",
+                ConcurrencyStamp = "f6a611e8-3328-4c65-99ed-5107a120e2b4",
+                Location = cantones[0]
+            });
             context.Users.AddRange(users);
             context.SaveChanges();
         }
@@ -252,6 +318,8 @@ namespace LoCoMPro.Data
 
             List<int> basePrice = new() { 2500, 2000, 20000, 300000, 1100000 };
 
+            var autoUser = users.FirstOrDefault(u => u.Id == "7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4");
+
             /* Generates the registers by using the index of the products, users, stores and the dates */
             for (int productIndex = 0; productIndex < products.Count; productIndex++)
             {
@@ -261,11 +329,12 @@ namespace LoCoMPro.Data
                     {
                         registers.Add(new Register() { Product = products[productIndex], Contributor = users[usersIndex], Store = stores[storeIndex]
                         , Price = (basePrice[productIndex] + ((basePrice[productIndex] / 25) * usersIndex * storeIndex))
-                        , SubmitionDate = new DateTime(2023, 1 + usersIndex + storeIndex, 10 + productIndex + usersIndex + storeIndex, 12, 0, 0, DateTimeKind.Utc)
+                        , SubmitionDate = new DateTime(2023, 1 + usersIndex + storeIndex / 3, 10 + productIndex + usersIndex + storeIndex / 3, 12, 0, 0, DateTimeKind.Utc)
                         , Comment = comments[GenerateRandom(0, comments.Count)] });
                     }
                 }
             }
+            registers.RemoveAll(r => r.Contributor == autoUser);
 
             context.Registers.AddRange(registers);
             context.SaveChanges();
@@ -315,7 +384,7 @@ namespace LoCoMPro.Data
             for(int registerIndex = 0 ; registerIndex < (registers.Count / (users.Count * 3)); registerIndex++) {
                 reports.Add(new Report() { ReportedRegister = registers[registerIndex]
                         , Reporter = users[GenerateRandom(0, users.Count)]
-                        , ReportDate = new DateTime(2024, 2, 15, 12, 0, 0, DateTimeKind.Utc)
+                        , ReportDate = new DateTime(2024, GenerateRandom(1, 12), GenerateRandom(1, 25), 12, 0, 0, DateTimeKind.Utc)
                         , CantonName = registers[registerIndex].CantonName!
                         , ProvinceName = registers[registerIndex].ProvinciaName!, ReportState = 1});
             }
@@ -363,6 +432,118 @@ namespace LoCoMPro.Data
             return random.Next(lower, higher);
         }
 
+        /// <summary>
+        /// Generates an array of <paramref name="desiredCount"/> random numbers between 0 and <paramref name="count"/>.
+        /// </summary>
+        /// <param name="count">High limit of generated numbers.<param>
+        /// <param name="desiredCount">Quantity of random numbers desired.</param>
+        /// <returns>Array of randomly generated numbers.</returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static int[] GenerateRandomNumbers(int count, int desiredCount)
+        {
+            if (desiredCount > count)
+            {
+                throw new ArgumentException("The desired count cannot be greater than the total count.");
+            }
+
+            int[] randomNumbers = new int[count];
+
+            // Populate the array with numbers from 0 to count - 1
+            for (int i = 0; i < count; i++)
+            {
+                randomNumbers[i] = i;
+            }
+
+            // Use Fisher-Yates shuffle algorithm to shuffle the array
+            Random random = new Random();
+            int n = randomNumbers.Length;
+            while (n > desiredCount)
+            {
+                n--;
+                int k = random.Next(n + 1);
+                int value = randomNumbers[k];
+                randomNumbers[k] = randomNumbers[n];
+                randomNumbers[n] = value;
+            }
+            // Resize the array to the desired count
+            Array.Resize(ref randomNumbers, desiredCount);
+
+            return randomNumbers;
+        }
+
+        /// <summary>
+        /// Generates old registers data in the database to test old register detection.
+        /// </summary>
+        /// <param name="context">Context to initialize.</param>
+        /// <param name="registers">List of registers to initialize.</param>
+        /// <param name="users">Users to asociate with each register.</param>
+        /// <param name="products">Products wich the registers refer to.</param>
+        /// <param name="stores">Stores wich the registers refer to.</param>
+        public static void GenerateOldRegisters(LoCoMProContext context
+            , ref List<Register> registers, ref List<User> users
+            , ref List<Product> products, ref List<Store> stores)
+        {
+            List<string> comments = CreateComments();
+
+            var autoUser = users.FirstOrDefault(u => u.Id == "7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4");
+
+            var newRegisters = new List<Register>();
+
+            for (int userIndex = 0; userIndex < 5; userIndex++)
+            {
+                    newRegisters.Add(new Register()
+                    {
+                        Product = products[2], Contributor = users[userIndex], Store = stores[2], Price = 20000,
+                        SubmitionDate = new DateTime(2023, 1 + userIndex, 2 + userIndex + 2, 12, 0, 0, DateTimeKind.Utc), 
+                        Comment = comments[GenerateRandom(0, comments.Count)]
+                    });
+            }
+
+            for (int userIndex = 0; userIndex < 3; userIndex++)
+            {
+                for(int storeIndex = 0; storeIndex < 3; storeIndex++)
+                {
+                    newRegisters.Add(new Register()
+                    {
+                        Product = products[2], Contributor = users[userIndex], Store = stores[storeIndex], Price = 19000,
+                        SubmitionDate = new DateTime(2022, 1+ userIndex, 1 + userIndex + storeIndex, 12, 0, 0, DateTimeKind.Utc),
+                        Comment = comments[GenerateRandom(0, comments.Count)]
+                    });
+                }
+            }
+            for (int userIndex = 0; userIndex < 8; userIndex++)
+            {
+                newRegisters.Add(new Register()
+                {
+                    Product = products[3], Contributor = users[userIndex],Store = stores[2], Price = 299000,
+                    SubmitionDate = new DateTime(2022, 1 + userIndex, 3 + userIndex, 12, 0, 0, DateTimeKind.Utc),
+                    Comment = comments[GenerateRandom(0, comments.Count)]
+                });
+            }
+            newRegisters.Add(new Register()
+            {
+                Product = products[4], Contributor = users[4], Store = stores[0], Price = 1020000,
+                SubmitionDate = new DateTime(2021, 7, 9, 9, 0, 0, DateTimeKind.Utc),
+                Comment = comments[GenerateRandom(0, comments.Count)]
+            });
+            newRegisters.Add(new Register()
+            {
+                Product = products[4], Contributor = users[3], Store = stores[0],Price = 1020000, 
+                SubmitionDate = new DateTime(2021, 7, 2, 9, 0, 0, DateTimeKind.Utc),
+                Comment = comments[GenerateRandom(0, comments.Count)]
+            });
+            newRegisters.Add(new Register()
+            {
+                Product = products[1],
+                Contributor = users[3],
+                Store = stores[0],
+                Price = 3000,
+                SubmitionDate = new DateTime(2022, 7, 2, 9, 0, 0, DateTimeKind.Utc),
+                Comment = comments[GenerateRandom(0, comments.Count)]
+            });
+            context.Registers.AddRange(newRegisters);
+            context.SaveChanges();
+        }
     }
 
 }

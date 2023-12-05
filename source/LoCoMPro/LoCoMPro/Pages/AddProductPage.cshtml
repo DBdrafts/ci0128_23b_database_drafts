@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/dropzone.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/min/dropzone.min.js"></script>
-
 }
 
 <!DOCTYPE html>
@@ -24,12 +23,11 @@
 
 <body>
     <div class="register-section">
+        <div id="feedbackMessage" class="feedback-message"></div>
         <form id="addProductForm" method="post" asp-page="AddProductPage" enctype="multipart/form-data">
             @Html.AntiForgeryToken()
             <h2>Nuevo registro de producto</h2>
             <hr class="title-separator">
-
-
             <label for="chosenlocation">Ubicación<span class="required-marker">*</span>
                 <span class="required-tooltip">Campo obligatorio</span></label>
             <div class="location-container">
@@ -91,9 +89,10 @@
                 <button type="button" id="saveLocationMap-button">Guardar</button>
             </div>
             <label for="images">Imágenes</label>
-            <input type="file" id="productImages" name="productImages" accept="image/*" multiple>
+
+            <div id="dragDropZone" class="dropzone"></div>
             
-            <button type="submit" class="submit-button" form="addProductForm">
+            <button type="button" class="submit-button" id="form-submit-button">
                 <div class="button-content">
                     <span class="button-text">Agregar Registro</span>
                     <img src="~/img/AddRegisterIcon.svg" alt="addRegIcon" class="icon">
@@ -105,6 +104,6 @@
     <script src="~/js/AddProductPage/sequentialForm.js"></script>
     <script src="~/js/AddProductPage/autocompleteAddProduct.js"></script>
     <script src="~/js/feedbackMessage.js"></script>
-    <script src="~/js/AddProductPage/uploadImages.js"></script>
+    <script src="~/js/AddProductPage/sendForm.js"></script>
 </body>
 </html>

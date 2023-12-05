@@ -26,6 +26,5 @@ namespace functional_tests.Shared
             SearchBar().SendKeys(searchString);
             SearchButton().Click();
         }
-  
     }
 }

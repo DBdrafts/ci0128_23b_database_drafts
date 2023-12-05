@@ -14,6 +14,7 @@
 
 
 <head>
+    <title>ModeratePage</title>
     <link rel="stylesheet" href="~/css/ModeratePage.css" />
     <script src="~/js/interactionsPopUp.js"></script>
     <script src="~/js/productListButton.js"></script>
@@ -33,8 +34,6 @@
         <h1>¡No hay reportes que revisar!</h1>
         <img src="~/img/ProductNotFound.svg" alt="Producto no encontrado" />
     </div>
-
-
 
     <div class="reports-section" id="no-empty-list">
         <div class="results-cont-msg" span id="results-count"></div>
@@ -82,7 +81,7 @@
                     $"{s}{report.ProvinceName}{s}{report.ReportDate}" +
                     $"{s}{report.ReportState}{s}{reporterName}" +
                     $"{s}{contributorName}{s}{register.Price}{s}{@reportNum}" +
-                    $"{s}{register.Comment}";
+                    $"{s}{register.Comment}{s}{report.Reason}";
                 
                 int imagecount = 0;
                 var registerImages = "";
@@ -155,9 +154,12 @@
                         </div>
                     </div>
 
+                    <p><b>Motivo del reporte:</b></p>
+                    <div id="popup-report-comment"></div>
+
                     <div class="buttons-container">
-                        
-                        <button class="interactions-close-button" onclick="closeInteractionsPopup()">Cerrar</button>
+
+                        <button class="interactions-close-button" onclick="closeInteractionsPopupMod()">Cerrar</button>
                         <button id="acceptReport" onclick="acceptReport()" style="visibility: hidden;">Aceptar</button>
                         <button id="rejectReport" onclick="rejectReport()" style="visibility: hidden;">Rechazar</button>
                         

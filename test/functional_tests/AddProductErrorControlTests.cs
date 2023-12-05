@@ -1,0 +1,196 @@
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium.Chrome;
+using SeleniumExtras.WaitHelpers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using functional_tests.Shared;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+
+
+namespace functional_tests
+{
+    public class AddProductErrorControlTests
+    {
+        // Test by Geancarlo Rivera Hernández C06516 | Sprint 3
+        [Test]
+        public void AddProductWithoutEnteringLocation()
+        {
+            // Arrange
+            var driver = new ChromeDriver();
+            driver.Navigate().GoToUrl("https://localhost:7119/Identity/Account/Login");
+            var testPage = new Login(driver);
+
+            var email = "geanca567@hotmail.com";
+            var password = "Geanca567!";
+
+            // Act
+            testPage.SingIn(email, password);
+            testPage.ChangeUrl("https://localhost:7119/AddProductPage");
+
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+
+            var submitForm = driver.FindElement(By.Id("form-submit-button"));
+            wait.Until(ExpectedConditions.ElementToBeClickable(submitForm));
+
+            driver.FindElement(By.Id("form-submit-button")).Click();
+
+            var feedbackMessageElement = driver.FindElement(By.Id("feedbackMessage"));
+
+            wait.Until(driver => feedbackMessageElement.Displayed);
+
+            string reportFeedbackMessage = feedbackMessageElement.Text;
+
+            // Assert
+            Assert.That(reportFeedbackMessage.Contains("Por favor, seleccione una ubicación."));
+            driver.Quit();
+        }
+
+        // Test by Geancarlo Rivera Hernández C06516 | Sprint 3
+        [Test]
+        public void AddProductWithoutEnteringStoreName()
+        {
+            // Arrange
+            var driver = new ChromeDriver();
+            driver.Navigate().GoToUrl("https://localhost:7119/Identity/Account/Login");
+            var testPage = new Login(driver);
+
+            var email = "geanca567@hotmail.com";
+            var password = "Geanca567!";
+
+            // Act
+            testPage.SingIn(email, password);
+            testPage.ChangeUrl("https://localhost:7119/AddProductPage");
+            
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+
+            driver.FindElement(By.Id("showPopupButton")).Click();
+
+            IWebElement selectProvince = driver.FindElement(By.Id("province"));
+            selectProvince.Click();
+            selectProvince.FindElement(By.XPath("//option[@value='Alajuela']")).Click();
+
+            IWebElement selectCanton = driver.FindElement(By.Id("canton"));
+            selectCanton.Click();
+            wait.Until(driver => selectCanton.Displayed);
+
+            selectCanton.FindElement(By.XPath("//option[@value='Atenas']")).Click();
+
+            driver.FindElement(By.Id("saveLocationMap-button")).Click();
+
+            driver.FindElement(By.Id("form-submit-button")).Click();
+
+            var feedbackMessageElement = driver.FindElement(By.Id("feedbackMessage"));
+
+            wait.Until(driver => feedbackMessageElement.Displayed);
+
+            string reportFeedbackMessage = feedbackMessageElement.Text;
+
+            // Assert
+            Assert.That(reportFeedbackMessage.Contains("Por favor, ingrese el nombre del establecimiento."));
+            driver.Quit();
+        }
+
+        // Test by Geancarlo Rivera Hernández C06516 | Sprint 3
+        [Test]
+        public void AddProductWithoutEnteringProductName()
+        {
+            // Arrange
+            var driver = new ChromeDriver();
+            driver.Navigate().GoToUrl("https://localhost:7119/Identity/Account/Login");
+            var testPage = new Login(driver);
+
+            var email = "geanca567@hotmail.com";
+            var password = "Geanca567!";
+            string storeName = "MasxMenos";
+
+            // Act
+            testPage.SingIn(email, password);
+            testPage.ChangeUrl("https://localhost:7119/AddProductPage");
+
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+
+            driver.FindElement(By.Id("showPopupButton")).Click();
+
+            IWebElement selectProvince = driver.FindElement(By.Id("province"));
+            selectProvince.Click();
+            selectProvince.FindElement(By.XPath("//option[@value='Alajuela']")).Click();
+
+            IWebElement selectCanton = driver.FindElement(By.Id("canton"));
+            selectCanton.Click();
+            wait.Until(driver => selectCanton.Displayed);
+
+            selectCanton.FindElement(By.XPath("//option[@value='Atenas']")).Click();
+
+            driver.FindElement(By.Id("saveLocationMap-button")).Click();
+
+            driver.FindElement(By.Id("store")).SendKeys(storeName);
+
+            driver.FindElement(By.Id("form-submit-button")).Click();
+
+            var feedbackMessageElement = driver.FindElement(By.Id("feedbackMessage"));
+
+            wait.Until(driver => feedbackMessageElement.Displayed);
+
+            string reportFeedbackMessage = feedbackMessageElement.Text;
+
+            // Assert
+            Assert.That(reportFeedbackMessage.Contains("Por favor, ingrese el nombre del producto."));
+            driver.Quit();
+        }
+
+        // Test by Dwayne Taylor Monterrosa C17827 | Sprint 3
+        [Test]
+        public void AddProductWithoutEnteringPrice()
+        {
+            // Arrange
+            var driver = new ChromeDriver();
+            driver.Navigate().GoToUrl("https://localhost:7119/Identity/Account/Login");
+            var testPage = new Login(driver);
+
+            var email = "geanca567@hotmail.com";
+            var password = "Geanca567!";
+            string storeName = "MasxMenos";
+            string productName = "Agua";
+
+            // Act
+            testPage.SingIn(email, password);
+            testPage.ChangeUrl("https://localhost:7119/AddProductPage");
+
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+
+            driver.FindElement(By.Id("showPopupButton")).Click();
+
+            IWebElement selectProvince = driver.FindElement(By.Id("province"));
+            selectProvince.Click();
+            selectProvince.FindElement(By.XPath("//option[@value='Alajuela']")).Click();
+
+            IWebElement selectCanton = driver.FindElement(By.Id("canton"));
+            selectCanton.Click();
+            wait.Until(driver => selectCanton.Displayed);
+
+            selectCanton.FindElement(By.XPath("//option[@value='Atenas']")).Click();
+
+            driver.FindElement(By.Id("saveLocationMap-button")).Click();
+
+            driver.FindElement(By.Id("store")).SendKeys(storeName);
+
+            driver.FindElement(By.Id("productName")).SendKeys(productName);
+
+            driver.FindElement(By.Id("form-submit-button")).Click();
+
+            var feedbackMessageElement = driver.FindElement(By.Id("feedbackMessage"));
+
+            wait.Until(driver => feedbackMessageElement.Displayed);
+
+            string reportFeedbackMessage = feedbackMessageElement.Text;
+
+            // Assert
+            Assert.That(reportFeedbackMessage.Contains("Por favor, ingrese el precio del producto."));
+            driver.Quit();
+        }
+    }
+}

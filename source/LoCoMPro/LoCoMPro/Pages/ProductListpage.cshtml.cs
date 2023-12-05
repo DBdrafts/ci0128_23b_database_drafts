@@ -13,8 +13,9 @@ namespace LoCoMPro.Pages
     /// </summary>
     public class ProductListPageModel : LoCoMProPageModel
     {
+        private readonly UserManager<User> _userManager;
 
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor? _httpContextAccessor;
 
         /// <summary>
         /// Reference to the user product list
@@ -26,15 +27,11 @@ namespace LoCoMPro.Pages
         /// </summary>
         public IList<UserProductListElement> UserProductList { get; set; }
 
-        /// <summary>
-        /// Total amount of products
-        /// </summary>
-        public int TotalAmountProduct { get; set; }
 
         /// <summary>
-        /// Total amount that all products cost
+        /// Flag if the user has choose a location
         /// </summary>
-        public int TotalPrice { get; set; }
+        public bool HasUserLocation { get; set; } = false;
 
         /// <summary>
         /// Creates a new ProductListPageModel.
@@ -42,23 +39,22 @@ namespace LoCoMPro.Pages
         /// <param name="context">DB Context to pull data from.</param>
         /// <param name="configuration">Configuration for page.</param>
         /// <param name="httpContextAccessor">Allow access to the http context
+        /// <param name="userManager">User manager to handle user permissions.</param>
         public ProductListPageModel(LoCoMProContext context, IConfiguration configuration
-            , IHttpContextAccessor? httpContextAccessor)
+            , IHttpContextAccessor? httpContextAccessor, UserManager<User> userManager)
             : base(context, configuration)
         {
             _httpContextAccessor = httpContextAccessor;
 
-            if (httpContextAccessor != null)
+            if (_httpContextAccessor != null)
             {
                 _userProductList = new UserProductList(_httpContextAccessor);
-
-                // Gets the user product list
-                UserProductList = _userProductList.GetUserProductList();
             }
             else
             {
                 UserProductList = new List<UserProductListElement>();
             }
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -67,23 +63,19 @@ namespace LoCoMPro.Pages
         /// <returns></returns>
         public async Task OnGetAsync()
         {
-            // Calculates the total amount between all the products
-            CalculateTotalPrice();
-        }
-
-        /// <summary>
-        /// Calculates the total amount between all the products in the list
-        /// </summary>
-        /// <returns></returns>
-        public void CalculateTotalPrice()
-        {
-            // Establish the standard culture info
-            CultureInfo culture = CultureInfo.InvariantCulture;
-
-            // Gets the average price of the product and add it to the total amount
-            foreach (var product in UserProductList)
+            User? actualUser = null;
+            if (User != null && _userManager != null)
             {
-                TotalPrice += ConvertIntFromString(culture, product.AvgPrice);
+                actualUser = (await _userManager.GetUserAsync(User))!;
+            }
+            if (actualUser != null)
+            {
+                _userProductList.SetListName(actualUser.Id);
+
+                // Gets the user product list
+                UserProductList = _userProductList.GetUserProductList();
+
+                HasUserLocation = actualUser.Geolocation != null;
             }
         }
 
@@ -92,6 +84,11 @@ namespace LoCoMPro.Pages
         /// </summary>
         public IActionResult OnPostRemoveFromProductList(string productData)
         {
+            if (User != null && _userManager != null)
+            {
+                _userProductList.SetListName(_userManager.GetUserId(User)!);
+            }
+
             // Gets and split the data
             string[] values = SplitString(productData, '\x1F');
 
@@ -106,28 +103,6 @@ namespace LoCoMPro.Pages
             }
 
             return new JsonResult("OK");
-        }
-
-        /// <summary>
-        /// Convert a string that contains a int to a int
-        /// </summary>
-        /// <param name="culture">The culture rules that are going to be use.</param>
-        /// <param name="stringToNormalize">String to convert to int.</param>
-        /// <returns>The int converted from the string.</returns>
-        internal int ConvertIntFromString(CultureInfo culture, string stringToNormalize)
-        {
-            // Standardize the string that contains a int  
-            string normalizedString = Regex.Replace(stringToNormalize, @"[^\d]", "");
-
-            int intFromString = 0;
-
-            // Tries to parse to int
-            if (int.TryParse(normalizedString, NumberStyles.Number, culture, out int avgPrice))
-            {
-                intFromString = avgPrice;
-            }
-
-            return intFromString;
         }
 
         /// <summary>

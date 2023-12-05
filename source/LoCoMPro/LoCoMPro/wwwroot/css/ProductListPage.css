@@ -6,11 +6,14 @@
     width: 100%;
     height: auto;
     color: black;
+    min-width: 1100px;
 }
 
 /* Style for the title of the page */
 .list-page-title {
     text-align: center;
+    display:inline-block;
+    width: 100%;
 }
 
 /* Style for the subtitle of the page */
@@ -18,21 +21,66 @@
     text-align: left;
 }
 
+/* Style for the information text section*/
+.information-text-section {
+    display: inline-block;
+    width: 100%;
+}
+
+
+/* Style for the information button section */
+.information-button-section {
+    display: inline-block;
+    height: 100%;
+    min-width: 200px;
+    text-align: right;
+    width: 100%;
+}
+
+/* Style for the location message text */
+.location-message {
+    color: var(--locompro-red);
+    width: 100%;
+    display:inline-block;
+    text-align: right;
+    margin: 10px 0px;
+}
+
+/* Style for the generate report button */
+#generate-report-button {
+    background-color: var(--locompro-blue);
+    padding: 10px;
+    font-size: larger;
+}
+
+/* Style for the generate report button when hover */
+#generate-report-button:hover {
+    background-color: var(--locompro-blue-hover);
+}
+
+/* Style for the generate report button icon */
+.fa-list {
+    font-size: 20px !important;
+    text-align: center;
+    margin: 5px;
+}
+
 /* Style for the title of the columns */
 .list-page-column-title {
     display: inline-flex;
     height: auto;
-    width: 92%;
-    justify-content: space-between;
+    width: 76%;
+    justify-content: space-around;
     list-style: none;
-    margin: 10px 0px;
-    min-width: 950px;
+    margin: 10px 0px 10px 0px;
+    padding: 0px;
+    min-width: 900px;
 }
 
 /* Style for list title columns */
 .list-page-column-title li {
     font-size: x-large;
-    flex: 0 0 0%;
+    flex: 0 0 33%;
     text-align: center;
     margin: 0px 10px;
 }
@@ -139,8 +187,8 @@
 
 /* Style for the feedback message of the Pop Up when active */
 .feedback-message.active {
-    display: block; /* Mostrar el mensaje */
-    opacity: 1; /* Hacerlo visible */
+    display: block;
+    opacity: 1;
     z-index: 10;
 }
 
@@ -156,4 +204,9 @@
     width: 40%;
     height: 40%;
     margin: -70px
+}
+
+/* Style for the line of the list block */
+.information-section hr {
+    margin: 10px !important;
 }
