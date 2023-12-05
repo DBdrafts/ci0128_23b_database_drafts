@@ -5,10 +5,11 @@
     reportNumber = openButton.getAttribute('report-number');
 
     // Gets the register data
-    var [productName, storeName, dateLimit, numOldRegisters] = reportData.split(String.fromCharCode(31));
+    var [productName, storeName, cantonName, provinceName, dateLimit, numOldRegisters] = reportData.split(String.fromCharCode(31));
     // Sets the register data
     document.getElementById('popup-productName').textContent = productName;
     document.getElementById('popup-storeName').textContent = storeName;
+    document.getElementById('popup-location').textContent = provinceName + ", " + cantonName;
     document.getElementById('popup-dateLimit').textContent = dateLimit;
     document.getElementById('popup-old-registers-amount').textContent = numOldRegisters;
 }
