@@ -137,10 +137,10 @@ public class BaseTest
                 return new MostReportedPageModel(dbContext, mockConfiguration.Object, mockUserManager.Object);
 
             case "users_who_create_more_reports":
-                return new UsersWhoCreateMoreReportsModel(dbContext, mockConfiguration.Object, mockUserManager.Object);
+                return new UsersWhoCreateMoreReportsModel(dbContext, mockConfiguration.Object);
 
             case "moderate_old_registers":
-                return new ModerateOldRegistersModel(dbContext, mockConfiguration.Object, mockUserManager.Object);
+                return new ModerateOldRegistersModel(dbContext, mockConfiguration.Object);
             // Return a base page model
             default:
                 return new LoCoMProPageModel(dbContext, mockConfiguration.Object);

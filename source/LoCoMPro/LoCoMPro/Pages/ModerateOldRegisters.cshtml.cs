@@ -18,32 +18,56 @@ namespace LoCoMPro.Pages
     [Authorize(Roles = "Moderator")]
     public class ModerateOldRegistersModel : LoCoMProPageModel
     {
-        private readonly UserManager<User> _userManager;
+        /// <summary>
+        /// List of products in the database.
+        /// </summary>
+        public IList<Product> Products { get; set; } = new List<Product>();
 
-        public IList<Product> Products { get; set; } = new List<Product>(); 
-
+        /// <summary>
+        /// List of registers in the database.
+        /// </summary>
         public IList<Register> Registers { get; set; } = new List<Register>();
 
+        /// <summary>
+        /// List of products that contain old registers.
+        /// </summary>
         public IList<Product> ProductsWithOldRegisters { get; set; } = new List<Product>();
 
+        /// <summary>
+        /// List of stores that contain old registers.
+        /// </summary>
         public IList<Store> StoresWithOldRegisters { get; set; } = new List<Store>();
 
+        /// <summary>
+        /// Number of old registers per product.
+        /// </summary>
         public IList<int> NumberOfOldRegisters { get; set; } = new List<int>();
 
+        /// <summary>
+        /// List of old registers.
+        /// </summary>
         public IList<Register> OldRegisters { get; set; } = new List<Register>();
 
+        /// <summary>
+        /// List of date limits, anything after those dates is considered old.
+        /// </summary>
         public IList<DateTime> dateLimits {  get; set; } = new List<DateTime>();
 
         /// <summary>
-        /// User of metauristica
+        /// Automatic user for reports.
         /// </summary>
         public User userMeta;
 
-        public ModerateOldRegistersModel(LoCoMProContext context, IConfiguration configuration,
-            UserManager<User> userManager) : base(context, configuration) {
-            _userManager = userManager;
+        /// <summary>
+        /// Page constructor.
+        /// </summary>
+        public ModerateOldRegistersModel(LoCoMProContext context, IConfiguration configuration) : base(context, configuration) {
         }
 
+        /// <summary>
+        /// OnGet method. Gets the automatic user, fills the lists with all the products and registers. 
+        /// Then applies the algorith in search for the old registers and generates reports for each one of them.
+        /// </summary>
         public async Task OnGetAsync()
         {
             userMeta = _context.Users.FirstOrDefault(user => user.Id == "7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4");
@@ -62,7 +86,9 @@ namespace LoCoMPro.Pages
             lookForOldRegisters(2);
             generateReports();
         }
-
+        /// <summary>
+        /// Fills the products list.
+        /// </summary>
         public async Task<int> getProducts()
         {
             var products = from p in _context.Products
@@ -75,6 +101,9 @@ namespace LoCoMPro.Pages
             }
             return Products.Count;
         }
+        /// <summary>
+        /// Fills the registers list.
+        /// </summary>
         public async Task<int> getRegisters()
         {
             var registers = from r in _context.Registers.Include(r => r.Reports)
@@ -87,7 +116,9 @@ namespace LoCoMPro.Pages
             }
             return Registers.Count;
         }
-
+        /// <summary>
+        /// Method that applies the algorith in search for old registers.
+        /// </summary>
         public void lookForOldRegisters(double coefficient)
         {
             foreach (Product product in Products)
@@ -130,7 +161,9 @@ namespace LoCoMPro.Pages
                 }
             }
         }
-
+        /// <summary>
+        /// Calculates the 80 percent index for a total of registers.
+        /// </summary>
         public int calculate80PercentIndex (int registerTotal)
         {
             int index80Percent = (int)Math.Round(registerTotal * 0.8);
@@ -140,7 +173,9 @@ namespace LoCoMPro.Pages
 
             return index80Percent;
         }
-
+        /// <summary>
+        /// Generates reports for each of the old registers.
+        /// </summary>
         public void generateReports()
             {
             foreach (var register in OldRegisters)
@@ -239,7 +274,9 @@ namespace LoCoMPro.Pages
             // Return a JsonResult with the string "OK" indicating successful rejection.
             return new JsonResult("OK");
         }
-
+        /// <summary>
+        /// Gets the report to update from the context.
+        /// </summary>
         public List<Report> getReportsToUpdate(string prodName, string storeName)
         {
             var reports = from report in _context.Reports
@@ -249,7 +286,9 @@ namespace LoCoMPro.Pages
                           select report;
             return reports.ToList();
         }
-
+        /// <summary>
+        /// Gets the register to update from the context.
+        /// </summary>
         public List<Register> getRegistersToUpdate(string prodName, string storeName, DateTime dateLimit)
         {
             var registers = from register in _context.Registers

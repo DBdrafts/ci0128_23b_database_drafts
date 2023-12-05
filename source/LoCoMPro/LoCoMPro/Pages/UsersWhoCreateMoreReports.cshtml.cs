@@ -14,8 +14,6 @@ namespace LoCoMPro.Pages
     [Authorize(Roles = "Moderator")]
     public class UsersWhoCreateMoreReportsModel : LoCoMProPageModel
     {
-        private readonly UserManager<User> _userManager;
-
         /// <summary>
         /// List of users.
         /// </summary>
@@ -36,13 +34,17 @@ namespace LoCoMPro.Pages
         /// </summary>
         public IList<Report>? Reports { get; set; } = new List<Report>();
 
-        public UsersWhoCreateMoreReportsModel(LoCoMProContext context, IConfiguration configuration,
-            UserManager<User> userManager)
+        /// <summary>
+        /// Page constructor
+        /// </summary>
+        public UsersWhoCreateMoreReportsModel(LoCoMProContext context, IConfiguration configuration)
             : base(context, configuration)
         {
-            _userManager = userManager;
         }
-
+        /// <summary>
+        /// OnGet Method, fills the class lists with Users who made reports, orders that list based on the number of reports
+        /// and gets the user ratings for display.
+        /// </summary>
         public void OnGet ()
         {
             getUsersWhoReportedRegisters();
@@ -55,6 +57,7 @@ namespace LoCoMPro.Pages
         /// </summary>
         public int getUsersWhoReportedRegisters()
         {
+            // ID of the automatic user, used to avoid getting it as a user.
             string autoID = "7d5b4e6b-28eb-4a70-8ee6-e7378e024aa4";
             int err = -1; // Error getting users who reported
             var users = from u in _context.Users
