@@ -131,6 +131,7 @@ namespace LoCoMPro.Pages
                     var productRegisters = Registers.Where(r => r.ProductName == product.Name
                         && r.StoreName == store.Name).ToList();
 
+                    if (productRegisters.Count <= 1) { continue; }
                     // Order registers by date
                     productRegisters = productRegisters.OrderByDescending(r => r.SubmitionDate.Date).ToList();
 
